@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:63127",
-      "sslPort": 44395
+      "applicationUrl": "http://localhost:38385",
+      "sslPort": 44357
     }
   },
   "profiles": {
@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "CollabClothing": {
+    "CollabClothing.WebApp": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CollabClothing.Data
+namespace CollabClothing.WebApp.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace CollabClothing.Models
+namespace CollabClothing.WebApp.Models
 {
     public class ErrorViewModel
     {

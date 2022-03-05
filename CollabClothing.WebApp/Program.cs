@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CollabClothing
+namespace CollabClothing.WebApp
 {
     public class Program
     {
