@@ -19,7 +19,7 @@ namespace CollabClothing.WebApp.Data
         {
         }
 
-        public virtual DbSet<Models.Actions> Actions { get; set; }
+        public virtual DbSet<Models.Action> Actions { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
         public virtual DbSet<BannerType> BannerTypes { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
