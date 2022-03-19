@@ -59,7 +59,7 @@ namespace CollabClothing.WebApp.Data
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Models.Actions>(entity =>
+            modelBuilder.Entity<Models.Action>(entity =>
             {
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
