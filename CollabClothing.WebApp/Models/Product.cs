@@ -27,7 +27,7 @@ namespace CollabClothing.WebApp.Models
         public int? Installment { get; set; }
         public string Description { get; set; }
         public string Slug { get; set; }
-
+        public int ViewCount { get; set; }
         public virtual Brand Brand { get; set; }
         public virtual ICollection<Cart> Carts { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }

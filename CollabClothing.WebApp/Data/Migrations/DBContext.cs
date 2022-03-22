@@ -6,7 +6,7 @@ using CollabClothing.WebApp.Extensions;
 
 #nullable disable
 
-namespace CollabClothing.WebApp.Data
+namespace CollabClothing.WebApp.Data.Migrations
 {
     public partial class DBContext : DbContext
     {

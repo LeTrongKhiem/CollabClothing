@@ -1,4 +1,5 @@
 ﻿using CollabClothing.Appication.Catalog.Products.Dtos;
+using CollabClothing.Appication.Catalog.Products.Dtos.Manage;
 using CollabClothing.Appication.Dtos;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,10 @@ namespace CollabClothing.Appication.Catalog.Products
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductEditRequest request);
         Task<int> Delete(int productId);
-
+        Task<bool> UpdatePrice(string productId, decimal newPrice);
+        Task<bool> UpdateSaleOff(string productId, int newSaleOff);
+        Task AddViewCount(int productId);
         Task<List<ProductViewModel>>  GetAll();
-        Task<PageViewModel<ProductViewModel>> GetAllPaging(string keyword, int pageIndex, int pageSize);
+        Task<PageResult<ProductViewModel>> GetAllPaging(GetRequestPagingProduct request);
     }
 }

@@ -18,32 +18,32 @@ namespace CollabClothing.WebApp.Data
         {
         }
 
-        public virtual DbSet<Models.Action> Action { get; set; }
-        public virtual DbSet<Banner> Banner { get; set; }
-        public virtual DbSet<BannerType> BannerType { get; set; }
-        public virtual DbSet<Brand> Brand { get; set; }
-        public virtual DbSet<Cart> Cart { get; set; }
-        public virtual DbSet<Category> Categorie { get; set; }
-        public virtual DbSet<Color> Color { get; set; }
-        public virtual DbSet<Contact> Contact { get; set; }
-        public virtual DbSet<Function> Function { get; set; }
-        public virtual DbSet<Order> Order { get; set; }
-        public virtual DbSet<OrderDetail> OrderDetail { get; set; }
-        public virtual DbSet<Permission> Permission{ get; set; }
-        public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<ProductDetail> ProductDetail { get; set; }
-        public virtual DbSet<ProductImage> ProductImage { get; set; }
-        public virtual DbSet<ProductMapCategory> ProductMapCategorie { get; set; }
-        public virtual DbSet<ProductMapSize> ProductMapSize { get; set; }
-        public virtual DbSet<Promotion> Promotion { get; set; }
-        public virtual DbSet<PromotionDetail> PromotionDetail { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
-        public virtual DbSet<Size> Size { get; set; }
-        public virtual DbSet<SizeMapColor> SizeMapColor { get; set; }
-        public virtual DbSet<SystemActivity> SystemActivitie{ get; set; }
-        public virtual DbSet<Topic> Topic { get; set; }
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserRole> UserRole { get; set; }
+        public virtual DbSet<Models.Action> Actions { get; set; }
+        public virtual DbSet<Banner> Banners { get; set; }
+        public virtual DbSet<BannerType> BannerTypes { get; set; }
+        public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Color> Colors { get; set; }
+        public virtual DbSet<Contact> Contacts { get; set; }
+        public virtual DbSet<Function> Functions { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Permission> Permissions{ get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductDetail> ProductDetails { get; set; }
+        public virtual DbSet<ProductImage> ProductImages { get; set; }
+        public virtual DbSet<ProductMapCategory> ProductMapCategories { get; set; }
+        public virtual DbSet<ProductMapSize> ProductMapSizes { get; set; }
+        public virtual DbSet<Promotion> Promotions { get; set; }
+        public virtual DbSet<PromotionDetail> PromotionDetails { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Size> Sizes { get; set; }
+        public virtual DbSet<SizeMapColor> SizeMapColors { get; set; }
+        public virtual DbSet<SystemActivity> SystemActivities{ get; set; }
+        public virtual DbSet<Topic> Topics { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

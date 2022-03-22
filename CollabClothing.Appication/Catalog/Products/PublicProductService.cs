@@ -1,4 +1,5 @@
 ﻿using CollabClothing.Appication.Catalog.Products.Dtos;
+using CollabClothing.Appication.Catalog.Products.Dtos.Public;
 using CollabClothing.Appication.Dtos;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace CollabClothing.Appication.Catalog.Products
 {
     public class PublicProductService : IPublicProductService
     {
-        public PageViewModel<ProductViewModel> GetAllByCategoryId(string categoryId, int pageIndex, int pageSize)
+        public PageResult<ProductViewModel> GetAllByCategoryId(GetRequestPagingProduct request)
         {
             throw new NotImplementedException();
         }
