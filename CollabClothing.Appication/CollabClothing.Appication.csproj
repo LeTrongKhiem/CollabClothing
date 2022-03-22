@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CollabClothing.Utilities\CollabClothing.Utilities.csproj" />
+    <ProjectReference Include="..\CollabClothing.WebApp\CollabClothing.WebApp.csproj" />
+  </ItemGroup>
+
 </Project>

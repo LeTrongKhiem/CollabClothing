@@ -6,7 +6,7 @@ using CollabClothing.WebApp.Extensions;
 
 #nullable disable
 
-namespace CollabClothing.WebApp.Data
+namespace CollabClothing.WebApp.Data.Migrations
 {
     public partial class DBContext : DbContext
     {
@@ -19,7 +19,7 @@ namespace CollabClothing.WebApp.Data
         {
         }
 
-        public virtual DbSet<Models.Actions> Actions { get; set; }
+        public virtual DbSet<Models.Action> Actions { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
         public virtual DbSet<BannerType> BannerTypes { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
@@ -59,7 +59,7 @@ namespace CollabClothing.WebApp.Data
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Models.Actions>(entity =>
+            modelBuilder.Entity<Models.Action>(entity =>
             {
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
