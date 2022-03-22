@@ -87,11 +87,19 @@ namespace CollabClothing.Appication.Catalog.Products
             }
             //3. paging
             int totalRow = await query.CountAsync();
-            var data = query.Skip((request.PageIndex - 1) * request.PageSize)
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize).Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
                     ProductName = x.p.ProductName,
+                    BrandId = x.p.BrandId,
+                    Description = x.p.Description,
+                    Installment = x.p.Installment,
+                    PriceCurrent = x.p.PriceCurrent,
+                    PriceOld = x.p.PriceOld,
+                    SaleOff = x.p.SaleOff,
+                    Slug = x.p.Slug,
+                    SoldOut = x.p.SoldOut
                 })
                 .ToListAsync();
 
@@ -99,7 +107,7 @@ namespace CollabClothing.Appication.Catalog.Products
 
             var pagedResult = new PageResult<ProductViewModel>()
             {
-                Items = await data,
+                Items = data,
                 TotalRecord = totalRow
             };
 
