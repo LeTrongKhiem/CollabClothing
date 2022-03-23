@@ -110,12 +110,25 @@ namespace CollabClothing.Appication.Catalog.Products
                 Items = data,
                 TotalRecord = totalRow
             };
+            return pagedResult;
 
         }
 
         public async Task<int> Update(ProductEditRequest request)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FindAsync(request.Id);
+            var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == request.Id);
+            if (product == null)
+            {
+                throw new CollabException($"Cannot find product with Id: {request.Id}");
+            }
+            product.Id = request.Id;
+            product.ProductName = request.ProductName;
+            productDetail.Details = request.Details;
+            product.Description = request.Description;
+            product.BrandId = request.BrandId;
+            product.Slug = request.Slug;
+            return await _context.SaveChangesAsync();
         }
 
         public Task<bool> UpdatePrice(int productId, decimal newPrice)
@@ -123,7 +136,17 @@ namespace CollabClothing.Appication.Catalog.Products
             throw new NotImplementedException();
         }
 
+        public Task<bool> UpdatePrice(string productId, decimal newPrice)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> UpdateSaleOff(int productId, int newSaleOff)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateSaleOff(string productId, int newSaleOff)
         {
             throw new NotImplementedException();
         }

@@ -29,7 +29,7 @@ namespace CollabClothing.WebApp.Data
         public virtual DbSet<Function> Functions { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
-        public virtual DbSet<Permission> Permissions{ get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductDetail> ProductDetails { get; set; }
         public virtual DbSet<ProductImage> ProductImages { get; set; }
@@ -40,7 +40,7 @@ namespace CollabClothing.WebApp.Data
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<SizeMapColor> SizeMapColors { get; set; }
-        public virtual DbSet<SystemActivity> SystemActivities{ get; set; }
+        public virtual DbSet<SystemActivity> SystemActivities { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }

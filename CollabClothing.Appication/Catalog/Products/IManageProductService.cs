@@ -13,11 +13,11 @@ namespace CollabClothing.Appication.Catalog.Products
     {
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductEditRequest request);
-        Task<int> Delete(int productId);
+        Task<int> Delete(string productId);
         Task<bool> UpdatePrice(string productId, decimal newPrice);
         Task<bool> UpdateSaleOff(string productId, int newSaleOff);
-        Task AddViewCount(int productId);
-        Task<List<ProductViewModel>>  GetAll();
+        Task AddViewCount(string productId);
+        Task<List<ProductViewModel>> GetAll();
         Task<PageResult<ProductViewModel>> GetAllPaging(GetRequestPagingProduct request);
     }
 }
