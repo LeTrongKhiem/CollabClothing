@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CollabClothing.Appication.Catalog.Products.Dtos.Manage
+namespace CollabClothing.ViewModels.Catalog.Products.Manage
 {
     public class ProductEditRequest
     {

@@ -1,6 +1,4 @@
-﻿using CollabClothing.Appication.Catalog.Products.Dtos;
-using CollabClothing.Appication.Catalog.Products.Dtos.Public;
-using CollabClothing.Appication.Dtos;
+﻿
 using CollabClothing.WebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using CollabClothing.ViewModels.Common;
+using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.Appication.Catalog.Products.Dtos.Public;
 
 namespace CollabClothing.Appication.Catalog.Products
 {

@@ -1,13 +1,12 @@
-﻿using CollabClothing.WebApp.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CollabClothing.Appication.Catalog.Products.Dtos.Manage
+namespace CollabClothing.ViewModels.Catalog.Products
 {
-    public class ProductCreateRequest
+    public class ProductViewModel
     {
         public string Id { get; set; }
         public string ProductName { get; set; }
@@ -20,8 +19,5 @@ namespace CollabClothing.Appication.Catalog.Products.Dtos.Manage
         public string Description { get; set; }
         public string Slug { get; set; }
         public string Details { get; set; }
-
-        public Category Category { get; set; }
-        public Size Size { get; set; }
     }
 }

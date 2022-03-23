@@ -1,7 +1,8 @@
 ﻿using CollabClothing.Appication.Catalog.Products.Dtos;
-using CollabClothing.Appication.Catalog.Products.Dtos.Manage;
-using CollabClothing.Appication.Dtos;
 using CollabClothing.Utilities.Exceptions;
+using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Products.Manage;
+using CollabClothing.ViewModels.Common;
 using CollabClothing.WebApp.Data;
 using CollabClothing.WebApp.Models;
 using Microsoft.EntityFrameworkCore;

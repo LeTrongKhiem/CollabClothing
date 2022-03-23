@@ -1,6 +1,7 @@
 ﻿using CollabClothing.Appication.Catalog.Products.Dtos;
-using CollabClothing.Appication.Catalog.Products.Dtos.Manage;
-using CollabClothing.Appication.Dtos;
+using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Products.Manage;
+using CollabClothing.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
