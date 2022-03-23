@@ -86,6 +86,8 @@ namespace CollabClothing.Appication.Catalog.Products
                 query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
             }
             //3. paging
+            //ham skip lay data tiep theo vd trang 1 (1-1 * 5) = 0 lay 5 sp tiep theo la den sp thu 1 den 5
+            //                              trang 2 (2-1 *5) = 5 lay 5 sp tiep theo tu sp 6 toi 10
             int totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize).Select(x => new ProductViewModel()
@@ -130,25 +132,37 @@ namespace CollabClothing.Appication.Catalog.Products
             product.Slug = request.Slug;
             return await _context.SaveChangesAsync();
         }
-
-        public Task<bool> UpdatePrice(int productId, decimal newPrice)
+        public async Task<bool> UpdatePriceCurrent(string productId, decimal newPrice)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                throw new CollabException($"Cannot find product with id: {productId}");
+            }
+            product.PriceCurrent = newPrice;
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> UpdatePrice(string productId, decimal newPrice)
+        public async Task<bool> UpdatePriceOld(string productId, decimal newPrice)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                throw new CollabException($"Cannot find product with id: {productId}");
+            }
+            product.PriceOld = newPrice;
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> UpdateSaleOff(int productId, int newSaleOff)
+        public async Task<bool> UpdateSaleOff(string productId, int newSaleOff)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateSaleOff(string productId, int newSaleOff)
-        {
-            throw new NotImplementedException();
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                throw new CollabException($"Cannot find product with id: {productId}");
+            }
+            product.SaleOff = newSaleOff;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

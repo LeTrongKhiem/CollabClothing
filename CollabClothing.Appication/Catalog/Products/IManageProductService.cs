@@ -14,7 +14,8 @@ namespace CollabClothing.Appication.Catalog.Products
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductEditRequest request);
         Task<int> Delete(string productId);
-        Task<bool> UpdatePrice(string productId, decimal newPrice);
+        Task<bool> UpdatePriceCurrent(string productId, decimal newPrice);
+        Task<bool> UpdatePriceOld(string productId, decimal newPrice);
         Task<bool> UpdateSaleOff(string productId, int newSaleOff);
         Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();

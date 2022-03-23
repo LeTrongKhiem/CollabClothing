@@ -11,6 +11,6 @@ namespace CollabClothing.Appication.Catalog.Products
 {
     public interface IPublicProductService
     {
-        PageResult<ProductViewModel> GetAllByCategoryId(GetRequestPagingProduct request);
+        Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetRequestPagingProduct request);
     }
 }
