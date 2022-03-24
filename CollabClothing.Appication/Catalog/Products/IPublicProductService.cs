@@ -1,5 +1,4 @@
 ﻿
-using CollabClothing.Appication.Catalog.Products.Dtos.Public;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
 using System;
@@ -12,6 +11,6 @@ namespace CollabClothing.Appication.Catalog.Products
 {
     public interface IPublicProductService
     {
-        Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetRequestPagingProduct request);
+        Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductRequestPagingProduct request);
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System.IO;
 using System.Net.Http.Headers;
-using CollabClothing.Appication.Catalog.Products.Dtos;
 using CollabClothing.Utilities.Exceptions;
 using CollabClothing.ViewModels.Catalog.Products;
-using CollabClothing.ViewModels.Catalog.Products.Manage;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.WebApp.Data;
 using CollabClothing.WebApp.Models;
@@ -37,7 +35,8 @@ namespace CollabClothing.Appication.Catalog.Products
             product.ViewCount += 1;
             await _context.SaveChangesAsync();
         }
-
+        //create product ProductCreateRequest la ham duoc tao ben CollabClothing.ViewModels dung de the hien cac thuoc tinh maf nguoi dung co the nhap 
+        //de tao nen 1 san pham
         public async Task<int> Create(ProductCreateRequest request)
         {
             var product = new Product()
@@ -75,7 +74,8 @@ namespace CollabClothing.Appication.Catalog.Products
             _context.Products.Add(product);
             return await _context.SaveChangesAsync();
         }
-
+        //method dung de delete product khai bao bien product dung de tim kiem product bang id
+        //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
         public async Task<int> Delete(string productId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -95,8 +95,9 @@ namespace CollabClothing.Appication.Catalog.Products
         {
             throw new NotImplementedException();
         }
-
-        public async Task<PageResult<ProductViewModel>> GetAllPaging(GetRequestPagingProduct request)
+        //method phan trang
+        //GetRequestPagingProduct truyen vao keyword la chuoi tim kiem va 1 list cac categoryid
+        public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPagingProduct request)
         {
             //1. Select join
             var query = from p in _context.Products
@@ -266,6 +267,23 @@ namespace CollabClothing.Appication.Catalog.Products
             }
             _context.ProductImages.Update(productImage);
             return await _context.SaveChangesAsync();
+        }
+
+        public async Task<ProductImageViewModel> GetProductImageById(string imageId)
+        {
+            var productImage = await _context.ProductImages.FindAsync(imageId);
+            if (productImage == null)
+            {
+                throw new CollabException($"Cannot find ImageProduct with id: {productImage.Id}");
+            }
+            var viewModel = new ProductImageViewModel()
+            {
+                Id = productImage.Id,
+                Alt = productImage.Alt,
+                Path = productImage.Path,
+                productId = productImage.ProductId
+            };
+            return viewModel;
         }
     }
 }

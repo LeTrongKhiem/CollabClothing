@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace CollabClothing.ViewModels.Catalog.Products.Manage
+namespace CollabClothing.ViewModels.Catalog.Products
 {
     public class ProductEditRequest
     {

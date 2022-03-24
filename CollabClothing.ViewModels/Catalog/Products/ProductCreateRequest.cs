@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CollabClothing.ViewModels.Catalog.Products.Manage
+namespace CollabClothing.ViewModels.Catalog.Products
 {
     public class ProductCreateRequest
     {

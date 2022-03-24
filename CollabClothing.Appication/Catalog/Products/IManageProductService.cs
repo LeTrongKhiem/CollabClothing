@@ -1,7 +1,5 @@
-﻿using CollabClothing.Appication.Catalog.Products.Dtos;
-using CollabClothing.ViewModels.Catalog.ProductImages;
+﻿using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
-using CollabClothing.ViewModels.Catalog.Products.Manage;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -26,11 +24,12 @@ namespace CollabClothing.Appication.Catalog.Products
         Task<int> UpdateImage(string imageId, ProductImageEditRequest request);
         Task<int> RemoveImage(string imageId);
         Task<List<ProductImageViewModel>> GetListImage(string productId);
+        Task<ProductImageViewModel> GetProductImageById(string imageId);
         //
 
 
         Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();
-        Task<PageResult<ProductViewModel>> GetAllPaging(GetRequestPagingProduct request);
+        Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPagingProduct request);
     }
 }

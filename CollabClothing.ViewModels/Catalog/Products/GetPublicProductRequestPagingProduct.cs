@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CollabClothing.Appication.Catalog.Products.Dtos.Public
+namespace CollabClothing.ViewModels.Catalog.Products
 {
-    public class GetRequestPagingProduct : PagingRequestBase
+    public class GetPublicProductRequestPagingProduct : PagingRequestBase
     {
         public string? CategoryId { get; set; }
     }

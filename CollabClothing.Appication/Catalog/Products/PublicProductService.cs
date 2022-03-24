@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.Catalog.Products;
-using CollabClothing.Appication.Catalog.Products.Dtos.Public;
 
 namespace CollabClothing.Appication.Catalog.Products
 {
@@ -20,10 +19,8 @@ namespace CollabClothing.Appication.Catalog.Products
         {
             _context = context;
         }
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetRequestPagingProduct request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductRequestPagingProduct request)
         {
-            int CategoryIdInt = Convert.ToInt32(request.CategoryId);
-
             var query = from p in _context.Products
                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
                         join c in _context.Categories on pmc.CategoryId equals c.Id
