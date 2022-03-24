@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CollabClothing.Appication.Common;
+using CollabClothing.ViewModels.Catalog.ProductImages;
 
 namespace CollabClothing.Appication.Catalog.Products
 {
@@ -22,6 +23,7 @@ namespace CollabClothing.Appication.Catalog.Products
     {
         private readonly DBContext _context;
         private readonly IStorageService _storageService;
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public ManageProductService(DBContext context, IStorageService storageService)
         {
             _context = context;
@@ -169,24 +171,6 @@ namespace CollabClothing.Appication.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public Task<List<ProductImageViewModel>> GetListImage(string productId)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<int> AddImages(string productId, List<IFormFile> files)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> RemoveImage(string imageId)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<int> UpdateImage(string imageId, string atl)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> UpdatePriceCurrent(string productId, decimal newPrice)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -224,7 +208,64 @@ namespace CollabClothing.Appication.Catalog.Products
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim();
             var fileName = $"{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return fileName;
+            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
+        }
+
+        //mothod get product images by product id
+        public async Task<List<ProductImageViewModel>> GetListImage(string productId)
+        {
+            var listProductImages = await _context.ProductImages.Where(x => x.ProductId.Equals(productId)).Select(i => new ProductImageViewModel()
+            {
+                Id = i.Id,
+                Alt = i.Alt,
+                Path = i.Path,
+                productId = i.ProductId
+            }).ToListAsync();
+            return listProductImages;
+        }
+        public async Task<string> AddImages(string productId, ProductImageCreateRequest request)
+        {
+            var productImage = new ProductImage()
+            {
+                Id = request.Id,
+                ProductId = productId,
+                Path = request.Path,
+                Alt = request.Alt
+            };
+            if (request.File != null)
+            {
+                productImage.Path = await this.SaveFile(request.File);
+            }
+            _context.ProductImages.Add(productImage);
+            await _context.SaveChangesAsync();
+            return productImage.Id;
+
+        }
+
+        public async Task<int> RemoveImage(string imageId)
+        {
+            var productImage = await _context.ProductImages.FindAsync(imageId);
+            if (productImage == null)
+            {
+                throw new CollabException($"Product Image with image id : {productImage.Id} not exists!!!");
+            }
+            _context.ProductImages.Remove(productImage);
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> UpdateImage(string imageId, ProductImageEditRequest request)
+        {
+            var productImage = await _context.ProductImages.FindAsync(imageId);
+            if (productImage == null)
+            {
+                throw new CollabException($"Cannot find product image with id: {productImage.Id}");
+            }
+            if (request.File != null)
+            {
+                productImage.Path = await this.SaveFile(request.File);
+                productImage.Alt = request.Alt;
+            }
+            _context.ProductImages.Update(productImage);
+            return await _context.SaveChangesAsync();
         }
     }
 }

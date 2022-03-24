@@ -1,4 +1,4 @@
-namespace CollabClothing.ViewModels.Catalog.Products
+namespace CollabClothing.ViewModels.Catalog.ProductImages
 {
     public class ProductImageViewModel
     {
