@@ -28,6 +28,7 @@ namespace CollabClothing.Appication.Catalog.Products
             _storageService = storageService;
         }
 
+
         public async Task AddViewCount(string productId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -59,16 +60,16 @@ namespace CollabClothing.Appication.Catalog.Products
                 }
             };
             //save image
-            if (request.ThumbnailImage != null)
-            {
-                product.ProductImages = new List<ProductImage>() {
-                    new ProductImage() {
-                        Id = request.productImage.Id,
-                        Path = await this.SaveFile(request.ThumbnailImage),
-                        Alt = request.ProductName
-            }
-        };
-            }
+            // if (request.ThumbnailImage != null)
+            // {
+            //     var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
+            //     if (thumbnailImage != null)
+            //     {
+            //         thumbnailImage.Id = request.productImage.Id;
+            //         thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
+            //         thumbnailImage.Alt = request.ProductName;
+            //     }
+            // }
             _context.Products.Add(product);
             return await _context.SaveChangesAsync();
         }
@@ -78,6 +79,12 @@ namespace CollabClothing.Appication.Catalog.Products
             var product = await _context.Products.FindAsync(productId);
             if (productId == null)
                 throw new CollabException($"Cannot find a product: {productId}");
+            var images = _context.ProductImages.Where(i => i.ProductId == productId);
+            foreach (var image in images)
+            {
+                await _storageService.DeleteFileAsync(image.Path);
+            }
+
             _context.Products.Remove(product);
             return await _context.SaveChangesAsync();
         }
@@ -148,8 +155,38 @@ namespace CollabClothing.Appication.Catalog.Products
             product.Description = request.Description;
             product.BrandId = request.BrandId;
             product.Slug = request.Slug;
+            //save image
+            if (request.ThumbnailImage != null)
+            {
+                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
+                if (thumbnailImage != null)
+                {
+                    thumbnailImage.Id = request.productImage.Id;
+                    thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
+                    thumbnailImage.Alt = request.ProductName;
+                }
+            }
             return await _context.SaveChangesAsync();
         }
+
+        public Task<List<ProductImageViewModel>> GetListImage(string productId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<int> AddImages(string productId, List<IFormFile> files)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> RemoveImage(string imageId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<int> UpdateImage(string imageId, string atl)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> UpdatePriceCurrent(string productId, decimal newPrice)
         {
             var product = await _context.Products.FindAsync(productId);

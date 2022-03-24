@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace CollabClothing.ViewModels.Catalog.Products.Manage
@@ -17,5 +18,6 @@ namespace CollabClothing.ViewModels.Catalog.Products.Manage
         public string BrandId { get; set; }
         public string Slug { get; set; }
         public IFormFile ThumbnailImage { get; set; }
+        public ProductImage productImage { get; set; }
     }
 }
