@@ -1,25 +1,31 @@
-﻿using CollabClothing.Appication.Catalog.Products.Dtos;
+﻿using System.IO;
+using System.Net.Http.Headers;
+using CollabClothing.Appication.Catalog.Products.Dtos;
 using CollabClothing.Utilities.Exceptions;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Products.Manage;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.WebApp.Data;
 using CollabClothing.WebApp.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CollabClothing.Appication.Common;
 
 namespace CollabClothing.Appication.Catalog.Products
 {
     public class ManageProductService : IManageProductService
     {
         private readonly DBContext _context;
-        public ManageProductService(DBContext context)
+        private readonly IStorageService _storageService;
+        public ManageProductService(DBContext context, IStorageService storageService)
         {
             _context = context;
+            _storageService = storageService;
         }
 
         public async Task AddViewCount(string productId)
@@ -52,6 +58,17 @@ namespace CollabClothing.Appication.Catalog.Products
                     }
                 }
             };
+            //save image
+            if (request.ThumbnailImage != null)
+            {
+                product.ProductImages = new List<ProductImage>() {
+                    new ProductImage() {
+                        Id = request.productImage.Id,
+                        Path = await this.SaveFile(request.ThumbnailImage),
+                        Alt = request.ProductName
+            }
+        };
+            }
             _context.Products.Add(product);
             return await _context.SaveChangesAsync();
         }
@@ -164,6 +181,13 @@ namespace CollabClothing.Appication.Catalog.Products
             }
             product.SaleOff = newSaleOff;
             return await _context.SaveChangesAsync() > 0;
+        }
+        private async Task<string> SaveFile(IFormFile file)
+        {
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim();
+            var fileName = $"{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            return fileName;
         }
     }
 }
