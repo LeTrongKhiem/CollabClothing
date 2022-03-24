@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Microsoft.AspNerCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using CollabClothing.Appication.Catalog.Products;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -10,10 +10,16 @@ namespace CollabClothing.BackendApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        private readonly IPublicProductService _publicProductService;
+        public ProductsController(IPublicProductService publicProductService)
+        {
+            _publicProductService = publicProductService;
+        }
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok("Demo ok");
+            var product = await _publicProductService.GetAll();
+            return Ok(product);
         }
     }
 }
