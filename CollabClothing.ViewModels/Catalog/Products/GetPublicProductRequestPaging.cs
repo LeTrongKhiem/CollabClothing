@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Catalog.Products
 {
-    public class GetPublicProductRequestPagingProduct : PagingRequestBase
+    public class GetPublicProductRequestPaging : PagingRequestBase
     {
         public string? CategoryId { get; set; }
     }

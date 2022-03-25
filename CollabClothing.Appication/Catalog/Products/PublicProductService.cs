@@ -46,7 +46,7 @@ namespace CollabClothing.Appication.Catalog.Products
             return data;
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductRequestPagingProduct request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductRequestPaging request)
         {
             var query = from p in _context.Products
                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId

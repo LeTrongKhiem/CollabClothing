@@ -13,9 +13,10 @@ namespace CollabClothing.Appication.Catalog.Products
     public interface IManageProductService
     {
         //method create product
-        Task<int> Create(ProductCreateRequest request);
+        Task<string> Create(ProductCreateRequest request);
         Task<int> Update(ProductEditRequest request);
         Task<int> Delete(string productId);
+        Task<ProductViewModel> GetProductById(string productId);
         Task<bool> UpdatePriceCurrent(string productId, decimal newPrice);
         Task<bool> UpdatePriceOld(string productId, decimal newPrice);
         Task<bool> UpdateSaleOff(string productId, int newSaleOff);
@@ -30,6 +31,6 @@ namespace CollabClothing.Appication.Catalog.Products
 
         Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();
-        Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPagingProduct request);
+        Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPaging request);
     }
 }

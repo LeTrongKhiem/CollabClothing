@@ -17,14 +17,13 @@ namespace CollabClothing.BackendApi
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-
-
         }
         //public static async Task Main(string[] args)
         //{
+        //    GetPublicProductRequestPagingProduct request = new GetPublicProductRequestPagingProduct();
         //    DBClothingContext context = new DBClothingContext();
         //    PublicProductService p = new PublicProductService(context);
-        //    List<ProductViewModel> list = await p.GetAll();
+        //    List<ProductViewModel> list = await p.GetAllByCategoryId();
         //    foreach (var product in list)
         //    {
         //        Console.WriteLine(product.Id);
