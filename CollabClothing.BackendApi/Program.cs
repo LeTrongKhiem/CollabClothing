@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CollabClothing.Appication.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +17,21 @@ namespace CollabClothing.BackendApi
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+
+
         }
+        //public static async Task Main(string[] args)
+        //{
+        //    DBClothingContext context = new DBClothingContext();
+        //    PublicProductService p = new PublicProductService(context);
+        //    List<ProductViewModel> list = await p.GetAll();
+        //    foreach (var product in list)
+        //    {
+        //        Console.WriteLine(product.Id);
+        //    }
+        //}
+
+
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)

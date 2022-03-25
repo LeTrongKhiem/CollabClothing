@@ -1,5 +1,4 @@
 ﻿
-using CollabClothing.WebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,24 +8,26 @@ using System.Threading.Tasks;
 using System.Linq;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.WebApp.Models;
 
 namespace CollabClothing.Appication.Catalog.Products
 {
     public class PublicProductService : IPublicProductService
     {
-        private readonly DBContext _context;
-        public PublicProductService(DBContext context)
+        private readonly DBClothingContext _context;
+        public PublicProductService(DBClothingContext context)
         {
             _context = context;
         }
 
+
         public async Task<List<ProductViewModel>> GetAll()
         {
-            //var query = from p in _context.Products
-            //            join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
-            //            join c in _context.Categories on pmc.CategoryId equals c.Id
-            //            select new { p, pmc };
-            var query = from p in _context.Products select new { p };
+            var query = from p in _context.Products
+                        join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
+                        join c in _context.Categories on pmc.CategoryId equals c.Id
+                        select new { p, pmc, c };
+            //var query = from p in _context.Products select new { p };
 
             var data = await query.Select(x => new ProductViewModel()
             {
@@ -39,7 +40,8 @@ namespace CollabClothing.Appication.Catalog.Products
                 PriceOld = x.p.PriceOld,
                 SaleOff = x.p.SaleOff,
                 Slug = x.p.Slug,
-                SoldOut = x.p.SoldOut
+                SoldOut = x.p.SoldOut,
+                CategoryName = x.c.NameCategory
             }).ToListAsync();
             return data;
         }

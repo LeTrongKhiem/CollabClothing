@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using CollabClothing.Utilities.Exceptions;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
-using CollabClothing.WebApp.Data;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +18,10 @@ namespace CollabClothing.Appication.Catalog.Products
 {
     public class ManageProductService : IManageProductService
     {
-        private readonly DBContext _context;
+        private readonly DBClothingContext _context;
         private readonly IStorageService _storageService;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
-        public ManageProductService(DBContext context, IStorageService storageService)
+        public ManageProductService(DBClothingContext context, IStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
