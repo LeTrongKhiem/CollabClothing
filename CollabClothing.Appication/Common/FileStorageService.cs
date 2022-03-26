@@ -7,7 +7,7 @@ namespace CollabClothing.Appication.Common
     public class FileStorageService : IStorageService
     {
         private readonly string _userContentFolder;
-        private const string USER_CONTENT_FOLDER_NAME = "user_content";
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
             _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME);
