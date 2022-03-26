@@ -28,12 +28,12 @@ namespace CollabClothing.Appication.Catalog.Products
         }
 
 
-        public async Task AddViewCount(string productId)
-        {
-            var product = await _context.Products.FindAsync(productId);
-            product.ViewCount += 1;
-            await _context.SaveChangesAsync();
-        }
+        // public async Task AddViewCount(string productId)
+        // {
+        //     var product = await _context.Products.FindAsync(productId);
+        //     product.ViewCount += 1;
+        //     await _context.SaveChangesAsync();
+        // }
         //create product ProductCreateRequest la ham duoc tao ben CollabClothing.ViewModels dung de the hien cac thuoc tinh maf nguoi dung co the nhap 
         //de tao nen 1 san pham
         public async Task<string> Create(ProductCreateRequest request)
@@ -50,27 +50,15 @@ namespace CollabClothing.Appication.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
-                ViewCount = 0,
+                // ViewCount = 0,
                 ProductMapCategories = new List<ProductMapCategory>()
                 {
                     new ProductMapCategory()
                     {
-                        ProductId = request.Id,
-                        CategoryId = request.Category.Id
+                        CategoryId = request.CategoryViewModel.CategoryId
                     }
                 }
             };
-            //save image
-            // if (request.ThumbnailImage != null)
-            // {
-            //     var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
-            //     if (thumbnailImage != null)
-            //     {
-            //         thumbnailImage.Id = request.productImage.Id;
-            //         thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
-            //         thumbnailImage.Alt = request.ProductName;
-            //     }
-            // }
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return product.Id;

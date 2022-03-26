@@ -45,7 +45,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ProductCreateRequest request)
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             var productId = await _manageProductService.Create(request);
             if (productId.Equals("") || productId == null)
