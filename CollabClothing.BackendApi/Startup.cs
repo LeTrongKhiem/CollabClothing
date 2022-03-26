@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CollabClothing.Appication.Catalog.Products;
+using CollabClothing.Appication.Common;
 using CollabClothing.Utilities.Constants;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Builder;
@@ -32,6 +33,8 @@ namespace CollabClothing.BackendApi
         {
             services.AddDbContext<DBClothingContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddSwaggerGen(c =>

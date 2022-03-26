@@ -77,5 +77,26 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok();
         }
+        [HttpPut("price/{productId}/{newPriceCurrent}")]
+        public async Task<IActionResult> UpdateCurrentPrice(string productId, decimal newCurrentPrice)
+        {
+            var isSuccess = await _manageProductService.UpdatePriceCurrent(productId, newCurrentPrice);
+            if (isSuccess)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpPut("price/{productId}/{newPriceOld}")]
+        public async Task<IActionResult> UpdateOldPrice(string productId, decimal newOldPrice)
+        {
+            var isSuccess = await _manageProductService.UpdatePriceCurrent(productId, newOldPrice);
+            if (isSuccess)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }
