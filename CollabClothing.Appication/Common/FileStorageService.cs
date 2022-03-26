@@ -7,7 +7,7 @@ namespace CollabClothing.Appication.Common
     public class FileStorageService : IStorageService
     {
         private readonly string _userContentFolder;
-        private const string USER_CONTENT_FOLDER_NAME = "user_content";
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
             _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME);
@@ -26,7 +26,7 @@ namespace CollabClothing.Appication.Common
 
         public string GetFileUrl(string fileName)
         {
-            return $"{USER_CONTENT_FOLDER_NAME}/{fileName}";
+            return $"/{USER_CONTENT_FOLDER_NAME}/{fileName}";
         }
 
         public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
