@@ -19,5 +19,6 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public string Description { get; set; }
         public string Slug { get; set; }
         public string Details { get; set; }
+        public string CategoryName { get; set; }
     }
 }

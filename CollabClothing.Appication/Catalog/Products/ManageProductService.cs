@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using CollabClothing.Utilities.Exceptions;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
-using CollabClothing.WebApp.Data;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +18,10 @@ namespace CollabClothing.Appication.Catalog.Products
 {
     public class ManageProductService : IManageProductService
     {
-        private readonly DBContext _context;
+        private readonly DBClothingContext _context;
         private readonly IStorageService _storageService;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
-        public ManageProductService(DBContext context, IStorageService storageService)
+        public ManageProductService(DBClothingContext context, IStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
@@ -37,7 +36,7 @@ namespace CollabClothing.Appication.Catalog.Products
         }
         //create product ProductCreateRequest la ham duoc tao ben CollabClothing.ViewModels dung de the hien cac thuoc tinh maf nguoi dung co the nhap 
         //de tao nen 1 san pham
-        public async Task<int> Create(ProductCreateRequest request)
+        public async Task<string> Create(ProductCreateRequest request)
         {
             var product = new Product()
             {
@@ -56,7 +55,8 @@ namespace CollabClothing.Appication.Catalog.Products
                 {
                     new ProductMapCategory()
                     {
-                        CategoryId = request.Category.NameCategory
+                        ProductId = request.Id,
+                        CategoryId = request.Category.Id
                     }
                 }
             };
@@ -72,7 +72,8 @@ namespace CollabClothing.Appication.Catalog.Products
             //     }
             // }
             _context.Products.Add(product);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return product.Id;
         }
         //method dung de delete product khai bao bien product dung de tim kiem product bang id
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
@@ -91,13 +92,64 @@ namespace CollabClothing.Appication.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<int> Update(ProductEditRequest request)
+        {
+            var product = await _context.Products.FindAsync(request.Id);
+            var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == request.Id);
+            if (product == null)
+            {
+                throw new CollabException($"Cannot find product with Id: {request.Id}");
+            }
+            product.Id = request.Id;
+            product.ProductName = request.ProductName;
+            productDetail.Details = request.Details;
+            product.Description = request.Description;
+            product.BrandId = request.BrandId;
+            product.Slug = request.Slug;
+            //save image
+            if (request.ThumbnailImage != null)
+            {
+                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
+                if (thumbnailImage != null)
+                {
+                    thumbnailImage.Id = request.productImage.Id;
+                    thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
+                    thumbnailImage.Alt = request.ProductName;
+                }
+            }
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<ProductViewModel> GetProductById(string productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                throw new CollabException($"Cannot find product with id: {productId}");
+            }
+            var viewModel = new ProductViewModel()
+            {
+                Id = product.Id,
+                ProductName = product.ProductName,
+                PriceCurrent = product.PriceCurrent,
+                PriceOld = product.PriceOld,
+                SaleOff = product.SaleOff,
+                Description = product.Description,
+                BrandId = product.BrandId,
+                Installment = product.Installment,
+                Slug = product.Slug,
+                SoldOut = product.SoldOut
+            };
+            return viewModel;
+        }
+
         public async Task<List<ProductViewModel>> GetAll()
         {
             throw new NotImplementedException();
         }
         //method phan trang
         //GetRequestPagingProduct truyen vao keyword la chuoi tim kiem va 1 list cac categoryid
-        public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPagingProduct request)
+        public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPaging request)
         {
             //1. Select join
             var query = from p in _context.Products
@@ -144,33 +196,6 @@ namespace CollabClothing.Appication.Catalog.Products
 
         }
 
-        public async Task<int> Update(ProductEditRequest request)
-        {
-            var product = await _context.Products.FindAsync(request.Id);
-            var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == request.Id);
-            if (product == null)
-            {
-                throw new CollabException($"Cannot find product with Id: {request.Id}");
-            }
-            product.Id = request.Id;
-            product.ProductName = request.ProductName;
-            productDetail.Details = request.Details;
-            product.Description = request.Description;
-            product.BrandId = request.BrandId;
-            product.Slug = request.Slug;
-            //save image
-            if (request.ThumbnailImage != null)
-            {
-                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
-                if (thumbnailImage != null)
-                {
-                    thumbnailImage.Id = request.productImage.Id;
-                    thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
-                    thumbnailImage.Alt = request.ProductName;
-                }
-            }
-            return await _context.SaveChangesAsync();
-        }
 
         public async Task<bool> UpdatePriceCurrent(string productId, decimal newPrice)
         {
