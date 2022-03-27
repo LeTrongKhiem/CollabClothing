@@ -18,6 +18,7 @@ namespace CollabClothing.BackendApi.Controllers
             _publicProductService = publicProductService;
             _manageProductService = manageProductService;
         }
+        //api get all product 
         //url mac dinh cua get http://localhost:port/controller
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -25,6 +26,7 @@ namespace CollabClothing.BackendApi.Controllers
             var product = await _publicProductService.GetAll();
             return Ok(product);
         }
+        //api paging product truyen vao categoryId pageindex va pagesize
         //http://localhost:port/products/public-paging
         [HttpGet("public-paging")]
         public async Task<IActionResult> Get([FromQuery] GetPublicProductRequestPaging request)
