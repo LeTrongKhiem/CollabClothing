@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CollabClothing.Appication.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.ProductImages;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -49,6 +50,10 @@ namespace CollabClothing.BackendApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             var productId = await _manageProductService.Create(request);
             if (productId.Equals("") || productId == null)
             {
@@ -61,6 +66,10 @@ namespace CollabClothing.BackendApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] ProductEditRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             var affectedResult = await _manageProductService.Update(request);
             if (affectedResult == 0)
             {
@@ -99,6 +108,35 @@ namespace CollabClothing.BackendApi.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+        //method update sale off product
+        [HttpPut("newSaleOff/{productId}/{newSaleOff}")]
+        public async Task<IActionResult> UpdateSaleOff(string productId, int newSaleOff)
+        {
+            var isSuccess = await _manageProductService.UpdateSaleOff(productId, newSaleOff);
+            if (isSuccess)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+
+        //api image
+        [HttpPut("image/{productId}")]
+        public async Task<IActionResult> AddProductImage(string productId, [FromForm] ProductImageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var productImageId = await _manageProductService.AddImages(productId, request);
+            if (productImageId == null || productImageId.Equals(""))
+            {
+                return BadRequest();
+            }
+            var image = await _manageProductService.GetProductImageById(productImageId);
+            return CreatedAtAction(nameof(image), new { id = productImageId }, image);
         }
     }
 }

@@ -233,7 +233,7 @@ namespace CollabClothing.Appication.Catalog.Products
         }
         private async Task<string> SaveFile(IFormFile file)
         {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim();
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
@@ -247,7 +247,6 @@ namespace CollabClothing.Appication.Catalog.Products
                 Id = i.Id,
                 Alt = i.Alt,
                 Path = i.Path,
-                productId = i.ProductId
             }).ToListAsync();
             return listProductImages;
         }
@@ -308,7 +307,6 @@ namespace CollabClothing.Appication.Catalog.Products
                 Id = productImage.Id,
                 Alt = productImage.Alt,
                 Path = productImage.Path,
-                productId = productImage.ProductId
             };
             return viewModel;
         }
