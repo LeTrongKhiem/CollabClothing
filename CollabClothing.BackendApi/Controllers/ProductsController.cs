@@ -57,7 +57,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //update product
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] ProductEditRequest request)
+        public async Task<IActionResult> Update([FromForm] ProductEditRequest request)
         {
             var affectedResult = await _manageProductService.Update(request);
             if (affectedResult == 0)
@@ -77,7 +77,7 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok();
         }
-        [HttpPut("price/{productId}/{newPriceCurrent}")]
+        [HttpPut("newPriceCurrent/{productId}/{newCurrentPrice}")]
         public async Task<IActionResult> UpdateCurrentPrice(string productId, decimal newCurrentPrice)
         {
             var isSuccess = await _manageProductService.UpdatePriceCurrent(productId, newCurrentPrice);
@@ -88,10 +88,10 @@ namespace CollabClothing.BackendApi.Controllers
             return BadRequest();
         }
 
-        [HttpPut("price/{productId}/{newPriceOld}")]
+        [HttpPut("newPriceOld/{productId}/{newOldPrice}")]
         public async Task<IActionResult> UpdateOldPrice(string productId, decimal newOldPrice)
         {
-            var isSuccess = await _manageProductService.UpdatePriceCurrent(productId, newOldPrice);
+            var isSuccess = await _manageProductService.UpdatePriceOld(productId, newOldPrice);
             if (isSuccess)
             {
                 return Ok();

@@ -85,14 +85,18 @@ namespace CollabClothing.Appication.Catalog.Products
         public async Task<int> Update(ProductEditRequest request)
         {
             var product = await _context.Products.FindAsync(request.Id);
-            var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == request.Id);
+            // var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == product.Id);
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with Id: {request.Id}");
             }
+            // if (productDetail == null)
+            // {
+            //     throw new CollabException($"Cannot find product with Id: {request.Id}");
+            // }
             product.Id = request.Id;
             product.ProductName = request.ProductName;
-            productDetail.Details = request.Details;
+            // productDetail.Details = request.Details;
             product.Description = request.Description;
             product.BrandId = request.BrandId;
             product.Slug = request.Slug;
@@ -102,9 +106,10 @@ namespace CollabClothing.Appication.Catalog.Products
                 var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
                 if (thumbnailImage != null)
                 {
-                    thumbnailImage.Id = request.productImage.Id;
+                    // thumbnailImage.Id = request.productImage.Id;
                     thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
                     thumbnailImage.Alt = request.ProductName;
+                    _context.ProductImages.Update(thumbnailImage);
                 }
             }
             return await _context.SaveChangesAsync();
