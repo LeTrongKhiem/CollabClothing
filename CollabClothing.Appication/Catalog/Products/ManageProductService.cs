@@ -51,13 +51,13 @@ namespace CollabClothing.Appication.Catalog.Products
                 Description = request.Description,
                 Slug = request.Slug,
                 // ViewCount = 0,
-                ProductMapCategories = new List<ProductMapCategory>()
-                {
-                    new ProductMapCategory()
-                    {
-                        CategoryId = request.CategoryViewModel.CategoryId
-                    }
-                }
+                // ProductMapCategories = new List<ProductMapCategory>()
+                // {
+                //     new ProductMapCategory()
+                //     {
+                //         CategoryId = request.CategoryViewModel.CategoryId
+                //     }
+                // }
             };
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
@@ -67,6 +67,7 @@ namespace CollabClothing.Appication.Catalog.Products
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
         public async Task<int> Delete(string productId)
         {
+            var productMapCate = await _context.ProductMapCategories.FirstOrDefaultAsync(x => x.ProductId == productId);
             var product = await _context.Products.FindAsync(productId);
             if (productId == null)
                 throw new CollabException($"Cannot find a product: {productId}");
@@ -76,6 +77,7 @@ namespace CollabClothing.Appication.Catalog.Products
                 await _storageService.DeleteFileAsync(image.Path);
             }
 
+            _context.ProductMapCategories.Remove(productMapCate);
             _context.Products.Remove(product);
             return await _context.SaveChangesAsync();
         }
@@ -111,6 +113,11 @@ namespace CollabClothing.Appication.Catalog.Products
         public async Task<ProductViewModel> GetProductById(string productId)
         {
             var product = await _context.Products.FindAsync(productId);
+            var categories = await (from c in _context.Categories
+                                    join pmc in _context.ProductMapCategories on c.Id equals pmc.CategoryId
+                                    where pmc.ProductId == productId
+                                    select c.NameCategory).ToListAsync();
+            var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with id: {productId}");
@@ -126,7 +133,9 @@ namespace CollabClothing.Appication.Catalog.Products
                 BrandId = product.BrandId,
                 Installment = product.Installment,
                 Slug = product.Slug,
-                SoldOut = product.SoldOut
+                SoldOut = product.SoldOut,
+                Categories = categories,
+                ThumbnailImage = image != null ? image.Path : "no-image.jpg"
             };
             return viewModel;
         }
