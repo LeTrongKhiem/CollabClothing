@@ -51,7 +51,7 @@ namespace CollabClothing.Appication.Catalog.Products
             var query = from p in _context.Products
                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
                         join c in _context.Categories on pmc.CategoryId equals c.Id
-                        select new { p, pmc };
+                        select new { p, pmc, c };
             if (request.CategoryId != null && !request.CategoryId.Equals("0"))
             {
                 query = query.Where(p => p.pmc.CategoryId == request.CategoryId);
@@ -71,7 +71,8 @@ namespace CollabClothing.Appication.Catalog.Products
                                         PriceOld = x.p.PriceOld,
                                         SaleOff = x.p.SaleOff,
                                         Slug = x.p.Slug,
-                                        SoldOut = x.p.SoldOut
+                                        SoldOut = x.p.SoldOut,
+                                        CategoryName = x.c.NameCategory
                                     })
                 .ToListAsync();
             var pagedResult = new PageResult<ProductViewModel>()
