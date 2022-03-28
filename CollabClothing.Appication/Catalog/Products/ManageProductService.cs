@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CollabClothing.Appication.Common;
 using CollabClothing.ViewModels.Catalog.ProductImages;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CollabClothing.Appication.Catalog.Products
 {
@@ -234,10 +235,11 @@ namespace CollabClothing.Appication.Catalog.Products
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var fileName = $"{Path.GetExtension(originalFileName)}";
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
         }
+
 
         //mothod get product images by product id
         public async Task<List<ProductImageViewModel>> GetListImage(string productId)
@@ -256,7 +258,7 @@ namespace CollabClothing.Appication.Catalog.Products
             {
                 Id = request.Id,
                 ProductId = productId,
-                Path = request.Path,
+                // Path = request.Path,
                 Alt = request.Alt
             };
             if (request.File != null)
@@ -269,6 +271,18 @@ namespace CollabClothing.Appication.Catalog.Products
 
         }
 
+        //support delete file
+        private async Task DeleteFile(string fileName)
+        {
+            // var pathImage = Path.Combine(_userContentFolder, fileName);
+            if (fileName == null)
+            {
+                throw new CollabException($"Cannot find file with path {fileName}");
+            }
+            await _storageService.DeleteFileAsync(fileName);
+
+        }
+        //method remove file
         public async Task<int> RemoveImage(string imageId)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
@@ -277,6 +291,14 @@ namespace CollabClothing.Appication.Catalog.Products
                 throw new CollabException($"Product Image with image id : {productImage.Id} not exists!!!");
             }
             _context.ProductImages.Remove(productImage);
+            string fullPath = "wwwroot" + productImage.Path;
+            if (File.Exists(fullPath))
+            {
+                await Task.Run(() =>
+                {
+                    File.Delete(fullPath);
+                });
+            }
             return await _context.SaveChangesAsync();
         }
         public async Task<int> UpdateImage(string imageId, ProductImageEditRequest request)

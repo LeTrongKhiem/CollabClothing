@@ -123,7 +123,7 @@ namespace CollabClothing.BackendApi.Controllers
 
 
         //api image
-        [HttpPut("image/{productId}")]
+        [HttpPost("{productId}/images")]
         public async Task<IActionResult> AddProductImage(string productId, [FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -137,6 +137,35 @@ namespace CollabClothing.BackendApi.Controllers
             }
             var image = await _manageProductService.GetProductImageById(productImageId);
             return CreatedAtAction(nameof(image), new { id = productImageId }, image);
+        }
+        [HttpDelete("images/{imageId}")]
+        public async Task<IActionResult> DeleteProductImage(string imageId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var affectedResult = await _manageProductService.RemoveImage(imageId);
+            if (affectedResult == 0)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        //method update product image
+        [HttpPut("images/{imageId}")]
+        public async Task<IActionResult> UpdateProductImage(string imageId, [FromForm] ProductImageEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var affectedResult = await _manageProductService.UpdateImage(imageId, request);
+            if (affectedResult == 0)
+            {
+                return BadRequest();
+            }
+            return Ok();
         }
     }
 }
