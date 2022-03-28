@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Net;
+using System.IO;
 using System.Net.Http.Headers;
 using CollabClothing.Utilities.Exceptions;
 using CollabClothing.ViewModels.Catalog.Products;
@@ -310,6 +311,8 @@ namespace CollabClothing.Appication.Catalog.Products
             }
             if (request.File != null)
             {
+                string fullPath = "wwwroot" + productImage.Path;
+                File.Delete(fullPath);
                 productImage.Path = await this.SaveFile(request.File);
                 productImage.Alt = request.Alt;
             }
