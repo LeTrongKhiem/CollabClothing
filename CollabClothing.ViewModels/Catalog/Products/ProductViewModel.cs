@@ -19,7 +19,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public string Description { get; set; }
         public string Slug { get; set; }
         public string Details { get; set; }
-        public string CategoryName { get; set; }
+        // public string CategoryName { get; set; }
         public string ThumbnailImage { get; set; }
         public List<string> Categories { get; set; } = new List<string>();
     }

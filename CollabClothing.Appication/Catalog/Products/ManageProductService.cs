@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Net.Mime;
+using System.Net.NetworkInformation;
+using System.Net;
 using System.IO;
 using System.Net.Http.Headers;
 using CollabClothing.Utilities.Exceptions;
@@ -87,25 +89,36 @@ namespace CollabClothing.Appication.Catalog.Products
         public async Task<int> Update(ProductEditRequest request)
         {
             var product = await _context.Products.FindAsync(request.Id);
+            var imagePath = (from p in _context.Products
+                             join pimg in _context.ProductImages on p.Id equals pimg.ProductId
+                             where p.Id == product.Id
+                             select pimg.Path).ToString();
+            var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
             // var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == product.Id);
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with Id: {request.Id}");
             }
-            // if (productDetail == null)
-            // {
-            //     throw new CollabException($"Cannot find product with Id: {request.Id}");
-            // }
             product.Id = request.Id;
             product.ProductName = request.ProductName;
             // productDetail.Details = request.Details;
             product.Description = request.Description;
             product.BrandId = request.BrandId;
+            //delete old image file
+            string fullPath = "wwwroot" + image.Path;
+            if (File.Exists(fullPath))
+            {
+                await Task.Run(() =>
+                {
+                    File.Delete(fullPath);
+                });
+            }
             product.Slug = request.Slug;
             //save image
             if (request.ThumbnailImage != null)
             {
                 var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
+
                 if (thumbnailImage != null)
                 {
                     // thumbnailImage.Id = request.productImage.Id;
