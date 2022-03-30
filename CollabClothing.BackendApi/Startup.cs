@@ -68,7 +68,7 @@ namespace CollabClothing.BackendApi
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eShopSolution V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger CollabClothing V1");
             });
 
             app.UseEndpoints(endpoints =>

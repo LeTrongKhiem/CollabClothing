@@ -29,8 +29,13 @@ namespace CollabClothing.Appication.Catalog.Products
         //
 
 
-        Task AddViewCount(string productId);
+        // Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();
         Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPaging request);
+
+        //method phan chia product voi category
+
+
+
     }
 }

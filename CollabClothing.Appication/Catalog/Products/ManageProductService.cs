@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System.Net.Mime;
+using System.Net.NetworkInformation;
+using System.Net;
+using System.IO;
 using System.Net.Http.Headers;
 using CollabClothing.Utilities.Exceptions;
 using CollabClothing.ViewModels.Catalog.Products;
@@ -13,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CollabClothing.Appication.Common;
 using CollabClothing.ViewModels.Catalog.ProductImages;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CollabClothing.Appication.Catalog.Products
 {
@@ -28,12 +32,12 @@ namespace CollabClothing.Appication.Catalog.Products
         }
 
 
-        public async Task AddViewCount(string productId)
-        {
-            var product = await _context.Products.FindAsync(productId);
-            product.ViewCount += 1;
-            await _context.SaveChangesAsync();
-        }
+        // public async Task AddViewCount(string productId)
+        // {
+        //     var product = await _context.Products.FindAsync(productId);
+        //     product.ViewCount += 1;
+        //     await _context.SaveChangesAsync();
+        // }
         //create product ProductCreateRequest la ham duoc tao ben CollabClothing.ViewModels dung de the hien cac thuoc tinh maf nguoi dung co the nhap 
         //de tao nen 1 san pham
         public async Task<string> Create(ProductCreateRequest request)
@@ -50,27 +54,15 @@ namespace CollabClothing.Appication.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
-                ViewCount = 0,
-                ProductMapCategories = new List<ProductMapCategory>()
-                {
-                    new ProductMapCategory()
-                    {
-                        ProductId = request.Id,
-                        CategoryId = request.Category.Id
-                    }
-                }
+                // ViewCount = 0,
+                // ProductMapCategories = new List<ProductMapCategory>()
+                // {
+                //     new ProductMapCategory()
+                //     {
+                //         CategoryId = request.CategoryViewModel.CategoryId
+                //     }
+                // }
             };
-            //save image
-            // if (request.ThumbnailImage != null)
-            // {
-            //     var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
-            //     if (thumbnailImage != null)
-            //     {
-            //         thumbnailImage.Id = request.productImage.Id;
-            //         thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
-            //         thumbnailImage.Alt = request.ProductName;
-            //     }
-            // }
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return product.Id;
@@ -79,6 +71,7 @@ namespace CollabClothing.Appication.Catalog.Products
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
         public async Task<int> Delete(string productId)
         {
+            var productMapCate = await _context.ProductMapCategories.FirstOrDefaultAsync(x => x.ProductId == productId);
             var product = await _context.Products.FindAsync(productId);
             if (productId == null)
                 throw new CollabException($"Cannot find a product: {productId}");
@@ -88,6 +81,7 @@ namespace CollabClothing.Appication.Catalog.Products
                 await _storageService.DeleteFileAsync(image.Path);
             }
 
+            _context.ProductMapCategories.Remove(productMapCate);
             _context.Products.Remove(product);
             return await _context.SaveChangesAsync();
         }
@@ -95,26 +89,42 @@ namespace CollabClothing.Appication.Catalog.Products
         public async Task<int> Update(ProductEditRequest request)
         {
             var product = await _context.Products.FindAsync(request.Id);
-            var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == request.Id);
+            var imagePath = (from p in _context.Products
+                             join pimg in _context.ProductImages on p.Id equals pimg.ProductId
+                             where p.Id == product.Id
+                             select pimg.Path).ToString();
+            var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
+            // var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == product.Id);
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with Id: {request.Id}");
             }
             product.Id = request.Id;
             product.ProductName = request.ProductName;
-            productDetail.Details = request.Details;
+            // productDetail.Details = request.Details;
             product.Description = request.Description;
             product.BrandId = request.BrandId;
+            //delete old image file
+            string fullPath = "wwwroot" + image.Path;
+            if (File.Exists(fullPath))
+            {
+                await Task.Run(() =>
+                {
+                    File.Delete(fullPath);
+                });
+            }
             product.Slug = request.Slug;
             //save image
             if (request.ThumbnailImage != null)
             {
                 var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
+
                 if (thumbnailImage != null)
                 {
-                    thumbnailImage.Id = request.productImage.Id;
+                    // thumbnailImage.Id = request.productImage.Id;
                     thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
                     thumbnailImage.Alt = request.ProductName;
+                    _context.ProductImages.Update(thumbnailImage);
                 }
             }
             return await _context.SaveChangesAsync();
@@ -123,6 +133,11 @@ namespace CollabClothing.Appication.Catalog.Products
         public async Task<ProductViewModel> GetProductById(string productId)
         {
             var product = await _context.Products.FindAsync(productId);
+            var categories = await (from c in _context.Categories
+                                    join pmc in _context.ProductMapCategories on c.Id equals pmc.CategoryId
+                                    where pmc.ProductId == productId
+                                    select c.NameCategory).ToListAsync();
+            var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with id: {productId}");
@@ -138,7 +153,9 @@ namespace CollabClothing.Appication.Catalog.Products
                 BrandId = product.BrandId,
                 Installment = product.Installment,
                 Slug = product.Slug,
-                SoldOut = product.SoldOut
+                SoldOut = product.SoldOut,
+                Categories = categories,
+                ThumbnailImage = image != null ? image.Path : "no-image.jpg"
             };
             return viewModel;
         }
@@ -231,11 +248,12 @@ namespace CollabClothing.Appication.Catalog.Products
         }
         private async Task<string> SaveFile(IFormFile file)
         {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim();
-            var fileName = $"{Path.GetExtension(originalFileName)}";
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
         }
+
 
         //mothod get product images by product id
         public async Task<List<ProductImageViewModel>> GetListImage(string productId)
@@ -245,7 +263,6 @@ namespace CollabClothing.Appication.Catalog.Products
                 Id = i.Id,
                 Alt = i.Alt,
                 Path = i.Path,
-                productId = i.ProductId
             }).ToListAsync();
             return listProductImages;
         }
@@ -255,7 +272,7 @@ namespace CollabClothing.Appication.Catalog.Products
             {
                 Id = request.Id,
                 ProductId = productId,
-                Path = request.Path,
+                // Path = request.Path,
                 Alt = request.Alt
             };
             if (request.File != null)
@@ -268,6 +285,18 @@ namespace CollabClothing.Appication.Catalog.Products
 
         }
 
+        //support delete file
+        private async Task DeleteFile(string fileName)
+        {
+            // var pathImage = Path.Combine(_userContentFolder, fileName);
+            if (fileName == null)
+            {
+                throw new CollabException($"Cannot find file with path {fileName}");
+            }
+            await _storageService.DeleteFileAsync(fileName);
+
+        }
+        //method remove file
         public async Task<int> RemoveImage(string imageId)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
@@ -276,6 +305,14 @@ namespace CollabClothing.Appication.Catalog.Products
                 throw new CollabException($"Product Image with image id : {productImage.Id} not exists!!!");
             }
             _context.ProductImages.Remove(productImage);
+            string fullPath = "wwwroot" + productImage.Path;
+            if (File.Exists(fullPath))
+            {
+                await Task.Run(() =>
+                {
+                    File.Delete(fullPath);
+                });
+            }
             return await _context.SaveChangesAsync();
         }
         public async Task<int> UpdateImage(string imageId, ProductImageEditRequest request)
@@ -287,6 +324,8 @@ namespace CollabClothing.Appication.Catalog.Products
             }
             if (request.File != null)
             {
+                string fullPath = "wwwroot" + productImage.Path;
+                File.Delete(fullPath);
                 productImage.Path = await this.SaveFile(request.File);
                 productImage.Alt = request.Alt;
             }
@@ -306,7 +345,6 @@ namespace CollabClothing.Appication.Catalog.Products
                 Id = productImage.Id,
                 Alt = productImage.Alt,
                 Path = productImage.Path,
-                productId = productImage.ProductId
             };
             return viewModel;
         }
