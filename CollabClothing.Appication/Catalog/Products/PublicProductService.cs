@@ -70,7 +70,6 @@ namespace CollabClothing.Appication.Catalog.Products
                                   CategoryName = c.NameCategory,
                                   ThumbnailImage = pimg.Path != null ? pimg.Path : "no-image in product"
                               }).ToListAsync();
-            // var allData = data.Union(data2).ToList();
             return data;
         }
 
@@ -113,7 +112,9 @@ namespace CollabClothing.Appication.Catalog.Products
             var pagedResult = new PageResult<ProductViewModel>()
             {
                 Items = data,
-                TotalRecord = totalRow
+                TotalRecord = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
             return pagedResult;
         }
