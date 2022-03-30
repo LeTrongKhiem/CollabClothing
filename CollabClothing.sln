@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollabClothing.WebApp", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollabClothing.Data", "CollabClothing.Data\CollabClothing.Data.csproj", "{089A80D8-E455-40D7-BD8A-5979481A2F9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollabClothing.Application", "CollabClothing.Appication\CollabClothing.Application.csproj", "{297AB662-615E-494F-8489-AB4A04374825}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollabClothing.Application", "CollabClothing.Application\CollabClothing.Application.csproj", "{297AB662-615E-494F-8489-AB4A04374825}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollabClothing.Utilities", "CollabClothing.Utilities\CollabClothing.Utilities.csproj", "{69916026-DDAE-4830-9168-CBE684410D3F}"
 EndProject

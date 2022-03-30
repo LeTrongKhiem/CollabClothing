@@ -1,6 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
-namespace CollabClothing.Appication.Common
+namespace CollabClothing.Application.Common
 {
     public interface IStorageService
     {
