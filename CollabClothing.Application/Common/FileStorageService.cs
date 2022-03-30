@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 
-namespace CollabClothing.Appication.Common
+namespace CollabClothing.Application.Common
 {
     public class FileStorageService : IStorageService
     {

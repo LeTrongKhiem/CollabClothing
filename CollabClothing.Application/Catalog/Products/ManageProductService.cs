@@ -14,11 +14,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CollabClothing.Appication.Common;
+using CollabClothing.Application.Common;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using Microsoft.AspNetCore.Hosting;
 
-namespace CollabClothing.Appication.Catalog.Products
+namespace CollabClothing.Application.Catalog.Products
 {
     public class ManageProductService : IManageProductService
     {
