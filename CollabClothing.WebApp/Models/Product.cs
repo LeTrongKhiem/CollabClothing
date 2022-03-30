@@ -42,7 +42,7 @@ namespace CollabClothing.WebApp.Models
         [Required]
         [Column(TypeName = "text")]
         public string Slug { get; set; }
-        public int ViewCount { get; set; }
+        // public int ViewCount { get; set; }
 
         [ForeignKey(nameof(BrandId))]
         [InverseProperty("Products")]
