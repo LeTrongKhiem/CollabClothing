@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CollabClothing.Appication.Catalog.Products;
+using CollabClothing.Application.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 

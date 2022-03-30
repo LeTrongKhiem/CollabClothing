@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CollabClothing.Appication.Catalog.Products
+namespace CollabClothing.Application.Catalog.Products
 {
     public interface IManageProductService
     {

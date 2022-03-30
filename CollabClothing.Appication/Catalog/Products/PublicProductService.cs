@@ -10,7 +10,7 @@ using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.WebApp.Models;
 
-namespace CollabClothing.Appication.Catalog.Products
+namespace CollabClothing.Application.Catalog.Products
 {
     public class PublicProductService : IPublicProductService
     {
