@@ -14,11 +14,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CollabClothing.Appication.Common;
+using CollabClothing.Application.Common;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using Microsoft.AspNetCore.Hosting;
 
-namespace CollabClothing.Appication.Catalog.Products
+namespace CollabClothing.Application.Catalog.Products
 {
     public class ManageProductService : IManageProductService
     {
@@ -170,9 +170,14 @@ namespace CollabClothing.Appication.Catalog.Products
         {
             //1. Select join
             var query = from p in _context.Products
-                        join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
-                        join c in _context.Categories on pmc.CategoryId equals c.Id
-                        select new { p, pmc };
+                        join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
+                        from pmc in ppmc.DefaultIfEmpty()
+                        join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
+                        from c in ppmc.DefaultIfEmpty()
+                        join pimg in _context.ProductImages on p.Id equals pimg.ProductId
+                        into ppimg
+                        from pimg in ppimg.DefaultIfEmpty()
+                        select new { p, pmc, c, pimg };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
@@ -198,7 +203,9 @@ namespace CollabClothing.Appication.Catalog.Products
                     PriceOld = x.p.PriceOld,
                     SaleOff = x.p.SaleOff,
                     Slug = x.p.Slug,
-                    SoldOut = x.p.SoldOut
+                    SoldOut = x.p.SoldOut,
+                    CategoryName = x.c.Category.NameCategory,
+                    ThumbnailImage = x.pimg.Path
                 })
                 .ToListAsync();
 

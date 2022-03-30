@@ -3,14 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CollabClothing.Appication.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using CollabClothing.Appication.Common;
+using CollabClothing.Application.Common;
 
 namespace CollabClothing.BackendApi
 {
