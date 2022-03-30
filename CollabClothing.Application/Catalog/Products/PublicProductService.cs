@@ -10,7 +10,7 @@ using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.WebApp.Models;
 
-namespace CollabClothing.Appication.Catalog.Products
+namespace CollabClothing.Application.Catalog.Products
 {
     public class PublicProductService : IPublicProductService
     {
@@ -45,9 +45,16 @@ namespace CollabClothing.Appication.Catalog.Products
             //     SoldOut = x.p.SoldOut,
             //     // ThumbnailImage = x.pimg.Path != null ? x.pimg.Path : "no-image in product"
             // }).ToListAsync();
+            //from p in _context.Products
+            //join pimg in _context.ProductImages on new { PID = p.Id } equals new { PID = pimg.ProductId } into ProductInfoRight
+            //from productsInfoRightData in ProductInfoRight.DefaultIfEmpty()
             var data = await (from p in _context.Products
-                              join pimg in _context.ProductImages on new { PID = p.Id } equals new { PID = pimg.ProductId } into ProductInfoRight
-                              from productsInfoRightData in ProductInfoRight.DefaultIfEmpty()
+                              join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
+                              from pmc in ppmc.DefaultIfEmpty()
+                              join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
+                              from c in pmcc.DefaultIfEmpty()
+                              join pimg in _context.ProductImages on p.Id equals pimg.ProductId into ppimg
+                              from pimg in ppimg.DefaultIfEmpty()
                               select new ProductViewModel()
                               {
                                   Id = p.Id,
@@ -60,18 +67,22 @@ namespace CollabClothing.Appication.Catalog.Products
                                   SaleOff = p.SaleOff,
                                   Slug = p.Slug,
                                   SoldOut = p.SoldOut,
-                                  ThumbnailImage = productsInfoRightData.Path != null ? productsInfoRightData.Path : "no-image in product"
+                                  CategoryName = c.NameCategory,
+                                  ThumbnailImage = pimg.Path != null ? pimg.Path : "no-image in product"
                               }).ToListAsync();
-            // var allData = data.Union(data2).ToList();
             return data;
         }
 
         public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductRequestPaging request)
         {
             var query = from p in _context.Products
-                        join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
-                        join c in _context.Categories on pmc.CategoryId equals c.Id
-                        select new { p, pmc, c };
+                        join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
+                        from pmc in ppmc.DefaultIfEmpty()
+                        join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
+                        from c in pmcc.DefaultIfEmpty()
+                        join pimg in _context.ProductImages on p.Id equals pimg.ProductId into ppimg
+                        from pimg in ppimg.DefaultIfEmpty()
+                        select new { p, pmc, c, pimg };
             if (request.CategoryId != null && !request.CategoryId.Equals("0"))
             {
                 query = query.Where(p => p.pmc.CategoryId == request.CategoryId);
@@ -94,12 +105,16 @@ namespace CollabClothing.Appication.Catalog.Products
                                         Slug = x.p.Slug,
                                         SoldOut = x.p.SoldOut,
                                         // ThumbnailImage = image
+                                        CategoryName = x.c.NameCategory,
+                                        ThumbnailImage = x.pimg.Path
                                     })
                 .ToListAsync();
             var pagedResult = new PageResult<ProductViewModel>()
             {
                 Items = data,
-                TotalRecord = totalRow
+                TotalRecord = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
             return pagedResult;
         }

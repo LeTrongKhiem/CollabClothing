@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CollabClothing.Appication.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.ProductImages;
+using CollabClothing.Application.Catalog.Products;
 
 namespace CollabClothing.BackendApi.Controllers
 {
