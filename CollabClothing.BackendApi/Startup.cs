@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using CollabClothing.Application.Catalog.Products;
 using CollabClothing.Application.Common;
+using CollabClothing.Application.System.Users;
 using CollabClothing.Utilities.Constants;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,9 +34,18 @@ namespace CollabClothing.BackendApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DBClothingContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
+
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<DBClothingContext>().AddDefaultTokenProviders();
+
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
+            services.AddTransient<UserManager<User>, UserManager<User>>();
+            services.AddTransient<SignInManager<User>, SignInManager<User>>();
+            services.AddTransient<RoleManager<Role>, RoleManager<Role>>();
+            services.AddTransient<IUserService, UserService>();
+
+
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddSwaggerGen(c =>

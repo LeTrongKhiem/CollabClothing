@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
 namespace CollabClothing.WebApp.Models
 {
-    public partial class User
+    public partial class User : IdentityUser<Guid>
     {
         public User()
         {

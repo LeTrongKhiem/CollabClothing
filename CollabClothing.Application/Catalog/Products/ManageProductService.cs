@@ -155,7 +155,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Slug = product.Slug,
                 SoldOut = product.SoldOut,
                 Categories = categories,
-                ThumbnailImage = image != null ? image.Path : "no-image.jpg"
+                ThumbnailImage = image != null ? image.Path : "no-image.jpg",
             };
             return viewModel;
         }
