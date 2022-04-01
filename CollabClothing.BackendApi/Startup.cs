@@ -34,6 +34,9 @@ namespace CollabClothing.BackendApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DBClothingContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
+
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<DBClothingContext>().AddDefaultTokenProviders();
+
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
@@ -41,6 +44,8 @@ namespace CollabClothing.BackendApi
             services.AddTransient<SignInManager<User>, SignInManager<User>>();
             services.AddTransient<RoleManager<Role>, RoleManager<Role>>();
             services.AddTransient<IUserService, UserService>();
+
+
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddSwaggerGen(c =>
