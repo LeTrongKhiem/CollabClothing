@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
 namespace CollabClothing.WebApp.Models
 {
-    public partial class DBClothingContext : DbContext
+    public partial class DBClothingContext : IdentityDbContext<User, Role, Guid>
     {
         public DBClothingContext()
         {
@@ -14,6 +19,10 @@ namespace CollabClothing.WebApp.Models
 
         public DBClothingContext(DbContextOptions<DBClothingContext> options)
             : base(options)
+        {
+        }
+
+        public DBClothingContext(DbContextOptions options) : base(options)
         {
         }
 

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
 namespace CollabClothing.WebApp.Models
 {
-    public partial class Role
+    public partial class Role : IdentityRole<Guid>
     {
         [Key]
         [StringLength(255)]
