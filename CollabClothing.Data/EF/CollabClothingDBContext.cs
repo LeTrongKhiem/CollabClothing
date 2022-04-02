@@ -10,10 +10,20 @@ namespace CollabClothing.Data.EF
 {
     public class CollabClothingDBContext : DbContext
     {
+        public CollabClothingDBContext()
+        {
+        }
+
         public CollabClothingDBContext(DbContextOptions options) : base(options)
         {
-
         }
-        public DbSet<Product> Products { get; set; }
+        public CollabClothingDBContext(DbContextOptions<DbContext> options) : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

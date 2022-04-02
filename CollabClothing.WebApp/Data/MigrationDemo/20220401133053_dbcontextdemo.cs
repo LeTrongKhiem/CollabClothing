@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CollabClothing.WebApp.Migrations
 {
-    public partial class MyFirstMigration : Migration
+    public partial class dbcontextdemo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +17,49 @@ namespace CollabClothing.WebApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Actions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEndDateUtc = table.Column<DateTime>(type: "datetime", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,35 +119,6 @@ namespace CollabClothing.WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Functions",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    NameFunction = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Url = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ParentId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    SortOrder = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Functions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    NameRole = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Size",
                 columns: table => new
                 {
@@ -129,25 +143,91 @@ namespace CollabClothing.WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Password = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Phone = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    DOB = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Address = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    FullName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    LastLoginDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    Code = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_dbo.AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_dbo.AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ShipName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    ShipAddress = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    ShipEmail = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    ShipPhoneNumber = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    AspNetUserId = table.Column<string>(type: "nvarchar(128)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_AspNetUserId",
+                        column: x => x.AspNetUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -194,36 +274,6 @@ namespace CollabClothing.WebApp.Migrations
                         name: "fk_brand_product",
                         column: x => x.BrandId,
                         principalTable: "Brand",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Permission",
-                columns: table => new
-                {
-                    RoleId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    FunctionId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ActionId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.ForeignKey(
-                        name: "fk_action_per",
-                        column: x => x.ActionId,
-                        principalTable: "Actions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_func_per",
-                        column: x => x.FunctionId,
-                        principalTable: "Functions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_role_per",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -276,75 +326,22 @@ namespace CollabClothing.WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "OrderDetails",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ShipName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ShipAddress = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ShipEmail = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ShipPhoneNumber = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
+                    OrderId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    ProductId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "fk_user_order",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SystemActivity",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ActionName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ActionDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    FunctionId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ClientIP = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SystemActivity", x => x.Id);
-                    table.ForeignKey(
-                        name: "fk_func_sys",
-                        column: x => x.FunctionId,
-                        principalTable: "Functions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_user_sys",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRole",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.ForeignKey(
-                        name: "fk_role_user",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_user_role",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        name: "fk_order_orderdetails",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -356,11 +353,18 @@ namespace CollabClothing.WebApp.Migrations
                     Id = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     ProductId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
+                    AspNetUserId = table.Column<string>(type: "nvarchar(128)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cart_AspNetUsers_AspNetUserId",
+                        column: x => x.AspNetUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_product_cart",
                         column: x => x.ProductId,
@@ -476,27 +480,6 @@ namespace CollabClothing.WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderDetails",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    OrderId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    ProductId = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "fk_order_orderdetails",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PromotionDetail",
                 columns: table => new
                 {
@@ -517,51 +500,30 @@ namespace CollabClothing.WebApp.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Brand",
-                columns: new[] { "Id", "Images", "Info", "NameBrand", "Slug" },
-                values: new object[,]
-                {
-                    { "01", "adidas.png", "Brand Adidas", "Adidas", "/adidas" },
-                    { "02", "nike.png", "Brand Nike", "Nike", "/nike" }
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
 
-            migrationBuilder.InsertData(
-                table: "Category",
-                columns: new[] { "Id", "Icon", "IsShowWeb", "Level", "NameCategory", "ParentId", "Slug" },
-                values: new object[,]
-                {
-                    { "10001", "men", true, 1, "Men", "null", "/men" },
-                    { "10002", "women", true, 1, "Women", "null", "/women" },
-                    { "20001", "men", true, 2, "T-Shirt", "10001", "/men/t-shirt" },
-                    { "20002", "women", true, 2, "T-Shirt", "10002", "/women/t-shirt" }
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
 
-            migrationBuilder.InsertData(
-                table: "Product",
-                columns: new[] { "Id", "BrandId", "Description", "Installment", "PriceCurrent", "PriceOld", "ProductName", "SaleOff", "Slug", "SoldOut" },
-                values: new object[,]
-                {
-                    { "01", "01", "", 0, 300000m, 450000m, "Ao thun nam ", 20, "/", false },
-                    { "03", "01", "", 0, 200000m, 350000m, "Ao thun nu", 20, "/", false },
-                    { "02", "02", "", 0, 400000m, 450000m, "Ao thun nam 2", 20, "/", true },
-                    { "04", "02", "", 0, 200000m, 320000m, "Ao thun nu 1", 20, "/", false }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ProductMapCategory",
-                columns: new[] { "CategoryId", "ProductId" },
-                values: new object[] { "20001", "01" });
-
-            migrationBuilder.InsertData(
-                table: "ProductMapCategory",
-                columns: new[] { "CategoryId", "ProductId" },
-                values: new object[] { "20002", "02" });
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Banner_TypeBannerId",
                 table: "Banner",
                 column: "TypeBannerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_AspNetUserId",
+                table: "Cart",
+                column: "AspNetUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cart_ProductId",
@@ -579,24 +541,9 @@ namespace CollabClothing.WebApp.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserId",
+                name: "IX_Orders_AspNetUserId",
                 table: "Orders",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Permission_ActionId",
-                table: "Permission",
-                column: "ActionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Permission_FunctionId",
-                table: "Permission",
-                column: "FunctionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Permission_RoleId",
-                table: "Permission",
-                column: "RoleId");
+                column: "AspNetUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_BrandId",
@@ -642,30 +589,22 @@ namespace CollabClothing.WebApp.Migrations
                 name: "IX_SizeMapColor_Sizeid",
                 table: "SizeMapColor",
                 column: "Sizeid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SystemActivity_FunctionId",
-                table: "SystemActivity",
-                column: "FunctionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SystemActivity_UserId",
-                table: "SystemActivity",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRole_RoleId",
-                table: "UserRole",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRole_UserId",
-                table: "UserRole",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Actions");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
             migrationBuilder.DropTable(
                 name: "Banner");
 
@@ -677,9 +616,6 @@ namespace CollabClothing.WebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
-
-            migrationBuilder.DropTable(
-                name: "Permission");
 
             migrationBuilder.DropTable(
                 name: "ProductDetail");
@@ -700,10 +636,7 @@ namespace CollabClothing.WebApp.Migrations
                 name: "SizeMapColor");
 
             migrationBuilder.DropTable(
-                name: "SystemActivity");
-
-            migrationBuilder.DropTable(
-                name: "UserRole");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "BannerType");
@@ -713,9 +646,6 @@ namespace CollabClothing.WebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Actions");
 
             migrationBuilder.DropTable(
                 name: "Category");
@@ -730,13 +660,7 @@ namespace CollabClothing.WebApp.Migrations
                 name: "Size");
 
             migrationBuilder.DropTable(
-                name: "Functions");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
-
-            migrationBuilder.DropTable(
-                name: "Users");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Product");

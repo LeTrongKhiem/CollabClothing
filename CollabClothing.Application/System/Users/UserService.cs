@@ -14,17 +14,43 @@ namespace CollabClothing.Application.System.Users
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly RoleManager<AspNetRole> _roleManager;
         private readonly IConfiguration _config;
+        private readonly DBClothingContext _context;
 
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager, IConfiguration configuration)
+        public UserService(UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager, RoleManager<AspNetRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = configuration;
+        }
+
+        public UserService(DBClothingContext context)
+        {
+            _context = context;
+        }
+        public async Task<bool> Register(RegisterRequest request)
+        {
+            var user = new AspNetUser()
+            {
+                UserName = request.UserName,
+                Email = request.Email,
+                Dob = request.Dob,
+                PhoneNumber = request.Phone,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+
+
+            };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else return false;
         }
         public async Task<string> Authenticate(LoginRequest request)
         {
@@ -41,7 +67,7 @@ namespace CollabClothing.Application.System.Users
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[] {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.FullName),
+                new Claim(ClaimTypes.GivenName, user.FirstName),
                 new Claim(ClaimTypes.Role, string.Join(";", roles)),
                 new Claim(ClaimTypes.Name, request.UserName)
             };
@@ -57,22 +83,6 @@ namespace CollabClothing.Application.System.Users
 
         }
 
-        public async Task<bool> Register(RegisterRequest request)
-        {
-            var user = new User()
-            {
-                Email = request.Email,
-                FullName = request.FullName,
-                Dob = request.Dob,
-                Phone = request.Phone,
-                Address = request.Address,
-            };
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
-            {
-                return true;
-            }
-            else return false;
-        }
+
     }
 }

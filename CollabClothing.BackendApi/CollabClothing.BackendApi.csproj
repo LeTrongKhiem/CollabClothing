@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="5.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <ProjectReference Include="..\CollabClothing.Application\CollabClothing.Application.csproj" />
     <ProjectReference Include="..\CollabClothing.Utilities\CollabClothing.Utilities.csproj" />

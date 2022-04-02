@@ -262,7 +262,7 @@ namespace CollabClothing.Application.Catalog.Products
         }
 
 
-        //mothod get product images by product id
+        //method get product images by product id
         public async Task<List<ProductImageViewModel>> GetListImage(string productId)
         {
             var listProductImages = await _context.ProductImages.Where(x => x.ProductId.Equals(productId)).Select(i => new ProductImageViewModel()

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CollabClothing.Application.Catalog.Products;
 using CollabClothing.Application.Common;
 using CollabClothing.Application.System.Users;
+using CollabClothing.BackendApi.Data;
 using CollabClothing.Utilities.Constants;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Builder;
@@ -35,14 +36,21 @@ namespace CollabClothing.BackendApi
         {
             services.AddDbContext<DBClothingContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
 
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<DBClothingContext>().AddDefaultTokenProviders();
-
+            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<DBClothingContext>().AddDefaultTokenProviders();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //                        .AddRoles<IdentityRole>()
+            //                        .AddEntityFrameworkStores<DBClothingContext>()
+            //                        .AddDefaultTokenProviders();
+            services.AddIdentity<AspNetUser, AspNetRole>()
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<DBClothingContext>()
+                .AddDefaultTokenProviders();
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
-            services.AddTransient<UserManager<User>, UserManager<User>>();
-            services.AddTransient<SignInManager<User>, SignInManager<User>>();
-            services.AddTransient<RoleManager<Role>, RoleManager<Role>>();
+            services.AddTransient<UserManager<AspNetUser>, UserManager<AspNetUser>>();
+            services.AddTransient<SignInManager<AspNetUser>, SignInManager<AspNetUser>>();
+            services.AddTransient<RoleManager<AspNetRole>, RoleManager<AspNetRole>>();
             services.AddTransient<IUserService, UserService>();
 
 
@@ -67,6 +75,7 @@ namespace CollabClothing.BackendApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            //app.UseIdentity();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
