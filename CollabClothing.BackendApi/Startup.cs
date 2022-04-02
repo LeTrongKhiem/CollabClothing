@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CollabClothing.Application.Catalog.Products;
 using CollabClothing.Application.Common;
@@ -8,6 +9,7 @@ using CollabClothing.Application.System.Users;
 using CollabClothing.BackendApi.Data;
 using CollabClothing.Utilities.Constants;
 using CollabClothing.WebApp.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -18,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace CollabClothing.BackendApi
@@ -53,6 +56,21 @@ namespace CollabClothing.BackendApi
             services.AddTransient<RoleManager<AspNetRole>, RoleManager<AspNetRole>>();
             services.AddTransient<IUserService, UserService>();
 
+
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    RequireExpirationTime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Your key to encrypt"))
+                };
+            });
 
             services.AddControllersWithViews();
             services.AddControllers();

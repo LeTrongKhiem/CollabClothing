@@ -20,16 +20,6 @@ namespace CollabClothing.BackendApi
             CreateHostBuilder(args).Build().Run();
 
         }
-        // public static async Task Main(string[] args)
-        // {
-        //     ManageProductService request = new ManageProductService();
-        //     DBClothingContext context = new DBClothingContext();
-        //     PublicProductService p = new PublicProductService(context);
-        //     List<ProductViewModel> list = await p.GetAllByCategoryId();
-        //     foreach (var product in list)
-        //     {
-        //         Console.WriteLine(product.Id);
-        //     }
         // }
 
 
