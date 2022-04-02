@@ -44,17 +44,17 @@ namespace CollabClothing.BackendApi
             //                        .AddRoles<IdentityRole>()
             //                        .AddEntityFrameworkStores<DBClothingContext>()
             //                        .AddDefaultTokenProviders();
-            services.AddIdentity<AspNetUser, AspNetRole>()
-                .AddDefaultUI()
-                .AddEntityFrameworkStores<DBClothingContext>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<AspNetUser, AspNetRole>()
+            //    .AddDefaultUI()
+            //    .AddEntityFrameworkStores<DBClothingContext>()
+            //    .AddDefaultTokenProviders();
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
-            services.AddTransient<UserManager<AspNetUser>, UserManager<AspNetUser>>();
-            services.AddTransient<SignInManager<AspNetUser>, SignInManager<AspNetUser>>();
-            services.AddTransient<RoleManager<AspNetRole>, RoleManager<AspNetRole>>();
-            services.AddTransient<IUserService, UserService>();
+            //services.AddTransient<UserManager<AspNetUser>, UserManager<AspNetUser>>();
+            //services.AddTransient<SignInManager<AspNetUser>, SignInManager<AspNetUser>>();
+            //services.AddTransient<RoleManager<AspNetRole>, RoleManager<AspNetRole>>();
+            //services.AddTransient<IUserService, UserService>();
 
 
             services.AddAuthentication(auth =>

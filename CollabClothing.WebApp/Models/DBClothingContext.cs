@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CollabClothing.WebApp.Models
 {
-    public partial class DBClothingContext : IdentityDbContext<AspNetUser, AspNetRole, Guid>
+    public partial class DBClothingContext : DbContext
     //DbContext
 
     {

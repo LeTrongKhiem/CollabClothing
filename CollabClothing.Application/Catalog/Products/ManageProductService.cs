@@ -42,9 +42,10 @@ namespace CollabClothing.Application.Catalog.Products
         //de tao nen 1 san pham
         public async Task<string> Create(ProductCreateRequest request)
         {
+            Guid g = Guid.NewGuid();
             var product = new Product()
             {
-                Id = request.Id,
+                Id = g.ToString(),
                 ProductName = request.ProductName,
                 PriceCurrent = request.PriceCurrent,
                 PriceOld = request.PriceOld,
@@ -63,7 +64,13 @@ namespace CollabClothing.Application.Catalog.Products
                 //     }
                 // }
             };
+            var ProductMapCategory = new ProductMapCategory()
+            {
+                ProductId = product.Id,
+                CategoryId = request.CategoryId
+            };
             _context.Products.Add(product);
+            _context.ProductMapCategories.Add(ProductMapCategory);
             await _context.SaveChangesAsync();
             return product.Id;
         }
