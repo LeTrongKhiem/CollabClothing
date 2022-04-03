@@ -5,13 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CollabClothing.Data\CollabClothing.Data.csproj" />
     <ProjectReference Include="..\CollabClothing.Utilities\CollabClothing.Utilities.csproj" />
     <ProjectReference Include="..\CollabClothing.WebApp\CollabClothing.WebApp.csproj" />
     <ProjectReference Include="..\CollabClothing.ViewModels\CollabClothing.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.15" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
   </ItemGroup>
 

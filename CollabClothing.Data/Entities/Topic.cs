@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CollabClothing.Data.Entities
 {
-    public class Topic
+    public partial class Topic
     {
+        public Topic()
+        {
+            Contacts = new HashSet<Contact>();
+        }
+
         public string Id { get; set; }
         public string NameTopic { get; set; }
+
+        public virtual ICollection<Contact> Contacts { get; set; }
     }
 }

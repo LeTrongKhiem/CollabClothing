@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CollabClothing.Data.Entities
 {
-    public class BannerType
+    public partial class BannerType
     {
+        public BannerType()
+        {
+            Banners = new HashSet<Banner>();
+        }
+
         public string Id { get; set; }
         public string NameBannerType { get; set; }
+
+        public virtual ICollection<Banner> Banners { get; set; }
     }
 }

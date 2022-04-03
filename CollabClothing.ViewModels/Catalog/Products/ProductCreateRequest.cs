@@ -26,6 +26,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public string Slug { get; set; }
         public string Details { get; set; }
         public IFormFile ThumbnailImage { get; set; }
+        public string CategoryId { get; set; }
         // public ProductImageViewModel productImage { get; set; }
         // public CategoryViewModel CategoryViewModel { get; set; }
         // public Size Size { get; set; }

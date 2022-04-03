@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 using System.Linq;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.Catalog.Products;
-using CollabClothing.WebApp.Models;
+using CollabClothing.Data.EF;
 
 namespace CollabClothing.Application.Catalog.Products
 {
     public class PublicProductService : IPublicProductService
     {
-        private readonly DBClothingContext _context;
-        public PublicProductService(DBClothingContext context)
+        private readonly CollabClothingDBContext _context;
+        public PublicProductService(CollabClothingDBContext context)
         {
             _context = context;
         }
@@ -23,31 +23,6 @@ namespace CollabClothing.Application.Catalog.Products
 
         public async Task<List<ProductViewModel>> GetAll()
         {
-            // var query = from p in _context.Products
-            //             join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
-            //             join c in _context.Categories on pmc.CategoryId equals c.Id
-            //             // into ProductInfo
-            //             // from productData in ProductInfo.DefaultIfEmpty()
-            //             // join pimg in _context.ProductImages on p.Id equals pimg.ProductId
-            //             select new { p, pmc };
-
-            // var data = await query.Select(x => new ProductViewModel()
-            // {
-            //     Id = x.p.Id,
-            //     ProductName = x.p.ProductName,
-            //     BrandId = x.p.BrandId,
-            //     Description = x.p.Description,
-            //     Installment = x.p.Installment,
-            //     PriceCurrent = x.p.PriceCurrent,
-            //     PriceOld = x.p.PriceOld,
-            //     SaleOff = x.p.SaleOff,
-            //     Slug = x.p.Slug,
-            //     SoldOut = x.p.SoldOut,
-            //     // ThumbnailImage = x.pimg.Path != null ? x.pimg.Path : "no-image in product"
-            // }).ToListAsync();
-            //from p in _context.Products
-            //join pimg in _context.ProductImages on new { PID = p.Id } equals new { PID = pimg.ProductId } into ProductInfoRight
-            //from productsInfoRightData in ProductInfoRight.DefaultIfEmpty()
             var data = await (from p in _context.Products
                               join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
                               from pmc in ppmc.DefaultIfEmpty()

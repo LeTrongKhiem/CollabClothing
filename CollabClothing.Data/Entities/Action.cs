@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace CollabClothing.Data.Entities
 {
-    public partial class Color
+    public partial class Action
     {
         public string Id { get; set; }
-        public string NameColor { get; set; }
+        public string NameAction { get; set; }
     }
 }

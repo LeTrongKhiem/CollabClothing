@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using CollabClothing.Utilities.Exceptions;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
-using CollabClothing.WebApp.Models;
+using CollabClothing.Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,15 +17,16 @@ using System.Threading.Tasks;
 using CollabClothing.Application.Common;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using Microsoft.AspNetCore.Hosting;
+using CollabClothing.Data.EF;
 
 namespace CollabClothing.Application.Catalog.Products
 {
     public class ManageProductService : IManageProductService
     {
-        private readonly DBClothingContext _context;
+        private readonly CollabClothingDBContext _context;
         private readonly IStorageService _storageService;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
-        public ManageProductService(DBClothingContext context, IStorageService storageService)
+        public ManageProductService(CollabClothingDBContext context, IStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
@@ -42,9 +43,10 @@ namespace CollabClothing.Application.Catalog.Products
         //de tao nen 1 san pham
         public async Task<string> Create(ProductCreateRequest request)
         {
+            Guid g = Guid.NewGuid();
             var product = new Product()
             {
-                Id = request.Id,
+                Id = g.ToString(),
                 ProductName = request.ProductName,
                 PriceCurrent = request.PriceCurrent,
                 PriceOld = request.PriceOld,
@@ -63,7 +65,28 @@ namespace CollabClothing.Application.Catalog.Products
                 //     }
                 // }
             };
+            var ProductMapCategory = new ProductMapCategory()
+            {
+                ProductId = product.Id,
+                CategoryId = request.CategoryId
+            };
+            var Thumbnail = new ProductImage()
+            {
+                Id = g.ToString(),
+                ProductId = product.Id,
+
+            };
+            if (request.ThumbnailImage != null)
+            {
+                Thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
+            }
+            else
+            {
+                Thumbnail.Path = "no-image";
+            }
             _context.Products.Add(product);
+            _context.ProductMapCategories.Add(ProductMapCategory);
+            _context.ProductImages.Add(Thumbnail);
             await _context.SaveChangesAsync();
             return product.Id;
         }
@@ -155,7 +178,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Slug = product.Slug,
                 SoldOut = product.SoldOut,
                 Categories = categories,
-                ThumbnailImage = image != null ? image.Path : "no-image.jpg"
+                ThumbnailImage = image != null ? image.Path : "no-image.jpg",
             };
             return viewModel;
         }
@@ -262,7 +285,7 @@ namespace CollabClothing.Application.Catalog.Products
         }
 
 
-        //mothod get product images by product id
+        //method get product images by product id
         public async Task<List<ProductImageViewModel>> GetListImage(string productId)
         {
             var listProductImages = await _context.ProductImages.Where(x => x.ProductId.Equals(productId)).Select(i => new ProductImageViewModel()
