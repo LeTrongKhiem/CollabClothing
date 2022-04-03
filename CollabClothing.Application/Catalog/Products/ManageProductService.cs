@@ -56,14 +56,6 @@ namespace CollabClothing.Application.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
-                // ViewCount = 0,
-                // ProductMapCategories = new List<ProductMapCategory>()
-                // {
-                //     new ProductMapCategory()
-                //     {
-                //         CategoryId = request.CategoryViewModel.CategoryId
-                //     }
-                // }
             };
             var ProductMapCategory = new ProductMapCategory()
             {
@@ -74,6 +66,7 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 Id = g.ToString(),
                 ProductId = product.Id,
+                Alt = product.ProductName
 
             };
             if (request.ThumbnailImage != null)

@@ -14,5 +14,6 @@ namespace CollabClothing.Application.Catalog.Products
         Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductRequestPaging request);
 
         Task<List<ProductViewModel>> GetAll();
+        Task<List<ProductViewModel>> GetProductByCategoryId(string cateId);
     }
 }
