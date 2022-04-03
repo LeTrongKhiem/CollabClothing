@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CollabClothing.BackendApi.Controllers
 {
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -15,22 +16,6 @@ namespace CollabClothing.BackendApi.Controllers
         {
             _userService = userService;
         }
-        [HttpPost("authenticate")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var resultToken = await _userService.Authenticate(request);
-            if (string.IsNullOrEmpty(resultToken))
-            {
-                return BadRequest("Username or Password is incorrect");
-            }
-            return Ok(new { token = resultToken });
-        }
-
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] RegisterRequest request)
@@ -46,5 +31,23 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok();
         }
+        [HttpPost("authenticate")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Authenticate([FromForm] LoginRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var resultToken = await _userService.Authenticate(request);
+            if (string.IsNullOrEmpty(resultToken))
+            {
+                return BadRequest("Username or Password is incorrect");
+            }
+            return Ok(new { token = resultToken });
+        }
+
+
+
     }
 }

@@ -4,27 +4,50 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CollabClothing.ViewModels.System.Users;
-using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using CollabClothing.Data.Entities;
+using CollabClothing.Data.EF;
 
 namespace CollabClothing.Application.System.Users
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
+        private readonly CollabClothingDBContext _context;
 
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = configuration;
+        }
+
+        public async Task<bool> Register(RegisterRequest request)
+        {
+            Guid g = Guid.NewGuid();
+            var user = new AppUser()
+            {
+                Id = g,
+                UserName = request.UserName,
+                Email = request.Email,
+                Dob = request.Dob,
+                PhoneNumber = request.Phone,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+            };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else return false;
         }
         public async Task<string> Authenticate(LoginRequest request)
         {
@@ -41,7 +64,7 @@ namespace CollabClothing.Application.System.Users
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[] {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.FullName),
+                new Claim(ClaimTypes.GivenName, user.FirstName),
                 new Claim(ClaimTypes.Role, string.Join(";", roles)),
                 new Claim(ClaimTypes.Name, request.UserName)
             };
@@ -57,22 +80,6 @@ namespace CollabClothing.Application.System.Users
 
         }
 
-        public async Task<bool> Register(RegisterRequest request)
-        {
-            var user = new User()
-            {
-                Email = request.Email,
-                FullName = request.FullName,
-                Dob = request.Dob,
-                Phone = request.Phone,
-                Address = request.Address,
-            };
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
-            {
-                return true;
-            }
-            else return false;
-        }
+
     }
 }

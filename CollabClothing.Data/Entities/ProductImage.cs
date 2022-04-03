@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 namespace CollabClothing.Data.Entities
 {
-    public partial class ProductMapSize
+    public partial class ProductImage
     {
+        public string Id { get; set; }
         public string ProductId { get; set; }
-        public string SizeId { get; set; }
+        public string Path { get; set; }
+        public string Alt { get; set; }
 
         public virtual Product Product { get; set; }
-        public virtual Size Size { get; set; }
     }
 }

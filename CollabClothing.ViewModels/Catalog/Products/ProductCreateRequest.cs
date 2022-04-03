@@ -13,7 +13,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
 {
     public class ProductCreateRequest
     {
-        public string Id { get; set; }
+        // public string Id { get; set; }
         [Required(ErrorMessage = "You must input product name!!!")]
         public string ProductName { get; set; }
         public decimal PriceCurrent { get; set; }
@@ -26,6 +26,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public string Slug { get; set; }
         public string Details { get; set; }
         public IFormFile ThumbnailImage { get; set; }
+        public string CategoryId { get; set; }
         // public ProductImageViewModel productImage { get; set; }
         // public CategoryViewModel CategoryViewModel { get; set; }
         // public Size Size { get; set; }

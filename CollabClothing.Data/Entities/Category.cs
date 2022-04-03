@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CollabClothing.Data.Entities
 {
-    public class Category
+    public partial class Category
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public bool IsShowWeb { get; set; }
-        public int Level { get; set; }
-        public string? ParentId { get; set; }
-        public string Slug { get; set; }
-        public string Icon { get; set; }
+        public Category()
+        {
+            ProductMapCategories = new HashSet<ProductMapCategory>();
+        }
 
+        public string Id { get; set; }
+        public string NameCategory { get; set; }
+        public string ParentId { get; set; }
+        public string Icon { get; set; }
+        public int Level { get; set; }
+        public bool IsShowWeb { get; set; }
+        public string Slug { get; set; }
+
+        public virtual ICollection<ProductMapCategory> ProductMapCategories { get; set; }
     }
 }
