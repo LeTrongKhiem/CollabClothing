@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using CollabClothing.Application.Catalog.Products;
 using CollabClothing.Application.Common;
 using CollabClothing.Application.System.Users;
-using CollabClothing.BackendApi.Data;
+using CollabClothing.Data.EF;
+using CollabClothing.Data.Entities;
 using CollabClothing.Utilities.Constants;
-using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,24 +37,25 @@ namespace CollabClothing.BackendApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DBClothingContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
+            //services.AddDbContext<DBClothingContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
+            services.AddDbContext<CollabClothingDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
 
-            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<DBClothingContext>().AddDefaultTokenProviders();
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //                        .AddRoles<IdentityRole>()
-            //                        .AddEntityFrameworkStores<DBClothingContext>()
-            //                        .AddDefaultTokenProviders();
-            //services.AddIdentity<AspNetUser, AspNetRole>()
-            //    .AddDefaultUI()
-            //    .AddEntityFrameworkStores<DBClothingContext>()
-            //    .AddDefaultTokenProviders();
+            services.AddIdentity<AppUser, AppRole>()
+            .AddEntityFrameworkStores<CollabClothingDBContext>()
+            .AddDefaultTokenProviders();
+
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
-            //services.AddTransient<UserManager<AspNetUser>, UserManager<AspNetUser>>();
-            //services.AddTransient<SignInManager<AspNetUser>, SignInManager<AspNetUser>>();
-            //services.AddTransient<RoleManager<AspNetRole>, RoleManager<AspNetRole>>();
-            //services.AddTransient<IUserService, UserService>();
+
+
+            services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
+            services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
+            services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+
+            services.AddTransient<IUserService, UserService>();
+
+
 
 
             services.AddAuthentication(auth =>

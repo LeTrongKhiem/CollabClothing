@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace CollabClothing.WebApp.Models
+namespace CollabClothing.Data.Entities
 {
     [Table("sysdiagrams")]
     [Index(nameof(PrincipalId), nameof(Name), Name = "UK_principal_name", IsUnique = true)]

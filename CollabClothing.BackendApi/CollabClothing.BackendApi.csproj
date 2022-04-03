@@ -10,16 +10,17 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <ProjectReference Include="..\CollabClothing.Application\CollabClothing.Application.csproj" />
+    <ProjectReference Include="..\CollabClothing.Data\CollabClothing.Data.csproj" />
     <ProjectReference Include="..\CollabClothing.Utilities\CollabClothing.Utilities.csproj" />
     <ProjectReference Include="..\CollabClothing.WebApp\CollabClothing.WebApp.csproj" />
     <ProjectReference Include="..\CollabClothing.ViewModels\CollabClothing.ViewModels.csproj" />
     
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.14" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.14" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.14">
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.15">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

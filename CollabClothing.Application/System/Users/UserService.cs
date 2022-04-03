@@ -4,23 +4,24 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CollabClothing.ViewModels.System.Users;
-using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using CollabClothing.Data.Entities;
+using CollabClothing.Data.EF;
 
 namespace CollabClothing.Application.System.Users
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly SignInManager<AspNetUser> _signInManager;
-        private readonly RoleManager<AspNetRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
-        private readonly DBClothingContext _context;
+        private readonly CollabClothingDBContext _context;
 
-        public UserService(UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager, RoleManager<AspNetRole> roleManager, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,22 +29,18 @@ namespace CollabClothing.Application.System.Users
             _config = configuration;
         }
 
-        public UserService(DBClothingContext context)
-        {
-            _context = context;
-        }
         public async Task<bool> Register(RegisterRequest request)
         {
-            var user = new AspNetUser()
+            Guid g = Guid.NewGuid();
+            var user = new AppUser()
             {
+                Id = g,
                 UserName = request.UserName,
                 Email = request.Email,
                 Dob = request.Dob,
                 PhoneNumber = request.Phone,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-
-
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)

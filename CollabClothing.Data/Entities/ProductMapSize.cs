@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CollabClothing.Data.Entities
 {
-    public class ProductMapSize
+    public partial class ProductMapSize
     {
-        public Product Product { get; set; }
-        public Size Size { get; set; }
-
         public string ProductId { get; set; }
-
         public string SizeId { get; set; }
+
+        public virtual Product Product { get; set; }
+        public virtual Size Size { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace CollabClothing.WebApp.Models
+namespace CollabClothing.Data.Entities
 {
     public partial class PromotionDetail
     {
