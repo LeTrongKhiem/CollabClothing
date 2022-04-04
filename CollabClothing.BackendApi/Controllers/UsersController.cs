@@ -46,8 +46,5 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(new { token = resultToken });
         }
-
-
-
     }
 }

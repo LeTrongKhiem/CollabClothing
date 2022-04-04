@@ -22,6 +22,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using CollabClothing.ViewModels.System.Users;
 
 namespace CollabClothing.BackendApi
 {
@@ -37,7 +40,6 @@ namespace CollabClothing.BackendApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<DBClothingContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
             services.AddDbContext<CollabClothingDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
 
             services.AddIdentity<AppUser, AppRole>()
@@ -55,7 +57,8 @@ namespace CollabClothing.BackendApi
 
             services.AddTransient<IUserService, UserService>();
 
-
+            // services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
+            // services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>(); vi khai bao fv => fv.RegisterValidatorsFromAssemblyContaining
 
             string issuer = Configuration.GetValue<string>("Token:Issuer");
             string signingKey = Configuration.GetValue<string>("Token:Key");
@@ -75,8 +78,8 @@ namespace CollabClothing.BackendApi
                 };
             });
 
-            services.AddControllersWithViews();
-            services.AddControllers();
+            // services.AddControllersWithViews();
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
             services.AddSwaggerGen(c =>
             {
