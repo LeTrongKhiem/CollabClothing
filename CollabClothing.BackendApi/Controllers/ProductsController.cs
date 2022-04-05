@@ -46,6 +46,16 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+        [HttpGet("/category/{cateId}")]
+        public async Task<IActionResult> GetProductByCategoryId(string cateId)
+        {
+            var product = await _publicProductService.GetProductByCategoryId(cateId);
+            if (product == null)
+            {
+                return BadRequest("Cannot find product");
+            }
+            return Ok(product);
+        }
         //
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)

@@ -79,7 +79,6 @@ namespace CollabClothing.Application.Catalog.Products
                                         SaleOff = x.p.SaleOff,
                                         Slug = x.p.Slug,
                                         SoldOut = x.p.SoldOut,
-                                        // ThumbnailImage = image
                                         CategoryName = x.c.NameCategory,
                                         ThumbnailImage = x.pimg.Path
                                     })
@@ -92,6 +91,36 @@ namespace CollabClothing.Application.Catalog.Products
                 PageSize = request.PageSize
             };
             return pagedResult;
+        }
+
+        public async Task<List<ProductViewModel>> GetProductByCategoryId(string cateId)
+        {
+            var data = await (from p in _context.Products
+                              join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
+                              from pmc in ppmc.DefaultIfEmpty()
+                              join c in _context.Categories on pmc.CategoryId equals c.Id
+                              into pmcc
+                              from c in pmcc.DefaultIfEmpty()
+                              join pimg in _context.ProductImages on p.Id equals pimg.ProductId
+                              into ppimg
+                              from pimg in ppimg.DefaultIfEmpty()
+                              select new ProductViewModel()
+                              {
+                                  Id = p.Id,
+                                  ProductName = p.ProductName,
+                                  BrandId = p.BrandId,
+                                  Description = p.Description,
+                                  Installment = p.Installment,
+                                  PriceCurrent = p.PriceCurrent,
+                                  PriceOld = p.PriceOld,
+                                  SaleOff = p.SaleOff,
+                                  Slug = p.Slug,
+                                  SoldOut = p.SoldOut,
+                                  CategoryName = c.NameCategory,
+                                  ThumbnailImage = pimg.Path != null ? pimg.Path : "no-image in product"
+                              }
+                              ).ToListAsync();
+            return data;
         }
     }
 }

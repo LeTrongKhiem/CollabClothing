@@ -13,7 +13,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
 {
     public class ProductCreateRequest
     {
-        public string Id { get; set; }
+        // public string Id { get; set; }
         [Required(ErrorMessage = "You must input product name!!!")]
         public string ProductName { get; set; }
         public decimal PriceCurrent { get; set; }
