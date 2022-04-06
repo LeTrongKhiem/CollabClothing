@@ -76,8 +76,6 @@ namespace CollabClothing.Application.System.Users
                         expires: DateTime.Now.AddHours(3),
                         signingCredentials: creds);
             return new JwtSecurityTokenHandler().WriteToken(token);
-
-
         }
 
 

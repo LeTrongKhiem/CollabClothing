@@ -1,8 +1,110 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "User Management";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="page-header">
+ <div class="header-sub-title">
+  <nav class="breadcrumb breadcrumb-dash">
+   <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+   <a class="breadcrumb-item" asp-area="Admin" asp-controller="AdminAccount" asp-action="Index">Danh sách tài khoản quản trị</a>
+  </nav>
+ </div>
 </div>
+
+<div class="card">
+ <div class="card-body">
+  <div class="row m-b-30">
+   <div class="col-lg-8">
+	<div class="d-md-flex">
+	 <div class="m-b-10 m-r-15">
+	 </div>
+	 <div class="m-b-10">
+	  <select class="custom-select" style="min-width: 180px; margin-top: 15px;" id="txtRole" name="txtRole">
+	   <option selected>Chọn</option>
+	   <option value="all">Tất cả</option>
+	   <option value="1">Quản Trị</option>
+	   <option value="0">Nhân Viên</option>
+	  </select>
+	 </div>
+	</div>
+   </div>
+   <div class="col-lg-4 text-right">
+	<button class="btn btn-primary">
+	 <a asp-area="Admin" asp-controller="AdminAccount" asp-action="Create">
+	  <i class="anticon anticon-plus-circle m-r-5" style="color:azure;"></i>
+	  <span style="color:azure;">Thêm tài khoản</span>
+	 </a>
+	</button>
+   </div>
+  </div>
+  <div class="table-responsive">
+   <table class="table table-hover e-commerce-table">
+	<thead>
+	 <tr>
+	  <th>
+	   Admin Id
+	  </th>
+	  <th>
+	   Họ Tên
+	  </th>
+	  <th>
+	   Email
+	  </th>
+	  <th>
+	   SĐT
+	  </th>
+	  <th>
+	   Ngày BĐ
+	  </th>
+	  <th>
+	   Quyền
+	  </th>
+	  <th>
+	   Địa chỉ
+	  </th>
+	  <th></th>
+	 </tr>
+	</thead>
+	<tbody>
+	</tbody>
+   </table>
+   <div aria-label="Page navigation example">
+	<ul class="pagination">
+	 <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminAccount" asp-action="Index"></pager>
+	</ul>
+   </div>
+  </div>
+ </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+		crossorigin="anonymous"></script>
+@section Scripts {
+<script>
+	$(document).ready(function() {
+		jQuery("#txtRole").change(function() {
+			var role = jQuery(this).children(":selected").attr("value");
+			role = parseFloat(role);
+			$('#txtRole option').removeAttr('selected');
+			$("#txtRole > [value=" + role +"]").attr("selected", "true");
+			$.ajax({
+			  type: "GET",
+			  url: "/Admin/AdminAccount/Filter",
+			  dataType: "json",
+			  data : {
+					Role : role
+			  },
+			  async : true,
+			  success: function(results){
+				 if (results.status == "success") {
+					 window.location.href = results.redirectUrlUsers;
+				 }
+			  },
+			  error : function(xhr) {
+				  alert('Error');
+			  }
+			});
+		});
+	});
+</script>
+}

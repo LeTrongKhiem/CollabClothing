@@ -1,4 +1,4 @@
-using CollabClothing.WebApp.Models;
+
 using Microsoft.AspNetCore.Http;
 
 namespace CollabClothing.ViewModels.Catalog.ProductImages
