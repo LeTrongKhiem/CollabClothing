@@ -28,6 +28,10 @@ namespace CollabClothing.ManageAdminApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
             {
                 option.LoginPath = "/User/Login";
@@ -66,7 +70,7 @@ namespace CollabClothing.ManageAdminApp
             app.UseRouting();
 
             app.UseAuthorization();
-            //app.UseSession();
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

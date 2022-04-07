@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using CollabClothing.Application.System.Users;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollabClothing.BackendApi.Controllers
@@ -44,7 +45,28 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest("Username or Password is incorrect");
             }
+            //else
+            //{
+            //    HttpContext.Session.SetString("Token", resultToken);
+            //}
             return Ok(resultToken);
+        }
+
+        //https://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
+        [HttpGet("paging")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetListUser([FromQuery] GetUserRequestPaging request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var users = await _userService.GetListUser(request);
+            if (users == null)
+            {
+                return BadRequest("No User find");
+            }
+            return Ok(users);
         }
     }
 }

@@ -10,6 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using CollabClothing.Data.Entities;
 using CollabClothing.Data.EF;
+using CollabClothing.ViewModels.Common;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -78,6 +81,36 @@ namespace CollabClothing.Application.System.Users
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
+        public async Task<PageResult<UserViewModel>> GetListUser(GetUserRequestPaging request)
+        {
+            var query = _userManager.Users;
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.UserName.Contains(request.Keyword) || x.PhoneNumber.Contains(request.Keyword) || x.LastName.Contains(request.Keyword)
+                                        || x.Email.Contains(request.Keyword));
+            }
+            //total row
+            var totalRow = await query.CountAsync();
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                            .Take(request.PageSize)
+                            .Select(x => new UserViewModel()
+                            {
+                                Id = x.Id,
+                                Dob = x.Dob,
+                                Email = x.Email,
+                                FirstName = x.FirstName,
+                                LastName = x.LastName,
+                                PhoneNumber = x.PhoneNumber,
+                                UserName = x.UserName
+                            }).ToListAsync();
+            var pageResult = new PageResult<UserViewModel>()
+            {
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                TotalRecord = totalRow
+            };
+            return pageResult;
+        }
     }
 }

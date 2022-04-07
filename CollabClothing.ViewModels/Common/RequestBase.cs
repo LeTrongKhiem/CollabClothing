@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Common
 {
-    public class PagingRequestBase : RequestBase
+    public class RequestBase
     {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
+        public string Bearer { get; set; }
     }
 }

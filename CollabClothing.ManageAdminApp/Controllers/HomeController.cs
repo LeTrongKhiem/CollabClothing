@@ -1,5 +1,7 @@
 ﻿using CollabClothing.ManageAdminApp.Models;
+using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,6 +24,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
 
         public IActionResult Index()
         {
+            
             return View();
         }
 
