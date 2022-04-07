@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ManageAdminApp.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
@@ -29,7 +29,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
-            var session = HttpContext.Session.GetString("Token");
+            var session = HttpContext.Session.GetString("Token"); //tao base controller
             var request = new GetUserRequestPaging()
             {
                 Bearer = session,
@@ -42,33 +42,24 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login()
+        public IActionResult Create()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Create(RegisterRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View();
             }
-            var token = await _userApiClient.Authenticate(request);
-
-            var userPrincipal = this.ValidateToken(token);
-            var authProperties = new AuthenticationProperties()
+            var result = await _userApiClient.Register(request);
+            if (result)
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = true
-
-            };
-            HttpContext.Session.SetString("Token", token);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                                            userPrincipal,
-                                            authProperties);
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index");
+            }
+            return View(request);
         }
 
         public async Task<IActionResult> Logout()
@@ -77,22 +68,6 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        public ClaimsPrincipal ValidateToken(string jwtToken)
-        {
-            IdentityModelEventSource.ShowPII = true;
 
-            SecurityToken validatedToken;
-            TokenValidationParameters validationParameters = new TokenValidationParameters();
-
-            validationParameters.ValidateLifetime = true;
-
-            validationParameters.ValidAudience = _configuration["Token:Issuer"];
-            validationParameters.ValidIssuer = _configuration["Token:Issuer"];
-            validationParameters.IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
-
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
-
-            return principal;
-        }
     }
 }

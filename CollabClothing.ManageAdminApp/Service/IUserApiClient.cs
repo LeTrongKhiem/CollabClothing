@@ -11,5 +11,6 @@ namespace CollabClothing.ManageAdminApp.Service
     {
         Task<string> Authenticate(LoginRequest request);
         Task<PageResult<UserViewModel>> GetListUser(GetUserRequestPaging request);
+        Task<bool> Register(RegisterRequest request);
     }
 }

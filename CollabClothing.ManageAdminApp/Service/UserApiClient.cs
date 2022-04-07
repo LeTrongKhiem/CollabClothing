@@ -44,5 +44,17 @@ namespace CollabClothing.ManageAdminApp.Service
             return users;
 
         }
+
+        //method register
+        public async Task<bool> Register(RegisterRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var response = await client.PostAsync($"/api/users/register", httpContent);
+            return response.IsSuccessStatusCode;
+        }
     }
 }
