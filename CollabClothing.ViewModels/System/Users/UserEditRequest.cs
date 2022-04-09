@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.System.Users
 {
-    public class UserViewModel
+    public class UserEditRequest
     {
         public Guid Id { get; set; }
-        [Display(Name = "Tên tài khoản")]
-        public string UserName { get; set; }
         [Display(Name = "Tên")]
         public string FirstName { get; set; }
         [Display(Name = "Họ")]
@@ -23,7 +21,7 @@ namespace CollabClothing.ViewModels.System.Users
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]
         public DateTime Dob { get; set; }
+        //[Display(Name = "Địa chỉ")]
         //public string Address { get; set; }
-
     }
 }

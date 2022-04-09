@@ -29,16 +29,15 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
-            var session = HttpContext.Session.GetString("Token"); //tao base controller
+            //var session = HttpContext.Session.GetString("Token"); //tao base controller
             var request = new GetUserRequestPaging()
             {
-                Bearer = session,
                 Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };
             var data = await _userApiClient.GetListUser(request);
-            return View(data);
+            return View(data.ResultObject);
         }
 
         [HttpGet]
@@ -55,17 +54,58 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return View();
             }
             var result = await _userApiClient.Register(request);
-            if (result)
+            if (result.IsSuccessed)
             {
                 return RedirectToAction("Index");
             }
+
             return View(request);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var user = await _userApiClient.GetById(id);
+            if (user.IsSuccessed)
+            {
+                var userResult = user.ResultObject;
+                var editUser = new UserEditRequest()
+                {
+                    Id = id,
+                    Dob = userResult.Dob,
+                    Email = userResult.Email,
+                    FirstName = userResult.FirstName,
+                    LastName = userResult.LastName,
+                    PhoneNumber = userResult.PhoneNumber
+                };
+                return View(editUser);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _userApiClient.Edit(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+
+        }
+
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "User");
+            HttpContext.Session.Remove("Token");
+            return RedirectToAction("Index", "Login");
         }
 
 

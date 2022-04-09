@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Common
 {
-    public class RequestBase
+    public class ResultApi<T>
     {
-        public string Bearer { get; set; }
+        public bool IsSuccessed { get; set; }
+        public string Message { get; set; }
+        public T ResultObject { get; set; }
     }
 }

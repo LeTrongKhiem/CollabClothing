@@ -32,10 +32,20 @@ namespace CollabClothing.Application.System.Users
             _config = configuration;
         }
 
-        public async Task<bool> Register(RegisterRequest request)
+        public async Task<ResultApi<bool>> Register(RegisterRequest request)
         {
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            var email = await _userManager.FindByEmailAsync(request.Email);
+            if (user != null)
+            {
+                return new ResultApiError<bool>("Username đã tồn tại");
+            }
+            if (email != null)
+            {
+                return new ResultApiError<bool>("Email đã tồn tại");
+            }
             Guid g = Guid.NewGuid();
-            var user = new AppUser()
+            user = new AppUser()
             {
                 Id = g,
                 UserName = request.UserName,
@@ -48,21 +58,21 @@ namespace CollabClothing.Application.System.Users
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return true;
+                return new ResultApiSuccessed<bool>();
             }
-            else return false;
+            return new ResultApiError<bool>("Đăng kí không thành công");
         }
-        public async Task<string> Authenticate(LoginRequest request)
+        public async Task<ResultApi<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
-                return null;
+                return new ResultApiError<string>("Username không tồn tại");
             }
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
             {
-                return null;
+                return new ResultApiError<string>("Đăng nhập thất bại");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[] {
@@ -78,10 +88,10 @@ namespace CollabClothing.Application.System.Users
                         claims,
                         expires: DateTime.Now.AddHours(3),
                         signingCredentials: creds);
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new ResultApiSuccessed<string>(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public async Task<PageResult<UserViewModel>> GetListUser(GetUserRequestPaging request)
+        public async Task<ResultApi<PageResult<UserViewModel>>> GetListUser(GetUserRequestPaging request)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -110,7 +120,48 @@ namespace CollabClothing.Application.System.Users
                 PageSize = request.PageSize,
                 TotalRecord = totalRow
             };
-            return pageResult;
+            return new ResultApiSuccessed<PageResult<UserViewModel>>(pageResult);
+        }
+
+        public async Task<ResultApi<bool>> Edit(Guid id, UserEditRequest request)
+        {
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id))
+            {
+                return new ResultApiError<bool>("Email đã tồn tại");
+            }
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Dob = request.Dob;
+            user.Email = request.Email;
+            user.PhoneNumber = request.PhoneNumber;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return new ResultApiSuccessed<bool>();
+            }
+            return new ResultApiError<bool>("Cập nhật không thành công");
+        }
+
+        public async Task<ResultApi<UserViewModel>> GetById(Guid Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<UserViewModel>("Tài khoản không tồn tại");
+            }
+            var userViewModel = new UserViewModel()
+            {
+                Id = user.Id,
+                Dob = user.Dob,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName
+            };
+            return new ResultApiSuccessed<UserViewModel>(userViewModel);
         }
     }
 }

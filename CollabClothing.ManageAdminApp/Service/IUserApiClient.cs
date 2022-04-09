@@ -9,8 +9,10 @@ namespace CollabClothing.ManageAdminApp.Service
 {
     public interface IUserApiClient
     {
-        Task<string> Authenticate(LoginRequest request);
-        Task<PageResult<UserViewModel>> GetListUser(GetUserRequestPaging request);
-        Task<bool> Register(RegisterRequest request);
+        Task<ResultApi<string>> Authenticate(LoginRequest request);
+        Task<ResultApi<PageResult<UserViewModel>>> GetListUser(GetUserRequestPaging request);
+        Task<ResultApi<bool>> Register(RegisterRequest request);
+        Task<ResultApi<bool>> Edit(Guid id, UserEditRequest request);
+        Task<ResultApi<UserViewModel>> GetById(Guid id);
     }
 }

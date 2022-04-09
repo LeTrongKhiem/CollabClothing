@@ -39,14 +39,14 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 return View(ModelState);
             }
-            var token = await _userApiClient.Authenticate(request);
-            var userPrincipal = this.ValidateToken(token);
+            var result = await _userApiClient.Authenticate(request);
+            var userPrincipal = this.ValidateToken(result.ResultObject);
             var authProperties = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = true
             };
-            HttpContext.Session.SetString("Token", token);
+            HttpContext.Session.SetString("Token", result.ResultObject);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                             userPrincipal,
                                             authProperties);

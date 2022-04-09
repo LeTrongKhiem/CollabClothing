@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CollabClothing.Application.System.Users;
 using CollabClothing.ViewModels.System.Users;
@@ -26,11 +27,11 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userService.Register(request);
-            if (result == false)
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Register is unsuccessful");
+                return BadRequest(result);
             }
-            return Ok();
+            return Ok(result);
         }
         [HttpPost("authenticate")]
         [AllowAnonymous]
@@ -41,9 +42,9 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var resultToken = await _userService.Authenticate(request);
-            if (string.IsNullOrEmpty(resultToken))
+            if (string.IsNullOrEmpty(resultToken.ResultObject))
             {
-                return BadRequest("Username or Password is incorrect");
+                return BadRequest(resultToken);
             }
             //else
             //{
@@ -67,6 +68,37 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest("No User find");
             }
             return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var users = await _userService.GetById(id);
+            if (users == null)
+            {
+                return BadRequest("No User find");
+            }
+            return Ok(users);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(Guid id, [FromBody] UserEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.Edit(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }
