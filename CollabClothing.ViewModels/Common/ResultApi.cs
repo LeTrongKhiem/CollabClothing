@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Common
 {
-    public class PageResult<T> : PagedResultBase
+    public class ResultApi<T>
     {
-        public List<T> Items { get; set; }
-
+        public bool IsSuccessed { get; set; }
+        public string Message { get; set; }
+        public T ResultObject { get; set; }
     }
 }

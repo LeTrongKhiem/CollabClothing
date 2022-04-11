@@ -2,6 +2,7 @@
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ManageAdminApp.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
@@ -26,62 +27,111 @@ namespace CollabClothing.ManageAdminApp.Controllers
             _configuration = configuration;
 
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)
         {
-            return View();
+            //var session = HttpContext.Session.GetString("Token"); //tao base controller
+            var request = new GetUserRequestPaging()
+            {
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
+            var data = await _userApiClient.GetListUser(request);
+            return View(data.ResultObject);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login()
+        public IActionResult Create()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Create(RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.Register(request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(request);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var user = await _userApiClient.GetById(id);
+            if (user.IsSuccessed)
+            {
+                var userResult = user.ResultObject;
+                var editUser = new UserEditRequest()
+                {
+                    Id = id,
+                    Dob = userResult.Dob,
+                    Email = userResult.Email,
+                    FirstName = userResult.FirstName,
+                    LastName = userResult.LastName,
+                    PhoneNumber = userResult.PhoneNumber
+                };
+                return View(editUser);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserEditRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
-            var token = await _userApiClient.Authenticate(request);
-
-            var userPrincipal = this.ValidateToken(token);
-            var authProperties = new AuthenticationProperties()
+            var result = await _userApiClient.Edit(request.Id, request);
+            if (result.IsSuccessed)
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = true
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
 
-            };
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                                            userPrincipal,
-                                            authProperties);
-            return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid Id)
+        {
+            var user = await _userApiClient.GetById(Id);
+            if (user == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(user.ResultObject);
+
+        }
+        //[HttpDelete]
+        //public async Task<IActionResult> Delete(Guid Id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(ModelState);
+        //    }
+        //    var result = await _userApiClient.Delete(Id);
+        //    if (result.IsSuccessed)
+        //    {
+
+        //    }
+        //}
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "User");
+            HttpContext.Session.Remove("Token");
+            return RedirectToAction("Index", "Login");
         }
 
-        public ClaimsPrincipal ValidateToken(string jwtToken)
-        {
-            IdentityModelEventSource.ShowPII = true;
 
-            SecurityToken validatedToken;
-            TokenValidationParameters validationParameters = new TokenValidationParameters();
-
-            validationParameters.ValidateLifetime = true;
-
-            validationParameters.ValidAudience = _configuration["Token:Issuer"];
-            validationParameters.ValidIssuer = _configuration["Token:Issuer"];
-            validationParameters.IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
-
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
-
-            return principal;
-        }
     }
 }

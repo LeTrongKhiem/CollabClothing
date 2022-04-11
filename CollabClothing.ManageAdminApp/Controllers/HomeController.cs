@@ -1,5 +1,7 @@
 ﻿using CollabClothing.ManageAdminApp.Models;
+using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ManageAdminApp.Controllers
 {
-    [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -22,6 +23,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
