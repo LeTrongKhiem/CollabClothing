@@ -14,5 +14,6 @@ namespace CollabClothing.ManageAdminApp.Service
         Task<ResultApi<bool>> Register(RegisterRequest request);
         Task<ResultApi<bool>> Edit(Guid id, UserEditRequest request);
         Task<ResultApi<UserViewModel>> GetById(Guid id);
+        Task<ResultApi<bool>> Delete(Guid id);
     }
 }

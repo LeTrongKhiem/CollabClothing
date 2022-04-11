@@ -115,12 +115,8 @@
 				}
 	</tbody>
    </table>
- @*  <div aria-label="Page navigation example">
-	<ul class="pagination">
-	 <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminAccount" asp-action="Index"></pager>
-	</ul>
-   </div>*@
   </div>
+  @await Component.InvokeAsync("Pager", Model)
  </div>
 </div>
 

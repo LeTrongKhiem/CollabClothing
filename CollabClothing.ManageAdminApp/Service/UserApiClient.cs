@@ -97,8 +97,22 @@ namespace CollabClothing.ManageAdminApp.Service
             var body = await response.Content.ReadAsStringAsync();
             var users = JsonConvert.DeserializeObject<ResultApiSuccessed<PageResult<UserViewModel>>>(body);
             return users;
-
         }
+        public async Task<ResultApi<bool>> Delete(Guid Id)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.DeleteAsync($"/api/users/{Id}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
+        }
+
 
 
     }

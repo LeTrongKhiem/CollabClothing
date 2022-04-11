@@ -23,7 +23,7 @@ namespace CollabClothing.Application.System.Users
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly CollabClothingDBContext _context;
-
+        #region Constructor
         public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
@@ -31,7 +31,8 @@ namespace CollabClothing.Application.System.Users
             _roleManager = roleManager;
             _config = configuration;
         }
-
+        #endregion
+        #region Register
         public async Task<ResultApi<bool>> Register(RegisterRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
@@ -62,6 +63,8 @@ namespace CollabClothing.Application.System.Users
             }
             return new ResultApiError<bool>("Đăng kí không thành công");
         }
+        #endregion
+        #region Authenticate
         public async Task<ResultApi<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
@@ -90,7 +93,7 @@ namespace CollabClothing.Application.System.Users
                         signingCredentials: creds);
             return new ResultApiSuccessed<string>(new JwtSecurityTokenHandler().WriteToken(token));
         }
-
+        #endregion
         public async Task<ResultApi<PageResult<UserViewModel>>> GetListUser(GetUserRequestPaging request)
         {
             var query = _userManager.Users;
@@ -162,6 +165,21 @@ namespace CollabClothing.Application.System.Users
                 UserName = user.UserName
             };
             return new ResultApiSuccessed<UserViewModel>(userViewModel);
+        }
+
+        public async Task<ResultApi<bool>> Delete(Guid Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Tài khoản không tồn tại");
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return new ResultApiSuccessed<bool>();
+            }
+            return new ResultApiError<bool>("Xóa thất bại");
         }
     }
 }

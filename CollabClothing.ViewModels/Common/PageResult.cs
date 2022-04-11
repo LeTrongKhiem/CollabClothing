@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Common
 {
-    public class PageResult<T> : PagingRequestBase
+    public class PageResult<T> : PagedResultBase
     {
         public List<T> Items { get; set; }
-        public int TotalRecord { get; set; }
 
     }
 }

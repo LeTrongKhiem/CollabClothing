@@ -46,10 +46,6 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(resultToken);
             }
-            //else
-            //{
-            //    HttpContext.Session.SetString("Token", resultToken);
-            //}
             return Ok(resultToken);
         }
 
@@ -94,6 +90,20 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userService.Edit(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.Delete(id);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

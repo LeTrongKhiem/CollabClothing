@@ -27,7 +27,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             _configuration = configuration;
 
         }
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)
         {
             //var session = HttpContext.Session.GetString("Token"); //tao base controller
             var request = new GetUserRequestPaging()
@@ -100,6 +100,30 @@ namespace CollabClothing.ManageAdminApp.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid Id)
+        {
+            var user = await _userApiClient.GetById(Id);
+            if (user == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(user.ResultObject);
+
+        }
+        //[HttpDelete]
+        //public async Task<IActionResult> Delete(Guid Id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(ModelState);
+        //    }
+        //    var result = await _userApiClient.Delete(Id);
+        //    if (result.IsSuccessed)
+        //    {
+
+        //    }
+        //}
 
         public async Task<IActionResult> Logout()
         {
