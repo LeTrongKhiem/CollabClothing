@@ -104,6 +104,7 @@ namespace CollabClothing.Application.Catalog.Products
                               join pimg in _context.ProductImages on p.Id equals pimg.ProductId
                               into ppimg
                               from pimg in ppimg.DefaultIfEmpty()
+                              where (c.Id == cateId)
                               select new ProductViewModel()
                               {
                                   Id = p.Id,
