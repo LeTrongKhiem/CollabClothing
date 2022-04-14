@@ -94,6 +94,7 @@ namespace CollabClothing.Application.System.Users
             return new ResultApiSuccessed<string>(new JwtSecurityTokenHandler().WriteToken(token));
         }
         #endregion
+        #region GetListUser
         public async Task<ResultApi<PageResult<UserViewModel>>> GetListUser(GetUserRequestPaging request)
         {
             var query = _userManager.Users;
@@ -125,6 +126,7 @@ namespace CollabClothing.Application.System.Users
             };
             return new ResultApiSuccessed<PageResult<UserViewModel>>(pageResult);
         }
+        #endregion
 
         public async Task<ResultApi<bool>> Edit(Guid id, UserEditRequest request)
         {
