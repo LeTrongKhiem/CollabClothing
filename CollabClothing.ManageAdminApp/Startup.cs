@@ -33,7 +33,7 @@ namespace CollabClothing.ManageAdminApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //use session header bearer
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
             {
                 option.LoginPath = "/Login/Index";
@@ -51,6 +51,7 @@ namespace CollabClothing.ManageAdminApp
             }
 #endif
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<ICategoryApiClient, CategoryApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
