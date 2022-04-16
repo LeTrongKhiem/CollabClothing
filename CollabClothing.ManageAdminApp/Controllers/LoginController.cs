@@ -37,9 +37,14 @@ namespace CollabClothing.ManageAdminApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View();
             }
             var result = await _userApiClient.Authenticate(request);
+            if (result.ResultObject == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View();
+            }
             var userPrincipal = this.ValidateToken(result.ResultObject);
             var authProperties = new AuthenticationProperties()
             {
