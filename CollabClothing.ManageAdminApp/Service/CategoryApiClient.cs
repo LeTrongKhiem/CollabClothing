@@ -28,13 +28,13 @@ namespace CollabClothing.ManageAdminApp.Service
         #endregion
         public async Task<ResultApi<bool>> Create(CategoryCreateRequest request)
         {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.PostAsync("/api/categories", httpContent);
+            var response = await client.PostAsync($"/api/categories", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
