@@ -9,7 +9,7 @@ namespace CollabClothing.ManageAdminApp.Service
 {
     public interface ICategoryApiClient
     {
-        Task<ResultApi<string>> Create();
+        Task<ResultApi<bool>> Create(CategoryCreateRequest request);
         Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request);
     }
 }
