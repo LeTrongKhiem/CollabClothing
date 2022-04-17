@@ -7,13 +7,15 @@
 
 <h1>Tạo danh mục mới</h1>
 <div class="page-header">
- <div class="header-sub-title">
-  <nav class="breadcrumb breadcrumb-dash">
-   <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-   <a class="breadcrumb-item" asp-controller="Category" asp-action="Create">Tạo danh mục mới</a>
-  </nav>
- </div>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i
+                    class="anticon anticon-home m-r-5"></i>Home</a>
+            <a class="breadcrumb-item" asp-controller="Category" asp-action="Create">Tạo danh mục mới</a>
+        </nav>
+    </div>
 </div>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -35,7 +37,8 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsShowWeb" /> @Html.DisplayNameFor(model => model.IsShowWeb)
+                    <input class="form-check-input" asp-for="IsShowWeb" /> @Html.DisplayNameFor(model =>
+                    model.IsShowWeb)
                 </label>
             </div>
             <div class="form-group">
@@ -58,4 +61,3 @@
 <div>
     <a asp-action="Index">Trở lại</a>
 </div>
-
