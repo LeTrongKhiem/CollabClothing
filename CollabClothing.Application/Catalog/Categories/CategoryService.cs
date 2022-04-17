@@ -30,6 +30,7 @@ namespace CollabClothing.Application.Catalog.Categories
             _context = context;
             _storageService = storageService;
         }
+
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -118,14 +119,46 @@ namespace CollabClothing.Application.Catalog.Categories
             return new ResultApiSuccessed<CategoryViewModel>(cate1);
         }
 
-        public Task<ResultApi<int>> Edit(CategoryEditRequest request)
+        public async Task<ResultApi<bool>> Edit(string cateId, CategoryEditRequest request)
         {
-            throw new NotImplementedException();
+            var cate = await _context.Categories.FindAsync(cateId);
+            if (cate == null)
+            {
+                return new ResultApiError<bool>("Mã danh mục không chính xác!!!");
+            }
+            cate.NameCategory = request.CategoryName;
+            cate.IsShowWeb = request.IsShowWeb;
+            cate.ParentId = request.ParentId;
+            cate.Slug = request.Slug;
+            cate.Level = request.Level;
+            if (request.Icon != null)
+            {
+                var fullPath = "wwwroot" + cate.Icon;
+                if (File.Exists(fullPath))
+                {
+                    await Task.Run(() =>
+                    {
+                        File.Delete(fullPath);
+                    });
+                }
+                // await _storageService.DeleteFileAsync(cate.Icon);
+                cate.Icon = await this.SaveFile(request.Icon);
+                await _context.SaveChangesAsync();
+            }
+            return new ResultApiSuccessed<bool>();
         }
 
-        public Task<ResultApi<int>> Delete(string CateId)
+        public async Task<ResultApi<bool>> Delete(string CateId)
         {
-            throw new NotImplementedException();
+            var cate = await _context.Categories.FindAsync(CateId);
+            if (cate.Id == null)
+            {
+                return new ResultApiError<bool>("Không tìm thấy danh mục sản phẩm");
+            }
+            await _storageService.DeleteFileAsync(cate.Icon);
+            _context.Categories.Remove(cate);
+            await _context.SaveChangesAsync();
+            return new ResultApiSuccessed<bool>();
         }
     }
 }
