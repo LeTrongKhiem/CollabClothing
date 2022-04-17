@@ -25,6 +25,7 @@ using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using CollabClothing.ViewModels.System.Users;
+using CollabClothing.Application.Catalog.Categories;
 
 namespace CollabClothing.BackendApi
 {
@@ -50,7 +51,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
-
+            services.AddTransient<ICategoryService, CategoryService>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();

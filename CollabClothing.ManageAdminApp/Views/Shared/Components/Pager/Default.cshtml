@@ -50,14 +50,14 @@
 			}
 		}
 		@if (Model.PageIndex != finishIndex)
-        {
-            <li class="page-item">
-                <a class="page-link" title="@Model.PageCount.ToString()" href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())">Sau</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())">Cuối</a>
-            </li>
-        }
+		{
+			<li class="page-item">
+				<a class="page-link" title="@Model.PageCount.ToString()" href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())">Sau</a>
+			</li>
+			<li class="page-item">
+				<a class="page-link" href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())">Cuối</a>
+			</li>
+		}
  </ul>
 
 }

@@ -12,6 +12,7 @@ namespace CollabClothing.Application.Common
         {
             _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME);
         }
+
         public async Task DeleteFileAsync(string fileName)
         {
             var filePath = Path.Combine(_userContentFolder, fileName);
@@ -31,9 +32,10 @@ namespace CollabClothing.Application.Common
 
         public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
         {
-            var filePath = Path.Combine(_userContentFolder, fileName);
+            var filePath = Path.Combine(_userContentFolder + "/icon-category", fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }
+
     }
 }
