@@ -31,5 +31,24 @@ namespace CollabClothing.ManageAdminApp.Controllers
 
             return View(data.ResultObject);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CategoryCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _categoryApiClient.Create(request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(result);
+        }
     }
 }

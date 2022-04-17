@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CollabClothing.ManageAdminApp.Service
@@ -25,9 +26,22 @@ namespace CollabClothing.ManageAdminApp.Service
             _configuration = configuration;
         }
         #endregion
-        public Task<ResultApi<string>> Create()
+        public async Task<ResultApi<bool>> Create(CategoryCreateRequest request)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PostAsync("/api/categories", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
+
         }
 
         public async Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request)//request khong can serialize sang json
