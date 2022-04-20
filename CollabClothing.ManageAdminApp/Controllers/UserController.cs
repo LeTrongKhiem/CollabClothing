@@ -1,4 +1,5 @@
-﻿using CollabClothing.ManageAdminApp.Service;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using CollabClothing.ManageAdminApp.Service;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,6 +22,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
+        //private readonly INotyfService _notyfService;
         public UserController(IUserApiClient userApiClient, IConfiguration configuration)
         {
             _userApiClient = userApiClient;
@@ -38,6 +40,10 @@ namespace CollabClothing.ManageAdminApp.Controllers
             };
             var data = await _userApiClient.GetListUser(request);
             ViewBag.Keyword = keyword;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
             return View(data.ResultObject);
         }
 
@@ -57,9 +63,11 @@ namespace CollabClothing.ManageAdminApp.Controllers
             var result = await _userApiClient.Register(request);
             if (result.IsSuccessed)
             {
+                TempData["result"] = "Thêm người dùng mới thành công";
+
                 return RedirectToAction("Index");
             }
-
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
 
@@ -79,6 +87,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                     LastName = userResult.LastName,
                     PhoneNumber = userResult.PhoneNumber
                 };
+
                 return View(editUser);
             }
             return RedirectToAction("Error", "Home");
@@ -94,6 +103,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             var result = await _userApiClient.Edit(request.Id, request);
             if (result.IsSuccessed)
             {
+                TempData["result"] = "Cập nhật thành công";
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", result.Message);
@@ -130,6 +140,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             var result = await _userApiClient.Delete(request.Id);
             if (result.IsSuccessed)
             {
+                TempData["result"] = "Xóa người dùng thành công";
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("Error", "Home");

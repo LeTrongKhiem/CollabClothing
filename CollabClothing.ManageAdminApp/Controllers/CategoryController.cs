@@ -48,7 +48,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return View(result);
+            return View(request);
         }
     }
 }

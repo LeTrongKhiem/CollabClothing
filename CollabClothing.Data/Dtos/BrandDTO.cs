@@ -1,6 +1,12 @@
-namespace CollabClothing.ViewModels.Catalog.Brands
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CollabClothing.Data.Dtos
 {
-    public class BrandViewModel
+    public class BrandDTO
     {
         public string Id { get; set; }
         public string NameBrand { get; set; }

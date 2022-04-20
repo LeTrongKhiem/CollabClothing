@@ -53,6 +53,18 @@
 	</button>
    </div>
   </div>
+  <div class="row">
+	  <div class="col-md-6"></div>
+	  <div class="col-md-6">
+	   @if (ViewBag.SuccessMsg != null)
+		{
+			<div class="alert alert-success" role="alert" id="msgAlert">
+				@ViewBag.SuccessMsg
+			</div>
+		}
+   </div>
+  </div>
+		
   <div class="table-responsive">
    <table class="table table-hover e-commerce-table">
 	<thead>
@@ -131,4 +143,12 @@
   @await Component.InvokeAsync("Pager", Model)
  </div>
 </div>
+
+@section Scripts{
+	<script>
+	 setTimeout(function() {
+		$('#msgAlert').fadeOut('slow');
+	 }, 2000);
+ </script>
+}
 

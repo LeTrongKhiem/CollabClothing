@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification;
 using CollabClothing.ManageAdminApp.Service;
 using CollabClothing.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
@@ -50,6 +51,7 @@ namespace CollabClothing.ManageAdminApp
                 builder.AddRazorRuntimeCompilation();
             }
 #endif
+            //services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
         }

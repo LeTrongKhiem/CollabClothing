@@ -103,7 +103,7 @@ namespace CollabClothing.Application.System.Users
                 query = query.Where(x => x.UserName.Contains(request.Keyword) || x.PhoneNumber.Contains(request.Keyword) || x.LastName.Contains(request.Keyword)
                                         || x.Email.Contains(request.Keyword));
             }
-            //total row
+            //total row 
             var totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                             .Take(request.PageSize)
