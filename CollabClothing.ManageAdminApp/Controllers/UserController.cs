@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CollabClothing.ManageAdminApp.Service;
+using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -141,6 +142,21 @@ namespace CollabClothing.ManageAdminApp.Controllers
             if (result.IsSuccessed)
             {
                 TempData["result"] = "Xóa người dùng thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("Error", "Home");
+            return View(request);
+        }
+        [HttpPut]
+        public async Task<IActionResult> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _userApiClient.RolesAssign(id, request);
+            if (result.IsSuccessed)
+            {
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("Error", "Home");

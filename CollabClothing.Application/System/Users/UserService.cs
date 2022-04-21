@@ -135,6 +135,10 @@ namespace CollabClothing.Application.System.Users
                 return new ResultApiError<bool>("Email đã tồn tại");
             }
             var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Tài khoản không tồn tại");
+            }
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Dob = request.Dob;
@@ -182,6 +186,29 @@ namespace CollabClothing.Application.System.Users
                 return new ResultApiSuccessed<bool>();
             }
             return new ResultApiError<bool>("Xóa thất bại");
+        }
+
+        public async Task<ResultApi<bool>> RoleAssign(Guid Id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Tài khoản không tồn tại");
+            }
+            //xoa role
+            var deleteRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+            await _userManager.RemoveFromRolesAsync(user, deleteRoles);
+
+            var addRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
+            foreach (var roles in addRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roles) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, roles);
+                }
+            }
+            return new ResultApiSuccessed<bool>();
+
         }
     }
 }
