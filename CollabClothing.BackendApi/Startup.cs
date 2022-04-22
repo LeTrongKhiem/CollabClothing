@@ -26,6 +26,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using CollabClothing.ViewModels.System.Users;
 using CollabClothing.Application.Catalog.Categories;
+using CollabClothing.Application.System.Roles;
 
 namespace CollabClothing.BackendApi
 {
@@ -58,7 +59,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 
             services.AddTransient<IUserService, UserService>();
-
+            services.AddTransient<IRoleService, RoleService>();
             // services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             // services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>(); vi khai bao fv => fv.RegisterValidatorsFromAssemblyContaining
 

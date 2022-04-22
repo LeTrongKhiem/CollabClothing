@@ -160,6 +160,7 @@ namespace CollabClothing.Application.System.Users
             {
                 return new ResultApiError<UserViewModel>("Tài khoản không tồn tại");
             }
+            var roles = await _userManager.GetRolesAsync(user);
             var userViewModel = new UserViewModel()
             {
                 Id = user.Id,
@@ -168,7 +169,8 @@ namespace CollabClothing.Application.System.Users
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Roles = roles
             };
             return new ResultApiSuccessed<UserViewModel>(userViewModel);
         }

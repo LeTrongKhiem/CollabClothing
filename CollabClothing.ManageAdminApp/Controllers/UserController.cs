@@ -147,20 +147,35 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ModelState.AddModelError("Error", "Home");
             return View(request);
         }
-        [HttpPut]
-        public async Task<IActionResult> RoleAssign(Guid id, RoleAssignRequest request)
+        [HttpGet]
+        public async Task<IActionResult> RoleAssign(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            if (result.IsSuccessed)
+            {
+                var user = result.ResultObject;
+                var updateRequest = new RoleAssignRequest();
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> RolesAssign(RoleAssignRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
-            var result = await _userApiClient.RolesAssign(id, request);
+            var result = await _userApiClient.RolesAssign(request.Id, request);
             if (result.IsSuccessed)
             {
+                TempData["result"] = "Cập nhật quyền thành công";
                 return RedirectToAction("Index");
             }
-            ModelState.AddModelError("Error", "Home");
+            ModelState.AddModelError("Error", "");
             return View(request);
+
         }
 
         public async Task<IActionResult> Logout()

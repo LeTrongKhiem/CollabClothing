@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CollabClothing.ViewModels.Common
+namespace CollabClothing.ViewModels.System.Roles
 {
-    public class RoleAssignRequest
+    public class RoleViewModel
     {
         public Guid Id { get; set; }
-        public SelectItem[] Roles { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

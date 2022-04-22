@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CollabClothing.ViewModels.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace CollabClothing.ViewModels.System.Users
         [DataType(DataType.Date)]
         public DateTime Dob { get; set; }
         //public string Address { get; set; }
+        public IList<string> Roles { get; set; }
 
     }
 }
