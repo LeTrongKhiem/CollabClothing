@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CollabClothing.Application.System.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,17 @@ namespace CollabClothing.BackendApi.Controllers
     [Authorize]
     public class RolesController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly IRoleService _roleService;
+
+        public RolesController(IRoleService roleService)
         {
-            return Ok();
+            _roleService = roleService;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var roles = await _roleService.GetAll();
+            return Ok(roles);
         }
     }
 }
