@@ -89,9 +89,10 @@ namespace CollabClothing.Application.Catalog.Products
         {
             var productMapCate = await _context.ProductMapCategories.FirstOrDefaultAsync(x => x.ProductId == productId);
             var product = await _context.Products.FindAsync(productId);
-            if (productId == null)
+            if (product.Id == null)
                 throw new CollabException($"Cannot find a product: {productId}");
             var images = _context.ProductImages.Where(i => i.ProductId == productId);
+
             foreach (var image in images)
             {
                 await _storageService.DeleteFileAsync(image.Path);
@@ -110,7 +111,6 @@ namespace CollabClothing.Application.Catalog.Products
                              where p.Id == product.Id
                              select pimg.Path).ToString();
             var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
-            // var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == product.Id);
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with Id: {request.Id}");
@@ -120,6 +120,7 @@ namespace CollabClothing.Application.Catalog.Products
             // productDetail.Details = request.Details;
             product.Description = request.Description;
             product.BrandId = request.BrandId;
+
             //delete old image file
             string fullPath = "wwwroot" + image.Path;
             if (File.Exists(fullPath))
@@ -230,7 +231,9 @@ namespace CollabClothing.Application.Catalog.Products
             var pagedResult = new PageResult<ProductViewModel>()
             {
                 Items = data,
-                TotalRecord = totalRow
+                TotalRecord = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
             return pagedResult;
 
@@ -295,7 +298,6 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 Id = request.Id,
                 ProductId = productId,
-                // Path = request.Path,
                 Alt = request.Alt
             };
             if (request.File != null)

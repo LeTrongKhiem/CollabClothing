@@ -1,0 +1,56 @@
+﻿@model CollabClothing.ViewModels.Common.RoleAssignRequest
+
+@{
+    ViewData["Title"] = "Gán quyền user";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Gán quyền user</h1>
+<div class="page-header">
+ <div class="header-sub-title">
+  <nav class="breadcrumb breadcrumb-dash">
+   <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+   <a class="breadcrumb-item" asp-controller="User" asp-action="Index">Danh sách tài khoản</a>
+   <a class="breadcrumb-item" asp-controller="User" asp-action="RolesAssign">Gán quyền user</a>
+  </nav>
+ </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RolesAssign">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" class="form-control" />
+            @for (var i = 0; i < Model.Roles.Count; i++)
+            {
+                <div class="form-group d-flex align-items-center row" style="font-size: 16px;">
+                        <div class="m-r-10 col-md-3">@Model.Roles[i].Name</div>
+                        <div class="col-md-3">
+                            <input type="checkbox" asp-for="Roles[i].Selected" style="font-size: 25px;"/>
+                            @*<label for="switch-@Model.Roles[i]"></label>*@
+                            <input type="hidden" asp-for="Roles[i].Id"/>
+                            <input type="hidden" asp-for="Roles[i].Name"/>
+                        </div>
+                        
+                </div>
+
+                @* <div class="form-group d-flex align-items-center">
+                    <div class="switch m-r-10">
+                        <div>@Model.Roles[i].Name</div>
+                        <input type="checkbox" asp-for="Roles[i].Selected" id="switch-@Model.Roles[i]"/>
+                        <label for="switch-@Model.Roles[i]"></label>
+                        <input type="hidden" asp-for="Roles[i].Id"/>
+                        <input type="hidden" asp-for="Roles[i].Name"/>
+                    </div>
+                </div>*@
+            }
+            <div class="form-group">
+                <input type="submit" value="Lưu lại" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở lại</a>
+</div>
+

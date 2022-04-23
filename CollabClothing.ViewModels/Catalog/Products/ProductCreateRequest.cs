@@ -1,6 +1,5 @@
 ﻿using CollabClothing.ViewModels.Catalog.Categories;
 using CollabClothing.ViewModels.Catalog.ProductImages;
-using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
