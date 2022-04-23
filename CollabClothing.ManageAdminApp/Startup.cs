@@ -54,6 +54,7 @@ namespace CollabClothing.ManageAdminApp
             //services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

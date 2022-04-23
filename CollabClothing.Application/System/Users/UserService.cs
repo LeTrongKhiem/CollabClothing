@@ -199,7 +199,13 @@ namespace CollabClothing.Application.System.Users
             }
             //xoa role
             var deleteRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
-            await _userManager.RemoveFromRolesAsync(user, deleteRoles);
+            foreach (var roles in deleteRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roles) == true)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, roles);
+                }
+            }
 
             var addRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
             foreach (var roles in addRoles)

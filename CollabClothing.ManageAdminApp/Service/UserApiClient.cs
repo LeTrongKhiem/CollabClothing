@@ -120,7 +120,7 @@ namespace CollabClothing.ManageAdminApp.Service
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["Token"]);
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
             var response = await client.PutAsync($"/api/users/{id}/roles", httpContent);
             var result = await response.Content.ReadAsStringAsync();

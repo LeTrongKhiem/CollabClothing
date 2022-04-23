@@ -23,11 +23,13 @@ namespace CollabClothing.ManageAdminApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
+        private readonly IRoleApiClient _roleApiClient;
         //private readonly INotyfService _notyfService;
-        public UserController(IUserApiClient userApiClient, IConfiguration configuration)
+        public UserController(IUserApiClient userApiClient, IConfiguration configuration, IRoleApiClient roleApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
+            _roleApiClient = roleApiClient;
 
         }
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
@@ -148,18 +150,28 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public async Task<IActionResult> RoleAssign(Guid id)
+        public async Task<IActionResult> RolesAssign(Guid id)
         {
-            var result = await _userApiClient.GetById(id);
-            if (result.IsSuccessed)
-            {
-                var user = result.ResultObject;
-                var updateRequest = new RoleAssignRequest();
-                return View(updateRequest);
-            }
-            return RedirectToAction("Error", "Home");
-
+            var rolesAssignRequest = await GetRoleAssignRequest(id);
+            return View(rolesAssignRequest);
         }
+        private async Task<RoleAssignRequest> GetRoleAssignRequest(Guid id)
+        {
+            var user = await _userApiClient.GetById(id);
+            var roles = await _roleApiClient.GetAll();
+            var roleAssignRequest = new RoleAssignRequest();
+            foreach (var role in roles.ResultObject)
+            {
+                roleAssignRequest.Roles.Add(new SelectItem()
+                {
+                    Id = role.Id.ToString(),
+                    Name = role.Name,
+                    Selected = user.ResultObject.Roles.Contains(role.Name)
+                });
+            }
+            return roleAssignRequest;
+        }
+
         [HttpPost]
         public async Task<IActionResult> RolesAssign(RoleAssignRequest request)
         {
@@ -174,7 +186,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("Error", "");
-            return View(request);
+            var rolesAssignRequest = GetRoleAssignRequest(request.Id);
+            return View(rolesAssignRequest);
 
         }
 
