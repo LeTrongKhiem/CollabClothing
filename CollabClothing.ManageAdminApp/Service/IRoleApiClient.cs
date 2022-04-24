@@ -10,5 +10,9 @@ namespace CollabClothing.ManageAdminApp.Service
     public interface IRoleApiClient
     {
         Task<ResultApi<List<RoleViewModel>>> GetAll();
+        Task<ResultApi<bool>> Create(RoleCreateRequest request);
+        Task<ResultApi<bool>> Edit(Guid id, RoleEditRequest request);
+        Task<ResultApi<bool>> Delete(Guid id);
+        Task<ResultApi<RoleViewModel>> GetById(Guid id);
     }
 }
