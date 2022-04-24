@@ -60,17 +60,18 @@ namespace CollabClothing.Application.System.Roles
 
         public async Task<ResultApi<bool>> Edit(Guid id, RoleEditRequest request)
         {
+            //if (await _roleManager.Roles.AnyAsync(x => x.Name == request.Name && x.Id == request.Id))
+            //{
+            //    return new ResultApiError<bool>("Đã tồn tại role");
+            //}
             var role = await _roleManager.FindByIdAsync(id.ToString());
             if (role == null)
             {
                 return new ResultApiError<bool>("Role không tồn tại");
             }
-            role = new AppRole()
-            {
-                Name = request.Name,
-                Description = request.Description,
-                NormalizedName = request.Name
-            };
+            role.Name = request.Name;
+            role.Description = request.Description;
+            role.NormalizedName = request.Name;
             var result = await _roleManager.UpdateAsync(role);
             if (result.Succeeded)
             {

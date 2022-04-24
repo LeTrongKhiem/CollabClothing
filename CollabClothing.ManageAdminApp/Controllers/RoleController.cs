@@ -75,6 +75,40 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var role = await _roleApiClient.GetById(id);
+            if (role.IsSuccessed)
+            {
+                var roleResult = role.ResultObject;
+                var editRole = new RoleEditRequest()
+                {
+                    Id = id,
+                    Name = roleResult.Name,
+                    Description = roleResult.Description
+                };
+
+                return View(editRole);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(RoleEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _roleApiClient.Edit(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Cập nhật Role thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
 
     }
 }
