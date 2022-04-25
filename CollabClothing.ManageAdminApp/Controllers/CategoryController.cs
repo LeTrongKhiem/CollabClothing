@@ -50,5 +50,30 @@ namespace CollabClothing.ManageAdminApp.Controllers
             }
             return View(request);
         }
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            var cate = new CategoryDeleteRequest()
+            {
+                Id = id
+            };
+            return View(cate);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(CategoryDeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _categoryApiClient.Delete(request.Id);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Xóa danh mục thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
     }
 }

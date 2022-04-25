@@ -78,7 +78,7 @@ namespace CollabClothing.ManageAdminApp.Service
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["Token"]);
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
             var response = await client.DeleteAsync($"api/categories/{cateId}");
             var result = await response.Content.ReadAsStringAsync();
