@@ -13,17 +13,18 @@ using System.Threading.Tasks;
 
 namespace CollabClothing.ManageAdminApp.Service
 {
-    public class RoleApiClient : IRoleApiClient
+    public class RoleApiClient : BaseApiClient, IRoleApiClient
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpClientFactory _httpClientFactory;
+        //private readonly IConfiguration _configuration;
         #region Constructor
         public RoleApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+            : base(httpClientFactory, httpContextAccessor, configuration)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
+            //_httpContextAccessor = httpContextAccessor;
+            //_httpClientFactory = httpClientFactory;
+            //_configuration = configuration;
         }
         #endregion
 
@@ -73,21 +74,24 @@ namespace CollabClothing.ManageAdminApp.Service
             return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
         }
 
-        public async Task<ResultApi<List<RoleViewModel>>> GetAll()
+        public async Task<List<RoleViewModel>> GetAll()
         {
-            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.GetAsync($"api/roles");
-            var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                List<RoleViewModel> myDeserializedRoleObject = (List<RoleViewModel>)JsonConvert.DeserializeObject(result, typeof(List<RoleViewModel>));
-                return new ResultApiSuccessed<List<RoleViewModel>>(myDeserializedRoleObject);
-                //return JsonConvert.DeserializeObject<ResultApiSuccessed<List<RoleViewModel>>>(result);
-            }
-            return JsonConvert.DeserializeObject<ResultApiError<List<RoleViewModel>>>(result);
+            //var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            //var client = _httpClientFactory.CreateClient();
+            //client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            //var response = await client.GetAsync($"api/roles");
+            //var result = await response.Content.ReadAsStringAsync();
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    List<RoleViewModel> myDeserializedRoleObject = (List<RoleViewModel>)JsonConvert.DeserializeObject(result, typeof(List<RoleViewModel>));
+            //    //return new ResultApiSuccessed<List<RoleViewModel>>(myDeserializedRoleObject);
+            //    return myDeserializedRoleObject;
+            //    //return JsonConvert.DeserializeObject<ResultApiSuccessed<List<RoleViewModel>>>(result);
+            //}
+            ////return JsonConvert.DeserializeObject<ResultApiError<List<RoleViewModel>>>(result);
+            //throw new Exception(result);
+            return await GetListAsync<RoleViewModel>("/api/roles");
         }
 
         public async Task<ResultApi<RoleViewModel>> GetById(Guid id)

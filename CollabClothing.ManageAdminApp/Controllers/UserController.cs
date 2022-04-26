@@ -160,7 +160,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             var user = await _userApiClient.GetById(id);
             var roles = await _roleApiClient.GetAll();
             var roleAssignRequest = new RoleAssignRequest();
-            foreach (var role in roles.ResultObject)
+            foreach (var role in roles)
             {
                 roleAssignRequest.Roles.Add(new SelectItem()
                 {
