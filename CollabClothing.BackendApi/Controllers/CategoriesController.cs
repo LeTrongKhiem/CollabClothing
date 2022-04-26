@@ -47,12 +47,12 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var cateId = _categoryService.Create(request);
+            var cateId = await _categoryService.Create(request);
             if (cateId.Equals("") || cateId == null)
             {
                 return BadRequest();
             }
-            var cate = await _categoryService.GetCateById(await cateId);
+            var cate = await _categoryService.GetCateById(cateId);
             return CreatedAtAction(nameof(cateId), new { id = cateId }, cate);
 
         }

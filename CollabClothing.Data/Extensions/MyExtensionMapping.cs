@@ -22,5 +22,17 @@ namespace CollabClothing.Data.Extensions
             category.Slug = categoryDTO.Slug;
         }
         #endregion
+
+        #region BrandMappingDTO
+        public static void BrandMapping(this Brand brand, BrandDTO brandDTO)
+        {
+            brand.Id = brandDTO.Id;
+            brand.NameBrand = brandDTO.NameBrand;
+            brand.Info = brandDTO.Info;
+            brand.Images = brandDTO.Images;
+            brand.Slug = brandDTO.Slug;
+        }
+        #endregion  
+
     }
 }

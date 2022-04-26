@@ -11,5 +11,7 @@ namespace CollabClothing.ManageAdminApp.Service
     {
         Task<ResultApi<bool>> Create(CategoryCreateRequest request);
         Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request);
+        Task<ResultApi<bool>> Edit(string cateId, CategoryEditRequest request);
+        Task<ResultApi<bool>> Delete(string cateId);
     }
 }
