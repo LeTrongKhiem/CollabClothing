@@ -15,16 +15,10 @@ namespace CollabClothing.ManageAdminApp.Service
 {
     public class RoleApiClient : BaseApiClient, IRoleApiClient
     {
-        //private readonly IHttpContextAccessor _httpContextAccessor;
-        //private readonly IHttpClientFactory _httpClientFactory;
-        //private readonly IConfiguration _configuration;
         #region Constructor
         public RoleApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
             : base(httpClientFactory, httpContextAccessor, configuration)
         {
-            //_httpContextAccessor = httpContextAccessor;
-            //_httpClientFactory = httpClientFactory;
-            //_configuration = configuration;
         }
         #endregion
 
