@@ -35,6 +35,13 @@ namespace CollabClothing.BackendApi.Controllers
             var product = await _publicProductService.GetAllByCategoryId(request);
             return Ok(product);
         }
+        //get paging product admin
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductRequestPaging request)
+        {
+            var product = await _manageProductService.GetAllPaging(request);
+            return Ok(product);
+        }
         //http://localhost:5001/products/id
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById(string productId)

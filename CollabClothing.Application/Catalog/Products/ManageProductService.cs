@@ -190,17 +190,19 @@ namespace CollabClothing.Application.Catalog.Products
                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
                         from pmc in ppmc.DefaultIfEmpty()
                         join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
-                        from c in ppmc.DefaultIfEmpty()
-                        join pimg in _context.ProductImages on p.Id equals pimg.ProductId
-                        into ppimg
+                        from c in pmcc.DefaultIfEmpty()
+                        join pimg in _context.ProductImages on p.Id equals pimg.ProductId into ppimg
                         from pimg in ppimg.DefaultIfEmpty()
                         select new { p, pmc, c, pimg };
+
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.p.ProductName.Contains(request.Keyword));
+                query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.p.BrandId.Contains(request.Keyword)
+                || x.p.PriceCurrent == Int32.Parse(request.Keyword) || x.p.PriceOld == Int32.Parse(request.Keyword)
+                || x.p.SaleOff == Int32.Parse(request.Keyword) || x.c.NameCategory.Contains(request.Keyword));
             }
-            if (request.CategoryIds.Count > 0)
+            if (!string.IsNullOrEmpty(request.CategoryIds))
             {
                 query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
             }
@@ -221,7 +223,7 @@ namespace CollabClothing.Application.Catalog.Products
                     SaleOff = x.p.SaleOff,
                     Slug = x.p.Slug,
                     SoldOut = x.p.SoldOut,
-                    CategoryName = x.c.Category.NameCategory,
+                    CategoryName = x.c.NameCategory,
                     ThumbnailImage = x.pimg.Path
                 })
                 .ToListAsync();
