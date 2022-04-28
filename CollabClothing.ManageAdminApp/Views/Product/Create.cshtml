@@ -1,0 +1,103 @@
+﻿@model CollabClothing.ViewModels.Catalog.Products.ProductCreateRequest
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Thêm sản phẩm</h1>
+<hr />
+<div class="page-header">
+ <div class="header-sub-title">
+  <nav class="breadcrumb breadcrumb-dash">
+   <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+   <a class="breadcrumb-item" asp-controller="Product" asp-action="Index">Danh sách sản phẩm</a>
+   <a class="breadcrumb-item" asp-controller="Product" asp-action="Create">Thêm sản phẩm</a>
+  </nav>
+ </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                <label asp-for="ProductName" class="control-label"></label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Slug" class="control-label"></label>
+                <input asp-for="Slug" class="form-control" placeholder="/Slug"/>
+                <span asp-validation-for="Slug" class="text-danger"></span>
+            </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="PriceCurrent" class="control-label"></label>
+                    <input asp-for="PriceCurrent" class="form-control" />
+                    <span asp-validation-for="PriceCurrent" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="PriceOld" class="control-label"></label>
+                    <input asp-for="PriceOld" class="form-control" />
+                    <span asp-validation-for="PriceOld" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="SaleOff" class="control-label"></label>
+                    <input asp-for="SaleOff" class="form-control" />
+                    <span asp-validation-for="SaleOff" class="text-danger"></span>
+                </div>
+            </div>
+            
+           <div class="row">
+               <div class="form-group col-md-6">
+                <label asp-for="BrandId" class="control-label"></label>
+                <input asp-for="BrandId" class="form-control" />
+                <span asp-validation-for="BrandId" class="text-danger"></span>
+            </div>
+             <div class="form-group col-md-6">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <input asp-for="CategoryId" class="form-control" />
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+           </div>
+            
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SoldOut" /> @Html.DisplayNameFor(model => model.SoldOut)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Installment" class="control-label"></label>
+                <input asp-for="Installment" class="form-control" />
+                <span asp-validation-for="Installment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Details" class="control-label"></label>
+                <input asp-for="Details" class="form-control" />
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ThumbnailImage" class="control-label"></label>
+                <input asp-for="ThumbnailImage" class="form-control" />
+                <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở lại</a>
+</div>
+

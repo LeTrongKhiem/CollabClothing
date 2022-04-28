@@ -11,5 +11,6 @@ namespace CollabClothing.ManageAdminApp.Service
     public interface IProductApiClient
     {
         Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request);
+        Task<bool> Create(ProductCreateRequest request);
     }
 }

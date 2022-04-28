@@ -45,7 +45,7 @@
    </div>
    <div class="col-lg-4 text-right">
     <button class="btn btn-primary">
-     <a asp-controller="User" asp-action="Create">
+     <a asp-controller="Product" asp-action="Create">
       <i class="anticon anticon-plus-circle m-r-5" style="color:azure;"></i>
       <span style="color:azure;">Thêm sản phẩm mới</span>
      </a>
@@ -65,7 +65,7 @@
   </div>
         
   <div class="table-responsive">
-   <table class="table table-hover e-commerce-table">
+   <table class="table table-hover e-commerce-table" id="data-table">
     <thead>
         <tr>
             <th>
@@ -174,7 +174,12 @@
 </div>
 
 @section Scripts{
+<!-- page js -->
+    <script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+
     <script>
+        $('#data-table').DataTable();
      setTimeout(function() {
         $('#msgAlert').fadeOut('slow');
      }, 2000);

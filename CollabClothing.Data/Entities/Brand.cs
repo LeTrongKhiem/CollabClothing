@@ -19,5 +19,10 @@ namespace CollabClothing.Data.Entities
         public string Slug { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
+
+        public void BrandMapping()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
