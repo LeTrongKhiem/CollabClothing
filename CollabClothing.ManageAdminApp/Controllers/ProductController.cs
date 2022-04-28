@@ -34,5 +34,26 @@ namespace CollabClothing.ManageAdminApp.Controllers
             }
             return View(data);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.Create(request);
+            if (result)
+            {
+                TempData["result"] = "Thêm sản phẩm mới thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", "Thêm sản phẩm mới thất bại");
+            return View(request);
+        }
     }
 }

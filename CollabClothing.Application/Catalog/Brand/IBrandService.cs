@@ -10,7 +10,7 @@ namespace CollabClothing.Application.Catalog.Brand
 {
     public interface IBrandService
     {
-        Task<ResultApi<bool>> Create(BrandCreateRequest request);
+        Task<ResultApi<string>> Create(BrandCreateRequest request);
         Task<ResultApi<bool>> Edit(BrandEditRequest request);
         Task<ResultApi<bool>> Delete(string brandId);
         Task<ResultApi<BrandViewModel>> GetByBrandId(string brandId);

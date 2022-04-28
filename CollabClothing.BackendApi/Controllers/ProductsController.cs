@@ -65,6 +65,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //
         [HttpPost]
+        [Consumes("multipart/from-data")] // accept 1 form data fromform
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)

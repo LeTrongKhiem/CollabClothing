@@ -56,6 +56,8 @@ namespace CollabClothing.Application.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
+
+
             };
             var ProductMapCategory = new ProductMapCategory()
             {

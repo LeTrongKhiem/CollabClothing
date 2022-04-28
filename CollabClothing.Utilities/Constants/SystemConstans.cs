@@ -9,4 +9,5 @@ namespace CollabClothing.Utilities.Constants
             public const string Token = "Token";
         }
     }
+
 }
