@@ -1,5 +1,4 @@
 ﻿using CollabClothing.ManageAdminApp.Service;
-using CollabClothing.Utilities.Constants;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -52,7 +51,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = true
             };
-            HttpContext.Session.SetString(SystemConstans.AppSettings.Token, result.ResultObject);
+            HttpContext.Session.SetString("Token", result.ResultObject);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                             userPrincipal,
                                             authProperties);
