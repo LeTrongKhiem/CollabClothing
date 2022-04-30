@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CollabClothing.ManageAdminApp.Service
@@ -72,16 +73,30 @@ namespace CollabClothing.ManageAdminApp.Service
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
             var response = await client.DeleteAsync($"api/Products/{productId}");
             var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                return JsonConvert.DeserializeObject<bool>(result);
-            }
-            return JsonConvert.DeserializeObject<bool>(result);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> Edit(ProductEditRequest request)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PutAsync($"api/products/{request.Id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request)
         {
             return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
+        }
+
+        public async Task<ProductViewModel> GetById(string id)
+        {
+            return await GetAsync<ProductViewModel>($"/api/products/{id}");
         }
     }
 }

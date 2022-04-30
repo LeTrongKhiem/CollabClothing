@@ -85,5 +85,54 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(request);
         }
         #endregion
+        #region Update
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var product = _productApiClient.GetById(id);
+            if (product != null)
+            {
+                var productResult = product.Result;
+                var editProduct = new ProductEditRequest()
+                {
+                    Id = id,
+                    ProductName = productResult.ProductName,
+                    Details = productResult.Details,
+                    Description = productResult.Description,
+                    BrandId = productResult.BrandId,
+                    Slug = productResult.Slug,
+                    ImagePath = productResult.ThumbnailImage
+                };
+                return View(editProduct);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        public async Task<IActionResult> Edit(ProductEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.Edit(request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật thành công";
+                return RedirectToAction("Index");
+            }
+            return View(request);
+        }
+        #endregion
+        #region Details
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            if (product == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(product);
+        }
+        #endregion
     }
 }
