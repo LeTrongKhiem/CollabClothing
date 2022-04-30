@@ -34,6 +34,8 @@ namespace CollabClothing.ManageAdminApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+            services.AddControllersWithViews();
+            services.AddMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //use session header bearer
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
             {
@@ -83,6 +85,7 @@ namespace CollabClothing.ManageAdminApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
             });
         }
     }

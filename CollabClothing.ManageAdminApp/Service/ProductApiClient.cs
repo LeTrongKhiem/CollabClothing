@@ -3,6 +3,7 @@ using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,10 +56,27 @@ namespace CollabClothing.ManageAdminApp.Service
             requestContent.Add(new StringContent(request.Description), "description");
             requestContent.Add(new StringContent(request.Slug), "slug");
             requestContent.Add(new StringContent(request.Details), "details");
+            requestContent.Add(new StringContent(request.CategoryId), "categoryId");
 
             var response = await client.PostAsync($"/api/products/", requestContent);
             return response.IsSuccessStatusCode;
 
+        }
+
+        public async Task<bool> Delete(string productId)
+        {
+            //return await DeleteAsync($"/api/products/{id}");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.DeleteAsync($"api/Products/{productId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<bool>(result);
+            }
+            return JsonConvert.DeserializeObject<bool>(result);
         }
 
         public async Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request)

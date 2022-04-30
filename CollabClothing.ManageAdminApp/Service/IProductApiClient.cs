@@ -12,5 +12,6 @@ namespace CollabClothing.ManageAdminApp.Service
     {
         Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request);
         Task<bool> Create(ProductCreateRequest request);
+        Task<bool> Delete(string id);
     }
 }

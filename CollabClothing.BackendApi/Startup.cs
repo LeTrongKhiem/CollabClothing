@@ -48,7 +48,6 @@ namespace CollabClothing.BackendApi
             services.AddIdentity<AppUser, AppRole>()
             .AddEntityFrameworkStores<CollabClothingDBContext>()
             .AddDefaultTokenProviders();
-
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
