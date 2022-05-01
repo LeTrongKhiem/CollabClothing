@@ -82,7 +82,8 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //update product
         [HttpPut]
-        public async Task<IActionResult> Update([FromForm] ProductEditRequest request)
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromBody] ProductEditRequest request)
         {
             if (!ModelState.IsValid)
             {

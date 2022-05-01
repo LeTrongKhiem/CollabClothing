@@ -71,7 +71,7 @@ namespace CollabClothing.ManageAdminApp.Service
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.DeleteAsync($"api/Products/{productId}");
+            var response = await client.DeleteAsync($"/api/Products/{productId}");
             var result = await response.Content.ReadAsStringAsync();
             return response.IsSuccessStatusCode;
         }

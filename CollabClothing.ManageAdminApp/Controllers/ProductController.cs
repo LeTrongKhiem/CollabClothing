@@ -107,6 +107,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
             }
             return RedirectToAction("Error", "Home");
         }
+        [HttpPost]
+        //[Consumes("multipart/form-data")]
         public async Task<IActionResult> Edit(ProductEditRequest request)
         {
             if (!ModelState.IsValid)

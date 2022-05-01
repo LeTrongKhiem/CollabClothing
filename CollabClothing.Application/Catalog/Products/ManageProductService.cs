@@ -146,6 +146,7 @@ namespace CollabClothing.Application.Catalog.Products
             // productDetail.Details = request.Details;
             product.Description = request.Description;
             product.BrandId = request.BrandId;
+            product.Details = request.Details;
 
             //delete old image file
             string fullPath = "wwwroot" + image.Path;
