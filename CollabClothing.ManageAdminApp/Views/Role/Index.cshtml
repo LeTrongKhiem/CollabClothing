@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<CollabClothing.ViewModels.System.Roles.RoleViewModel>
 
 @{
-	ViewData["Title"] = "Danh sách Role";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Danh sách Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Danh sách Role</h1>
@@ -20,75 +20,75 @@
  <div class="card-body">
   <div class="row m-b-30">
    <div class="col-lg-11 text-right">
-	<button class="btn btn-primary">
-	 <a asp-controller="Role" asp-action="Create">
-	  <i class="anticon anticon-plus-circle m-r-5" style="color:azure;"></i>
-	  <span style="color:azure;">Thêm Role mới</span>
-	 </a>
-	</button>
+    <button class="btn btn-primary">
+     <a asp-controller="Role" asp-action="Create">
+      <i class="anticon anticon-plus-circle m-r-5" style="color:azure;"></i>
+      <span style="color:azure;">Thêm Role mới</span>
+     </a>
+    </button>
    </div>
   </div>
   <div class="row">
-	  <div class="col-md-6"></div>
-	  <div class="col-md-6">
-	   @if (ViewBag.SuccessMsg != null)
-		{
-			<div class="alert alert-success" role="alert" id="msgAlert">
-				@ViewBag.SuccessMsg
-			</div>
-		}
+      <div class="col-md-6"></div>
+      <div class="col-md-6">
+       @if (ViewBag.SuccessMsg != null)
+        {
+            <div class="alert alert-success" role="alert" id="msgAlert">
+                @ViewBag.SuccessMsg
+            </div>
+        }
    </div>
   </div>
-		
+        
   <div class="table-responsive">
-   <table class="table table-hover e-commerce-table">
-	 <thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.Id)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Name)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Description)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Id)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Name)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Description)
-			</td>
-			<td>
-				 <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-				<a asp-controller="Role" asp-action="Details" asp-route-id="@item.Id">
-				 <i class="anticon anticon-eye"></i>
-				</a>
-			   </button>
-			   <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-				<a asp-controller="Role" asp-action="Edit" asp-route-id="@item.Id">
-				 <i class="anticon anticon-edit"></i>
-				</a>
+   <table class="table table-hover e-commerce-table" id="data-table">
+     <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                 <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                <a asp-controller="Role" asp-action="Details" asp-route-id="@item.Id">
+                 <i class="anticon anticon-eye"></i>
+                </a>
+               </button>
+               <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                <a asp-controller="Role" asp-action="Edit" asp-route-id="@item.Id">
+                 <i class="anticon anticon-edit"></i>
+                </a>
 
-			   </button>
-			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-				<a asp-controller="Role" asp-action="Delete" asp-route-id="@item.Id">
-				 <i class="anticon anticon-delete"></i>
-				</a>
-			   </button>
-			</td>
-		</tr>
-				}
-	</tbody>
+               </button>
+               <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                <a asp-controller="Role" asp-action="Delete" asp-route-id="@item.Id">
+                 <i class="anticon anticon-delete"></i>
+                </a>
+               </button>
+            </td>
+        </tr>
+                }
+    </tbody>
    </table>
   </div>
  </div>
@@ -96,9 +96,14 @@
 
 
 @section Scripts{
-	<script>
-	 setTimeout(function() {
-		$('#msgAlert').fadeOut('slow');
-	 }, 2000);
+<!-- page js -->
+    <script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+
+    <script>
+        $('#data-table').DataTable();
+     setTimeout(function() {
+        $('#msgAlert').fadeOut('slow');
+     }, 2000);
  </script>
 }

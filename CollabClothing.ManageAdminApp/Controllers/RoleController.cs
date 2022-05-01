@@ -26,7 +26,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
-            return View(result.ResultObject);
+            return View(result);
         }
         [HttpGet]
         public IActionResult Create()

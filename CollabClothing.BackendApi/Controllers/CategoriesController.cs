@@ -41,7 +41,8 @@ namespace CollabClothing.BackendApi.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CategoryCreateRequest request)
         {
             if (!ModelState.IsValid)
             {

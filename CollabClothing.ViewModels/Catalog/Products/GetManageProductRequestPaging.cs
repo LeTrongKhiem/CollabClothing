@@ -10,6 +10,6 @@ namespace CollabClothing.ViewModels.Catalog.Products
     public class GetManageProductRequestPaging : PagingRequestBase
     {
         public string Keyword { get; set; }
-        public List<string> CategoryIds { get; set; }
+        public string? CategoryIds { get; set; }
     }
 }

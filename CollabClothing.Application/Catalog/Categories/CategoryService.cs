@@ -23,7 +23,8 @@ namespace CollabClothing.Application.Catalog.Categories
     {
         private readonly CollabClothingDBContext _context;
         private readonly IStorageService _storageService;
-        private readonly string USER_CONTENT_FOLDER_NAME = "user-content/icon-category";
+        private readonly string USER_CONTENT_FOLDER_NAME = "user-content";
+        private readonly string CHILD_PATH_FOLDER_NAME = "icon-category";
 
         public CategoryService(CollabClothingDBContext context, IStorageService storageService)
         {
@@ -34,8 +35,8 @@ namespace CollabClothing.Application.Catalog.Categories
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName, CHILD_PATH_FOLDER_NAME);
+            return "/" + USER_CONTENT_FOLDER_NAME + "/" + CHILD_PATH_FOLDER_NAME + "/" + fileName;
         }
         public async Task<string> Create(CategoryCreateRequest request)
         {
