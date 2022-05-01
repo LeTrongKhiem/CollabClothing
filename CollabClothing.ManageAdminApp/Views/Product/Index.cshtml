@@ -5,7 +5,7 @@
     ViewData["Title"] = "Danh sách sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration; // lay duong dan localhost:5001
 <div class="page-header">
  <div class="header-sub-title">
   <nav class="breadcrumb breadcrumb-dash">
@@ -81,7 +81,7 @@
                 Giảm giá (%)
             </th>
             <th>
-                Brand Id
+                Thương hiệu
             </th>
             <th>
                 Đã bán hết
@@ -140,8 +140,8 @@
             </td>
             <td>
                 @*@Html.DisplayFor(modelItem => item.ThumbnailImage)*@
-                @*<img src="~@Html.DisplayFor(modelItem => item.ThumbnailImage)" width="100px" height="100px"/>*@
-                <img src="" width="100px" height="100px"/>
+                @*<img src="@(Configuration["BaseAddress"]+@item.ThumbnailImage)" width="100px" height="100px"/>*@
+                @*<img src="" width="100px" height="100px"/>*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)

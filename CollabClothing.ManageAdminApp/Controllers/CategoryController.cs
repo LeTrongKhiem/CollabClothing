@@ -37,7 +37,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CategoryCreateRequest request)
         {
             if (!ModelState.IsValid)
             {

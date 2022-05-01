@@ -30,16 +30,18 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ViewBag.Keyword = keyword;
             if (TempData["result"] != null)
             {
-                ViewBag.MsgSuccess = TempData["result"];
+                ViewBag.SuccessMsg = TempData["result"];
             }
             return View(data);
         }
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -55,5 +57,84 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ModelState.AddModelError("", "Thêm sản phẩm mới thất bại");
             return View(request);
         }
+        #endregion
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete(string Id)
+        {
+            var product = new ProductDeleteRequest()
+            {
+                Id = Id
+            };
+            return View(product);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(ProductDeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.Delete(request.Id);
+            if (result)
+            {
+                TempData["result"] = "Xóa thành công sản phẩm";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", "Xóa thất bại sản phẩm");
+            return View(request);
+        }
+        #endregion
+        #region Update
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var product = _productApiClient.GetById(id);
+            if (product != null)
+            {
+                var productResult = product.Result;
+                var editProduct = new ProductEditRequest()
+                {
+                    Id = id,
+                    ProductName = productResult.ProductName,
+                    Details = productResult.Details,
+                    Description = productResult.Description,
+                    BrandId = productResult.BrandId,
+                    Slug = productResult.Slug,
+                    ImagePath = productResult.ThumbnailImage
+                };
+                return View(editProduct);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> Edit(ProductEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.Edit(request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật thành công";
+                return RedirectToAction("Index");
+            }
+            return View(request);
+        }
+        #endregion
+        #region Details
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            if (product == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(product);
+        }
+        #endregion
     }
 }

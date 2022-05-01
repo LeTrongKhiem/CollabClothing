@@ -65,12 +65,12 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //
         [HttpPost]
-        [Consumes("multipart/from-data")] // accept 1 form data fromform
+        [Consumes("multipart/form-data")] // accept 1 form data fromform
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             var productId = await _manageProductService.Create(request);
             if (productId.Equals("") || productId == null)
@@ -82,7 +82,8 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //update product
         [HttpPut]
-        public async Task<IActionResult> Update([FromForm] ProductEditRequest request)
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromBody] ProductEditRequest request)
         {
             if (!ModelState.IsValid)
             {
