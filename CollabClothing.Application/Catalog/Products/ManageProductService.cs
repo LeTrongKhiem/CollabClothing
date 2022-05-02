@@ -74,6 +74,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
+                Details = request.Details
 
 
             };

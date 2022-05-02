@@ -74,6 +74,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         [HttpPut("cateId")]
         [AllowAnonymous]
+        [Consumes("mutilpart/form-data")]
         public async Task<IActionResult> Edit(string cateId, [FromForm] CategoryEditRequest request)
         {
             if (!ModelState.IsValid)
