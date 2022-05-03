@@ -5,4 +5,7 @@
 - HTML5
 - CSS
 - Javascript 
+- DataBase First
+- Ajax
+- 
 
