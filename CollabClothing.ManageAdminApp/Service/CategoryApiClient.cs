@@ -135,5 +135,10 @@ namespace CollabClothing.ManageAdminApp.Service
             }
             return JsonConvert.DeserializeObject<ResultApiError<CategoryViewModel>>(result);
         }
+
+        public async Task<List<CategoryViewModel>> GetAll()
+        {
+            return await GetListAsync<CategoryViewModel>("/api/categories/");
+        }
     }
 }

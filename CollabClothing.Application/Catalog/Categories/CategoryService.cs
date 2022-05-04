@@ -168,5 +168,15 @@ namespace CollabClothing.Application.Catalog.Categories
             await _context.SaveChangesAsync();
             return new ResultApiSuccessed<bool>();
         }
+
+        public async Task<List<CategoryViewModel>> GetAll()
+        {
+            var query = from c in _context.Categories select new { c };
+            return await query.Select(x => new CategoryViewModel()
+            {
+                CategoryId = x.c.Id,
+                CategoryName = x.c.NameCategory
+            }).ToListAsync();
+        }
     }
 }

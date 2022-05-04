@@ -33,11 +33,9 @@
                 </div>
             </div>
         </form>
-          <select class="custom-select" style="min-width: 180px; margin-top: 15px;" id="txtRole" name="txtRole">
+          <select class="custom-select" style="min-width: 180px; margin-top: 15px;" name="categoryId" asp-items="@ViewBag.Categories">
            <option selected>Chọn</option>
            <option value="all">Tất cả</option>
-           <option value="1">Quản Trị</option>
-           <option value="0">Nhân Viên</option>
           </select>
      
      </div>

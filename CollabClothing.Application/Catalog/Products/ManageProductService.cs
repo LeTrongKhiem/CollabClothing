@@ -229,13 +229,17 @@ namespace CollabClothing.Application.Catalog.Products
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.p.BrandId.Contains(request.Keyword)
+                query = query.Where(x => x.p.BrandId.Contains(request.Keyword)
                 || x.p.PriceCurrent == Int32.Parse(request.Keyword) || x.p.PriceOld == Int32.Parse(request.Keyword)
-                || x.p.SaleOff == Int32.Parse(request.Keyword) || x.c.NameCategory.Contains(request.Keyword));
+                || x.p.SaleOff == Int32.Parse(request.Keyword) || x.c.NameCategory.Contains(request.Keyword) || x.p.ProductName.Contains(request.Keyword));
             }
-            if (!string.IsNullOrEmpty(request.CategoryIds))
+            //if (!string.IsNullOrEmpty(request.CategoryIds.ToString()))
+            //{
+            //    query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
+            //}
+            if (!string.IsNullOrEmpty(request.CategoryId))
             {
-                query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
+                query = query.Where(x => x.pmc.CategoryId == request.CategoryId);
             }
             //3. paging
             //ham skip lay data tiep theo vd trang 1 (1-1 * 5) = 0 lay 5 sp tiep theo la den sp thu 1 den 5
@@ -266,7 +270,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Items = data,
                 TotalRecord = totalRow,
                 PageIndex = request.PageIndex,
-                PageSize = request.PageSize
+                PageSize = request.PageSize,
             };
             return pagedResult;
 

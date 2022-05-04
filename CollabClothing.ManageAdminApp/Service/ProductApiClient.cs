@@ -84,7 +84,7 @@ namespace CollabClothing.ManageAdminApp.Service
 
         public async Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request)
         {
-            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
+            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&CategoryId={request.CategoryId}");
         }
 
         public async Task<ProductViewModel> GetById(string id)
