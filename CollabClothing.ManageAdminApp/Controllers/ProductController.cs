@@ -21,7 +21,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             _configuration = configuration;
             _categoryApiClient = categoryApiClient;
         }
-        public async Task<IActionResult> Index(string keyword, string? categoryId, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, string categoryId, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetManageProductRequestPaging()
             {
