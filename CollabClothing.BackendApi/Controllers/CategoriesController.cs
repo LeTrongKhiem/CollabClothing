@@ -18,6 +18,12 @@ namespace CollabClothing.BackendApi.Controllers
         {
             _categoryService = categoryService;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var cate = await _categoryService.GetAll();
+            return Ok(cate);
+        }
         [HttpGet("paging")]
         //[AllowAnonymous]
         public async Task<IActionResult> Get([FromQuery] GetCategoryRequestPaging request)
@@ -74,6 +80,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         [HttpPut("cateId")]
         [AllowAnonymous]
+        [Consumes("mutilpart/form-data")]
         public async Task<IActionResult> Edit(string cateId, [FromForm] CategoryEditRequest request)
         {
             if (!ModelState.IsValid)

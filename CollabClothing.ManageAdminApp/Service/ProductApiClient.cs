@@ -66,14 +66,7 @@ namespace CollabClothing.ManageAdminApp.Service
 
         public async Task<bool> Delete(string productId)
         {
-            //return await DeleteAsync($"/api/products/{id}");
-            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.DeleteAsync($"/api/Products/{productId}");
-            var result = await response.Content.ReadAsStringAsync();
-            return response.IsSuccessStatusCode;
+            return await DeleteAsync($"/api/products/{productId}");
         }
 
         public async Task<bool> Edit(ProductEditRequest request)
@@ -91,7 +84,7 @@ namespace CollabClothing.ManageAdminApp.Service
 
         public async Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request)
         {
-            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
+            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}");
         }
 
         public async Task<ProductViewModel> GetById(string id)

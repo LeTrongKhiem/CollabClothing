@@ -99,8 +99,6 @@ namespace CollabClothing.Application.Catalog.Categories
 
         public async Task<ResultApi<CategoryViewModel>> GetCateById(string Id)
         {
-            Category category = new Category();
-            category.CateMapping(new CategoryDTO());
             var cate = await _context.Categories.FindAsync(Id);
             if (cate == null)
             {
@@ -116,6 +114,9 @@ namespace CollabClothing.Application.Catalog.Categories
                 Level = cate.Level,
                 Slug = cate.Slug
             };
+
+            Category category = new Category();
+            category.CateMapping(new CategoryDTO());
             return new ResultApiSuccessed<CategoryViewModel>(cate1);
         }
 
@@ -166,6 +167,16 @@ namespace CollabClothing.Application.Catalog.Categories
             _context.Categories.Remove(cate);
             await _context.SaveChangesAsync();
             return new ResultApiSuccessed<bool>();
+        }
+
+        public async Task<List<CategoryViewModel>> GetAll()
+        {
+            var query = from c in _context.Categories select new { c };
+            return await query.Select(x => new CategoryViewModel()
+            {
+                CategoryId = x.c.Id,
+                CategoryName = x.c.NameCategory
+            }).ToListAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CollabClothing.ManageAdminApp.Service;
 using CollabClothing.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -13,21 +14,31 @@ namespace CollabClothing.ManageAdminApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
-        public ProductController(IProductApiClient productApiClient, IConfiguration configuration)
+        private readonly ICategoryApiClient _categoryApiClient;
+        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient)
         {
             _productApiClient = productApiClient;
             _configuration = configuration;
+            _categoryApiClient = categoryApiClient;
         }
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, string categoryId, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetManageProductRequestPaging()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                CategoryId = categoryId
             };
             var data = await _productApiClient.GetAll(request);
             ViewBag.Keyword = keyword;
+            var categories = await _categoryApiClient.GetAll();
+            ViewBag.Categories = categories.Select(x => new SelectListItem()
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId,
+                Selected = categoryId == x.CategoryId && categoryId != null
+            });
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
