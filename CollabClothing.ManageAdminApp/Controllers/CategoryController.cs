@@ -118,6 +118,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(request);
         }
         #endregion
-
+        #region Details
+        #endregion
     }
 }

@@ -24,12 +24,13 @@ namespace CollabClothing.Application.System.Users
         private readonly IConfiguration _config;
         private readonly CollabClothingDBContext _context;
         #region Constructor
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = configuration;
+            _context = context;
         }
         #endregion
         #region Register
@@ -37,6 +38,7 @@ namespace CollabClothing.Application.System.Users
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             var email = await _userManager.FindByEmailAsync(request.Email);
+            var role = await _roleManager.FindByNameAsync("Role User");
             if (user != null)
             {
                 return new ResultApiError<bool>("Username đã tồn tại");
@@ -56,6 +58,10 @@ namespace CollabClothing.Application.System.Users
                 FirstName = request.FirstName,
                 LastName = request.LastName,
             };
+            //var userRole = new RoleManager()
+            //{
+
+            //};
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
@@ -97,12 +103,26 @@ namespace CollabClothing.Application.System.Users
         #region GetListUser
         public async Task<ResultApi<PageResult<UserViewModel>>> GetListUser(GetUserRequestPaging request)
         {
+            //var query = from user in _userManager.Users
+            //            join userrole in _context.UserRoles on user.Id equals userrole.UserId
+            //            into usermaprole
+            //            from userrole in usermaprole.DefaultIfEmpty()
+            //            join role in _roleManager.Roles on userrole.RoleId equals role.Id
+            //            into userrolerole
+            //            from role in userrolerole.DefaultIfEmpty()
+            //            select new { user, userrole, role };
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword) || x.PhoneNumber.Contains(request.Keyword) || x.LastName.Contains(request.Keyword)
                                         || x.Email.Contains(request.Keyword));
+                //query = query.Where(x => x.user.UserName.Contains(request.Keyword) || x.user.PhoneNumber.Contains(request.Keyword) || x.user.LastName.Contains(request.Keyword)
+                //|| x.user.Email.Contains(request.Keyword));
             }
+            //if (!string.IsNullOrEmpty(request.RoleId.ToString()))
+            //{
+            //    query = query.Where(x => x.role.Id == request.RoleId);
+            //}
             //total row 
             var totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
