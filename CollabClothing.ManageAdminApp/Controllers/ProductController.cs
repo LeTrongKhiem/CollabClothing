@@ -106,7 +106,6 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 var productResult = product.Result;
                 var editProduct = new ProductEditRequest()
                 {
-                    Id = id,
                     ProductName = productResult.ProductName,
                     Details = productResult.Details,
                     Description = productResult.Description,
@@ -119,14 +118,14 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return RedirectToAction("Error", "Home");
         }
         [HttpPost]
-        //[Consumes("multipart/form-data")]
-        public async Task<IActionResult> Edit(ProductEditRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Edit(string id, [FromForm] ProductEditRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
-            var result = await _productApiClient.Edit(request);
+            var result = await _productApiClient.Edit(id, request);
             if (result)
             {
                 TempData["result"] = "Cập nhật thành công";

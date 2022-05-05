@@ -97,7 +97,7 @@ namespace CollabClothing.Application.Catalog.Categories
         }
         #endregion
 
-        public async Task<ResultApi<CategoryViewModel>> GetCateById(string Id)
+        public async Task<CategoryViewModel> GetCateById(string Id)
         {
             var cate = await _context.Categories.FindAsync(Id);
             if (cate == null)
@@ -117,7 +117,7 @@ namespace CollabClothing.Application.Catalog.Categories
 
             Category category = new Category();
             category.CateMapping(new CategoryDTO());
-            return new ResultApiSuccessed<CategoryViewModel>(cate1);
+            return cate1;
         }
 
         public async Task<ResultApi<bool>> Edit(string cateId, CategoryEditRequest request)

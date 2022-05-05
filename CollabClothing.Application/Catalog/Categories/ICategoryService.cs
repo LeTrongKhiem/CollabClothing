@@ -14,7 +14,7 @@ namespace CollabClothing.Application.Catalog.Categories
         Task<ResultApi<bool>> Edit(string cateId, CategoryEditRequest request);
         Task<ResultApi<bool>> Delete(string CateId);
         Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request); //paing
-        Task<ResultApi<CategoryViewModel>> GetCateById(string Id);
+        Task<CategoryViewModel> GetCateById(string Id);
         Task<List<CategoryViewModel>> GetAll();
     }
 }

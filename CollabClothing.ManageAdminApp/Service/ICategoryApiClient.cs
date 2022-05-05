@@ -12,7 +12,7 @@ namespace CollabClothing.ManageAdminApp.Service
         Task<ResultApi<bool>> Create(CategoryCreateRequest request);
         Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request);
         Task<ResultApi<bool>> Delete(string cateId);
-        Task<ResultApi<CategoryViewModel>> GetById(string cateId);
+        Task<CategoryViewModel> GetById(string cateId);
         Task<ResultApi<bool>> Edit(string id, CategoryEditRequest request);
         Task<List<CategoryViewModel>> GetAll();
     }

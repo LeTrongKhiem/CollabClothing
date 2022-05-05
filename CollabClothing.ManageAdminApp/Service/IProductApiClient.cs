@@ -13,7 +13,7 @@ namespace CollabClothing.ManageAdminApp.Service
         Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request);
         Task<bool> Create(ProductCreateRequest request);
         Task<bool> Delete(string id);
-        Task<bool> Edit(ProductEditRequest request);
+        Task<bool> Edit(string id, ProductEditRequest request);
         Task<ProductViewModel> GetById(string id);
     }
 }

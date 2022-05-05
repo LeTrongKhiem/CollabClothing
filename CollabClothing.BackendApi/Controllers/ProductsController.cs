@@ -81,15 +81,15 @@ namespace CollabClothing.BackendApi.Controllers
             return CreatedAtAction(nameof(productId), new { id = productId }, product);
         }
         //update product
-        [HttpPut]
-        //[Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update([FromBody] ProductEditRequest request)
+        [HttpPut("{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update(string id, [FromForm] ProductEditRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var affectedResult = await _manageProductService.Update(request);
+            var affectedResult = await _manageProductService.Update(id, request);
             if (affectedResult == 0)
             {
                 return BadRequest();

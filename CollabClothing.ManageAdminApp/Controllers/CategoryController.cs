@@ -84,19 +84,19 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         #region Update
         [HttpGet]
-        public IActionResult Edit(string cateId)
+        public async Task<IActionResult> Edit(string cateId)
         {
             var cate = _categoryApiClient.GetById(cateId);
             if (cate != null)
             {
-                var cateResult = cate.Result.ResultObject;
+                var cateResult = cate.Result;
                 var editCategory = new CategoryEditRequest()
                 {
                     CategoryName = cateResult.CategoryName,
                     IsShowWeb = cateResult.IsShowWeb,
                     Level = cateResult.Level,
                     ParentId = cateResult.ParentId,
-                    Slug = cateResult.Slug
+                    Slug = cateResult.Slug,
                 };
                 return View(editCategory);
             }
@@ -119,6 +119,20 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         #endregion
         #region Details
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _categoryApiClient.GetById(id);
+            if (result == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(result);
+        }
         #endregion
     }
 }

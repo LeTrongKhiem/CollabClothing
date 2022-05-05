@@ -9,7 +9,6 @@ namespace CollabClothing.ViewModels.Catalog.Products
 {
     public class ProductEditRequest
     {
-        public string Id { get; set; }
         public string ProductName { get; set; }
         public string Details { get; set; }
         public string Description { get; set; }

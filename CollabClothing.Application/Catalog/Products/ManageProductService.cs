@@ -134,17 +134,15 @@ namespace CollabClothing.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Update(ProductEditRequest request)
+        public async Task<int> Update(string id, ProductEditRequest request)
         {
-            var product = await _context.Products.FindAsync(request.Id);
+            var product = await _context.Products.FindAsync(id);
             var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
             if (product == null)
             {
-                throw new CollabException($"Cannot find product with Id: {request.Id}");
+                throw new CollabException($"Cannot find product with Id: {id}");
             }
-            product.Id = request.Id;
             product.ProductName = request.ProductName;
-            // productDetail.Details = request.Details;
             product.Description = request.Description;
             product.BrandId = request.BrandId;
             product.Details = request.Details;
@@ -162,7 +160,7 @@ namespace CollabClothing.Application.Catalog.Products
             //save image
             if (request.ThumbnailImage != null)
             {
-                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
+                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
 
                 if (thumbnailImage != null)
                 {
@@ -225,7 +223,6 @@ namespace CollabClothing.Application.Catalog.Products
                         join b in _context.Brands on p.BrandId equals b.Id into pb
                         from b in pb.DefaultIfEmpty()
                         select new { p, pmc, c, pimg, b };
-
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {

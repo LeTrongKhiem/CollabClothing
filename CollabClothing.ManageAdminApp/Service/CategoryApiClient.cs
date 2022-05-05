@@ -121,19 +121,19 @@ namespace CollabClothing.ManageAdminApp.Service
             return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
         }
 
-        public async Task<ResultApi<CategoryViewModel>> GetById(string cateId)
+        public async Task<CategoryViewModel> GetById(string cateId)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(SystemConstans.AppSettings.BaseAddress);
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
             var response = await client.GetAsync($"/api/categories/{cateId}");
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<ResultApiSuccessed<CategoryViewModel>>(result);
+                return JsonConvert.DeserializeObject<CategoryViewModel>(result);
             }
-            return JsonConvert.DeserializeObject<ResultApiError<CategoryViewModel>>(result);
+            return JsonConvert.DeserializeObject<CategoryViewModel>(result);
         }
 
         public async Task<List<CategoryViewModel>> GetAll()

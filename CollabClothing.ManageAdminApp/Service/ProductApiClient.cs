@@ -63,22 +63,31 @@ namespace CollabClothing.ManageAdminApp.Service
             return response.IsSuccessStatusCode;
 
         }
-
-        public async Task<bool> Delete(string productId)
-        {
-            return await DeleteAsync($"/api/products/{productId}");
-        }
-
-        public async Task<bool> Edit(ProductEditRequest request)
+        public async Task<bool> Edit(string id, ProductEditRequest request)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.PutAsync($"api/products/{request.Id}", httpContent);
-            var result = await response.Content.ReadAsStringAsync();
+            var requestContent = new MultipartFormDataContent();
+            if (request.ThumbnailImage != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
+                }
+                ByteArrayContent byteArrayContent = new ByteArrayContent(data);
+                requestContent.Add(byteArrayContent, "thumbnailImage", request.ThumbnailImage.FileName);
+
+            }
+            requestContent.Add(new StringContent(request.ProductName), "productName");
+            requestContent.Add(new StringContent(request.Details), "details");
+            requestContent.Add(new StringContent(request.Description), "description");
+            requestContent.Add(new StringContent(request.Slug), "slug");
+            requestContent.Add(new StringContent(request.ImagePath), "imagePath");
+            requestContent.Add(new StringContent(request.BrandId), "brandId");
+            var response = await client.PutAsync($"/api/products/{id}", requestContent);
             return response.IsSuccessStatusCode;
         }
 
@@ -91,5 +100,10 @@ namespace CollabClothing.ManageAdminApp.Service
         {
             return await GetAsync<ProductViewModel>($"/api/products/{id}");
         }
+        public async Task<bool> Delete(string productId)
+        {
+            return await DeleteAsync($"/api/products/{productId}");
+        }
+
     }
 }
