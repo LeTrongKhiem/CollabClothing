@@ -70,41 +70,32 @@ namespace CollabClothing.ManageAdminApp.Service
             return result;
         }
 
-        public async Task<ResultApi<bool>> Edit(string cateId, CategoryEditRequest request)
+        public async Task<bool> Edit(string cateId, CategoryEditRequest request)
         {
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAdress"]);
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.PutAsync($"/api/categories/{cateId}", httpContent);
-            var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
+            var requestContent = new MultipartFormDataContent();
+            if (request.Icon != null)
             {
-                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+                byte[] data;
+                using (var br = new BinaryReader(request.Icon.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Icon.OpenReadStream().Length);
+                }
+                ByteArrayContent byteArrayContent = new ByteArrayContent(data);
+                requestContent.Add(byteArrayContent, "icon", request.Icon.FileName);
             }
-            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
-            //var requestContent = new MultipartFormDataContent();
-            //if (request.Icon != null)
-            //{
-            //    byte[] data;
-            //    using (var br = new BinaryReader(request.Icon.OpenReadStream()))
-            //    {
-            //        data = br.ReadBytes((int)request.Icon.OpenReadStream().Length);
-            //    }
-            //    ByteArrayContent byteArrayContent = new ByteArrayContent(data);
-            //    requestContent.Add(byteArrayContent, "icon", request.Icon.FileName);
-            //}
-            //requestContent.Add(new StringContent(request.CategoryName), "categoryName");
-            //requestContent.Add(new StringContent(request.IsShowWeb.ToString()), "isShowWeb");
-            //requestContent.Add(new StringContent(request.ParentId), "parentId");
-            //requestContent.Add(new StringContent(request.Level.ToString()), "level");
-            //requestContent.Add(new StringContent(request.Slug), "slug");
+            requestContent.Add(new StringContent(request.CategoryName), "categoryName");
+            requestContent.Add(new StringContent(request.IsShowWeb.ToString()), "isShowWeb");
+            requestContent.Add(new StringContent(request.ParentId), "parentId");
+            requestContent.Add(new StringContent(request.Level.ToString()), "level");
+            requestContent.Add(new StringContent(request.Slug), "slug");
 
-            //var response = await client.PutAsync($"/api/categories/{cateId}", requestContent);
-            //return new ResultApiSuccessed<bool>();
+            var response = await client.PutAsync($"/api/categories/cateId?cateId={cateId}", requestContent);
+            return response.IsSuccessStatusCode;
         }
         public async Task<ResultApi<bool>> Delete(string cateId)
         {

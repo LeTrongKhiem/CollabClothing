@@ -84,9 +84,9 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         #region Update
         [HttpGet]
-        public async Task<IActionResult> Edit(string cateId)
+        public async Task<IActionResult> Edit(string id)
         {
-            var cate = _categoryApiClient.GetById(cateId);
+            var cate = _categoryApiClient.GetById(id);
             if (cate != null)
             {
                 var cateResult = cate.Result;
@@ -103,14 +103,15 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return RedirectToAction("Error", "Home");
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, CategoryEditRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Edit(string id, [FromForm] CategoryEditRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
             var result = await _categoryApiClient.Edit(id, request);
-            if (result.IsSuccessed)
+            if (result)
             {
                 TempData["result"] = "Cập nhật thành công";
                 return RedirectToAction("Index");

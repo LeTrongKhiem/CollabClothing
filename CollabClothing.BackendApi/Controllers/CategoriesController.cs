@@ -80,7 +80,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         [HttpPut("cateId")]
         [AllowAnonymous]
-        [Consumes("mutilpart/form-data")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Edit(string cateId, [FromForm] CategoryEditRequest request)
         {
             if (!ModelState.IsValid)
@@ -92,7 +92,7 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(result);
             }
-            return Ok(result);
+            return Ok();
         }
 
     }
