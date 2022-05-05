@@ -10,5 +10,6 @@ namespace CollabClothing.ViewModels.System.Users
     public class GetUserRequestPaging : PagingRequestBase
     {
         public string Keyword { get; set; }
+        public Guid RoleId { get; set; }
     }
 }
