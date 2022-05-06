@@ -141,7 +141,7 @@
             <td>
                 @*@Html.DisplayFor(modelItem => item.ThumbnailImage)*@
                 @*<img src="@(Configuration["BaseAddress"]+@item.ThumbnailImage)" width="100px" height="100px"/>*@
-                @*<img src="" width="100px" height="100px"/>*@
+                <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.ThumbnailImage)" width="100px" height="100px"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)

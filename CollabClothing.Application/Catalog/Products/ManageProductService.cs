@@ -142,35 +142,54 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 throw new CollabException($"Cannot find product with Id: {id}");
             }
-            product.ProductName = request.ProductName;
+            product.ProductName = request.ProductName != null ? request.ProductName : product.ProductName;
             product.Description = request.Description;
             product.BrandId = request.BrandId;
             product.Details = request.Details;
-
-            //delete old image file
-            string fullPath = "wwwroot" + image.Path;
-            if (File.Exists(fullPath))
-            {
-                await Task.Run(() =>
-                {
-                    File.Delete(fullPath);
-                });
-            }
             product.Slug = request.Slug;
-            //save image
-            if (request.ThumbnailImage != null)
+            if (image == null)
             {
-                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
-
-                if (thumbnailImage != null)
+                Guid g = Guid.NewGuid();
+                var thumbnail = new ProductImage()
                 {
-                    // thumbnailImage.Id = request.productImage.Id;
-                    thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
-                    thumbnailImage.Alt = request.ProductName;
-                    _context.ProductImages.Update(thumbnailImage);
+                    Id = g.ToString(),
+                    ProductId = product.Id,
+                    Alt = product.ProductName,
+                };
+                if (request.ThumbnailImage != null)
+                {
+                    thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
                 }
+                _context.ProductImages.Add(thumbnail);
+                return await _context.SaveChangesAsync();
             }
-            return await _context.SaveChangesAsync();
+            else
+            {
+                //delete old image file
+                string fullPath = "wwwroot" + image.Path;
+                if (File.Exists(fullPath))
+                {
+                    await Task.Run(() =>
+                    {
+                        File.Delete(fullPath);
+                    });
+                }
+                //save image
+                if (request.ThumbnailImage != null)
+                {
+                    var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
+
+                    if (thumbnailImage != null)
+                    {
+                        // thumbnailImage.Id = request.productImage.Id;
+                        thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
+                        thumbnailImage.Alt = request.ProductName;
+                        _context.ProductImages.Update(thumbnailImage);
+                    }
+                }
+                return await _context.SaveChangesAsync();
+            }
+
         }
 
         public async Task<ProductViewModel> GetProductById(string productId)
