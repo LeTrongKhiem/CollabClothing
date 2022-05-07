@@ -15,6 +15,6 @@ namespace CollabClothing.ManageAdminApp.Service
         Task<bool> Delete(string id);
         Task<bool> Edit(string id, ProductEditRequest request);
         Task<ProductViewModel> GetById(string id);
-        Task<ResultApi<bool>> CategoryAssign(string id, CategoryAssignRequest request);
+        Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
     }
 }

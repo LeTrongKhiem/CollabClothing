@@ -81,7 +81,7 @@ namespace CollabClothing.BackendApi.Controllers
             var product = await _manageProductService.GetProductById(productId);
             return CreatedAtAction(nameof(productId), new { id = productId }, product);
         }
-        [HttpPut("id/categories")]
+        [HttpPut("{id}/categories")]
         public async Task<IActionResult> CategoriesAssign(string id, CategoryAssignRequest request)
         {
             if (!ModelState.IsValid)

@@ -69,6 +69,7 @@ namespace CollabClothing.Application.Catalog.Categories
         {
 
             var query = from cate in _context.Categories select new { cate };
+            var query2 = _context.Categories.Where(x => x.ParentId == x.Id).Select(o => o.NameCategory).ToString();
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.cate.NameCategory.Contains(request.Keyword));
@@ -84,8 +85,10 @@ namespace CollabClothing.Application.Catalog.Categories
                              IsShowWeb = x.cate.IsShowWeb,
                              Level = x.cate.Level,
                              ParentId = x.cate.ParentId,
-                             Slug = x.cate.Slug
+                             Slug = x.cate.Slug,
+                             ParentName = query2
                          }).ToListAsync();
+
             var pageResult = new PageResult<CategoryViewModel>()
             {
                 Items = data,

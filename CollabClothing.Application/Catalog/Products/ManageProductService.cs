@@ -113,29 +113,25 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 return false;
             }
-            //delete assign category
-            var removeCategories = request.Categories.Where(x => x.Selected == false).ToList();
-            foreach (var category in removeCategories)
+            foreach (var category in request.Categories)
             {
-                var productMapCate = await _context.ProductMapCategories.FindAsync(id, category.Id);
-                if (productMapCate != null)
+                var productMapCate = await _context.ProductMapCategories.FirstOrDefaultAsync(x => x.CategoryId == category.Id
+                        && x.ProductId == product.Id);
+                if (productMapCate != null && category.Selected == false)
                 {
                     _context.ProductMapCategories.Remove(productMapCate);
                 }
-            }
-            //add category assign
-            var addCategories = request.Categories.Where(x => x.Selected == true).ToList();
-            foreach (var category in addCategories)
-            {
-                var productMapCate = await _context.ProductMapCategories.FindAsync(id, category.Id);
-                if (productMapCate != null)
+                else if (productMapCate == null && category.Selected == true)
                 {
-                    _context.ProductMapCategories.Add(productMapCate);
+                    await _context.ProductMapCategories.AddAsync(new ProductMapCategory()
+                    {
+                        CategoryId = category.Id,
+                        ProductId = id
+                    });
                 }
             }
             await _context.SaveChangesAsync();
             return true;
-
         }
         //method dung de delete product khai bao bien product dung de tim kiem product bang id
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
@@ -279,7 +275,8 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 query = query.Where(x => x.p.BrandId.Contains(request.Keyword)
                 || x.p.PriceCurrent == Int32.Parse(request.Keyword) || x.p.PriceOld == Int32.Parse(request.Keyword)
-                || x.p.SaleOff == Int32.Parse(request.Keyword) || x.c.NameCategory.Contains(request.Keyword) || x.p.ProductName.Contains(request.Keyword));
+                || x.p.SaleOff == Int32.Parse(request.Keyword) || x.c.NameCategory.Contains(request.Keyword) ||
+                x.p.ProductName.Contains(request.Keyword));
             }
             //if (!string.IsNullOrEmpty(request.CategoryIds.ToString()))
             //{

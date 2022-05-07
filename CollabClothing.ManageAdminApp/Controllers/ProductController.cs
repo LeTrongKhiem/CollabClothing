@@ -149,7 +149,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
         #endregion
         #region CategoryAssign
         [HttpGet]
-        public async Task<IActionResult> CategoriesAssign(string id, CategoryAssignRequest request)
+        public async Task<IActionResult> CategoriesAssign(string id)
         {
             var categoriesAssignRequest = await GetCategoriesAssignRequest(id);
             return View(categoriesAssignRequest);
@@ -179,7 +179,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return View(ModelState);
             }
             var result = await _productApiClient.CategoryAssign(request.Id, request);
-            if (result.IsSuccessed)
+            if (result)
             {
                 TempData["result"] = "Cập nhật danh mục sản phẩm thành công";
                 return RedirectToAction("Index");

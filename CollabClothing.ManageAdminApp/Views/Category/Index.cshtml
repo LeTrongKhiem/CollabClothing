@@ -73,6 +73,9 @@
             <th>
                 FileIcon
             </th>
+            <th>
+                FileIcon
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -96,6 +99,9 @@
             </td>
             <td>
                <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.Icon)" width="100px" height="100px"/>
+            </td>
+             <td>
+              @Html.DisplayFor(modelItem => item.ParentName)
             </td>
             <td>
                  <button class="btn btn-icon btn-hover btn-sm btn-rounded">

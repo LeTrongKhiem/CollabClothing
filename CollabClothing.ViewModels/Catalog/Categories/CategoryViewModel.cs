@@ -15,6 +15,8 @@ namespace CollabClothing.ViewModels.Catalog.Categories
         [Display(Name = "ShowWeb")]
         public bool IsShowWeb { get; set; }
         public string Slug { get; set; }
+        [Display(Name = "Hình ảnh")]
         public string Icon { get; set; }
+        public string ParentName { get; set; }
     }
 }

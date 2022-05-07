@@ -106,21 +106,21 @@ namespace CollabClothing.ManageAdminApp.Service
             return await DeleteAsync($"/api/products/{productId}");
         }
 
-        public async Task<ResultApi<bool>> CategoryAssign(string id, CategoryAssignRequest request)
+        public async Task<bool> CategoryAssign(string id, CategoryAssignRequest request)
         {
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
             var response = await client.PutAsync($"/api/products/{id}/categories", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+                return JsonConvert.DeserializeObject<bool>(result);
             }
-            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
+            return JsonConvert.DeserializeObject<bool>(result);
         }
     }
 }
