@@ -132,20 +132,39 @@ namespace CollabClothing.Application.Catalog.Categories
             cate.ParentId = request.ParentId;
             cate.Slug = request.Slug;
             cate.Level = request.Level;
-            if (request.Icon != null)
+            if (cate.Icon == null)
             {
-                var fullPath = "wwwroot" + cate.Icon;
-                if (File.Exists(fullPath))
+                if (request.Icon != null)
                 {
-                    await Task.Run(() =>
-                    {
-                        File.Delete(fullPath);
-                    });
+                    cate.Icon = await this.SaveFile(request.Icon);
                 }
-                cate.Icon = await this.SaveFile(request.Icon);
+                _context.Categories.Add(cate);
                 await _context.SaveChangesAsync();
+                return new ResultApiSuccessed<bool>();
             }
-            return new ResultApiSuccessed<bool>();
+            else
+            {
+                if (request.Icon != null)
+                {
+                    var fullPath = "wwwroot" + cate.Icon;
+                    if (File.Exists(fullPath))
+                    {
+                        await Task.Run(() =>
+                        {
+                            File.Delete(fullPath);
+                        });
+                    }
+                    cate.Icon = await this.SaveFile(request.Icon);
+                    _context.Categories.Update(cate);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _context.Categories.Update(cate);
+                    await _context.SaveChangesAsync();
+                }
+                return new ResultApiSuccessed<bool>();
+            }
         }
 
         public async Task<ResultApi<bool>> Delete(string CateId)

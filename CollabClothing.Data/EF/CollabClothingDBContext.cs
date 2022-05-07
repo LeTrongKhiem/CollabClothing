@@ -59,7 +59,9 @@ namespace CollabClothing.Data.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            //modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Vietnamese_100_CI_AS");
+
             modelBuilder.Entity<AppRole>(entity =>
             {
                 entity.ToTable("AppRoles");
@@ -207,7 +209,8 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameCategory)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true)
+                    .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ParentId)
                     .IsRequired()
@@ -346,7 +349,7 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Description).HasColumnType("text");
+                entity.Property(e => e.Description).HasColumnType("text").UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.PriceCurrent).HasColumnType("decimal(18, 0)");
 
@@ -355,8 +358,10 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
-
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.Details)
+                    .HasColumnType("text")
+                    .UseCollation("Vietnamese_100_CI_AS");
                 entity.Property(e => e.Slug)
                     .IsRequired()
                     .HasColumnType("text");

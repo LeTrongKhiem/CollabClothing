@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.Application.Catalog.Products;
+using System;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -79,6 +80,20 @@ namespace CollabClothing.BackendApi.Controllers
             }
             var product = await _manageProductService.GetProductById(productId);
             return CreatedAtAction(nameof(productId), new { id = productId }, product);
+        }
+        [HttpPut("id/categories")]
+        public async Task<IActionResult> CategoriesAssign(string id, CategoryAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.CategoryAssign(id, request);
+            if (!result)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         //update product
         [HttpPut("{id}")]

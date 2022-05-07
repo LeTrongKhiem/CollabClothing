@@ -1,5 +1,6 @@
 ﻿using CollabClothing.ManageAdminApp.Service;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -144,6 +145,48 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return RedirectToAction("Error", "Home");
             }
             return View(product);
+        }
+        #endregion
+        #region CategoryAssign
+        [HttpGet]
+        public async Task<IActionResult> CategoriesAssign(string id, CategoryAssignRequest request)
+        {
+            var categoriesAssignRequest = await GetCategoriesAssignRequest(id);
+            return View(categoriesAssignRequest);
+        }
+
+        private async Task<CategoryAssignRequest> GetCategoriesAssignRequest(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            var categories = await _categoryApiClient.GetAll();
+            var categoryAssignRequest = new CategoryAssignRequest();
+            foreach (var category in categories)
+            {
+                categoryAssignRequest.Categories.Add(new SelectItem()
+                {
+                    Id = category.CategoryId,
+                    Name = category.CategoryName,
+                    Selected = product.Categories.Contains(category.CategoryName)
+                });
+            }
+            return categoryAssignRequest;
+        }
+        [HttpPost]
+        public async Task<IActionResult> CategoriesAssign(CategoryAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.CategoryAssign(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Cập nhật danh mục sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("Error", "");
+            var rolesAssignRequest = GetCategoriesAssignRequest(request.Id);
+            return View(rolesAssignRequest);
         }
         #endregion
     }

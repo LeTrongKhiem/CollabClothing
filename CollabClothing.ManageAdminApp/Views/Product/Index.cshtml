@@ -33,8 +33,8 @@
                 </div>
             </div>
              <select class="custom-select" style="min-width: 180px; margin-top: 15px;" name="categoryId" 
-               onchange="this.form.submit()" asp-items="@ViewBag.Categories">
-           <option selected>Chọn</option>
+               onchange="this.form.submit()" asp-items="ViewBag.Categories">
+           <option selected>---Chọn---</option>
            <option value="all">Tất cả</option>
           </select>
         </form>
@@ -139,8 +139,6 @@
                 @Html.DisplayFor(modelItem => item.Details)
             </td>
             <td>
-                @*@Html.DisplayFor(modelItem => item.ThumbnailImage)*@
-                @*<img src="@(Configuration["BaseAddress"]+@item.ThumbnailImage)" width="100px" height="100px"/>*@
                 <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.ThumbnailImage)" width="100px" height="100px"/>
             </td>
             <td>
@@ -161,6 +159,11 @@
                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
                 <a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id">
                  <i class="anticon anticon-delete"></i>
+                </a>
+               </button>
+               <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                <a asp-controller="Product" asp-action="CategoriesAssign" asp-route-id="@item.Id">
+                 <i class="anticon anticon-sliders"></i>
                 </a>
                </button>
             </td>

@@ -26,7 +26,8 @@ namespace CollabClothing.Application.Catalog.Products
         Task<int> RemoveImage(string imageId);
         Task<List<ProductImageViewModel>> GetListImage(string productId);
         Task<ProductImageViewModel> GetProductImageById(string imageId);
-        //
+        //assign category
+        Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
 
 
         // Task AddViewCount(string productId);
