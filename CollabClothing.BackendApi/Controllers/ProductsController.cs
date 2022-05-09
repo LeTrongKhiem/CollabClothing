@@ -33,14 +33,30 @@ namespace CollabClothing.BackendApi.Controllers
         [HttpGet("public-paging")]
         public async Task<IActionResult> Get([FromQuery] GetPublicProductRequestPaging request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var product = await _publicProductService.GetAllByCategoryId(request);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
             return Ok(product);
         }
         //get paging product admin
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductRequestPaging request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var product = await _manageProductService.GetAllPaging(request);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
             return Ok(product);
         }
         //http://localhost:5001/products/id

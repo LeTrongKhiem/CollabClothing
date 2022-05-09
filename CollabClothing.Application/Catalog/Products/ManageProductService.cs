@@ -273,22 +273,23 @@ namespace CollabClothing.Application.Catalog.Products
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.p.BrandId.Contains(request.Keyword)
-                || x.p.PriceCurrent == Int32.Parse(request.Keyword) || x.p.PriceOld == Int32.Parse(request.Keyword)
-                || x.p.SaleOff == Int32.Parse(request.Keyword) || x.c.NameCategory.Contains(request.Keyword) ||
-                x.p.ProductName.Contains(request.Keyword));
+                query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.b.NameBrand.Contains(request.Keyword));
             }
             //if (!string.IsNullOrEmpty(request.CategoryIds.ToString()))
             //{
             //    query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
             //}
-            if (!string.IsNullOrEmpty(request.CategoryId))
+            if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
             {
                 query = query.Where(x => x.pmc.CategoryId == request.CategoryId);
             }
             //3. paging
             //ham skip lay data tiep theo vd trang 1 (1-1 * 5) = 0 lay 5 sp tiep theo la den sp thu 1 den 5
             //                              trang 2 (2-1 *5) = 5 lay 5 sp tiep theo tu sp 6 toi 10
+            if (query == null)
+            {
+                return null;
+            }
             int totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize).Select(x => new ProductViewModel()
@@ -309,7 +310,6 @@ namespace CollabClothing.Application.Catalog.Products
                 .ToListAsync();
 
             //4. select and projection
-
             var pagedResult = new PageResult<ProductViewModel>()
             {
                 Items = data,

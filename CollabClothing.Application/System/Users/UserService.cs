@@ -103,14 +103,6 @@ namespace CollabClothing.Application.System.Users
         #region GetListUser
         public async Task<ResultApi<PageResult<UserViewModel>>> GetListUser(GetUserRequestPaging request)
         {
-            //var query = from user in _userManager.Users
-            //            join userrole in _context.UserRoles on user.Id equals userrole.UserId
-            //            into usermaprole
-            //            from userrole in usermaprole.DefaultIfEmpty()
-            //            join role in _roleManager.Roles on userrole.RoleId equals role.Id
-            //            into userrolerole
-            //            from role in userrolerole.DefaultIfEmpty()
-            //            select new { user, userrole, role };
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
             {
