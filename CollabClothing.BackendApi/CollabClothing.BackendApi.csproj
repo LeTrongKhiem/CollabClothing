@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\user-content\icon-category\" />
+    <Folder Include="wwwroot\user-content\img-brand\" />
   </ItemGroup>
 
 

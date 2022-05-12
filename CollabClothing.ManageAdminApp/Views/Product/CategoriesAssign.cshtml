@@ -21,12 +21,19 @@
             @for (var i = 0; i < Model.Categories.Count; i++)
             {
                 <div class="form-group d-flex align-items-center row" style="font-size: 16px;">
-                        <div class="m-r-10 col-md-3">@Model.Categories[i].Name</div>
+                       <div class="m-r-10 col-md-3">@Model.Categories[i].Name</div>
                         <div class="col-md-3">
                             <input type="checkbox" asp-for="Categories[i].Selected" style="font-size: 25px;"/>
                             <input type="hidden" asp-for="Categories[i].Id"/>
                             <input type="hidden" asp-for="Categories[i].Name"/>
                         </div>
+
+                        @*<div class="custom-control custom-switch">
+                          <input type="checkbox" class="custom-control-input" id="customSwitch2"  asp-for="Categories[i].Selected">
+                          <label class="custom-control-label" for="customSwitch2">@Model.Categories[i].Name</label>
+                          <input type="hidden" asp-for="Categories[i].Id"/>
+                          <input type="hidden" asp-for="Categories[i].Name"/>
+                        </div>*@
                         
                 </div>
             }
