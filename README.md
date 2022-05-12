@@ -7,5 +7,8 @@
 - Javascript 
 - DataBase First
 - Ajax
-- 
+
+
+Design Pattern ap dung
+- Dependency Injection
 
