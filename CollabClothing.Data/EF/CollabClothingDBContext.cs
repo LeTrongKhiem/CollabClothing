@@ -108,12 +108,10 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBanner)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsRequired().HasColumnType("text").UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.TypeBannerId)
                     .IsRequired()
@@ -138,7 +136,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBannerType)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<Brand>(entity =>
@@ -162,7 +160,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBrand)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.Slug)
                     .IsRequired()

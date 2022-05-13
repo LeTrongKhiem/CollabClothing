@@ -28,6 +28,7 @@ using CollabClothing.ViewModels.System.Users;
 using CollabClothing.Application.Catalog.Categories;
 using CollabClothing.Application.System.Roles;
 using CollabClothing.Application.Catalog.Brands;
+using CollabClothing.Application.Catalog.Banners;
 
 namespace CollabClothing.BackendApi
 {
@@ -54,6 +55,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IBrandService, BrandService>();
+            services.AddTransient<IBannerService, BannerSevice>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
