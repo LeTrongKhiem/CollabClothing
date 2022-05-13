@@ -46,6 +46,7 @@ namespace CollabClothing.BackendApi.Controllers
             return Ok(cate);
         }
         [HttpPost]
+
         [AllowAnonymous]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] CategoryCreateRequest request)
