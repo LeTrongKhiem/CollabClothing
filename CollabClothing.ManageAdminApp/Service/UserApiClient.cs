@@ -93,7 +93,7 @@ namespace CollabClothing.ManageAdminApp.Service
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
             var response = await client.GetAsync($"/api/users/paging?pageIndex={request.PageIndex}&" +
-                $"pageSize={request.PageSize}&keyword={request.Keyword}");
+                $"pageSize={request.PageSize}&keyword={request.Keyword}&roleId={request.RoleId}");
             var body = await response.Content.ReadAsStringAsync();
             var users = JsonConvert.DeserializeObject<ResultApiSuccessed<PageResult<UserViewModel>>>(body);
             return users;
@@ -113,7 +113,22 @@ namespace CollabClothing.ManageAdminApp.Service
             return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
         }
 
-
-
+        //role assign
+        public async Task<ResultApi<bool>> RolesAssign(Guid id, RoleAssignRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PutAsync($"/api/users/{id}/roles", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
+        }
     }
 }

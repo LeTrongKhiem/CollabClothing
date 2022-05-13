@@ -83,14 +83,17 @@
                                 <span class="icon-holder">
                                     <i class="anticon anticon-hdd"></i>
                                 </span>
-                                <span class="title">Quản lý khách hàng</span>
+                                <span class="title">Quản lý sản phẩm</span>
                                 <span class="arrow">
                                     <i class="arrow-icon"></i>
                                 </span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                     <a asp-area="Admin" asp-controller="Users" asp-action="Index">Quản lý tài khoản</a>
+                                     <a asp-controller="Product" asp-action="Index">Quản lý sản phẩm</a>
+                                </li>
+                                <li>
+                                     <a asp-controller="ProductImage" asp-action="Index">Quản lý hình ảnh sản phẩm</a>
                                 </li>
                                 
                             </ul>
@@ -157,14 +160,10 @@
                                     <a asp-controller="ProductListAdmin" asp-action="Index">Quản lý sản phẩm</a>
                                 </li>
                                 <li>
-                                    <a href="chartjs.html">Quản lý quyền truy cập</a>
+                                    <a asp-controller="Role" asp-action="Index">Quản lý quyền truy cập</a>
                                 </li>
                                 <li>
-                                    <a href="chartjs.html">Quản lý tỉnh thành</a>
-                                </li>
-                               
-                                <li>
-                                    <a asp-area="Admin" asp-controller="BannersAdmin" asp-action="Index">Quản lý Banner</a>
+                                    <a asp-controller="Banner" asp-action="Index">Quản lý Banner</a>
                                 </li>
                             </ul>
                         </li>

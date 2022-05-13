@@ -41,6 +41,24 @@ namespace CollabClothing.Application.Catalog.Products
         // }
         //create product ProductCreateRequest la ham duoc tao ben CollabClothing.ViewModels dung de the hien cac thuoc tinh maf nguoi dung co the nhap 
         //de tao nen 1 san pham
+        private async Task<string> SaveFile(IFormFile file)
+        {
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
+        }
+
+        //support delete file
+        private async Task DeleteFile(string fileName)
+        {
+            if (fileName == null)
+            {
+                throw new CollabException($"Cannot find file with path {fileName}");
+            }
+            await _storageService.DeleteFileAsync(fileName);
+
+        }
         public async Task<string> Create(ProductCreateRequest request)
         {
             Guid g = Guid.NewGuid();
@@ -56,15 +74,19 @@ namespace CollabClothing.Application.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
+                Details = request.Details
+
+
             };
             var ProductMapCategory = new ProductMapCategory()
             {
                 ProductId = product.Id,
                 CategoryId = request.CategoryId
             };
+            Guid g2 = Guid.NewGuid();
             var Thumbnail = new ProductImage()
             {
-                Id = g.ToString(),
+                Id = g2.ToString(),
                 ProductId = product.Id,
                 Alt = product.ProductName
 
@@ -83,46 +105,50 @@ namespace CollabClothing.Application.Catalog.Products
             await _context.SaveChangesAsync();
             return product.Id;
         }
+        //assign category
+        public async Task<bool> CategoryAssign(string id, CategoryAssignRequest request)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return false;
+            }
+            foreach (var category in request.Categories)
+            {
+                var productMapCate = await _context.ProductMapCategories.FirstOrDefaultAsync(x => x.CategoryId == category.Id
+                        && x.ProductId == product.Id);
+                if (productMapCate != null && category.Selected == false)
+                {
+                    _context.ProductMapCategories.Remove(productMapCate);
+                }
+                else if (productMapCate == null && category.Selected == true)
+                {
+                    await _context.ProductMapCategories.AddAsync(new ProductMapCategory()
+                    {
+                        CategoryId = category.Id,
+                        ProductId = id
+                    });
+                }
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
         //method dung de delete product khai bao bien product dung de tim kiem product bang id
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
         public async Task<int> Delete(string productId)
         {
             var productMapCate = await _context.ProductMapCategories.FirstOrDefaultAsync(x => x.ProductId == productId);
             var product = await _context.Products.FindAsync(productId);
+            var productImage = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product.Id == null)
                 throw new CollabException($"Cannot find a product: {productId}");
             var images = _context.ProductImages.Where(i => i.ProductId == productId);
 
-            foreach (var image in images)
-            {
-                await _storageService.DeleteFileAsync(image.Path);
-            }
-
-            _context.ProductMapCategories.Remove(productMapCate);
-            _context.Products.Remove(product);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> Update(ProductEditRequest request)
-        {
-            var product = await _context.Products.FindAsync(request.Id);
-            var imagePath = (from p in _context.Products
-                             join pimg in _context.ProductImages on p.Id equals pimg.ProductId
-                             where p.Id == product.Id
-                             select pimg.Path).ToString();
-            var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
-            if (product == null)
-            {
-                throw new CollabException($"Cannot find product with Id: {request.Id}");
-            }
-            product.Id = request.Id;
-            product.ProductName = request.ProductName;
-            // productDetail.Details = request.Details;
-            product.Description = request.Description;
-            product.BrandId = request.BrandId;
-
-            //delete old image file
-            string fullPath = "wwwroot" + image.Path;
+            //foreach (var image in images)
+            //{
+            //    await _storageService.DeleteFileAsync(image.Path);
+            //}
+            var fullPath = "wwwroot" + productImage.Path;
             if (File.Exists(fullPath))
             {
                 await Task.Run(() =>
@@ -130,21 +156,68 @@ namespace CollabClothing.Application.Catalog.Products
                     File.Delete(fullPath);
                 });
             }
-            product.Slug = request.Slug;
-            //save image
-            if (request.ThumbnailImage != null)
-            {
-                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.Id);
-
-                if (thumbnailImage != null)
-                {
-                    // thumbnailImage.Id = request.productImage.Id;
-                    thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
-                    thumbnailImage.Alt = request.ProductName;
-                    _context.ProductImages.Update(thumbnailImage);
-                }
-            }
+            _context.ProductImages.Remove(productImage);
+            _context.ProductMapCategories.Remove(productMapCate);
+            _context.Products.Remove(product);
             return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> Update(string id, ProductEditRequest request)
+        {
+            var product = await _context.Products.FindAsync(id);
+            var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
+            if (product == null)
+            {
+                throw new CollabException($"Cannot find product with Id: {id}");
+            }
+            product.ProductName = request.ProductName != null ? request.ProductName : product.ProductName;
+            product.Description = request.Description;
+            product.BrandId = request.BrandId;
+            product.Details = request.Details;
+            product.Slug = request.Slug;
+            if (image == null)
+            {
+                Guid g = Guid.NewGuid();
+                var thumbnail = new ProductImage()
+                {
+                    Id = g.ToString(),
+                    ProductId = product.Id,
+                    Alt = product.ProductName,
+                };
+                if (request.ThumbnailImage != null)
+                {
+                    thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
+                }
+                _context.ProductImages.Add(thumbnail);
+                return await _context.SaveChangesAsync();
+            }
+            else
+            {
+                //delete old image file
+                string fullPath = "wwwroot" + image.Path;
+                if (File.Exists(fullPath))
+                {
+                    await Task.Run(() =>
+                    {
+                        File.Delete(fullPath);
+                    });
+                }
+                //save image
+                if (request.ThumbnailImage != null)
+                {
+                    var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
+
+                    if (thumbnailImage != null)
+                    {
+                        // thumbnailImage.Id = request.productImage.Id;
+                        thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
+                        thumbnailImage.Alt = request.ProductName;
+                        _context.ProductImages.Update(thumbnailImage);
+                    }
+                }
+                return await _context.SaveChangesAsync();
+            }
+
         }
 
         public async Task<ProductViewModel> GetProductById(string productId)
@@ -173,6 +246,7 @@ namespace CollabClothing.Application.Catalog.Products
                 SoldOut = product.SoldOut,
                 Categories = categories,
                 ThumbnailImage = image != null ? image.Path : "no-image.jpg",
+                Details = product.Details
             };
             return viewModel;
         }
@@ -190,30 +264,39 @@ namespace CollabClothing.Application.Catalog.Products
                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
                         from pmc in ppmc.DefaultIfEmpty()
                         join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
-                        from c in ppmc.DefaultIfEmpty()
-                        join pimg in _context.ProductImages on p.Id equals pimg.ProductId
-                        into ppimg
+                        from c in pmcc.DefaultIfEmpty()
+                        join pimg in _context.ProductImages on p.Id equals pimg.ProductId into ppimg
                         from pimg in ppimg.DefaultIfEmpty()
-                        select new { p, pmc, c, pimg };
+                        join b in _context.Brands on p.BrandId equals b.Id into pb
+                        from b in pb.DefaultIfEmpty()
+                        select new { p, pmc, c, pimg, b };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.p.ProductName.Contains(request.Keyword));
+                query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.b.NameBrand.Contains(request.Keyword));
             }
-            if (request.CategoryIds.Count > 0)
+            //if (!string.IsNullOrEmpty(request.CategoryIds.ToString()))
+            //{
+            //    query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
+            //}
+            if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
             {
-                query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
+                query = query.Where(x => x.pmc.CategoryId == request.CategoryId);
             }
             //3. paging
             //ham skip lay data tiep theo vd trang 1 (1-1 * 5) = 0 lay 5 sp tiep theo la den sp thu 1 den 5
             //                              trang 2 (2-1 *5) = 5 lay 5 sp tiep theo tu sp 6 toi 10
+            if (query == null)
+            {
+                return null;
+            }
             int totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize).Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
                     ProductName = x.p.ProductName,
-                    BrandId = x.p.BrandId,
+                    BrandId = x.b.NameBrand,
                     Description = x.p.Description,
                     Installment = x.p.Installment,
                     PriceCurrent = x.p.PriceCurrent,
@@ -221,19 +304,18 @@ namespace CollabClothing.Application.Catalog.Products
                     SaleOff = x.p.SaleOff,
                     Slug = x.p.Slug,
                     SoldOut = x.p.SoldOut,
-                    CategoryName = x.c.Category.NameCategory,
+                    CategoryName = x.c.NameCategory,
                     ThumbnailImage = x.pimg.Path
                 })
                 .ToListAsync();
 
             //4. select and projection
-
             var pagedResult = new PageResult<ProductViewModel>()
             {
                 Items = data,
                 TotalRecord = totalRow,
                 PageIndex = request.PageIndex,
-                PageSize = request.PageSize
+                PageSize = request.PageSize,
             };
             return pagedResult;
 
@@ -272,13 +354,7 @@ namespace CollabClothing.Application.Catalog.Products
             product.SaleOff = newSaleOff;
             return await _context.SaveChangesAsync() > 0;
         }
-        private async Task<string> SaveFile(IFormFile file)
-        {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
-        }
+
 
 
         //method get product images by product id
@@ -310,17 +386,6 @@ namespace CollabClothing.Application.Catalog.Products
 
         }
 
-        //support delete file
-        private async Task DeleteFile(string fileName)
-        {
-            // var pathImage = Path.Combine(_userContentFolder, fileName);
-            if (fileName == null)
-            {
-                throw new CollabException($"Cannot find file with path {fileName}");
-            }
-            await _storageService.DeleteFileAsync(fileName);
-
-        }
         //method remove file
         public async Task<int> RemoveImage(string imageId)
         {

@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification;
 using CollabClothing.ManageAdminApp.Service;
 using CollabClothing.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
@@ -33,6 +34,8 @@ namespace CollabClothing.ManageAdminApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+            services.AddControllersWithViews();
+            services.AddMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //use session header bearer
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
             {
@@ -50,8 +53,12 @@ namespace CollabClothing.ManageAdminApp
                 builder.AddRazorRuntimeCompilation();
             }
 #endif
+            //services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
+            services.AddTransient<IProductApiClient, ProductApiClient>();
+            services.AddTransient<IBannerApiClient, BannerApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,6 +86,7 @@ namespace CollabClothing.ManageAdminApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
             });
         }
     }

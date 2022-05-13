@@ -18,6 +18,12 @@ namespace CollabClothing.BackendApi.Controllers
         {
             _categoryService = categoryService;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var cate = await _categoryService.GetAll();
+            return Ok(cate);
+        }
         [HttpGet("paging")]
         //[AllowAnonymous]
         public async Task<IActionResult> Get([FromQuery] GetCategoryRequestPaging request)
@@ -40,8 +46,10 @@ namespace CollabClothing.BackendApi.Controllers
             return Ok(cate);
         }
         [HttpPost]
-        //[AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
+
+        [AllowAnonymous]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CategoryCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -56,5 +64,37 @@ namespace CollabClothing.BackendApi.Controllers
             return CreatedAtAction(nameof(cateId), new { id = cateId }, cate);
 
         }
+        [HttpDelete("{cateId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Delete(string cateId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _categoryService.Delete(cateId);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("cateId")]
+        [AllowAnonymous]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Edit(string cateId, [FromForm] CategoryEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _categoryService.Edit(cateId, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok();
+        }
+
     }
 }

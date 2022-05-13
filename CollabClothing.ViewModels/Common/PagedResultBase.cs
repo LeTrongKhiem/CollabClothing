@@ -16,7 +16,7 @@ namespace CollabClothing.ViewModels.Common
             get
             {
                 var pageCount = (double)TotalRecord / PageSize;
-                return (int)Math.Ceiling(pageCount);
+                return (int)Math.Ceiling(pageCount);//lam tron len
             }
         }
     }

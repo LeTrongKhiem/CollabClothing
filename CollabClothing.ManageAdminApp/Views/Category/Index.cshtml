@@ -1,17 +1,17 @@
 ﻿@using CollabClothing.ViewModels.Common
+@using Microsoft.Extensions.Configuration
 @model PageResult<CollabClothing.ViewModels.Catalog.Categories.CategoryViewModel>
-
+@inject IConfiguration Configuration
 @{
-	ViewData["Title"] = "Index";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Danh sách danh mục";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
 <div class="page-header">
  <div class="header-sub-title">
   <nav class="breadcrumb breadcrumb-dash">
    <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-   <a class="breadcrumb-item" asp-controller="Category" asp-action="Index">Danh sách tài khoản</a>
+   <a class="breadcrumb-item" asp-controller="Category" asp-action="Index">Danh sách danh mục</a>
   </nav>
  </div>
 </div>
@@ -19,98 +19,124 @@
  <div class="card-body">
   <div class="row m-b-30">
    <div class="col-lg-8">
-	<div class="d-md-flex">
-	 <div class="m-b-10 m-r-15">
-	 </div>
-	 <div class="m-b-10">
-		  <select class="custom-select" style="min-width: 180px; margin-top: 15px;" id="txtRole" name="txtRole">
-		   <option selected>Chọn</option>
-		   <option value="all">Tất cả</option>
-		   <option value="1">Quản Trị</option>
-		   <option value="0">Nhân Viên</option>
-		  </select>
-	 
-	 </div>
-	</div>
+    <div class="d-md-flex">
+     <div class="m-b-10 m-r-15">
+     </div>
+     <div class="m-b-10">
+          <select class="custom-select" style="min-width: 180px; margin-top: 15px;" name="categoryId" asp-items="@ViewBag.Categories">
+           <option selected>Chọn</option>
+           <option value="all">Tất cả</option>
+          </select>
+     
+     </div>
+    </div>
    </div>
    <div class="col-lg-4 text-right">
-	<button class="btn btn-primary">
-	 <a asp-controller="Category" asp-action="Create">
-	  <i class="anticon anticon-plus-circle m-r-5" style="color:azure;"></i>
-	  <span style="color:azure;">Thêm danh mục</span>
-	 </a>
-	</button>
+    <button class="btn btn-primary">
+     <a asp-controller="Category" asp-action="Create">
+      <i class="anticon anticon-plus-circle m-r-5" style="color:azure;"></i>
+      <span style="color:azure;">Thêm danh mục</span>
+     </a>
+    </button>
+   </div>
+  </div>
+  <div class="row">
+      <div class="col-md-6"></div>
+      <div class="col-md-6">
+       @if (ViewBag.SuccessMsg != null)
+        {
+            <div class="alert alert-success" role="alert" id="msgAlert">
+                @ViewBag.SuccessMsg
+            </div>
+        }
    </div>
   </div>
   <div class="table-responsive">
-   <table class="table table-hover e-commerce-table">
-	<thead>
-		<tr>
-			<th>
-				Tên danh mục
-			</th>
-			<th>
-				Mã danh cha 
-			</th>
-			<th>
-				Level
-			</th>
-			<th>
-				ShowWeb
-			</th>
-			<th>
-				Slug
-			</th>
-			<th>
-				FileIcon
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model.Items) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.CategoryName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.ParentId)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Level)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.IsShowWeb)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Slug)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Icon)
-			</td>
-			<td>
-				 <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-				<a asp-controller="Category" asp-action="Details" asp-route-id="@item.CategoryId">
-				 <i class="anticon anticon-eye"></i>
-				</a>
-			   </button>
-			   <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-				<a asp-controller="Category" asp-action="Edit" asp-route-id="@item.CategoryId">
-				 <i class="anticon anticon-edit"></i>
-				</a>
+   <table class="table table-hover e-commerce-table" id="data-table">
+    <thead>
+        <tr>
+            <th>
+                Tên danh mục
+            </th>
+            <th>
+                Mã danh cha 
+            </th>
+            <th>
+                Level
+            </th>
+            <th>
+                ShowWeb
+            </th>
+            <th>
+                Slug
+            </th>
+            <th>
+                FileIcon
+            </th>
+            <th>
+                FileIcon
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Level)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsShowWeb)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slug)
+            </td>
+            <td>
+               <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.Icon)" width="100px" height="100px"/>
+            </td>
+             <td>
+              @Html.DisplayFor(modelItem => item.ParentName)
+            </td>
+            <td>
+                 <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                <a asp-controller="Category" asp-action="Details" asp-route-id="@item.CategoryId">
+                 <i class="anticon anticon-eye"></i>
+                </a>
+               </button>
+               <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                <a asp-controller="Category" asp-action="Edit" asp-route-id="@item.CategoryId">
+                 <i class="anticon anticon-edit"></i>
+                </a>
 
-			   </button>
-			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-				<a asp-controller="Category" asp-action="Delete" asp-route-id="@item.CategoryId">
-				 <i class="anticon anticon-delete"></i>
-				</a>
-			   </button>
-			</td>
-		</tr>
-				}
-	</tbody>
+               </button>
+               <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.CategoryId">
+                 <i class="anticon anticon-delete"></i>
+                </a>
+               </button>
+            </td>
+        </tr>
+                }
+    </tbody>
    </table>
   </div>
   @*@await Component.InvokeAsync("Pager", Model)*@
  </div>
 </div>
+
+@section Scripts{
+    <script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+    <script>
+     $('#data-table').DataTable();
+     setTimeout(function() {
+        $('#msgAlert').fadeOut('slow');
+     }, 2000);
+ </script>
+}

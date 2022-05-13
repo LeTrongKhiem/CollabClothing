@@ -27,6 +27,7 @@ namespace CollabClothing.Data.Entities
         public int? Installment { get; set; }
         public string Description { get; set; }
         public string Slug { get; set; }
+        public string Details { get; set; }
 
         public virtual Brand Brand { get; set; }
         public virtual ICollection<Cart> Carts { get; set; }

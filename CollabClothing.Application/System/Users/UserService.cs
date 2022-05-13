@@ -24,12 +24,13 @@ namespace CollabClothing.Application.System.Users
         private readonly IConfiguration _config;
         private readonly CollabClothingDBContext _context;
         #region Constructor
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = configuration;
+            _context = context;
         }
         #endregion
         #region Register
@@ -37,6 +38,7 @@ namespace CollabClothing.Application.System.Users
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             var email = await _userManager.FindByEmailAsync(request.Email);
+            var role = await _roleManager.FindByNameAsync("Role User");
             if (user != null)
             {
                 return new ResultApiError<bool>("Username đã tồn tại");
@@ -56,6 +58,10 @@ namespace CollabClothing.Application.System.Users
                 FirstName = request.FirstName,
                 LastName = request.LastName,
             };
+            //var userRole = new RoleManager()
+            //{
+
+            //};
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
@@ -102,8 +108,14 @@ namespace CollabClothing.Application.System.Users
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword) || x.PhoneNumber.Contains(request.Keyword) || x.LastName.Contains(request.Keyword)
                                         || x.Email.Contains(request.Keyword));
+                //query = query.Where(x => x.user.UserName.Contains(request.Keyword) || x.user.PhoneNumber.Contains(request.Keyword) || x.user.LastName.Contains(request.Keyword)
+                //|| x.user.Email.Contains(request.Keyword));
             }
-            //total row
+            //if (!string.IsNullOrEmpty(request.RoleId.ToString()))
+            //{
+            //    query = query.Where(x => x.role.Id == request.RoleId);
+            //}
+            //total row 
             var totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                             .Take(request.PageSize)
@@ -135,6 +147,10 @@ namespace CollabClothing.Application.System.Users
                 return new ResultApiError<bool>("Email đã tồn tại");
             }
             var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Tài khoản không tồn tại");
+            }
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Dob = request.Dob;
@@ -156,6 +172,7 @@ namespace CollabClothing.Application.System.Users
             {
                 return new ResultApiError<UserViewModel>("Tài khoản không tồn tại");
             }
+            var roles = await _userManager.GetRolesAsync(user);
             var userViewModel = new UserViewModel()
             {
                 Id = user.Id,
@@ -164,7 +181,8 @@ namespace CollabClothing.Application.System.Users
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Roles = roles
             };
             return new ResultApiSuccessed<UserViewModel>(userViewModel);
         }
@@ -182,6 +200,35 @@ namespace CollabClothing.Application.System.Users
                 return new ResultApiSuccessed<bool>();
             }
             return new ResultApiError<bool>("Xóa thất bại");
+        }
+
+        public async Task<ResultApi<bool>> RoleAssign(Guid Id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Tài khoản không tồn tại");
+            }
+            //xoa role
+            var deleteRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+            foreach (var roles in deleteRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roles) == true)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, roles);
+                }
+            }
+
+            var addRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
+            foreach (var roles in addRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, roles) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, roles);
+                }
+            }
+            return new ResultApiSuccessed<bool>();
+
         }
     }
 }

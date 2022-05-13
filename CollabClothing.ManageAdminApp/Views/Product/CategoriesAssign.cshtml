@@ -1,0 +1,51 @@
+﻿@model CollabClothing.ViewModels.Catalog.Products.CategoryAssignRequest
+
+@{
+    ViewData["Title"] = "Gán danh mục sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-header">
+ <div class="header-sub-title">
+  <nav class="breadcrumb breadcrumb-dash">
+   <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+   <a class="breadcrumb-item" asp-controller="Product" asp-action="Index">Danh sách sản phẩm</a>
+   <a class="breadcrumb-item" asp-controller="Product" asp-action="CategoriesAssign">Gán danh mục sản phẩm</a>
+  </nav>
+ </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CategoriesAssign">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" class="form-control"/>
+            @for (var i = 0; i < Model.Categories.Count; i++)
+            {
+                <div class="form-group d-flex align-items-center row" style="font-size: 16px;">
+                       <div class="m-r-10 col-md-3">@Model.Categories[i].Name</div>
+                        <div class="col-md-3">
+                            <input type="checkbox" asp-for="Categories[i].Selected" style="font-size: 25px;"/>
+                            <input type="hidden" asp-for="Categories[i].Id"/>
+                            <input type="hidden" asp-for="Categories[i].Name"/>
+                        </div>
+
+                        @*<div class="custom-control custom-switch">
+                          <input type="checkbox" class="custom-control-input" id="customSwitch2"  asp-for="Categories[i].Selected">
+                          <label class="custom-control-label" for="customSwitch2">@Model.Categories[i].Name</label>
+                          <input type="hidden" asp-for="Categories[i].Id"/>
+                          <input type="hidden" asp-for="Categories[i].Name"/>
+                        </div>*@
+                        
+                </div>
+            }
+
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở lại</a>
+</div>
+

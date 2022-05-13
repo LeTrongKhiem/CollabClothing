@@ -5,12 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\CollabClothing.Utilities\CollabClothing.Utilities.csproj" />
 	<ProjectReference Include="..\CollabClothing.ViewModels\CollabClothing.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+	  <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
 	  <PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.15" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />

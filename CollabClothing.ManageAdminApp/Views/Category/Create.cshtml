@@ -18,7 +18,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CategoryName" class="control-label"></label>
@@ -43,7 +43,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="Icon" class="control-label"></label>
-                <input asp-for="Icon" class="form-control" type="file" />
+
+                <input asp-for="Icon" class="form-control" type="file"/>
+
                 <span asp-validation-for="Icon" class="text-danger"></span>
             </div>
             <div class="form-group">

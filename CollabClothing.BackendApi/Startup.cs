@@ -26,6 +26,9 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using CollabClothing.ViewModels.System.Users;
 using CollabClothing.Application.Catalog.Categories;
+using CollabClothing.Application.System.Roles;
+using CollabClothing.Application.Catalog.Brands;
+using CollabClothing.Application.Catalog.Banners;
 
 namespace CollabClothing.BackendApi
 {
@@ -47,18 +50,19 @@ namespace CollabClothing.BackendApi
             services.AddIdentity<AppUser, AppRole>()
             .AddEntityFrameworkStores<CollabClothingDBContext>()
             .AddDefaultTokenProviders();
-
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IBrandService, BrandService>();
+            services.AddTransient<IBannerService, BannerSevice>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 
             services.AddTransient<IUserService, UserService>();
-
+            services.AddTransient<IRoleService, RoleService>();
             // services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             // services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>(); vi khai bao fv => fv.RegisterValidatorsFromAssemblyContaining
 

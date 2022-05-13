@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CollabClothing.Application.System.Users;
+using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -90,6 +91,20 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userService.Edit(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("{id}/roles")]
+        public async Task<IActionResult> RolesAssign(Guid id, RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _userService.RoleAssign(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

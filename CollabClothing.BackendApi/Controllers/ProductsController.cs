@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.Application.Catalog.Products;
+using System;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -32,7 +33,30 @@ namespace CollabClothing.BackendApi.Controllers
         [HttpGet("public-paging")]
         public async Task<IActionResult> Get([FromQuery] GetPublicProductRequestPaging request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var product = await _publicProductService.GetAllByCategoryId(request);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+        //get paging product admin
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductRequestPaging request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetAllPaging(request);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
             return Ok(product);
         }
         //http://localhost:5001/products/id
@@ -58,11 +82,12 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //
         [HttpPost]
+        [Consumes("multipart/form-data")] // accept 1 form data fromform
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             var productId = await _manageProductService.Create(request);
             if (productId.Equals("") || productId == null)
@@ -72,15 +97,30 @@ namespace CollabClothing.BackendApi.Controllers
             var product = await _manageProductService.GetProductById(productId);
             return CreatedAtAction(nameof(productId), new { id = productId }, product);
         }
-        //update product
-        [HttpPut]
-        public async Task<IActionResult> Update([FromForm] ProductEditRequest request)
+        [HttpPut("{id}/categories")]
+        public async Task<IActionResult> CategoriesAssign(string id, CategoryAssignRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var affectedResult = await _manageProductService.Update(request);
+            var result = await _manageProductService.CategoryAssign(id, request);
+            if (!result)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        //update product
+        [HttpPut("{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update(string id, [FromForm] ProductEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var affectedResult = await _manageProductService.Update(id, request);
             if (affectedResult == 0)
             {
                 return BadRequest();
