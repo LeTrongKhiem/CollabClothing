@@ -1,4 +1,5 @@
 ﻿using CollabClothing.ManageAdminApp.Service;
+using CollabClothing.ViewModels.Catalog.Banners;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,53 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 ViewBag.SuccessMsg = TempData["result"];
             }
             return View(data);
+        }
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            var banner = new BannerDeleteRequest()
+            {
+                Id = id
+            };
+            return View(banner);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(BannerDeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _bannerApiClient.Delete(request.Id);
+            if (result)
+            {
+                TempData["result"] = "Xóa Banner thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", "Xóa Banner thất bại");
+            return View(request);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create(BannerCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _bannerApiClient.Create(request);
+            if (result)
+            {
+                TempData["result"] = "Tạo Banner thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", "Tạo Banner thất bại");
+            return View(request);
         }
     }
 }

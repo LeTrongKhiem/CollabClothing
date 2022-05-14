@@ -8,6 +8,7 @@ using CollabClothing.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,9 +48,24 @@ namespace CollabClothing.Application.Catalog.Banners
             return bannerDTO.Id;
         }
 
-        public Task<bool> Delete(string id)
+        public async Task<bool> Delete(string id)
         {
-            throw new NotImplementedException();
+            var banner = await _context.Banners.FindAsync(id);
+            if (banner == null)
+            {
+                return false;
+            }
+            var fullPath = "wwwroot" + banner.Images;
+            if (File.Exists(fullPath))
+            {
+                await Task.Run(() =>
+                {
+                    File.Delete(fullPath);
+                });
+            }
+            _context.Banners.Remove(banner);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public Task<bool> Edit(string id, BannerEditRequest request)
