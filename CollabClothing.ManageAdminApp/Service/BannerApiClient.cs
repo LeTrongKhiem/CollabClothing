@@ -28,7 +28,7 @@ namespace CollabClothing.ManageAdminApp.Service
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(SystemConstans.AppSettings.BaseAddress);
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(session);
 
             var httpContent = new MultipartFormDataContent();
@@ -56,14 +56,42 @@ namespace CollabClothing.ManageAdminApp.Service
             return await DeleteAsync($"/api/banners/{id}");
         }
 
+        public async Task<bool> Edit(string id, BannerEditRequest request)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(session);
+
+            var httpContent = new MultipartFormDataContent();
+            if (request.Images != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Images.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Images.OpenReadStream().Length);
+                }
+                ByteArrayContent byteArrayContent = new ByteArrayContent(data);
+                httpContent.Add(byteArrayContent, "images", request.Images.FileName);
+            }
+            httpContent.Add(new StringContent(request.NameBanner), "nameBanner");
+            httpContent.Add(new StringContent(request.Alt), "alt");
+            httpContent.Add(new StringContent(request.TypeBannerId), "typeBannerId");
+            httpContent.Add(new StringContent(request.Text), "text");
+            httpContent.Add(new StringContent(request.Path), "path");
+
+            var response = await client.PutAsync($"/api/banners/id?id={id}", httpContent);
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<PageResult<BannerViewModel>> GetAll(PagingWithKeyword request)
         {
             return await GetAsync<PageResult<BannerViewModel>>($"/api/banners/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
         }
 
-        public async Task<ResultApi<BannerViewModel>> GetById(string id)
+        public async Task<BannerViewModel> GetById(string id)
         {
-            return await GetAsync<ResultApi<BannerViewModel>>($"/api/banners/{id}");
+            return await GetAsync<BannerViewModel>($"/api/banners/id?id={id}");
         }
     }
 }

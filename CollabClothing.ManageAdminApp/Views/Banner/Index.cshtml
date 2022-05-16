@@ -3,10 +3,10 @@
 @model PageResult<CollabClothing.ViewModels.Catalog.Banners.BannerViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Danh sách Banner";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 <div class="page-header">
  <div class="header-sub-title">
   <nav class="breadcrumb breadcrumb-dash">
@@ -56,19 +56,19 @@
     <thead>
         <tr>
             <th>
-                Name Banner
+                Tên Banner
             </th>
             <th>
-                Images
+                Hình ảnh
             </th>
             <th>
                 Alt
             </th>
             <th>
-                TypeBannerId
+                Loại Banner
             </th>
             <th>
-                Text
+                Chi tiết
             </th>
             <th></th>
         </tr>
@@ -80,7 +80,7 @@
                 @Html.DisplayFor(modelItem => item.NameBanner)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Images)
+                <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.Images)" width="100px" height="100px"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Alt)

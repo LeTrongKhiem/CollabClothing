@@ -36,6 +36,23 @@ namespace CollabClothing.BackendApi.Controllers
             var banner = await _bannerService.GetBannerById(bannerId);
             return CreatedAtAction(nameof(bannerId), new { id = bannerId }, banner);
         }
+        [HttpPut("id")]
+        [AllowAnonymous]
+        //[Consumes("mutilpart/form-data")]
+        public async Task<IActionResult> Edit(string id, [FromForm] BannerEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _bannerService.Edit(id, request);
+            if (!result)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
         [HttpGet("id")]
         [AllowAnonymous]
         public async Task<IActionResult> GetById(string id)

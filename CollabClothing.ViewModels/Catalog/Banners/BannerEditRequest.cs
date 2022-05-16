@@ -14,5 +14,6 @@ namespace CollabClothing.ViewModels.Catalog.Banners
         public string Alt { get; set; }
         public string TypeBannerId { get; set; }
         public string Text { get; set; }
+        public string Path { get; set; }
     }
 }
