@@ -8,6 +8,7 @@ using CollabClothing.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace CollabClothing.Application.Catalog.Banners
         private readonly CollabClothingDBContext _context;
         private readonly IStorageService _storageService;
         private readonly string USER_CONTENT_FOLDER_NAME = "user-content";
-        private readonly string CHILD_PATH_FLER_NAME = "img-banner";
+        private readonly string CHILD_PATH_FILE_NAME = "img-banner";
         public BannerSevice(CollabClothingDBContext context, IStorageService storageService)
         {
             _context = context;
@@ -38,7 +39,7 @@ namespace CollabClothing.Application.Catalog.Banners
             };
             if (request.Images != null)
             {
-                bannerDTO.Images = await _storageService.SaveFile(request.Images, CHILD_PATH_FLER_NAME);
+                bannerDTO.Images = await _storageService.SaveFile(request.Images, CHILD_PATH_FILE_NAME);
             }
             Banner banner = new Banner();
             banner.BannerMapping(bannerDTO);
@@ -47,24 +48,79 @@ namespace CollabClothing.Application.Catalog.Banners
             return bannerDTO.Id;
         }
 
-        public Task<bool> Delete(string id)
+        public async Task<bool> Delete(string id)
         {
-            throw new NotImplementedException();
+            var banner = await _context.Banners.FindAsync(id);
+            if (banner == null)
+            {
+                return false;
+            }
+            var fullPath = "wwwroot" + banner.Images;
+            if (File.Exists(fullPath))
+            {
+                await Task.Run(() =>
+                {
+                    File.Delete(fullPath);
+                });
+            }
+            _context.Banners.Remove(banner);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<bool> Edit(string id, BannerEditRequest request)
+        public async Task<bool> Edit(string id, BannerEditRequest request)
         {
-            throw new NotImplementedException();
+            var banner = await _context.Banners.FindAsync(id);
+            if (banner == null)
+            {
+                return false;
+            }
+            banner.Alt = request.Alt;
+            banner.NameBanner = request.NameBanner;
+            banner.TypeBannerId = request.TypeBannerId;
+            banner.Text = request.Text;
+            if (banner.Images == null)
+            {
+                if (request.Images != null)
+                {
+                    banner.Images = await _storageService.SaveFile(request.Images, CHILD_PATH_FILE_NAME);
+                }
+                _context.Banners.Add(banner);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                if (banner.Images != null)
+                {
+                    var fullPath = "wwwroot" + banner.Images;
+                    await Task.Run(() =>
+                    {
+                        File.Delete(fullPath);
+                    });
+                    banner.Images = await _storageService.SaveFile(request.Images, CHILD_PATH_FILE_NAME);
+                    _context.Banners.Update(banner);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    _context.Banners.Update(banner);
+                    await _context.SaveChangesAsync();
+                }
+                return true;
+            }
         }
 
         public async Task<PageResult<BannerViewModel>> GetAllPaging(PagingWithKeyword request)
         {
-            var query = from bannerType in _context.BannerTypes
-                        join banner in _context.Banners
-                        on bannerType.Id equals banner.TypeBannerId
-                        into bannerMapping
-                        from banner in bannerMapping.DefaultIfEmpty()
-                        select new { bannerType, banner };
+            //var query = from bannerType in _context.BannerTypes
+            //            join banner in _context.Banners
+            //            on bannerType.Id equals banner.TypeBannerId
+            //            into bannerMapping
+            //            from banner in bannerMapping.DefaultIfEmpty()
+            //            select new { bannerType, banner };
+            var query = from banner in _context.Banners select new { banner };
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.banner.NameBanner.Contains(request.Keyword));
@@ -105,7 +161,8 @@ namespace CollabClothing.Application.Catalog.Banners
                 Images = banner.Images,
                 NameBanner = banner.NameBanner,
                 Text = banner.Text,
-                TypeBannerId = banner.TypeBannerId
+                TypeBannerId = banner.TypeBannerId,
+
             };
             return bannerVm;
         }

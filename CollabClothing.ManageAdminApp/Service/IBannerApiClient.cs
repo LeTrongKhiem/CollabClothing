@@ -9,9 +9,10 @@ namespace CollabClothing.ManageAdminApp.Service
 {
     public interface IBannerApiClient
     {
-        Task<ResultApi<bool>> Create(BannerCreateRequest request);
+        Task<bool> Create(BannerCreateRequest request);
         Task<bool> Delete(string id);
+        Task<bool> Edit(string id, BannerEditRequest request);
         Task<PageResult<BannerViewModel>> GetAll(PagingWithKeyword request);
-        Task<ResultApi<BannerViewModel>> GetById(string id);
+        Task<BannerViewModel> GetById(string id);
     }
 }

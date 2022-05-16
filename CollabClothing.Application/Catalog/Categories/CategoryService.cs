@@ -31,6 +31,7 @@ namespace CollabClothing.Application.Catalog.Categories
             _context = context;
             _storageService = storageService;
         }
+
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -135,6 +136,7 @@ namespace CollabClothing.Application.Catalog.Categories
             cate.ParentId = request.ParentId;
             cate.Slug = request.Slug;
             cate.Level = request.Level;
+
             if (cate.Icon == null)
             {
                 if (request.Icon != null)
@@ -177,6 +179,7 @@ namespace CollabClothing.Application.Catalog.Categories
             {
                 return new ResultApiError<bool>("Không tìm thấy danh mục sản phẩm");
             }
+
             var fullPath = "wwwroot" + cate.Icon;
             if (File.Exists(fullPath))
             {
