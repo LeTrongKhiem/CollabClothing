@@ -23,5 +23,11 @@ namespace CollabClothing.BackendApi.Controllers
             var brand = await _brandService.GetAllPaging(request);
             return Ok(brand);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllBrand()
+        {
+            var result = await _brandService.GetAll();
+            return Ok(result);
+        }
     }
 }

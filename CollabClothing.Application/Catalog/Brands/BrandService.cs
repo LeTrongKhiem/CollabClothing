@@ -126,5 +126,15 @@ namespace CollabClothing.Application.Catalog.Brands
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<BrandViewModel>> GetAll()
+        {
+            var brand = from b in _context.Brands select new { b };
+            return await brand.Select(x => new BrandViewModel()
+            {
+                Id = x.b.Id,
+                NameBrand = x.b.NameBrand
+            }).ToListAsync();
+        }
     }
 }

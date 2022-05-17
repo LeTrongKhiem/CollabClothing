@@ -15,6 +15,6 @@ namespace CollabClothing.Application.Catalog.Brands
         Task<bool> Delete(string brandId);
         Task<BrandViewModel> GetByBrandId(string brandId);
         Task<PageResult<BrandViewModel>> GetAllPaging(PagingWithKeyword request);
-
+        Task<List<BrandViewModel>> GetAll();
     }
 }

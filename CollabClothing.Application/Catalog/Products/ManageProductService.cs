@@ -18,6 +18,7 @@ using CollabClothing.Application.Common;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using Microsoft.AspNetCore.Hosting;
 using CollabClothing.Data.EF;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CollabClothing.Application.Catalog.Products
 {
@@ -74,8 +75,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
-                Details = request.Details
-
+                Details = request.Details,
 
             };
             var ProductMapCategory = new ProductMapCategory()
