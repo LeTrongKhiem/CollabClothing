@@ -18,6 +18,7 @@ using CollabClothing.Application.Common;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using Microsoft.AspNetCore.Hosting;
 using CollabClothing.Data.EF;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CollabClothing.Application.Catalog.Products
 {
@@ -74,8 +75,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Installment = request.Installment,
                 Description = request.Description,
                 Slug = request.Slug,
-                Details = request.Details
-
+                Details = request.Details,
 
             };
             var ProductMapCategory = new ProductMapCategory()
@@ -305,7 +305,8 @@ namespace CollabClothing.Application.Catalog.Products
                     Slug = x.p.Slug,
                     SoldOut = x.p.SoldOut,
                     CategoryName = x.c.NameCategory,
-                    ThumbnailImage = x.pimg.Path
+                    ThumbnailImage = x.pimg.Path,
+                    BrandName = x.b.NameBrand
                 })
                 .ToListAsync();
 
