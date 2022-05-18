@@ -305,7 +305,8 @@ namespace CollabClothing.Application.Catalog.Products
                     Slug = x.p.Slug,
                     SoldOut = x.p.SoldOut,
                     CategoryName = x.c.NameCategory,
-                    ThumbnailImage = x.pimg.Path
+                    ThumbnailImage = x.pimg.Path,
+                    BrandName = x.b.NameBrand
                 })
                 .ToListAsync();
 

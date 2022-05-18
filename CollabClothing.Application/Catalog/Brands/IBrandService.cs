@@ -11,7 +11,7 @@ namespace CollabClothing.Application.Catalog.Brands
     public interface IBrandService
     {
         Task<string> Create(BrandCreateRequest request);
-        Task<bool> Edit(BrandEditRequest request);
+        Task<bool> Edit(string id, BrandEditRequest request);
         Task<bool> Delete(string brandId);
         Task<BrandViewModel> GetByBrandId(string brandId);
         Task<PageResult<BrandViewModel>> GetAllPaging(PagingWithKeyword request);

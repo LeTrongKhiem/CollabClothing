@@ -89,9 +89,50 @@ namespace CollabClothing.Application.Catalog.Brands
             }
         }
 
-        public Task<bool> Edit(BrandEditRequest request)
+        public async Task<bool> Edit(string id, BrandEditRequest request)
         {
-            throw new NotImplementedException();
+            var brand = await _context.Brands.FindAsync(id);
+            if (brand == null)
+            {
+                return false;
+            }
+            brand.NameBrand = request.NameBrand;
+            brand.Info = request.Info;
+            brand.Slug = request.Slug;
+            if (brand.Images == null)
+            {
+                if (request.Images != null)
+                {
+                    brand.Images = await _storageService.SaveFile(request.Images, CHILD_PATH_FOLDER_NAME);
+                }
+                _context.Brands.Add(brand);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                if (request.Images != null)
+                {
+                    var fullPath = "wwwroot" + brand.Images;
+                    if (File.Exists(fullPath))
+                    {
+                        await Task.Run(() =>
+                        {
+                            File.Delete(fullPath);
+                        });
+
+                    }
+                    _context.Brands.Update(brand);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    _context.Brands.Update(brand);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return true;
         }
 
         public async Task<PageResult<BrandViewModel>> GetAllPaging(PagingWithKeyword request)
@@ -122,9 +163,22 @@ namespace CollabClothing.Application.Catalog.Brands
             return pageResult;
         }
 
-        public Task<BrandViewModel> GetByBrandId(string brandId)
+        public async Task<BrandViewModel> GetByBrandId(string brandId)
         {
-            throw new NotImplementedException();
+            var brand = await _context.Brands.FindAsync(brandId);
+            if (brand == null)
+            {
+                return null;
+            }
+            var brandVm = new BrandViewModel()
+            {
+                Id = brand.Id,
+                Info = brand.Info,
+                Images = brand.Images,
+                NameBrand = brand.NameBrand,
+                Slug = brand.Slug
+            };
+            return brandVm;
         }
 
         public async Task<List<BrandViewModel>> GetAll()
