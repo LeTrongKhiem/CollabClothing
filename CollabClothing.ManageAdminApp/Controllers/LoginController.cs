@@ -1,4 +1,4 @@
-﻿using CollabClothing.ManageAdminApp.Service;
+﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

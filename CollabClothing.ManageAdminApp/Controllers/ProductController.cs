@@ -1,4 +1,4 @@
-﻿using CollabClothing.ManageAdminApp.Service;
+﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +16,13 @@ namespace CollabClothing.ManageAdminApp.Controllers
         private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
         private readonly ICategoryApiClient _categoryApiClient;
-        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient)
+        private readonly IBrandApiClient _brandApiClient;
+        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient)
         {
             _productApiClient = productApiClient;
             _configuration = configuration;
             _categoryApiClient = categoryApiClient;
+            _brandApiClient = brandApiClient;
         }
         public async Task<IActionResult> Index(string keyword, string categoryId, int pageIndex = 1, int pageSize = 10)
         {
@@ -48,8 +50,22 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         #region Create
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var categories = await _categoryApiClient.GetAll();
+            ViewBag.Categories = categories.Select(x => new SelectListItem()
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId,
+                Selected = x.CategoryId != null
+            });
+            var brand = await _brandApiClient.GetAllBrand();
+            ViewBag.Brands = brand.Select(x => new SelectListItem()
+            {
+                Text = x.NameBrand,
+                Value = x.Id,
+                Selected = x.Id != null
+            });
             return View();
         }
         [HttpPost]

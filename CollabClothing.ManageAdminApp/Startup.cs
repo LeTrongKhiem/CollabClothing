@@ -1,5 +1,5 @@
 using AspNetCoreHero.ToastNotification;
-using CollabClothing.ManageAdminApp.Service;
+using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -59,6 +59,7 @@ namespace CollabClothing.ManageAdminApp
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<IBannerApiClient, BannerApiClient>();
+            services.AddTransient<IBrandApiClient, BrandApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,5 @@
 ﻿    using AspNetCoreHero.ToastNotification.Abstractions;
-using CollabClothing.ManageAdminApp.Service;
+using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
