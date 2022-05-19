@@ -1,4 +1,4 @@
-﻿using CollabClothing.ManageAdminApp.Service;
+﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Catalog.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

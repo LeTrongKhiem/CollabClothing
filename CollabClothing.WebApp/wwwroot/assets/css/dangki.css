@@ -1,0 +1,106 @@
+
+.verification-code .v2-verification-code {
+    padding: 20px 0;
+    width: 377px;
+    margin: 0 auto;
+}
+.verification-code .v2-verification-code .v2-title p {
+     font-weight: 400;
+     font-size: 35px;
+     line-height: 23px;
+     display: flex;
+     align-items: center;
+ }
+.v2-login-area .form-signin {
+     width: 377px;
+     margin: 0 auto;
+ }
+.verification-code .v2-verification-code .v2-title {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+}
+.verification-code .v2-verification-code form .v2-group-info .form-group {
+    display: flex;
+    margin-bottom: 20px;
+    position: relative;
+}
+.verification-code .v2-verification-code form .v2-group-info .form-group .gender {
+    width: auto!important;
+}
+.verification-code .v2-verification-code form .v2-group-info .form-group span.gender-label {
+    margin: 0 20px 0 10px;
+    display: flex;
+    align-items: center;
+    font-size: 150%;
+}
+.verification-code .v2-verification-code form .v2-group-info .form-group input {
+    width: 100%;
+    height: 35px;
+    background: #fff;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding-left: 15px;
+    border: 1px solid #3e3e3e;
+}
+.verification-code .v2-verification-code form .v2-group-info .form-group .birth-day {
+     display: flex;
+     width: 100%;
+     border: 1px solid #3e3e3e;
+     border-radius: 5px;
+     text-align: center;
+     align-items: center;
+     border-right: none;
+ }
+.verification-code .v2-verification-code form .v2-group-info .form-group .birth-day .title {
+    width: 25%;
+    font-size: 150%;
+}
+.verification-code .v2-verification-code form .v2-group-info .form-group .select select {
+    width: 100px;
+    height: 35px;
+    border: none;
+    padding-left: 10px;
+    box-sizing: border-box;
+    border-radius: 0;
+    margin: 0;
+
+    -moz-appearance: none;
+    -ms-appearance: none;
+    border-right: 1px solid #3e3e3e;
+}
+
+.verification-code .v2-verification-code form .v2-group-info .form-group .select::after {
+
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+}
+
+.verification-code .v2-verification-code form .v2-group-info .form-group .select.year select {
+    border-radius: 5px;
+}
+.verification-code .v2-verification-code form .v2-group-info .form-group button {
+    height: 65px;
+    width: 100%;
+    background: linear-gradient(180deg,#015649 0%,#5faea0 100%);
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 26px;
+    text-transform: uppercase;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+button, input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: 150%;
+    line-height: 1.15;
+    margin: 0;
+}

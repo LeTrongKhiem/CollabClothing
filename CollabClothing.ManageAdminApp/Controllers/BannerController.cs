@@ -1,4 +1,4 @@
-﻿using CollabClothing.ManageAdminApp.Service;
+﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Catalog.Banners;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;

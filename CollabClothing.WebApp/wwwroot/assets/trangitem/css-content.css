@@ -1,0 +1,183 @@
+.css-content {
+    float: left;
+    width: 100%;
+    font-size: 16px;
+    position: relative;
+    text-align: justify
+}
+
+.css-content h2, .css-content h3, .css-content h4, .css-content h5, .css-content h6 {
+    color: rgb(50, 155, 139);
+    margin: 15px 0
+}
+
+.css-content h2 {
+    font: 700 20px/24px sans-serif
+}
+
+.css-content h3 {
+    font: 700 18px/21px sans-serif
+}
+
+.css-content h4 {
+    font: 700 16px/19px sans-serif
+}
+
+.css-content h5, .css-content h6 {
+    font: 700 14px/18px sans-serif
+}
+
+.css-content div {
+    line-height: 25px
+}
+
+.css-content p {
+    line-height: 25px;
+    margin: 5px 0 15px
+}
+
+.css-content a {
+    color: #00f
+}
+
+.css-content ul {
+    margin-left: 20px
+}
+
+.css-content ul li, .css-content ol li {
+    margin-bottom: 6px;
+    position: relative;
+    padding-left: 15px;
+    font-size: 16px;
+    line-height: 25px;
+    list-style-position: inside
+}
+
+.css-content ol {
+    margin-left: 20px
+}
+
+.css-content ol li {
+    padding-left: 0
+}
+
+.css-content ul li:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #417505;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%
+}
+
+.css-content table {
+    border-spacing: 0;
+    margin: 10px auto
+}
+
+.css-content table tbody tr:first-child, .css-content table tbody tr th {
+    font-weight: 700;
+    text-align: center
+}
+
+.css-content table td {
+    border: 1px solid #ddd;
+    border-right: none;
+    padding: 10px
+}
+
+.css-content table td:last-child {
+    border-right: 1px solid #ddd
+}
+
+.css-content .sudo-media-item {
+    width: 100%;
+    text-align: center
+}
+
+.css-content .sudo-media-item img {
+    padding: 10px;
+    border: 1px solid #ddd
+}
+
+.css-content .sudo-media-item figcaption {
+    padding: 10px 0
+}
+
+.css-content iframe {
+    display: block;
+    margin: 10px auto;
+    max-width: 100%
+}
+
+.css-content img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    display: block;
+    margin: auto
+}
+
+.css-content {
+    float: left;
+    width: 100%
+}
+
+.css-content .comment_ask {
+    padding-left: 0;
+    height: auto
+}
+
+.css-content .comment_ask:before {
+    display: none
+}
+
+.css-content .sudo-toc {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px dashed #ccc;
+    background: #fcfcfc;
+    width: 50%;
+    float: right;
+    margin-left: 20px
+}
+
+.css-content .sudo-toc>div {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    padding-bottom: 5px;
+    color: #333;
+    text-align: center
+}
+
+.css-content .sudo-toc ul {
+    color: #288ad6!important;
+    margin: 0!important
+}
+
+.css-content .sudo-toc ul li a {
+    font-weight: 400;
+    color: #288ad6!important
+}
+
+.css-content .sudo-toc>ul>li>a {
+    font-weight: 400
+}
+
+@media only screen and (max-width:991px) {
+    .css-content iframe {
+        max-width: 100%!important
+    }
+}
+
+@media only screen and (max-width:319px) {
+    .css-content iframe {
+        height: auto!important
+    }
+}
