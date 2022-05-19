@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\CollabClothing.ApiShared\CollabClothing.ApiShared.csproj" />
 	<ProjectReference Include="..\CollabClothing.Utilities\CollabClothing.Utilities.csproj" />
 	<ProjectReference Include="..\CollabClothing.ViewModels\CollabClothing.ViewModels.csproj" />
   </ItemGroup>

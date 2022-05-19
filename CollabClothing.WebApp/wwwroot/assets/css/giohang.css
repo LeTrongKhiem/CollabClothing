@@ -1,0 +1,39 @@
+
+body {
+    font-size: 1.6rem;
+    scroll-behavior: smooth;
+}
+#header .col{
+    margin:0 !important;
+
+}
+#footer .col{
+    margin: 0 !important;
+}
+.container {
+    margin-top: 80px;
+}
+
+.f-16 {
+    font-size: 1.6rem;
+}
+
+.h5, h5 {
+    font-size: 1.6rem;
+}
+
+.btn {
+    font-size: 1.2rem;
+}
+.f-12 {
+    font-size: 1.65rem;
+}
+
+
+.checkout{
+    margin-left: 100px;
+}
+
+.mgl-c {
+    font-size: 1.8rem;
+}

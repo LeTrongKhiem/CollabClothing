@@ -1,49 +1,244 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CollabClothing.WebApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CollabClothing.WebApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - CollabClothing.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewData["Title"] - Collabclothing</title>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+	<link rel="stylesheet" href="~/assets/font/fontawesome-free-5.15.3-web/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+	<link rel="icon" href="~/assets/img/logo3.png">
+
+	<link rel="stylesheet" href="~/assets/css/base.css">
+	<link rel="stylesheet" href="~/assets/css/grid.css">
+	<link rel="stylesheet" href="~/assets/css/main.css">
+	<link rel="stylesheet" href="~/assets/css/responsive.css">
+	@await RenderSectionAsync("Csss", required:false)
+</head>
+
+<body>
+<div class="main">
+		@await Html.PartialAsync("_HeaderPartialView");
+
+		<!-- Mobile and Tablet sub menu -->
+		
+	</div>
+
+			<div class="container">
+				@RenderBody()
+			</div>
+	<div class="footer">
+		<div class="grid wide">
+			<div class="row">
+				<!-- Footer Areas -->
+				<div class="col l-3 l-4-m m-5 c-10 l-o-0 l-o-0-m c-o-1 m-o-1">
+					<div class="footer__heading">
+						<i class="footer__heading-icon fas fa-map-marker-alt"></i>
+						Hệ thống cửa hàng
+					</div>
+					<ul class="footer-areas">
+						<li class="footer-area__item">
+							<h3 class="footer-area__heading">Hồ Chí Minh</h3>
+							<ul class="footer-places">
+								<li class="footer-place__item">
+									<div class="footer-place__item-location">
+										Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh
+										<a href="#" class="footer-place__item-link footer-place__item-link--highlight">
+											
+											
+											
+											|
+											Xem
+											bản đồ
+										
+										
+										
+										</a>
+									</div>
+									<div class="footer-place__item-contact">
+										Điện thoại:
+										<a href="#" class="footer-place__item-link">037.225.3243</a>
+										-
+										<a href="#" class="footer-place__item-link">097.123.9797</a>
+									</div>
+								</li>
+								<li class="footer-place__item">
+									<div class="footer-place__item-location">
+										Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh
+										<a href="#" class="footer-place__item-link footer-place__item-link--highlight">
+											
+											
+											
+											|
+											Xem
+											bản đồ
+										
+										
+										
+										</a>
+									</div>
+									<div class="footer-place__item-contact">
+										Điện thoại:
+										<a href="#" class="footer-place__item-link">037.225.3243</a>
+										-
+										<a href="#" class="footer-place__item-link">097.123.9797</a>
+									</div>
+								</li>
+								<li class="footer-place__item">
+									<div class="footer-place__item-location">
+										Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh
+										<a href="#" class="footer-place__item-link footer-place__item-link--highlight">
+											
+											
+											
+											|
+											Xem
+											bản đồ
+										
+										
+										
+										</a>
+									</div>
+									<div class="footer-place__item-contact">
+										Điện thoại:
+										<a href="#" class="footer-place__item-link">037.225.3243</a>
+										-
+										<a href="#" class="footer-place__item-link">097.123.9797</a>
+									</div>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Footer Policy -->
+				<div class="col l-3 l-4-m m-5 c-10 l-o-0 l-o-0-m c-o-1 m-o-1">
+					<div class="footer__heading">
+						<i class="footer__heading-icon far fa-question-circle"></i>
+						Quy định - chính sách
+					</div>
+
+					<ul class="footer-policy__list">
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Chính sách bảo hành</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Chính sách vận chuyển</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Chính sách đổi trả hàng</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Chính sách bảo mật thông tin</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Hướng dẫn thanh toán</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Hướng dẫn mua hàng Online</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Dịch vụ Ship COD Toàn quốc</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Chính sách đại lý linh, phụ kiện</a>
+						</li>
+						<li class="footer-policy__item">
+							<a href="#" class="footer-policy__link">Sitemap</a>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Footer Subscribe -->
+				<div class="col l-3 l-4-m m-5 c-10 l-o-0 l-o-0-m c-o-1 m-o-1">
+					<div class="footer__heading">
+						<i class="footer__heading-icon far fa-envelope"></i>
+						Đăng ký nhận bảng tin
+					</div>
+
+					<div class="footer-mail">
+						<form action="">
+							<input type="text" required placeholder="Nhập email của bạn..." name="" id=""
+								   class="footer-mail__input">
+							<button class="footer-mail__btn">Gửi</button>
+						</form>
+					</div>
+
+					<div class="footer-linked">
+						<h3 class="footer-linked__heading">
+							<i class="footer-linked__icon fas fa-link"></i>
+							Liên kết
+						</h3>
+
+						<ul class="footer-associates">
+							<li class="footer-associate__item">
+								<i class="footer-associate__icon footer-associate__icon--facebook fab fa-facebook"></i>
+								<a href="https://www.facebook.com/khiem.1604/" target="_blank"
+								   class="footer-associate__link">
+									Facebook
+								</a>
+							</li>
+							<li class="footer-associate__item">
+								<i class="footer-associate__icon footer-associate__icon--youtube fab fa-youtube"></i>
+								<a href="" target="_blank" class="footer-associate__link">
+									Youtube
+								</a>
+							</li>
+						</ul>
+					</div>
+
+
+				</div>
+				<div class="col l-3 l-4-m m-5 c-10 l-o-0 l-o-0-m c-o-1 m-o-1" style="padding: 65px 45px;">
+					<div class="footer-certification"></div>
+					<div class="footer-power"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer-text">CollabClothing Project Demo</div>
+
+		<ul class="footer-nav-mobile__list">
+			<li class="footer-nav-mobile__item">
+				<a href="#" class="footer-nav-mobile__link">
+					<i class="footer-nav-mobile__icon fas fa-home"></i>
+					<span class="footer-nav-mobile__title">Trang chủ</span>
+				</a>
+			</li>
+			<li class="footer-nav-mobile__item">
+				<a href="#" class="footer-nav-mobile__link">
+					<i class="footer-nav-mobile__icon fas fa-shopping-cart"></i>
+					<span class="footer-nav-mobile__title">Giỏ hàng</span>
+					<span class="footer-nav-mobile__number">0</span>
+				</a>
+			</li>
+			<li class="footer-nav-mobile__item">
+				<a href="#" class="footer-nav-mobile__link">
+					<i class="footer-nav-mobile__icon fas fa-bell"></i>
+					<span class="footer-nav-mobile__title">Thông báo</span>
+					<span class="footer-nav-mobile__number">0</span>
+				</a>
+			</li>
+			<li class="footer-nav-mobile__item">
+				<a href="#" class="footer-nav-mobile__link">
+					<i class="footer-nav-mobile__icon fas fa-user"></i>
+					<span class="footer-nav-mobile__title">Tài khoản</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<!-- Button -->
+	<a href="#" class="go-to-top">
+		<i class="go-to-top__icon fas fa-chevron-circle-up"></i>
+	</a>
+
+	@*<script src="~/js/phone.js"></script>*@
+	@await RenderSectionAsync("Scripts", required:false)
 </body>
+
 </html>

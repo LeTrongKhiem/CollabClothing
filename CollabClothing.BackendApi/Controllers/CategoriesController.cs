@@ -62,7 +62,6 @@ namespace CollabClothing.BackendApi.Controllers
             }
             var cate = await _categoryService.GetCateById(await cateId);
             return CreatedAtAction(nameof(cateId), new { id = cateId }, cate);
-
         }
         [HttpDelete("{cateId}")]
         [AllowAnonymous]
@@ -95,6 +94,5 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok();
         }
-
     }
 }

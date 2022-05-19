@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Domain", "2. Domain", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Host", "3. Host", "{8631C319-C3A2-4DAF-BD2D-FCEDE1E67854}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabClothing.ApiShared", "CollabClothing.ApiShared\CollabClothing.ApiShared.csproj", "{5E60EA37-AB42-4292-8D59-54B196629D47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{96CF2755-66A1-4FA0-8AF6-C43E40D03486}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96CF2755-66A1-4FA0-8AF6-C43E40D03486}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96CF2755-66A1-4FA0-8AF6-C43E40D03486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E60EA37-AB42-4292-8D59-54B196629D47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E60EA37-AB42-4292-8D59-54B196629D47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E60EA37-AB42-4292-8D59-54B196629D47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E60EA37-AB42-4292-8D59-54B196629D47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{F6039956-AF6C-4BE3-8341-23DB56BEACD4} = {29FF6838-D3EA-412A-819A-1CADC2902E72}
 		{FA9B6664-B2CC-485F-A910-E1A053C52828} = {8631C319-C3A2-4DAF-BD2D-FCEDE1E67854}
 		{96CF2755-66A1-4FA0-8AF6-C43E40D03486} = {8631C319-C3A2-4DAF-BD2D-FCEDE1E67854}
+		{5E60EA37-AB42-4292-8D59-54B196629D47} = {8631C319-C3A2-4DAF-BD2D-FCEDE1E67854}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89D291C1-FCA2-4576-8D19-57A19064C6E7}
