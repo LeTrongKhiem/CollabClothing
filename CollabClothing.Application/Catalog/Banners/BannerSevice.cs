@@ -112,6 +112,23 @@ namespace CollabClothing.Application.Catalog.Banners
             }
         }
 
+        public async Task<List<BannerViewModel>> GetAll()
+        {
+            var banner = await _context.Banners
+                                  .OrderBy(x => x.Id)
+                                  .Select(x => new BannerViewModel()
+                                  {
+                                      Id = x.Id,
+                                      Alt = x.Alt,
+                                      Images = x.Images,
+                                      NameBanner = x.NameBanner,
+                                      Text = x.Text,
+                                      TypeBannerId = x.TypeBannerId
+                                  }).ToListAsync();
+            return banner;
+
+        }
+
         public async Task<PageResult<BannerViewModel>> GetAllPaging(PagingWithKeyword request)
         {
             //var query = from bannerType in _context.BannerTypes

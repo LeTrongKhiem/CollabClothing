@@ -15,5 +15,6 @@ namespace CollabClothing.Application.Catalog.Banners
         Task<bool> Delete(string id);
         Task<PageResult<BannerViewModel>> GetAllPaging(PagingWithKeyword request);
         Task<BannerViewModel> GetBannerById(string id);
+        Task<List<BannerViewModel>> GetAll();
     }
 }

@@ -83,6 +83,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _bannerService.GetAll();
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
         [HttpDelete("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> Delete(string id)

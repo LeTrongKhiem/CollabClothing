@@ -1,4 +1,5 @@
-﻿using CollabClothing.WebApp.Models;
+﻿using CollabClothing.ApiShared;
+using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +13,17 @@ namespace CollabClothing.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBannerApiClient _bannerApiClient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBannerApiClient bannerApiClient)
         {
             _logger = logger;
+            _bannerApiClient = bannerApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var banner = await _bannerApiClient.GetAll();
             return View();
         }
 

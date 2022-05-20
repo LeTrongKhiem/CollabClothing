@@ -90,6 +90,11 @@ namespace CollabClothing.ApiShared
             return await GetAsync<PageResult<BannerViewModel>>($"/api/banners/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
         }
 
+        public Task<List<BannerViewModel>> GetAll()
+        {
+            return GetListAsync<BannerViewModel>($"/api/banners");
+        }
+
         public async Task<BannerViewModel> GetById(string id)
         {
             return await GetAsync<BannerViewModel>($"/api/banners/id?id={id}");
