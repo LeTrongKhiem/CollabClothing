@@ -20,7 +20,9 @@
     "CollabClothing.BackendApi": {
       "commandName": "Project",
 
+
       "launchBrowser": false,
+
 
       "launchUrl": "swagger",
       "environmentVariables": {

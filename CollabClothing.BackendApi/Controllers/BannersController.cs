@@ -107,6 +107,7 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _bannerService.Delete(id);
+
             if (!result)
             {
                 return BadRequest(result);
