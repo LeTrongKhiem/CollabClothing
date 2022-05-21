@@ -23,9 +23,12 @@ namespace CollabClothing.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var banner = await _bannerApiClient.GetAll();
+            var viewModel = new HomeViewModel()
+            {
+                ListBanner = await _bannerApiClient.GetAll()
+            };
 
-            return View();
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

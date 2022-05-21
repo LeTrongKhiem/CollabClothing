@@ -15,14 +15,8 @@ namespace CollabClothing.ApiShared
 {
     public class BannerApiClient : BaseApiClient, IBannerApiClient
     {
-        public readonly IHttpClientFactory _httpClientFactory;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public readonly IConfiguration _configuration;
         public BannerApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(httpClientFactory, httpContextAccessor, configuration)
         {
-            _httpClientFactory = httpClientFactory;
-            _httpContextAccessor = httpContextAccessor;
-            _configuration = configuration;
         }
 
         public async Task<bool> Create(BannerCreateRequest request)

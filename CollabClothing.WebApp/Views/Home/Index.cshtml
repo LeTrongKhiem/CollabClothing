@@ -1,39 +1,47 @@
-﻿@{
+﻿@using Microsoft.Extensions.Configuration
+@model HomeViewModel
+@{
 	ViewData["Title"] = "Trang chủ";
 }
 @section Csss {
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 }
+@inject IConfiguration Configuration;
 <div class="grid wide">
  <!-- Product Phone -->
  <div class="row container__item">
-	   <div class="col l-12 m-12 c-12">
-		   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-		  <ol class="carousel-indicators">
-			<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-			<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-			<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-		  </ol>
-		  <div class="carousel-inner">
-			<div class="carousel-item active">
-			  <img src="~/img/6BCeJyXI-1200x400-1.png" class="d-block w-100" alt="...">
-			</div>
-			<div class="carousel-item">
-			  <img src="~/img/banner1.png" class="d-block w-100" alt="...">
-			</div>
-			<div class="carousel-item">
-			  <img src="~/img/cBiCbmww-1200x400-1 (1).png" class="d-block w-100" alt="...">
-			</div>
+  <div class="col l-12 m-12 c-12">
+   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+	<ol class="carousel-indicators">
+	 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+	 <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+	 <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+	</ol>
+	<div class="carousel-inner">
+					<div class="carousel-item active">
+						<img src="~/img/6BCeJyXI-1200x400-1.png" class="d-block w-100" alt="...">
+						</div>
+					@foreach (var item in Model.ListBanner)
+					{
+		 <div class="carousel-item">
+		  <img src="@Configuration["BaseAddress"]@item.Images" class="d-block w-100" alt="@item.Alt">
+		  <div class="carousel-caption d-none d-md-block">
+		   <h5>@item.NameBanner</h5>
+		   <p>@item.NameBanner</p>
 		  </div>
-		  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-			<span class="sr-only">Previous</span>
-		  </a>
-		  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span>
-			<span class="sr-only">Next</span>
-		  </a>
-		</div>
+		 </div>
+					}
+
+	</div>
+	<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+	 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	 <span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+	 <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	 <span class="sr-only">Next</span>
+	</a>
+   </div>
   </div>
   <div class="col l-12 m-12 c-12">
    <div class="container-nav">
@@ -580,7 +588,7 @@
 </div>
 
 @section Scripts {
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-	
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
 }
