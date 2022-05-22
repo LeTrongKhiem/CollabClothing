@@ -4,6 +4,7 @@
     ViewData["Title"] = "Cập nhật sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration; // lay duong dan localhost:5001
 @section Scripts{
     <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
     <script>
@@ -33,7 +34,7 @@
  </div>
 </div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -58,7 +59,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImagePath" class="control-label"></label>
-                <input asp-for="ImagePath" class="form-control" />
+                <img src="@Configuration["BaseAddress"]@Model.ImagePath" width="120px" height="120px" style="margin-left: 50px;"/>
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
             </div>
             <div class="form-group">

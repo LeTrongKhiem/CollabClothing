@@ -15,14 +15,8 @@ namespace CollabClothing.ApiShared
 {
     public class BannerApiClient : BaseApiClient, IBannerApiClient
     {
-        public readonly IHttpClientFactory _httpClientFactory;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-        public readonly IConfiguration _configuration;
         public BannerApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(httpClientFactory, httpContextAccessor, configuration)
         {
-            _httpClientFactory = httpClientFactory;
-            _httpContextAccessor = httpContextAccessor;
-            _configuration = configuration;
         }
 
         public async Task<bool> Create(BannerCreateRequest request)
@@ -88,6 +82,11 @@ namespace CollabClothing.ApiShared
         public async Task<PageResult<BannerViewModel>> GetAll(PagingWithKeyword request)
         {
             return await GetAsync<PageResult<BannerViewModel>>($"/api/banners/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
+        }
+
+        public Task<List<BannerViewModel>> GetAll()
+        {
+            return GetListAsync<BannerViewModel>($"/api/banners");
         }
 
         public async Task<BannerViewModel> GetById(string id)

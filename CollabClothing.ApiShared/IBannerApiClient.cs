@@ -14,5 +14,6 @@ namespace CollabClothing.ApiShared
         Task<bool> Edit(string id, BannerEditRequest request);
         Task<PageResult<BannerViewModel>> GetAll(PagingWithKeyword request);
         Task<BannerViewModel> GetById(string id);
+        Task<List<BannerViewModel>> GetAll();
     }
 }

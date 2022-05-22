@@ -7,8 +7,8 @@
   <ItemGroup>
     <ProjectReference Include="..\CollabClothing.Data\CollabClothing.Data.csproj" />
     <ProjectReference Include="..\CollabClothing.Utilities\CollabClothing.Utilities.csproj" />
-    <ProjectReference Include="..\CollabClothing.WebApp\CollabClothing.WebApp.csproj" />
     <ProjectReference Include="..\CollabClothing.ViewModels\CollabClothing.ViewModels.csproj" />
+    <ProjectReference Include="..\CollabClothing.WebApp\CollabClothing.WebApp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
