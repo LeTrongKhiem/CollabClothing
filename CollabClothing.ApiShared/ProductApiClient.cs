@@ -137,7 +137,7 @@ namespace CollabClothing.ApiShared
             client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
 
-            var response = await client.PutAsync($"/api/products/{id}/{newCurrentPrice}", httpContent);
+            var response = await client.PutAsync($"/api/products/newPriceCurrent/{id}/{newCurrentPrice}", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             return response.IsSuccessStatusCode;
         }

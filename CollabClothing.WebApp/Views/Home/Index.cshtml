@@ -132,7 +132,7 @@
 		   <div class="container-product__item-heading">
 			<div class="container-product__item-img"
 									 @*style="background-image: url(.@Configuration["BaseAddress"]@item.ThumbnailImage);"*@>
-									 <img src="@Configuration["BaseAddress"]@item.ThumbnailImage"/>
+			 <img src="@Configuration["BaseAddress"]@item.ThumbnailImage" />
 			</div>
 
 			<div class="container-product-guarantee">
@@ -171,13 +171,19 @@
 		   <div class="container-product__item-wrap">
 			<div class="container-product__item-info">
 			 <a href="#" class="container-product__item-name">
-			  @item.ProductName
+											@item.ProductName
 			 </a>
 			 <i class="container-product__item-sale-icon fas fa-gift"></i>
 			</div>
+									@{
+										// define format VND
+										var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+								}
 			<div class="container-product__item-buy">
 			 <span class="container-product__item-price">
-			  @item.PriceCurrent đ
+											@*@Model.ParseToVND(@item.PriceCurrent)*@
+											@String.Format(format, "{0:c0}", @item.PriceCurrent )
 			 </span>
 			 <a href='#' class="container-product__item-btn">MUA</a>
 			</div>
@@ -207,7 +213,7 @@
 		   </ul>
 		  </div>
 		 </div>
-					}
+							}
 
 	</div>
    </div>

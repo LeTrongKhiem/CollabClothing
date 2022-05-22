@@ -207,25 +207,29 @@ namespace CollabClothing.ManageAdminApp.Controllers
         #endregion
         #region UpdateCurrentPrice
         [HttpGet]
-        public async Task<IActionResult> UpdateCurrentPrce(string id)
+        public async Task<IActionResult> UpdateCurrentPrice(string id)
         {
             var product = await _productApiClient.GetById(id);
-            if (product == null)
+            if (product != null)
             {
-                return RedirectToAction("Error", "Index");
+                var editProduct = new ProductEditRequest()
+                {
+                    PriceCurrent = product.PriceCurrent
+                };
+                return View(editProduct);
             }
-            return View(product);
+            return RedirectToAction("Error", "Home");
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCurrentPrce(string id, decimal newCurrentPrice)
+        public async Task<IActionResult> UpdateCurrentPrice(string id, ProductEditRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
-            var result = await _productApiClient.UpdateCurrentPrice(id, newCurrentPrice);
+            var result = await _productApiClient.UpdateCurrentPrice(id, request.PriceCurrent);
             if (result)
             {
                 TempData["result"] = "Cập nhật thành công";
