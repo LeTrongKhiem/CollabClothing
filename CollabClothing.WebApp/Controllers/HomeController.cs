@@ -14,18 +14,22 @@ namespace CollabClothing.WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IBannerApiClient _bannerApiClient;
+        private readonly IProductApiClient _productApiClient;
 
-        public HomeController(ILogger<HomeController> logger, IBannerApiClient bannerApiClient)
+        public HomeController(ILogger<HomeController> logger, IBannerApiClient bannerApiClient, IProductApiClient productApiClient)
         {
             _logger = logger;
             _bannerApiClient = bannerApiClient;
+            _productApiClient = productApiClient;
         }
 
         public async Task<IActionResult> Index()
         {
+
             var viewModel = new HomeViewModel()
             {
-                ListBanner = await _bannerApiClient.GetAll()
+                ListBanner = await _bannerApiClient.GetAll(),
+                ListProductFeatured = await _productApiClient.GetFeaturedProducts(12)
             };
 
             return View(viewModel);

@@ -70,6 +70,16 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+        [HttpGet("featured/{take}")]
+        public async Task<IActionResult> GetFeaturedProducts(int take)
+        {
+            var product = await _manageProductService.GetFeaturedProducts(take);
+            if (product == null)
+            {
+                return BadRequest("Cannot find products");
+            }
+            return Ok(product);
+        }
         [HttpGet("/category/{cateId}")]
         public async Task<IActionResult> GetProductByCategoryId(string cateId)
         {

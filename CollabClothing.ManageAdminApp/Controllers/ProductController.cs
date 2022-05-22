@@ -205,5 +205,34 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(rolesAssignRequest);
         }
         #endregion
+        #region UpdateCurrentPrice
+        [HttpGet]
+        public async Task<IActionResult> UpdateCurrentPrce(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            if (product == null)
+            {
+                return RedirectToAction("Error", "Index");
+            }
+            return View(product);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCurrentPrce(string id, decimal newCurrentPrice)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.UpdateCurrentPrice(id, newCurrentPrice);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật thành công";
+                return RedirectToAction("Index");
+            }
+            return View(result);
+        }
+        #endregion
     }
 }
