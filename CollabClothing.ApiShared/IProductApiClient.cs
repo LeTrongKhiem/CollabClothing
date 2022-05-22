@@ -16,5 +16,7 @@ namespace CollabClothing.ApiShared
         Task<bool> Edit(string id, ProductEditRequest request);
         Task<ProductViewModel> GetById(string id);
         Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
+        Task<List<ProductViewModel>> GetFeaturedProducts(int take);
+        Task<bool> UpdateCurrentPrice(string id, decimal newCurrentPrice);
     }
 }

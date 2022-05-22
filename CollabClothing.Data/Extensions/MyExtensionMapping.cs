@@ -43,5 +43,8 @@ namespace CollabClothing.Data.Extensions
             banner.TypeBannerId = bannerDTO.TypeBannerId;
         }
         #endregion
+        #region PromotionMappingDTO
+
+        #endregion
     }
 }

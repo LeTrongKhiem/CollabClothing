@@ -122,5 +122,24 @@ namespace CollabClothing.ApiShared
             }
             return JsonConvert.DeserializeObject<bool>(result);
         }
+
+        public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
+        {
+            return await GetListAsync<ProductViewModel>($"/api/products/featured/{take}");
+        }
+
+        public async Task<bool> UpdateCurrentPrice(string id, decimal newCurrentPrice)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var json = JsonConvert.SerializeObject(newCurrentPrice);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+
+            var response = await client.PutAsync($"/api/products/{id}/{newCurrentPrice}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            return response.IsSuccessStatusCode;
+        }
     }
 }

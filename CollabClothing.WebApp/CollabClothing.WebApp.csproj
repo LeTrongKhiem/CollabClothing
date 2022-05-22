@@ -32,7 +32,10 @@
 
   <ItemGroup>
 	<Folder Include="Areas\Identity\Data\" />
-	<Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CollabClothing.ApiShared\CollabClothing.ApiShared.csproj" />
   </ItemGroup>
 
 

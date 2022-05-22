@@ -1,9 +1,11 @@
-﻿@model CollabClothing.ViewModels.Catalog.Products.ProductViewModel
+﻿@using Microsoft.Extensions.Configuration
+@model CollabClothing.ViewModels.Catalog.Products.ProductViewModel
 
 @{
     ViewData["Title"] = "Chi tiết sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@inject IConfiguration Configuration;
 <h1>Chi tiết sản phẩm</h1>
 <div class="page-header">
  <div class="header-sub-title">
@@ -86,7 +88,8 @@
             @Html.DisplayNameFor(model => model.ThumbnailImage)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ThumbnailImage)
+            @*@Html.DisplayFor(model => model.ThumbnailImage)*@
+            <img src="@Configuration["BaseAddress"]@Model.ThumbnailImage" width="120px" height="120px" style="margin-left: 50px;"/>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CategoryName)

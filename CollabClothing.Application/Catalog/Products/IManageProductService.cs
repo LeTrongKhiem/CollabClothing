@@ -20,6 +20,7 @@ namespace CollabClothing.Application.Catalog.Products
         Task<bool> UpdatePriceCurrent(string productId, decimal newPrice);
         Task<bool> UpdatePriceOld(string productId, decimal newPrice);
         Task<bool> UpdateSaleOff(string productId, int newSaleOff);
+        Task<List<ProductViewModel>> GetFeaturedProducts(int take);
         // method productimage
         Task<string> AddImages(string productId, ProductImageCreateRequest request);
         Task<int> UpdateImage(string imageId, ProductImageEditRequest request);
@@ -28,7 +29,6 @@ namespace CollabClothing.Application.Catalog.Products
         Task<ProductImageViewModel> GetProductImageById(string imageId);
         //assign category
         Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
-
 
         // Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();
