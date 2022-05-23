@@ -443,19 +443,19 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
             var query = (from p in _context.Products
-                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
-                         //into ppmc
-                         //from pmc in ppmc.DefaultIfEmpty()
-                         join c in _context.Categories on pmc.CategoryId equals c.Id
-                         //into pmcc
-                         //from c in pmcc.DefaultIfEmpty()
+                             //join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
+                             //into ppmc
+                             //from pmc in ppmc.DefaultIfEmpty()
+                             //join c in _context.Categories on pmc.CategoryId equals c.Id
+                             //into pmcc
+                             //from c in pmcc.DefaultIfEmpty()
                          join pimg in _context.ProductImages on p.Id equals pimg.ProductId
                          into ppimg
                          from pimg in ppimg.DefaultIfEmpty()
                          join b in _context.Brands on p.BrandId equals b.Id
-                         //into pb
-                         //from b in pb.DefaultIfEmpty()
-                         select new { p, c, pimg, b, pmc });
+                         into pb
+                         from b in pb.DefaultIfEmpty()
+                         select new { p, pimg, b });
             var data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
                 .Select(x => new ProductViewModel()
                 {
@@ -469,11 +469,13 @@ namespace CollabClothing.Application.Catalog.Products
                     SaleOff = x.p.SaleOff,
                     Slug = x.p.Slug,
                     SoldOut = x.p.SoldOut,
-                    CategoryName = x.c.NameCategory,
+                    //CategoryName = x.c.NameCategory,
                     ThumbnailImage = x.pimg.Path,
                     BrandName = x.b.NameBrand
-                })
+                }).Where(x => x.Id != null)
                 .ToListAsync();
+            //data.GroupBy(x => x.Id)
+            //    .Select(o => o.First()).Distinct();
             return data;
         }
     }

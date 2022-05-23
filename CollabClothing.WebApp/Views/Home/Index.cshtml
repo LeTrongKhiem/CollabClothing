@@ -5,6 +5,7 @@
 }
 @section Csss {
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/index.css" />
 }
 @inject IConfiguration Configuration;
 <div class="grid wide">
@@ -179,11 +180,15 @@
 										// define format VND
 										var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-								}
+									}
 			<div class="container-product__item-buy">
 			 <span class="container-product__item-price">
 											@*@Model.ParseToVND(@item.PriceCurrent)*@
-											@String.Format(format, "{0:c0}", @item.PriceCurrent )
+											
+			  <div class="cta-btn">
+			   <span class="old-price">@item.PriceOld</span>
+			   <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
+			  </div>
 			 </span>
 			 <a href='#' class="container-product__item-btn">MUA</a>
 			</div>
@@ -213,7 +218,7 @@
 		   </ul>
 		  </div>
 		 </div>
-							}
+					}
 
 	</div>
    </div>

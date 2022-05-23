@@ -28,5 +28,6 @@ namespace CollabClothing.ViewModels.Catalog.Products
         // public ProductImage productImage { get; set; }
         [Display(Name = "Giá hiện tại")]
         public decimal PriceCurrent { get; set; }
+        public decimal PriceOld { get; set; }
     }
 }

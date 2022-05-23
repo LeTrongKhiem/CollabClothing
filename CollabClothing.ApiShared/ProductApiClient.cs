@@ -85,7 +85,7 @@ namespace CollabClothing.ApiShared
             requestContent.Add(new StringContent(request.Details), "details");
             requestContent.Add(new StringContent(request.Description), "description");
             requestContent.Add(new StringContent(request.Slug), "slug");
-            requestContent.Add(new StringContent(request.ImagePath), "imagePath");
+            //requestContent.Add(new StringContent(request.ImagePath), "imagePath");
             requestContent.Add(new StringContent(request.BrandId), "brandId");
             var response = await client.PutAsync($"/api/products/{id}", requestContent);
             return response.IsSuccessStatusCode;
@@ -138,6 +138,20 @@ namespace CollabClothing.ApiShared
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
 
             var response = await client.PutAsync($"/api/products/newPriceCurrent/{id}/{newCurrentPrice}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdatePriceOld(string id, decimal newPriceOld)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var json = JsonConvert.SerializeObject(newPriceOld);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+
+            var response = await client.PutAsync($"/api/products/newPriceOld/{id}/{newPriceOld}", httpContent);
             var result = await response.Content.ReadAsStringAsync();
             return response.IsSuccessStatusCode;
         }
