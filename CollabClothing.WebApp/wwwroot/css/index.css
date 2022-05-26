@@ -1,0 +1,137 @@
+﻿.cta-btn {
+    width: 8vw;
+    margin-right: 6px;
+    text-align: center;
+    font-size: 1em;
+    line-height: 1;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    background-color: rgba(0, 0, 0, 0.65);
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+}
+
+    .cta-btn span {
+        display: block;
+    }
+
+.old-price {
+    margin-top: 10px;
+    font-size: 1em;
+    text-decoration: line-through;
+    color: darkolivegreen;
+}
+ .tcb-product-slider .carousel-control {
+        width: 5%;
+    }
+
+.tcb-product-item a {
+    color: #147196;
+}
+
+    .tcb-product-item a:hover {
+        text-decoration: none;
+    }
+
+.tcb-product-item .tcb-hline {
+    margin: 10px 0;
+    height: 1px;
+    background: #ccc;
+}
+
+@media all and (max-width: 768px) {
+    .tcb-product-item {
+        margin-bottom: 30px;
+    }
+}
+
+.tcb-product-photo {
+    text-align: center;
+    height: 180px;
+    background: #fff;
+}
+
+    .tcb-product-photo img {
+        height: 100%;
+        display: inline-block;
+    }
+
+.tcb-product-info {
+    background: #f0f0f0;
+    padding: 15px;
+}
+
+.tcb-product-title h4 {
+    margin-top: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tcb-product-rating {
+    color: #acacac;
+}
+
+    .tcb-product-rating .active {
+        color: #FFB500;
+    }
+
+.tcb-product-price {
+    color: firebrick;
+    font-size: 18px;
+}
+
+
+
+.details {
+    margin: 50px 0;
+}
+
+    .details h1 {
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 3px;
+    }
+
+    .details .back-link {
+        text-align: center;
+    }
+
+        .details .back-link a {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 15px 30px;
+            background: #333;
+            color: #fff;
+            border-radius: 24px;
+        }
+
+            .details .back-link a svg {
+                margin-right: 10px;
+                vertical-align: text-top;
+                display: inline-block;
+            }
+
+.new-price {
+    color: #f6eb14;
+    font-size: 1.45em;
+    line-height: 1.1;
+}
+
+
+@media screen and (max-width: 1000px) {
+    .cta-btn {
+        margin-right: 60px;
+        margin-top: 450px;
+        width: 1vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .cta-btn {
+        margin-right: 35px;
+        margin-top: 350px;
+        width: 1vw;
+        font-size: 1em;
+    }
+}

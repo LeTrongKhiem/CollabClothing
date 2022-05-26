@@ -24,6 +24,12 @@ namespace CollabClothing.BackendApi.Controllers
             var cate = await _categoryService.GetAll();
             return Ok(cate);
         }
+        [HttpGet("parent")]
+        public async Task<IActionResult> GetParentCate()
+        {
+            var cate = await _categoryService.GetParentCate();
+            return Ok(cate);
+        }
         [HttpGet("paging")]
         //[AllowAnonymous]
         public async Task<IActionResult> Get([FromQuery] GetCategoryRequestPaging request)

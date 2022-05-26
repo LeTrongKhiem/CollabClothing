@@ -443,20 +443,20 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
             var query = (from p in _context.Products
-                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
-                         //into ppmc
-                         //from pmc in ppmc.DefaultIfEmpty()
-                         join c in _context.Categories on pmc.CategoryId equals c.Id
-                         //into pmcc
-                         //from c in pmcc.DefaultIfEmpty()
+                             //join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
+                             //into ppmc
+                             //from pmc in ppmc.DefaultIfEmpty()
+                             //join c in _context.Categories on pmc.CategoryId equals c.Id
+                             //into pmcc
+                             //from c in pmcc.DefaultIfEmpty()
                          join pimg in _context.ProductImages on p.Id equals pimg.ProductId
-                         into ppimg
-                         from pimg in ppimg.DefaultIfEmpty()
+                         //into ppimg
+                         //from pimg in ppimg.DefaultIfEmpty()
                          join b in _context.Brands on p.BrandId equals b.Id
-                         //into pb
-                         //from b in pb.DefaultIfEmpty()
-                         select new { p, c, pimg, b, pmc });
-            var data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
+                         into pb
+                         from b in pb.DefaultIfEmpty()
+                         select new { p, pimg, b });
+            List<ProductViewModel> data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
@@ -469,12 +469,63 @@ namespace CollabClothing.Application.Catalog.Products
                     SaleOff = x.p.SaleOff,
                     Slug = x.p.Slug,
                     SoldOut = x.p.SoldOut,
-                    CategoryName = x.c.NameCategory,
+                    //CategoryName = x.c.NameCategory,
                     ThumbnailImage = x.pimg.Path,
                     BrandName = x.b.NameBrand
                 })
-                .ToListAsync();
+            .ToListAsync();
+            //data.GroupBy(x => x.Id)
+            //    .Select(o => o.First()).Distinct();
             return data;
+        }
+
+        public async Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request)
+        {
+            var query = (from p in _context.Products
+                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
+                         into ppmc
+                         from pmc in ppmc.DefaultIfEmpty()
+                         join c in _context.Categories on pmc.CategoryId equals c.Id
+                         into pmcc
+                         from c in pmcc.DefaultIfEmpty()
+                         join pimg in _context.ProductImages on p.Id equals pimg.ProductId
+                         //into ppimg
+                         //from pimg in ppimg.DefaultIfEmpty()
+                         join b in _context.Brands on p.BrandId equals b.Id
+                         into pb
+                         from b in pb.DefaultIfEmpty()
+                         select new { p, pimg, b, c });
+            if (request.CategoryId != null)
+            {
+                query = query.Where(x => x.c.Id == request.CategoryId);
+            }
+            int totalRow = await query.CountAsync();
+            var data = await query.Skip(request.PageSize * (request.PageIndex - 1))
+                                    .Take(request.PageSize)
+                                    .Select(x => new ProductViewModel()
+                                    {
+                                        Id = x.p.Id,
+                                        ProductName = x.p.ProductName,
+                                        BrandId = x.b.NameBrand,
+                                        Description = x.p.Description,
+                                        Installment = x.p.Installment,
+                                        PriceCurrent = x.p.PriceCurrent,
+                                        PriceOld = x.p.PriceOld,
+                                        SaleOff = x.p.SaleOff,
+                                        Slug = x.p.Slug,
+                                        SoldOut = x.p.SoldOut,
+                                        //CategoryName = x.c.NameCategory,
+                                        ThumbnailImage = x.pimg.Path,
+                                        BrandName = x.b.NameBrand
+                                    }).ToListAsync();
+            var pageResult = new PageResult<ProductViewModel>()
+            {
+                Items = data,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
+                TotalRecord = totalRow
+            };
+            return pageResult;
         }
     }
 }

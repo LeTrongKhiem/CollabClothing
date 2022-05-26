@@ -1,0 +1,28 @@
+﻿@model CollabClothing.ViewModels.Catalog.Products.ProductEditRequest
+
+@{
+    ViewData["Title"] = "Update gía cũ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateOldPrice">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PriceOld" class="control-label"></label>
+                <input asp-for="PriceOld" class="form-control" />
+                <span asp-validation-for="PriceOld" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                 <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở lại</a>
+</div>
+
