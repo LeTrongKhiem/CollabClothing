@@ -41,9 +41,9 @@
 
 .header__navbar-list .header__navbar-item .header__navbar-link {
     color: #fff;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 20px;
-    padding: 22px 15px 23px;
+    padding: 22px 3px 23px;
     text-transform: uppercase;
     text-decoration: none;
 }

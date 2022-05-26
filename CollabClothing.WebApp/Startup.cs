@@ -56,6 +56,7 @@ namespace CollabClothing.WebApp
             services.AddTransient<IBannerApiClient, BannerApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
+            services.AddTransient<IBrandApiClient, BrandApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,8 +84,20 @@ namespace CollabClothing.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                  name: "Product Category",
+                  pattern: "/danh-muc/{id}", new
+                  {
+                      controller = "Product",
+                      action = "Category"
+
+                  });
+                endpoints.MapControllerRoute(
+                    name: "Product Details",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 //endpoints.MapRazorPages();
             });
         }

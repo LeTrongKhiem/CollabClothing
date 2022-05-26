@@ -1,0 +1,13 @@
+﻿@using CollabClothing.ViewModels.Catalog.Brands
+@model List<BrandViewModel>
+
+<h2 class="container-nav__heading">Hãng sản xuất:</h2>
+<ul class="container-nav__list">
+	@foreach (var item in Model)
+	{
+	 <li class="container-nav__item">
+	  <a href="@item.Id" class="container-nav__item-link">@item.NameBrand</a>
+	 </li>
+	}
+
+</ul>
