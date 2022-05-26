@@ -90,9 +90,6 @@
 				Trả góp
 			</th>
 			<th>
-				Mô tả
-			</th>
-			<th>
 				Slug
 			</th>
 			<th></th>
@@ -133,9 +130,6 @@
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => item.Installment)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Description)
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => item.Slug)
@@ -179,6 +173,11 @@
 			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
 				<a asp-controller="Product" asp-action="UpdateOldPrice" asp-route-id="@item.Id">
 				 <i class="anticon anticon-dollar"></i>
+				</a>
+			   </button>
+			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+				<a asp-controller="Product" asp-action="UpdateOldPrice" asp-route-id="@item.Id">
+				 <i class="anticon anticon-paper-clip"></i>
 				</a>
 			   </button>
 			</td>

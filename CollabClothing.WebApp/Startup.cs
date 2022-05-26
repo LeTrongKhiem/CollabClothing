@@ -55,6 +55,7 @@ namespace CollabClothing.WebApp
 
             services.AddTransient<IBannerApiClient, BannerApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
+            services.AddTransient<ICategoryApiClient, CategoryApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -69,7 +69,7 @@ namespace CollabClothing.Application.Catalog.Categories
         public async Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request)
         {
 
-            var query = from cate in _context.Categories select new { cate };
+            var query = from cate in _context.Categories orderby cate.Level select new { cate };
             var query2 = _context.Categories.Where(x => x.ParentId == x.Id).Select(o => o.NameCategory).ToString();
             if (!string.IsNullOrEmpty(request.Keyword))
             {
@@ -87,7 +87,7 @@ namespace CollabClothing.Application.Catalog.Categories
                              Level = x.cate.Level,
                              ParentId = x.cate.ParentId,
                              Slug = x.cate.Slug,
-                             ParentName = query2
+                             //ParentName = query2
                          }).ToListAsync();
 
             var pageResult = new PageResult<CategoryViewModel>()
@@ -200,8 +200,20 @@ namespace CollabClothing.Application.Catalog.Categories
             return await query.Select(x => new CategoryViewModel()
             {
                 CategoryId = x.c.Id,
-                CategoryName = x.c.NameCategory
+                CategoryName = x.c.NameCategory,
+                ParentId = x.c.ParentId
             }).ToListAsync();
+        }
+
+        public async Task<List<CategoryViewModel>> GetParentCate()
+        {
+            var query = from c in _context.Categories where c.ParentId.Equals("null") select new { c };
+            return await query.Select(x => new CategoryViewModel()
+            {
+                CategoryId = x.c.Id,
+                CategoryName = x.c.NameCategory,
+            })
+                .ToListAsync();
         }
     }
 }

@@ -16,5 +16,6 @@ namespace CollabClothing.Application.Catalog.Categories
         Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request); //paing
         Task<CategoryViewModel> GetCateById(string Id);
         Task<List<CategoryViewModel>> GetAll();
+        Task<List<CategoryViewModel>> GetParentCate();
     }
 }
