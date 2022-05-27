@@ -1,0 +1,42 @@
+﻿@using CollabClothing.ViewModels.Catalog.Categories
+@using Microsoft.Extensions.Configuration
+@model List<CategoryViewModel>
+@inject IConfiguration Configuration;
+<div class="header__navbar">
+	<ul class="header__navbar-list">
+		@{
+			var parents = Model.Where(x => x.ParentId.Equals("null"));
+		}
+		@for (int i = 0; i < parents.Count(); i++)
+		{
+			var parent = parents.ElementAt(i);
+			var child = Model.Where(x => x.ParentId.Equals(parent.CategoryId));
+
+	  <li class="header__navbar-item active">
+	   <a href="" class="header__navbar-link">@parent.CategoryName</a>
+				@if (child.Any())
+				{
+		   <div class="header-sub">
+			<div class="header-sub-menu">
+							@foreach (var item in child)
+							{
+
+				 <a href="/danh-muc/@item.CategoryId" class="header-sub-item">
+				  <div class="header-sub-img-menu">
+				   <img class="img-menu__thumb ls-is-cached lazyloaded"
+								 src="@Configuration["BaseAddress"]@item.Icon"
+								 alt="Áo thun" width="70" height="70">
+				   <span>@item.CategoryName</span>
+				  </div>
+				 </a>
+
+							}
+			</div>
+		   </div>
+
+				}
+	  </li>
+		}
+
+ </ul>
+</div>

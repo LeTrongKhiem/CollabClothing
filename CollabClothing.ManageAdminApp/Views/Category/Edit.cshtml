@@ -1,13 +1,11 @@
 ﻿@model CollabClothing.ViewModels.Catalog.Categories.CategoryEditRequest
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Sửa danh mục";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>CategoryEditRequest</h4>
+<h4>Sửa danh mục</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,9 +17,14 @@
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ParentId" class="control-label"></label>
+                @*<label asp-for="ParentId" class="control-label"></label>
                 <input asp-for="ParentId" class="form-control" />
-                <span asp-validation-for="ParentId" class="text-danger"></span>
+                <span asp-validation-for="ParentId" class="text-danger"></span>*@
+                <label asp-for="ParentId" class="font-weight-semibold"></label>
+			    <select asp-for="ParentId" class="custom-select" style="min-width:200px;" asp-items="ViewBag.Categories">
+			    <option value="" disabled selected>Chọn danh mục</option>
+                <option value="null" selected>Danh mục cha</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Level" class="control-label"></label>

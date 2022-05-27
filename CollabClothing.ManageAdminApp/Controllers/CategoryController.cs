@@ -1,6 +1,7 @@
 ﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Catalog.Categories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             };
             var data = await _categoryApiClient.GetAllPaging(request);
             ViewBag.Keyword = keyword;
+
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
@@ -36,8 +38,15 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(data.ResultObject);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var categories = await _categoryApiClient.GetParentCate();
+            ViewBag.Categories = categories.Select(x => new SelectListItem()
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId,
+                Selected = x.CategoryId != null
+            });
             return View();
         }
         [HttpPost]
@@ -87,6 +96,13 @@ namespace CollabClothing.ManageAdminApp.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var cate = _categoryApiClient.GetById(id);
+            var categories = await _categoryApiClient.GetParentCate();
+            ViewBag.Categories = categories.Select(x => new SelectListItem()
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId,
+                Selected = x.CategoryId != null
+            });
             if (cate != null)
             {
                 var cateResult = cate.Result;
