@@ -23,14 +23,7 @@ namespace CollabClothing.Application.Catalog.Promotions
         }
         public Task<string> Create(PromotionCreateRequest request)
         {
-            Guid g = Guid.NewGuid();
-            var promotion = new PromotionDetail()
-            {
-                Id = g.ToString(),
-                OnlinePromotion = request.OnlinePromotion,
-                Info = request.Info,
-                More = request.More
-            };
+            throw new NotImplementedException();
         }
 
         public Task<bool> Delete(string id)
