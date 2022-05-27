@@ -1,5 +1,6 @@
 ﻿using CollabClothing.Application.Common;
 using CollabClothing.Data.EF;
+using CollabClothing.Data.Entities;
 using CollabClothing.ViewModels.Catalog.Promotions;
 using CollabClothing.ViewModels.Common;
 using System;
@@ -22,25 +23,14 @@ namespace CollabClothing.Application.Catalog.Promotions
         }
         public Task<string> Create(PromotionCreateRequest request)
         {
-            //Guid g = Guid.NewGuid();
-            //var bannerDTO = new BannerDTO()
-            //{
-            //    Id = g.ToString(),
-            //    Alt = request.Alt,
-            //    NameBanner = request.NameBanner,
-            //    Text = request.Text,
-            //    TypeBannerId = request.TypeBannerId,
-            //};
-            //if (request.Images != null)
-            //{
-            //    bannerDTO.Images = await _storageService.SaveFile(request.Images, CHILD_PATH_FILE_NAME);
-            //}
-            //Banner banner = new Banner();
-            //banner.BannerMapping(bannerDTO);
-            //_context.Banners.Add(banner);
-            //await _context.SaveChangesAsync();
-            //return bannerDTO.Id;
-            throw new NotImplementedException();
+            Guid g = Guid.NewGuid();
+            var promotion = new PromotionDetail()
+            {
+                Id = g.ToString(),
+                OnlinePromotion = request.OnlinePromotion,
+                Info = request.Info,
+                More = request.More
+            };
         }
 
         public Task<bool> Delete(string id)

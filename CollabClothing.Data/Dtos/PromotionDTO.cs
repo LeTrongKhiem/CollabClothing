@@ -8,6 +8,8 @@ namespace CollabClothing.Data.Dtos
 {
     public class PromotionDTO
     {
-        
+        public string Id { get; set; }
+        public string NamePromotion { get; set; }
+        public string ProductId { get; set; }
     }
 }
