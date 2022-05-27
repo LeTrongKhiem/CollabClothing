@@ -155,5 +155,10 @@ namespace CollabClothing.ApiShared
             var result = await response.Content.ReadAsStringAsync();
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<List<ProductViewModel>> GetAll()
+        {
+            return await GetListAsync<ProductViewModel>($"/api/products/");
+        }
     }
 }

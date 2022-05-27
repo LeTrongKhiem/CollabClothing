@@ -201,7 +201,8 @@ namespace CollabClothing.Application.Catalog.Categories
             {
                 CategoryId = x.c.Id,
                 CategoryName = x.c.NameCategory,
-                ParentId = x.c.ParentId
+                ParentId = x.c.ParentId,
+                Icon = x.c.Icon
             }).ToListAsync();
         }
 

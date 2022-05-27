@@ -13,5 +13,6 @@ namespace CollabClothing.ViewModels.Catalog.Brands
         public string Info { get; set; }
         public IFormFile Images { get; set; }
         public string Slug { get; set; }
+        public string ImagesPath { get; set; }
     }
 }

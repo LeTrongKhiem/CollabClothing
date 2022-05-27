@@ -51,9 +51,22 @@
                 @Html.DisplayFor(modelItem => item.Slug)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+              <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                <a asp-controller="Brand" asp-action="Details" asp-route-id="@item.Id">
+                 <i class="anticon anticon-eye"></i>
+                </a>
+               </button>
+               <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                <a asp-controller="Brand" asp-action="Edit" asp-route-id="@item.Id">
+                 <i class="anticon anticon-edit"></i>
+                </a>
+
+               </button>
+               <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                <a asp-controller="Brand" asp-action="Delete" asp-route-id="@item.Id">
+                 <i class="anticon anticon-delete"></i>
+                </a>
+               </button>
             </td>
         </tr>
 }
