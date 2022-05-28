@@ -9,6 +9,7 @@ namespace CollabClothing.ViewModels.Catalog.ProductImages
         public string Path { get; set; }
         public string Alt { get; set; }
         public IFormFile ImageFile { get; set; }
+        public bool IsThumbnail { get; set; }
 
     }
 }

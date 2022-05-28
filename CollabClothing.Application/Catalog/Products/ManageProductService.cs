@@ -376,20 +376,24 @@ namespace CollabClothing.Application.Catalog.Products
         }
         public async Task<string> AddImages(string productId, ProductImageCreateRequest request)
         {
-            var productImage = new ProductImage()
+            foreach (var item in request.File)
             {
-                Id = request.Id,
-                ProductId = productId,
-                Alt = request.Alt
-            };
-            if (request.File != null)
-            {
-                productImage.Path = await this.SaveFile(request.File);
-            }
-            _context.ProductImages.Add(productImage);
-            await _context.SaveChangesAsync();
-            return productImage.Id;
+                var productImage = new ProductImage()
+                {
+                    Id = request.Id,
+                    ProductId = productId,
+                    Alt = request.Alt,
+                    IsThumbnail = request.IsThumbnail
+                };
+                if (request.File != null)
+                {
+                    productImage.Path = await this.SaveFile(item);
+                }
+                _context.ProductImages.Add(productImage);
 
+            }
+            await _context.SaveChangesAsync();
+            return productId;
         }
 
         //method remove file
@@ -441,6 +445,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Id = productImage.Id,
                 Alt = productImage.Alt,
                 Path = productImage.Path,
+                IsThumbnail = productImage.IsThumbnail
             };
             return viewModel;
         }

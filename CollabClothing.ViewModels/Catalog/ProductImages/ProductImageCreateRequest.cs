@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace CollabClothing.ViewModels.Catalog.ProductImages
 {
@@ -9,7 +10,8 @@ namespace CollabClothing.ViewModels.Catalog.ProductImages
         // public string Product { get; set; }
         // public string Path { get; set; }
         public string Alt { get; set; }
-        public IFormFile File { get; set; }
+        public List<IFormFile> File { get; set; }
+        public bool IsThumbnail { get; set; }
 
     }
 }
