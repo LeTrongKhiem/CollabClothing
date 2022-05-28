@@ -1,0 +1,41 @@
+﻿@model CollabClothing.ViewModels.Catalog.ProductImages.ProductImageEditRequest
+
+@{
+    ViewData["Title"] = "UpdateProductImages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>UpdateProductImages</h1>
+
+<h4>ProductImageEditRequest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateProductImages">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Alt" class="control-label"></label>
+                <input asp-for="Alt" class="form-control" />
+                <span asp-validation-for="Alt" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsThumbnail" /> @Html.DisplayNameFor(model => model.IsThumbnail)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" type="file" multiple/>
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

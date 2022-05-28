@@ -63,6 +63,10 @@ namespace CollabClothing.BackendApi.Controllers
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById(string productId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var product = await _manageProductService.GetProductById(productId);
             if (product == null)
             {
@@ -226,6 +230,34 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest();
             }
             return Ok();
+        }
+        [HttpGet("images/{productId}")]
+        public async Task<IActionResult> GetListImagesByProductId(string productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.GetListImage(productId);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
+        [HttpGet("images/product/{productImagesId}")]
+        public async Task<IActionResult> GetListImagesByProductImagesId(string productImagesId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.GetProductImageById(productImagesId);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
     }
 }

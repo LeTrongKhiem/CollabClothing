@@ -1,4 +1,5 @@
 ﻿using CollabClothing.ApiShared;
+using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -270,6 +271,109 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return RedirectToAction("Index");
             }
             return View(result);
+        }
+        #endregion
+        #region GetListImages
+        [HttpGet]
+        public async Task<IActionResult> GetListImages(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.GetAllImages(id);
+            return View(result);
+        }
+        #endregion
+        #region AddImages
+        [HttpGet]
+        public IActionResult CreateImages()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateImages(string productId, [FromForm] ProductImageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.CreateProductImages(productId, request);
+            if (result)
+            {
+                TempData["result"] = "Thêm hình ảnh thành công";
+                return RedirectToAction("GetListImages");
+            }
+            ModelState.AddModelError("", "Thêm hình ảnh thất bại");
+            return View(request);
+        }
+        #endregion
+        #region UpdateProductImages
+        [HttpGet]
+        public async Task<IActionResult> UpdateProductImages(string id)
+        {
+            var productImages = await _productApiClient.GetProductImagesById(id);
+            if (productImages != null)
+            {
+                var productResult = productImages;
+                var editProductImages = new ProductImageEditRequest()
+                {
+                    Alt = productResult.Alt,
+                    File = productResult.ImageFile,
+                    IsThumbnail = productResult.IsThumbnail
+                };
+                return View(editProductImages);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        [Consumes("mutilpart/form-data")]
+        public async Task<IActionResult> UpdateProductImages(string id, [FromForm] ProductImageEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.UpdateProductImages(id, request);
+            if (result)
+            {
+                TempData["result"] = "Sửa hình ảnh thành công";
+                return RedirectToAction("GetListImages");
+            }
+            ModelState.AddModelError("", "Sửa hình ảnh thất bại");
+            return View(request);
+        }
+        #endregion
+        #region DeleteProductImages
+        [HttpGet]
+        public IActionResult DeleteProductImages(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var product = new ProductImagesDeleteRequest()
+            {
+                Id = id
+            };
+            return View(product);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteProductImages(ProductImagesDeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.DeleteProductImages(request.Id);
+            if (result)
+            {
+                TempData["result"] = "Xóa hình ảnh thành công";
+                return RedirectToAction("GetListImages");
+            }
+            ModelState.AddModelError("", "Xóa hình ảnh thất bại");
+            return View(request);
         }
         #endregion
     }

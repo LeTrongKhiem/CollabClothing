@@ -22,7 +22,10 @@ namespace CollabClothing.Application.Catalog.Products
         Task<bool> UpdateSaleOff(string productId, int newSaleOff);
         Task<List<ProductViewModel>> GetFeaturedProducts(int take);
         Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request);
+
+
         // method productimage
+
         Task<string> AddImages(string productId, ProductImageCreateRequest request);
         Task<int> UpdateImage(string imageId, ProductImageEditRequest request);
         Task<int> RemoveImage(string imageId);
