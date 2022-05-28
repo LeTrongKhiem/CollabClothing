@@ -83,25 +83,30 @@ namespace CollabClothing.Application.Catalog.Products
                 ProductId = product.Id,
                 CategoryId = request.CategoryId
             };
-            Guid g2 = Guid.NewGuid();
-            var Thumbnail = new ProductImage()
+            foreach (var item in request.ThumbnailImage)
             {
-                Id = g2.ToString(),
-                ProductId = product.Id,
-                Alt = product.ProductName
+                Guid g2 = Guid.NewGuid();
+                var Thumbnail = new ProductImage()
+                {
+                    Id = g2.ToString(),
+                    ProductId = product.Id,
+                    Alt = product.ProductName
 
-            };
-            if (request.ThumbnailImage != null)
-            {
-                Thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
+                };
+                if (request.ThumbnailImage != null)
+                {
+                    Thumbnail.Path = await this.SaveFile(item);
+                }
+                else
+                {
+                    Thumbnail.Path = "no-image";
+                }
+                _context.ProductImages.Add(Thumbnail);
             }
-            else
-            {
-                Thumbnail.Path = "no-image";
-            }
+
             _context.Products.Add(product);
             _context.ProductMapCategories.Add(ProductMapCategory);
-            _context.ProductImages.Add(Thumbnail);
+
             await _context.SaveChangesAsync();
             return product.Id;
         }
@@ -442,6 +447,7 @@ namespace CollabClothing.Application.Catalog.Products
 
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
+
             var query = (from p in _context.Products
                              //join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
                              //into ppmc
@@ -476,6 +482,7 @@ namespace CollabClothing.Application.Catalog.Products
             .ToListAsync();
             //data.GroupBy(x => x.Id)
             //    .Select(o => o.First()).Distinct();
+            //var dataDistinct = new HashSet<ProductViewModel>(data).ToList();
             return data;
         }
 
