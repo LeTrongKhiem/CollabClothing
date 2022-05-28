@@ -482,8 +482,8 @@ namespace CollabClothing.Application.Catalog.Products
             .ToListAsync();
             //data.GroupBy(x => x.Id)
             //    .Select(o => o.First()).Distinct();
-            var dataDistinct = new HashSet<ProductViewModel>(data).ToList();
-            return dataDistinct;
+            //var dataDistinct = new HashSet<ProductViewModel>(data).ToList();
+            return data;
         }
 
         public async Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request)
