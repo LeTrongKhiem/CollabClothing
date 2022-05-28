@@ -63,6 +63,10 @@ namespace CollabClothing.BackendApi.Controllers
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById(string productId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var product = await _manageProductService.GetProductById(productId);
             if (product == null)
             {

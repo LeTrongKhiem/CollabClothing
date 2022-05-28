@@ -21,6 +21,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public string Details { get; set; }
         // public string CategoryName { get; set; }
         public string ThumbnailImage { get; set; }
+        public List<string> ListImages { get; set; }
         public List<string> Categories { get; set; } = new List<string>();
         public string CategoryName { get; set; }
         public string BrandName { get; set; }
