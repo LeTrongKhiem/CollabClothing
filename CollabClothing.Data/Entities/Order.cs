@@ -18,9 +18,9 @@ namespace CollabClothing.Data.Entities
         public string ShipAddress { get; set; }
         public string ShipEmail { get; set; }
         public string ShipPhoneNumber { get; set; }
-        public AppUser AppUser { get; set; }
         public Guid UserId { get; set; }
 
+        public virtual AspNetUser User { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

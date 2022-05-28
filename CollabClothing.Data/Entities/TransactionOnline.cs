@@ -14,9 +14,10 @@ namespace CollabClothing.Data.Entities
         public decimal Fee { get; set; }
         public string Result { get; set; }
         public string Message { get; set; }
-        public Status TansactionStatus { get; set; }
+        public int TansactionStatus { get; set; }
         public string Provider { get; set; }
         public Guid UserId { get; set; }
-        public AppUser AppUser { get; set; }
+
+        public virtual AspNetUser User { get; set; }
     }
 }

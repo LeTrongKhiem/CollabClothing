@@ -11,11 +11,9 @@ namespace CollabClothing.Data.Entities
         public string ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
+        public Guid UserId { get; set; }
 
         public virtual Product Product { get; set; }
-
-        public AppUser AppUser { get; set; }
-
-        public Guid UserId { get; set; }
+        public virtual AspNetUser User { get; set; }
     }
 }

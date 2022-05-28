@@ -1,34 +1,31 @@
-﻿
-using CollabClothing.Data.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata;
+using CollabClothing.Data.Entities;
+
+#nullable disable
 
 namespace CollabClothing.Data.EF
 {
-    public partial class CollabClothingDBContext : IdentityDbContext<AppUser, AppRole, Guid>
+    public partial class CollabClothingDBContext : DbContext
     {
         public CollabClothingDBContext()
         {
         }
 
-        public CollabClothingDBContext(DbContextOptions options) : base(options)
-        {
-        }
-        public CollabClothingDBContext(DbContextOptions<DbContext> options) : base(options)
+        public CollabClothingDBContext(DbContextOptions<CollabClothingDBContext> options)
+            : base(options)
         {
         }
 
-
-        public virtual DbSet<Entities.Action> Actions { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
+        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
-        public virtual DbSet<AppUser> AppUsers { get; set; }
-        public virtual DbSet<AppRole> AppRoles { get; set; }
         public virtual DbSet<BannerType> BannerTypes { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
@@ -48,6 +45,7 @@ namespace CollabClothing.Data.EF
         public virtual DbSet<SizeMapColor> SizeMapColors { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<TransactionOnline> TransactionOnlines { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -59,37 +57,110 @@ namespace CollabClothing.Data.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-            modelBuilder.HasAnnotation("Relational:Collation", "Vietnamese_100_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<AppRole>(entity =>
+            modelBuilder.Entity<AspNetRole>(entity =>
             {
-                entity.ToTable("AppRoles");
-                entity.Property(x => x.Description).HasMaxLength(200).IsRequired();
-            });
-            modelBuilder.Entity<AppUser>(entity =>
-            {
-                entity.ToTable("AppUSers");
-                entity.Property(x => x.FirstName).HasMaxLength(200).IsRequired();
-                entity.Property(x => x.LastName).HasMaxLength(200).IsRequired();
-                entity.Property(x => x.Dob).IsRequired();
-            });
-            modelBuilder.Entity<Entities.Action>(entity =>
-            {
-                entity.Property(e => e.Id)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedName] IS NOT NULL)");
 
-                entity.Property(e => e.NameAction)
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Name).HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedName).HasMaxLength(256);
             });
 
+            modelBuilder.Entity<AspNetRoleClaim>(entity =>
+            {
+                entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetRoleClaims)
+                    .HasForeignKey(d => d.RoleId);
+            });
+
+            modelBuilder.Entity<AspNetUser>(entity =>
+            {
+                entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
+
+                entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Email).HasMaxLength(256);
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+
+                entity.Property(e => e.UserName).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<AspNetUserClaim>(entity =>
+            {
+                entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserClaims)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserLogin>(entity =>
+            {
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
+
+                entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserLogins)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserRole>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.RoleId });
+
+                entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.RoleId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserToken>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
+            });
 
             modelBuilder.Entity<Banner>(entity =>
             {
                 entity.ToTable("Banner");
+
+                entity.HasIndex(e => e.TypeBannerId, "IX_Banner_TypeBannerId");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
@@ -108,12 +179,12 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBanner)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.Text)
                     .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .HasColumnType("text")
+                    .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.TypeBannerId)
                     .IsRequired()
@@ -138,7 +209,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBannerType)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<Brand>(entity =>
@@ -174,6 +245,10 @@ namespace CollabClothing.Data.EF
             {
                 entity.ToTable("Cart");
 
+                entity.HasIndex(e => e.ProductId, "IX_Cart_ProductId");
+
+                entity.HasIndex(e => e.UserId, "IX_Cart_UserId");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -190,7 +265,10 @@ namespace CollabClothing.Data.EF
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_product_cart");
-                entity.HasOne(x => x.AppUser).WithMany(x => x.Carts).HasForeignKey(x => x.UserId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -209,7 +287,6 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameCategory)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(true)
                     .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ParentId)
@@ -240,6 +317,8 @@ namespace CollabClothing.Data.EF
             modelBuilder.Entity<Contact>(entity =>
             {
                 entity.ToTable("Contact");
+
+                entity.HasIndex(e => e.TopicId, "IX_Contact_TopicId");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
@@ -283,6 +362,8 @@ namespace CollabClothing.Data.EF
 
             modelBuilder.Entity<Order>(entity =>
             {
+                entity.HasIndex(e => e.UserId, "IX_Orders_UserId");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -308,11 +389,16 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
-                entity.HasOne(x => x.AppUser).WithMany(x => x.Order).HasForeignKey(x => x.UserId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
+                entity.HasIndex(e => e.OrderId, "IX_OrderDetails_OrderId");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -340,6 +426,8 @@ namespace CollabClothing.Data.EF
             {
                 entity.ToTable("Product");
 
+                entity.HasIndex(e => e.BrandId, "IX_Product_BrandId");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -349,7 +437,13 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Description).HasColumnType("text").UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.Description)
+                    .HasColumnType("text")
+                    .UseCollation("Vietnamese_100_CI_AS");
+
+                entity.Property(e => e.Details)
+                    .HasColumnType("text")
+                    .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.PriceCurrent).HasColumnType("decimal(18, 0)");
 
@@ -358,10 +452,8 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
-                entity.Property(e => e.Details)
-                    .HasColumnType("text")
                     .UseCollation("Vietnamese_100_CI_AS");
+
                 entity.Property(e => e.Slug)
                     .IsRequired()
                     .HasColumnType("text");
@@ -376,6 +468,8 @@ namespace CollabClothing.Data.EF
             modelBuilder.Entity<ProductDetail>(entity =>
             {
                 entity.ToTable("ProductDetail");
+
+                entity.HasIndex(e => e.ProductId, "IX_ProductDetail_ProductId");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
@@ -399,13 +493,15 @@ namespace CollabClothing.Data.EF
             {
                 entity.ToTable("ProductImage");
 
+                entity.HasIndex(e => e.ProductId, "IX_ProductImage_ProductId");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Alt)
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.Path)
                     .HasMaxLength(255)
@@ -429,6 +525,8 @@ namespace CollabClothing.Data.EF
                     .HasName("PK__ProductM__159C556D63F46B0A");
 
                 entity.ToTable("ProductMapCategory");
+
+                entity.HasIndex(e => e.CategoryId, "IX_ProductMapCategory_CategoryId");
 
                 entity.Property(e => e.ProductId)
                     .HasMaxLength(255)
@@ -458,6 +556,8 @@ namespace CollabClothing.Data.EF
 
                 entity.ToTable("ProductMapSize");
 
+                entity.HasIndex(e => e.SizeId, "IX_ProductMapSize_SizeId");
+
                 entity.Property(e => e.ProductId)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -483,6 +583,8 @@ namespace CollabClothing.Data.EF
             {
                 entity.ToTable("Promotion");
 
+                entity.HasIndex(e => e.ProductId, "IX_Promotion_ProductId");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -490,7 +592,8 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NamePromotion)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ProductId)
                     .IsRequired()
@@ -507,6 +610,8 @@ namespace CollabClothing.Data.EF
             modelBuilder.Entity<PromotionDetail>(entity =>
             {
                 entity.ToTable("PromotionDetail");
+
+                entity.HasIndex(e => e.PromotionId, "IX_PromotionDetail_PromotionId");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
@@ -548,6 +653,10 @@ namespace CollabClothing.Data.EF
 
                 entity.ToTable("SizeMapColor");
 
+                entity.HasIndex(e => e.ColorId, "IX_SizeMapColor_ColorId");
+
+                entity.HasIndex(e => e.Sizeid, "IX_SizeMapColor_Sizeid");
+
                 entity.Property(e => e.ColorId)
                     .IsRequired()
                     .HasMaxLength(255)
@@ -584,23 +693,23 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(255)
                     .IsUnicode(false);
             });
+
             modelBuilder.Entity<TransactionOnline>(entity =>
             {
-                entity.ToTable("TransactionOnlines");
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.Id).UseIdentityColumn();
-                entity.HasOne(x => x.AppUser).WithMany(x => x.Transactions).HasForeignKey(x => x.UserId);
-            });
-            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
-            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
-            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogin").HasKey(x => x.UserId);
+                entity.HasIndex(e => e.UserId, "IX_TransactionOnlines_UserId");
 
-            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
-            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
-            base.OnModelCreating(modelBuilder);
-            //modelBuilder.Seed();
-            //OnModelCreatingPartial(modelBuilder);
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Fee).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.TransactionOnlines)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
