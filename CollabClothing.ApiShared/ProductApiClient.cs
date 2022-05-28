@@ -40,12 +40,16 @@ namespace CollabClothing.ApiShared
             if (request.ThumbnailImage != null)
             {
                 byte[] data;
-                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
+                foreach (var item in request.ThumbnailImage)
                 {
-                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
+                    using (var br = new BinaryReader(item.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)item.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, "thumbnailImage", item.FileName);
                 }
-                ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
+
             }
             requestContent.Add(new StringContent(request.ProductName), "productName");
             requestContent.Add(new StringContent(request.PriceCurrent.ToString()), "priceCurrent");
