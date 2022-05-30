@@ -221,7 +221,7 @@ namespace CollabClothing.ApiShared
                     data = br.ReadBytes((int)request.File.OpenReadStream().Length);
                 }
                 ByteArrayContent byteArrayContent = new ByteArrayContent(data);
-                requestContent.Add(byteArrayContent, "thumbnailImage", request.File.FileName);
+                requestContent.Add(byteArrayContent, "file", request.File.FileName);
 
             }
             requestContent.Add(new StringContent(request.Alt), "alt");

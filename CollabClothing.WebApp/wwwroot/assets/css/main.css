@@ -168,6 +168,8 @@
     max-width: 1200px;
     margin: auto;
     text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .header-sub-item {
@@ -176,6 +178,7 @@
     margin-right: 20px;
     margin-bottom: 20px;
     text-decoration: none;
+    width: 8%;
 }
 
 .header-sub-img-menu {
@@ -206,7 +209,7 @@
 }
 
 .header-sub-img-menu {
-    width: 100%;
+    width: 106%;
     height: auto;
 }
 
