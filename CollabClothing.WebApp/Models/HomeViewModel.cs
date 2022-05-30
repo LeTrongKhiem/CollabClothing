@@ -1,4 +1,5 @@
 ﻿using CollabClothing.ViewModels.Catalog.Banners;
+using CollabClothing.ViewModels.Catalog.Categories;
 using CollabClothing.ViewModels.Catalog.Products;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,10 @@ namespace CollabClothing.WebApp.Models
     {
         public List<BannerViewModel> ListBanner { get; set; }
         public List<ProductViewModel> ListProductFeatured { get; set; }
+        public List<ProductViewModel> ListProductFeaturedByMen { get; set; }
+        public List<ProductViewModel> ListProductFeaturedByWoman { get; set; }
+        public List<ProductViewModel> ListProductFeaturedByChild { get; set; }
+        public List<CategoryViewModel> ListCate { get; set; }
         public string ParseToVND(decimal price)
         {
             string a = string.Format("{ 0:0,0 vnđ}", price);

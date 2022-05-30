@@ -133,6 +133,11 @@ namespace CollabClothing.ApiShared
             return await GetListAsync<ProductViewModel>($"/api/products/featured/{take}");
         }
 
+        public async Task<List<ProductViewModel>> GetFeaturedProductsByCategory(string id, int take)
+        {
+            return await GetListAsync<ProductViewModel>($"/api/products/featured/{id}/{take}");
+        }
+
         public async Task<bool> UpdateCurrentPrice(string id, decimal newCurrentPrice)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
@@ -190,7 +195,7 @@ namespace CollabClothing.ApiShared
                         data = br.ReadBytes((int)item.OpenReadStream().Length);
                     }
                     ByteArrayContent bytes = new ByteArrayContent(data);
-                    requestContent.Add(bytes, "thumbnailImage", item.FileName);
+                    requestContent.Add(bytes, "file", item.FileName);
                 }
 
             }

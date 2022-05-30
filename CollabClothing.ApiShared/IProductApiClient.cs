@@ -18,6 +18,7 @@ namespace CollabClothing.ApiShared
         Task<ProductViewModel> GetById(string id);
         Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
         Task<List<ProductViewModel>> GetFeaturedProducts(int take);
+        Task<List<ProductViewModel>> GetFeaturedProductsByCategory(string id, int take);
         Task<bool> UpdateCurrentPrice(string id, decimal newCurrentPrice);
         Task<bool> UpdatePriceOld(string id, decimal newPriceOld);
         Task<List<ProductViewModel>> GetAll();

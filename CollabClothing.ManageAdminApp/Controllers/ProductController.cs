@@ -321,7 +321,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 {
                     Alt = productResult.Alt,
                     File = productResult.ImageFile,
-                    IsThumbnail = productResult.IsThumbnail
+                    IsThumbnail = productResult.IsThumbnail,
+                    Path = productResult.Path
                 };
                 return View(editProductImages);
             }
