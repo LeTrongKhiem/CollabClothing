@@ -67,7 +67,7 @@
 					{
 		 <div class="carousel-item @(i==0 ? "active":"")">
 		  <div class="row">
-								@foreach  (var item in featureProducts[i])
+								@foreach (var item in featureProducts[i])
 								{
 			   <div class="col-xs-6 col-sm-3">
 				<div class="tcb-product-item">
@@ -77,19 +77,19 @@
 				 <div class="tcb-product-info">
 				  <div class="tcb-product-title">
 				   <h4><a href="#">@item.ProductName </a></h4>
-				  
+
 				  </div>
 				  <div class="tcb-product-rating">
 				   <i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i>
 				   <a href="#">(4,585 ratings)</a>
 				  </div>
-				  @{
-									var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+												@{
+													var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-					}
+												}
 				  <div class="tcb-hline"></div>
 				  <div class="tcb-product-price">
-				   @String.Format(format, "{0:c0}", @item.PriceCurrent )
+													@String.Format(format, "{0:c0}", @item.PriceCurrent )
 				  </div>
 				 </div>
 				</div>
@@ -113,49 +113,7 @@
    </div>
   </div>
  </div>
- <div class="col l-12 m-12 c-12">
-  <div class="container-nav">
-   <h2 class="container-nav__heading">Nữ:</h2>
-   <ul class="container-nav__list">
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Áo thun</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Áo polo</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Áo khoác</a>
-	</li>
-	<li class="container-nav__item">
-		 <a href="#" class="container-nav__item-link">Áo kiểu</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Đồ công sở</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Đầm & Váy</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Quần dài</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Quần short</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Đồ lót</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Đồng hồ</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Mắt kính</a>
-	</li>
-	<li class="container-nav__item">
-	 <a href="#" class="container-nav__item-link">Trang sức</a>
-	</li>
-   </ul>
-  </div>
- </div>
+@await Component.InvokeAsync("CategoryChildMenu", "d93e95a9-38bd-4011-a457-29a763189a81")
 
  <div class="col l-12 m-12 c-12">
   <div class="container-filter">
@@ -197,13 +155,12 @@
   <div class="container-product">
    <div class="row no-gutters phone-products">
 	<!-- Thêm từng điện thoại vào -->
-				@foreach (var item in Model.ListProductFeatured)
+				@foreach (var item in Model.ListProductFeaturedByMen)
 				{
 		<div class="col l-2-4 l-3-m m-4 c-6">
 		 <div class="container-product__item">
 		  <div class="container-product__item-heading">
-		   <div class="container-product__item-img"
-								 @*style="background-image: url(.@Configuration["BaseAddress"]@item.ThumbnailImage);"*@>
+		   <div class="container-product__item-img">
 			<img src="@Configuration["BaseAddress"]@item.ThumbnailImage" />
 		   </div>
 
@@ -211,7 +168,7 @@
 			<a href='#' class="container-product__item-link">
 			 <div class="container-product-guarantee__heading">
 			  <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
-																						 alt="Guarantee"
+											 alt="Guarantee"
 											 class="container-product-guarantee__heading-img">
 			  <h3 class="container-product-guarantee__heading-text">
 			   CollabClothing
@@ -226,7 +183,7 @@
 			  <li class="container-product-guarantee__item">
 			   Cam kết hàng chính
 			   hãng
-						  </li>
+			  </li>
 			  <li class="container-product-guarantee__item">
 			   Tặng Voncher cho các
 			   lần mua sau
@@ -234,7 +191,7 @@
 			  <li class="container-product-guarantee__item">
 			   Hoàn tiền nếu phát
 			   hiện hàng giả
-						  </li>
+			  </li>
 			 </ul>
 			</a>
 			<a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
@@ -259,11 +216,11 @@
 			 <div class="cta-btn">
 			  <span class="old-price">@item.PriceOld</span>
 			  <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
-						 </div>
+			 </div>
 			</span>
 			<a href='#' class="container-product__item-btn">MUA</a>
 		   </div>
-				  </div>
+		  </div>
 		  <ul class="container-product__item-gifts-list">
 		   <li class="container-product__item-gift">
 			1. Cam kết:
@@ -280,14 +237,14 @@
 		   </li>
 		  </ul>
 		  <ul class="container-product-marker__list ${markers}">
-				   <li class="container-product-marker__item container-product-marker__item--new">
+		   <li class="container-product-marker__item container-product-marker__item--new">
 			Mới
 		   </li>
 		   <li class="container-product-marker__item container-product-marker__item--hot">
 			Hot
 		   </li>
 		  </ul>
-				 </div>
+		 </div>
 		</div>
 				}
 
@@ -317,11 +274,11 @@
 	 <div class="col l-6 m-6 c-0">
 	  <a href="#" class="banner__link">
 	   <img src="https://cdn.mobilecity.vn/mobilecity-vn/images/2020/08/airpod-2-2.jpg"
-																 alt="Banner 1" class="banner__img">
+								 alt="Banner 1" class="banner__img">
 	  </a>
 	 </div>
 	 <div class="col l-6 m-6 c-0">
-		  <a href="#" class="banner__link">
+	  <a href="#" class="banner__link">
 	   <img src="https://cdn.mobilecity.vn/mobilecity-vn/images/2019/11/untitled-1.jpg"
 								 alt="Banner 2" class="banner__img">
 	  </a>
@@ -329,58 +286,18 @@
 	</div>
    </div>
   </div>
-
-  <div class="col l-12 m-12 c-12">
-   <div class="container-nav">
-	<h2 class="container-nav__heading">Phụ kiện Nam:</h2>
-	<ul class="container-nav__list">
-	 <li class="container-nav__item">
-		  <a href="#" class="container-nav__item-link">Áo thun</a>
-	 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Áo polo</a>
-		 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Áo khoác</a>
-	 </li>
-		 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Áo sơ mi</a>
-	 </li>
-	 <li class="container-nav__item">
-		  <a href="#" class="container-nav__item-link">Đồ công sở</a>
-	 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Quần dài</a>
-		 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Quần short</a>
-	 </li>
-		 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Đồ lót</a>
-	 </li>
-	 <li class="container-nav__item">
-		  <a href="#" class="container-nav__item-link">Đồng hồ</a>
-	 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Mắt kính</a>
-		 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Trang sức</a>
-	 </li>
-	</ul>
-   </div>
-  </div>
+		@await Component.InvokeAsync("CategoryChildMenu", "82AAE383-3EDF-45F0-AA5B-9B4A514EA7A9")
 
   <div class="col l-12 m-12 c-12">
    <div class="container-filter">
 	<div class="container-filter__item">
 	 Giá từ cao đến thấp
 	 <i class="container-filter__icon-down fas fa-chevron-down"></i>
-		 <ul class="container-filter__list">
+	 <ul class="container-filter__list">
 	  <li class="container-filter__list-item">
 	   Giá từ cao đến thấp
 	  </li>
-		  <li class="container-filter__list-item">
+	  <li class="container-filter__list-item">
 	   Giá từ thấp đến cao
 	  </li>
 	 </ul>
@@ -400,7 +317,7 @@
 	   Khuyến mãi
 	  </li>
 	  <li class="container-filter__list-item">
-		   Hàng mới về
+	   Hàng mới về
 	  </li>
 	 </ul>
 	</div>
@@ -411,85 +328,98 @@
    <div class="container-product">
 	<div class="row no-gutters tool-products">
 	 <!-- Thêm phụ kiện -->
-	 <div class="col l-2-4 l-3-m m-4 c-6">
-	  <div class="container-product__item">
+					@foreach (var item in Model.ListProductFeaturedByWoman)
+					{
+		 <div class="col l-2-4 l-3-m m-4 c-6">
+		  <div class="container-product__item">
 		   <div class="container-product__item-heading">
-		<div class="container-product__item-img"
-									 style="background-image: url(./assets/img/611211883945921444708532552950181607768064o-2416.jpg);">
-		</div>
+			<div class="container-product__item-img">
+			 <img src="@Configuration["BaseAddress"]@item.ThumbnailImage" />
+			</div>
 
-		<div class="container-product-guarantee">
-		 <a href='#' class="container-product__item-link">
-		  <div class="container-product-guarantee__heading">
-		   <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
+			<div class="container-product-guarantee">
+			 <a href='#' class="container-product__item-link">
+			  <div class="container-product-guarantee__heading">
+			   <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
 												 alt="Guarantee"
 												 class="container-product-guarantee__heading-img">
-		   <h3 class="container-product-guarantee__heading-text">
-			CollabClothing
-		   </h3>
-		  </div>
+			   <h3 class="container-product-guarantee__heading-text">
+				CollabClothing
+			   </h3>
+			  </div>
 
-		  <ul class="container-product-guarantee__list">
-		   <li class="container-product-guarantee__item">
-			Hỗ trợ đổi trả trong
-			vòng 7 ngày
-		   </li>
-		   <li class="container-product-guarantee__item">
-			Cam kết hàng chính
-			hãng
-		   </li>
-		   <li class="container-product-guarantee__item">
-			Tặng Voncher cho các
-			lần mua sau
-		   </li>
-		   <li class="container-product-guarantee__item">
-			Hoàn tiền nếu phát
-			hiện hàng giả
-		   </li>
-		  </ul>
-		 </a>
-		 <a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
-		</div>
-	   </div>
-	   <div class="container-product__item-wrap">
-		<div class="container-product__item-info">
-		 <a href="#" class="container-product__item-name">
-		  Áo thun Champion Trắng
-		 </a>
-		 <i class="container-product__item-sale-icon fas fa-gift"></i>
-		</div>
-		<div class="container-product__item-buy">
-		 <span class="container-product__item-price">
-		  320.000 đ
-		 </span>
-		 <a href='#' class="container-product__item-btn">MUA</a>
-		</div>
-	   </div>
-	   <ul class="container-product__item-gifts-list">
-		<li class="container-product__item-gift">
-				 1. Cam kết:
-		 <span class="container-product__item-gift--highlight">
-		  Hàng chính hãng
-		 </span>
-		 khi mua BHV
-		</li>
-		<li class="container-product__item-gift">
-		 2. Voncher:
-				 <span class="container-product__item-gift--highlight">
-		  Lên tới 100k
-		 </span>
-		</li>
-	   </ul>
-	   <ul class="container-product-marker__list ${markers}">
-		<li class="container-product-marker__item container-product-marker__item--new">
-		 Mới
-		</li>
-		<li class="container-product-marker__item container-product-marker__item--hot">
-		 Hot
-		</li>
-	   </ul>
-	  </div>
-	 </div>
+			  <ul class="container-product-guarantee__list">
+			   <li class="container-product-guarantee__item">
+				Hỗ trợ đổi trả trong
+				vòng 7 ngày
+			   </li>
+			   <li class="container-product-guarantee__item">
+				Cam kết hàng chính
+				hãng
+			   </li>
+			   <li class="container-product-guarantee__item">
+				Tặng Voncher cho các
+				lần mua sau
+			   </li>
+			   <li class="container-product-guarantee__item">
+				Hoàn tiền nếu phát
+				hiện hàng giả
+			   </li>
+			  </ul>
+			 </a>
+			 <a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
+			</div>
+		   </div>
+		   <div class="container-product__item-wrap">
+			<div class="container-product__item-info">
+			 <a href="#" class="container-product__item-name">
+											@item.ProductName
+			 </a>
+			 <i class="container-product__item-sale-icon fas fa-gift"></i>
+			</div>
+									@{
+										// define format VND
+										var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+									}
+			<div class="container-product__item-buy">
+			 <span class="container-product__item-price">
+											@*@Model.ParseToVND(@item.PriceCurrent)*@
+
+			  <div class="cta-btn">
+			   <span class="old-price">@item.PriceOld</span>
+			   <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
+			  </div>
+			 </span>
+			 <a href='#' class="container-product__item-btn">MUA</a>
+			</div>
+		   </div>
+		   <ul class="container-product__item-gifts-list">
+			<li class="container-product__item-gift">
+			 1. Cam kết:
+			 <span class="container-product__item-gift--highlight">
+			  Hàng chính hãng
+			 </span>
+			 khi mua BHV
+			</li>
+			<li class="container-product__item-gift">
+			 2. Voncher:
+			 <span class="container-product__item-gift--highlight">
+			  Lên tới 100k
+			 </span>
+			</li>
+		   </ul>
+		   <ul class="container-product-marker__list ${markers}">
+			<li class="container-product-marker__item container-product-marker__item--new">
+			 Mới
+			</li>
+			<li class="container-product-marker__item container-product-marker__item--hot">
+			 Hot
+			</li>
+		   </ul>
+		  </div>
+		 </div>
+					}
 	</div>
    </div>
   </div>
@@ -522,31 +452,7 @@
    </div>
   </div>
 
-  <div class="col l-12 m-12 c-12">
-   <div class="container-nav">
-	<h2 class="container-nav__heading">Phụ kiện trẻ em:</h2>
-	<ul class="container-nav__list">
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Áo bé gái</a>
-	 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Quần bé gái</a>
-	 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Đầm bé gái</a>
-	 </li>
-		 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Áo bé trai</a>
-	 </li>
-	 <li class="container-nav__item">
-		  <a href="#" class="container-nav__item-link">Quần bé trai</a>
-	 </li>
-	 <li class="container-nav__item">
-	  <a href="#" class="container-nav__item-link">Đồng hồ</a>
-		 </li>
-	</ul>
-   </div>
-  </div>
+ @await Component.InvokeAsync("CategoryChildMenu", "29919101-ff6c-466f-907b-66a2f669be7f")
 
   <div class="col l-12 m-12 c-12">
    <div class="container-filter">
@@ -556,28 +462,28 @@
 	 <ul class="container-filter__list">
 	  <li class="container-filter__list-item">
 	   Giá từ cao đến thấp
-		  </li>
+	  </li>
 	  <li class="container-filter__list-item">
 	   Giá từ thấp đến cao
 	  </li>
-		 </ul>
+	 </ul>
 	</div>
 
 	<div class="container-filter__item">
 	 Bán chạy
-		 <i class="container-filter__icon-down fas fa-chevron-down"></i>
+	 <i class="container-filter__icon-down fas fa-chevron-down"></i>
 	 <ul class="container-filter__list">
 	  <li class="container-filter__list-item">
 	   Bán chạy
-		  </li>
+	  </li>
 	  <li class="container-filter__list-item">
 	   Phổ biến
 	  </li>
-		  <li class="container-filter__list-item">
+	  <li class="container-filter__list-item">
 	   Khuyến mãi
 	  </li>
 	  <li class="container-filter__list-item">
-		   Hàng mới về
+	   Hàng mới về
 	  </li>
 	 </ul>
 	</div>
@@ -588,92 +494,105 @@
    <div class="container-product">
 	<div class="row no-gutters fix-products">
 	 <!-- Thêm sản phẩm -->
-	 <div class="col l-2-4 l-3-m m-4 c-6">
-	  <div class="container-product__item">
+					@foreach (var item in Model.ListProductFeaturedByChild)
+					{
+		 <div class="col l-2-4 l-3-m m-4 c-6">
+		  <div class="container-product__item">
 		   <div class="container-product__item-heading">
-		<div class="container-product__item-img"
-									 style="background-image: url(./assets/img/611211883945921444708532552950181607768064o-2416.jpg);">
-		</div>
+			<div class="container-product__item-img">
+			 <img src="@Configuration["BaseAddress"]@item.ThumbnailImage" />
+			</div>
 
-		<div class="container-product-guarantee">
-		 <a href='#' class="container-product__item-link">
-		  <div class="container-product-guarantee__heading">
-		   <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
+			<div class="container-product-guarantee">
+			 <a href='#' class="container-product__item-link">
+			  <div class="container-product-guarantee__heading">
+			   <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
 												 alt="Guarantee"
 												 class="container-product-guarantee__heading-img">
-		   <h3 class="container-product-guarantee__heading-text">
-			CollabClothing
-		   </h3>
-		  </div>
+			   <h3 class="container-product-guarantee__heading-text">
+				CollabClothing
+			   </h3>
+			  </div>
 
-		  <ul class="container-product-guarantee__list">
-		   <li class="container-product-guarantee__item">
-			Hỗ trợ đổi trả trong
-			vòng 7 ngày
-		   </li>
-		   <li class="container-product-guarantee__item">
-			Cam kết hàng chính
-			hãng
-		   </li>
-		   <li class="container-product-guarantee__item">
-			Tặng Voncher cho các
-			lần mua sau
-		   </li>
-		   <li class="container-product-guarantee__item">
-			Hoàn tiền nếu phát
-			hiện hàng giả
-		   </li>
-		  </ul>
-				 </a>
-		 <a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
-		</div>
-	   </div>
+			  <ul class="container-product-guarantee__list">
+			   <li class="container-product-guarantee__item">
+				Hỗ trợ đổi trả trong
+				vòng 7 ngày
+			   </li>
+			   <li class="container-product-guarantee__item">
+				Cam kết hàng chính
+				hãng
+			   </li>
+			   <li class="container-product-guarantee__item">
+				Tặng Voncher cho các
+				lần mua sau
+			   </li>
+			   <li class="container-product-guarantee__item">
+				Hoàn tiền nếu phát
+				hiện hàng giả
+			   </li>
+			  </ul>
+			 </a>
+			 <a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
+			</div>
+		   </div>
 		   <div class="container-product__item-wrap">
-		<div class="container-product__item-info">
-		 <a href="#" class="container-product__item-name">
-		  Áo thun Champion Trắng
-		 </a>
-				 <i class="container-product__item-sale-icon fas fa-gift"></i>
-		</div>
-		<div class="container-product__item-buy">
-		 <span class="container-product__item-price">
-				  320.000 đ
-		 </span>
-		 <a href='#' class="container-product__item-btn">MUA</a>
-		</div>
-	   </div>
-	   <ul class="container-product__item-gifts-list">
-		<li class="container-product__item-gift">
-		 1. Cam kết:
-		 <span class="container-product__item-gift--highlight">
-				  Hàng chính hãng
-		 </span>
-		 khi mua BHV
-		</li>
-		<li class="container-product__item-gift">
-		 2. Voncher:
-		 <span class="container-product__item-gift--highlight">
-		  Lên tới 100k
-		 </span>
-		</li>
-	   </ul>
-	   <ul class="container-product-marker__list ${markers}">
-		<li class="container-product-marker__item container-product-marker__item--new">
-		 Mới
-		</li>
-		<li class="container-product-marker__item container-product-marker__item--hot">
-		 Hot
-		</li>
-	   </ul>
-	  </div>
-	 </div>
+			<div class="container-product__item-info">
+			 <a href="#" class="container-product__item-name">
+											@item.ProductName
+			 </a>
+			 <i class="container-product__item-sale-icon fas fa-gift"></i>
+			</div>
+									@{
+										// define format VND
+										var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+									}
+			<div class="container-product__item-buy">
+			 <span class="container-product__item-price">
+											@*@Model.ParseToVND(@item.PriceCurrent)*@
+
+			  <div class="cta-btn">
+			   <span class="old-price">@item.PriceOld</span>
+			   <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
+			  </div>
+			 </span>
+			 <a href='#' class="container-product__item-btn">MUA</a>
+			</div>
+		   </div>
+		   <ul class="container-product__item-gifts-list">
+			<li class="container-product__item-gift">
+			 1. Cam kết:
+			 <span class="container-product__item-gift--highlight">
+			  Hàng chính hãng
+			 </span>
+			 khi mua BHV
+			</li>
+			<li class="container-product__item-gift">
+			 2. Voncher:
+			 <span class="container-product__item-gift--highlight">
+			  Lên tới 100k
+			 </span>
+			</li>
+		   </ul>
+		   <ul class="container-product-marker__list ${markers}">
+			<li class="container-product-marker__item container-product-marker__item--new">
+			 Mới
+			</li>
+			<li class="container-product-marker__item container-product-marker__item--hot">
+			 Hot
+			</li>
+		   </ul>
+		  </div>
+		 </div>
+					}
 	</div>
    </div>
   </div>
 
   <div class="col l-12 m-12 c-12">
    <div class="container-view-more">
-	<a href="#" class="container-btn-extend">Xem thêm dịch vụ sửa chữa</a>
+	<a href="#" class="container-btn-extend">Xem thêm</a>
    </div>
   </div>
  </div>
@@ -685,18 +604,18 @@
 <script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.min.js"></script>
 @*<script>
 	$("#next").click(function () {
-				GetData();
-			});
+	GetData();
+	});
 
-			function GetData() {
+	function GetData() {
 
-				$.ajax({
-					type: "GET",
-					url: '@Url.Action("Index" ,"Home")',
-					dataType: "json",
-					success:
-					error: function () { alert('Niesukces'); },
-				});
-			}
-</script>*@
+	$.ajax({
+	type: "GET",
+	url: '@Url.Action("Index" ,"Home")',
+	dataType: "json",
+	success:
+	error: function () { alert('Niesukces'); },
+	});
+	}
+	</script>*@
 }

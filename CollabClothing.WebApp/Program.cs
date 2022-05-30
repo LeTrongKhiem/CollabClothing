@@ -20,6 +20,7 @@ namespace CollabClothing.WebApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    //webBuilder.UseUrls("https://localhost:5003/trang-chu");
                     webBuilder.UseStartup<Startup>();
                 });
     }

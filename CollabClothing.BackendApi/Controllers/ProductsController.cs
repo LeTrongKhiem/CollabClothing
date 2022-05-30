@@ -84,6 +84,18 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+
+        [HttpGet("featured/{id}/{take}")]
+        public async Task<IActionResult> GetFeaturedProductsCategory(string id, int take)
+        {
+            var product = await _manageProductService.GetFeaturedProductsCategory(id, take);
+            if (product == null)
+            {
+                return BadRequest("Cannot find products");
+            }
+            return Ok(product);
+        }
+
         [HttpGet("/category/{cateId}")]
         public async Task<IActionResult> GetProductByCategoryId(string cateId)
         {
@@ -188,6 +200,7 @@ namespace CollabClothing.BackendApi.Controllers
 
         //api image
         [HttpPost("{productId}/images")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddProductImage(string productId, [FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -218,6 +231,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //method update product image
         [HttpPut("images/{imageId}")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateProductImage(string imageId, [FromForm] ProductImageEditRequest request)
         {
             if (!ModelState.IsValid)
