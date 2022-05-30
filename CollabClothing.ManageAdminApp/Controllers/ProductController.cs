@@ -282,6 +282,17 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return View(ModelState);
             }
             var result = await _productApiClient.GetAllImages(id);
+
+
+            if (TempData["resultImages"] != null)
+            {
+                ViewBag.ResultImage = TempData["resultImages"];
+            }
+            else
+            {
+                TempData["idPrevious"] = id;
+                ViewData["IdPrevious"] = id;
+            }
             return View(result);
         }
         #endregion
@@ -289,21 +300,27 @@ namespace CollabClothing.ManageAdminApp.Controllers
         [HttpGet]
         public IActionResult CreateImages()
         {
+            //ViewBag.IdPrevious = TempData["idPrevious"];
+            ViewData["IdPrevious"] = TempData["idPrevious"];
             return View();
         }
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateImages(string productId, [FromForm] ProductImageCreateRequest request)
+        public async Task<IActionResult> CreateImages([FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
+            //ViewBag.IdPrevious = TempData["idPrevious"];
+            //string productId = ViewBag.IdPrevious;
+            var productId = TempData["idPrevious"].ToString();
             var result = await _productApiClient.CreateProductImages(productId, request);
             if (result)
             {
-                TempData["result"] = "Thêm hình ảnh thành công";
-                return RedirectToAction("GetListImages");
+                TempData["resultImages"] = "Tạo hình ảnh thành công";
+                //ViewBag.IdPrevious = TempData["idPrevious"];
+                return RedirectToAction("GetListImages", new { @id = productId });
             }
             ModelState.AddModelError("", "Thêm hình ảnh thất bại");
             return View(request);
@@ -319,17 +336,20 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 var productResult = productImages;
                 var editProductImages = new ProductImageEditRequest()
                 {
+                    Id = productResult.Id,
                     Alt = productResult.Alt,
                     File = productResult.ImageFile,
                     IsThumbnail = productResult.IsThumbnail,
                     Path = productResult.Path
                 };
+                //ViewBag.IdPrevious = TempData["idPrevious"];
+                ViewData["IdPrevious"] = TempData["idPrevious"];
                 return View(editProductImages);
             }
             return RedirectToAction("Error", "Home");
         }
         [HttpPost]
-        [Consumes("mutilpart/form-data")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateProductImages(string id, [FromForm] ProductImageEditRequest request)
         {
             if (!ModelState.IsValid)
@@ -339,8 +359,9 @@ namespace CollabClothing.ManageAdminApp.Controllers
             var result = await _productApiClient.UpdateProductImages(id, request);
             if (result)
             {
-                TempData["result"] = "Sửa hình ảnh thành công";
-                return RedirectToAction("GetListImages");
+                TempData["resultImages"] = "Sửa hình ảnh thành công";
+                ViewData["IdPrevious"] = TempData["idPrevious"];
+                return RedirectToAction("GetListImages", new { @id = ViewData["IdPrevious"] });
             }
             ModelState.AddModelError("", "Sửa hình ảnh thất bại");
             return View(request);
@@ -358,6 +379,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 Id = id
             };
+            ViewData["IdPrevious"] = TempData["idPrevious"];
             return View(product);
         }
         [HttpPost]
@@ -370,8 +392,9 @@ namespace CollabClothing.ManageAdminApp.Controllers
             var result = await _productApiClient.DeleteProductImages(request.Id);
             if (result)
             {
-                TempData["result"] = "Xóa hình ảnh thành công";
-                return RedirectToAction("GetListImages");
+                TempData["resultImages"] = "Xóa hình ảnh thành công";
+                ViewData["IdPrevious"] = TempData["idPrevious"];
+                return RedirectToAction("GetListImages", new { @id = ViewBag.IdPrevious });
             }
             ModelState.AddModelError("", "Xóa hình ảnh thất bại");
             return View(request);

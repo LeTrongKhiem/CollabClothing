@@ -50,6 +50,17 @@
 	</button>
    </div>
   </div>
+  <div class="row">
+   <div class="col-md-6"></div>
+   <div class="col-md-6">
+				@if (ViewBag.ResultImage != null)
+				{
+		<div class="alert alert-success" role="alert" id="msgAlert">
+						@ViewBag.ResultImage
+		</div>
+				}
+   </div>
+  </div>
 <table class="table">
  <thead>
   <tr>
@@ -98,3 +109,18 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+@section Scripts{
+<!-- page js -->
+<script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
+<script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+
+<script>
+	   $('#data-table').DataTable();
+	setTimeout(function() {
+	   $('#msgAlert').fadeOut('slow');
+	}, 2000);
+</script>
+@*<script src="~/AdminAssets/js/jquery.slim.min.js"></script>*@
+<script src="~/AdminAssets/js/popper.min.js"></script>
+<script src="~/AdminAssets/js/bootstrap.bundle.min.js"></script>
+}

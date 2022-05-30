@@ -22,6 +22,6 @@
     
     <form asp-action="DeleteProductImages">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="GetListImages">Back to List</a>
+        <a asp-action="GetListImages" asp-route-id="@ViewData["IdPrevious"]">Back to List</a>
     </form>
 </div>

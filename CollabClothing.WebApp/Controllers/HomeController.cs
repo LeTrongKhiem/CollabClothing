@@ -26,8 +26,8 @@ namespace CollabClothing.WebApp.Controllers
             _productApiClient = productApiClient;
             _httpContextAccessor = httpContextAccessor;
         }
-        [Route("/trang-chu")]
-        [Route("")]
+        [HttpGet("/trang-chu")]
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
 

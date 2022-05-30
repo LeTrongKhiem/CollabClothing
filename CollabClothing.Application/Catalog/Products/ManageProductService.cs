@@ -375,6 +375,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Id = i.Id,
                 Alt = i.Alt,
                 Path = i.Path,
+                IsThumbnail = i.IsThumbnail,
             }).ToListAsync();
             return listProductImages;
         }
@@ -431,6 +432,7 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 string fullPath = "wwwroot" + productImage.Path;
                 File.Delete(fullPath);
+                productImage.Id = productImage.Id;
                 productImage.Path = await this.SaveFile(request.File);
                 productImage.Alt = request.Alt != null ? request.Alt : productImage.Alt;
                 productImage.IsThumbnail = request.IsThumbnail;
@@ -439,6 +441,7 @@ namespace CollabClothing.Application.Catalog.Products
             }
             else
             {
+                productImage.Id = productImage.Id;
                 productImage.Path = productImage.Path;
                 productImage.Alt = request.Alt != null ? request.Alt : productImage.Alt;
                 productImage.IsThumbnail = request.IsThumbnail;
