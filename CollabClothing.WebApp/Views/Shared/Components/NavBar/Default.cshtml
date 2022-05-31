@@ -13,7 +13,7 @@
 			var child = Model.Where(x => x.ParentId.Equals(parent.CategoryId));
 
 	  <li class="header__navbar-item active">
-	   <a href="" class="header__navbar-link">@parent.CategoryName</a>
+	   <a href="/danh-muc/@parent.CategoryId" class="header__navbar-link">@parent.CategoryName</a>
 				@if (child.Any())
 				{
 		   <div class="header-sub">

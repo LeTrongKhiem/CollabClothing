@@ -216,5 +216,17 @@ namespace CollabClothing.Application.Catalog.Categories
             })
                 .ToListAsync();
         }
+
+        public async Task<List<CategoryViewModel>> GetCateChild(string parentId)
+        {
+            var query = from c in _context.Categories where c.ParentId.Equals(parentId) select new { c };
+            return await query.Select(x => new CategoryViewModel()
+            {
+                CategoryId = x.c.Id,
+                CategoryName = x.c.NameCategory,
+                ParentId = x.c.ParentId,
+                Icon = x.c.Icon
+            }).ToListAsync();
+        }
     }
 }

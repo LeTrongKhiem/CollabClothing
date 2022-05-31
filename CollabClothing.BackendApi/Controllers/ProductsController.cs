@@ -63,6 +63,10 @@ namespace CollabClothing.BackendApi.Controllers
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById(string productId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var product = await _manageProductService.GetProductById(productId);
             if (product == null)
             {
@@ -80,6 +84,18 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+
+        [HttpGet("featured/{id}/{take}")]
+        public async Task<IActionResult> GetFeaturedProductsCategory(string id, int take)
+        {
+            var product = await _manageProductService.GetFeaturedProductsCategory(id, take);
+            if (product == null)
+            {
+                return BadRequest("Cannot find products");
+            }
+            return Ok(product);
+        }
+
         [HttpGet("/category/{cateId}")]
         public async Task<IActionResult> GetProductByCategoryId(string cateId)
         {
@@ -184,6 +200,7 @@ namespace CollabClothing.BackendApi.Controllers
 
         //api image
         [HttpPost("{productId}/images")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddProductImage(string productId, [FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -214,6 +231,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //method update product image
         [HttpPut("images/{imageId}")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateProductImage(string imageId, [FromForm] ProductImageEditRequest request)
         {
             if (!ModelState.IsValid)
@@ -226,6 +244,34 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest();
             }
             return Ok();
+        }
+        [HttpGet("images/{productId}")]
+        public async Task<IActionResult> GetListImagesByProductId(string productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.GetListImage(productId);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
+        [HttpGet("images/product/{productImagesId}")]
+        public async Task<IActionResult> GetListImagesByProductImagesId(string productImagesId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.GetProductImageById(productImagesId);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
     }
 }

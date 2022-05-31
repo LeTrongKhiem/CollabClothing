@@ -16,5 +16,6 @@ namespace CollabClothing.ApiShared
         Task<bool> Edit(string id, CategoryEditRequest request);
         Task<List<CategoryViewModel>> GetAll();
         Task<List<CategoryViewModel>> GetParentCate();
+        Task<List<CategoryViewModel>> GetCateChild(string parentId);
     }
 }

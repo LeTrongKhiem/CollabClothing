@@ -42,6 +42,7 @@ namespace CollabClothing.Application.Catalog.Products
         // }
         //create product ProductCreateRequest la ham duoc tao ben CollabClothing.ViewModels dung de the hien cac thuoc tinh maf nguoi dung co the nhap 
         //de tao nen 1 san pham
+        #region Save/Delete File
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -60,6 +61,8 @@ namespace CollabClothing.Application.Catalog.Products
             await _storageService.DeleteFileAsync(fileName);
 
         }
+        #endregion
+        #region Create Product
         public async Task<string> Create(ProductCreateRequest request)
         {
             Guid g = Guid.NewGuid();
@@ -83,28 +86,34 @@ namespace CollabClothing.Application.Catalog.Products
                 ProductId = product.Id,
                 CategoryId = request.CategoryId
             };
-            Guid g2 = Guid.NewGuid();
-            var Thumbnail = new ProductImage()
+            foreach (var item in request.ThumbnailImage)
             {
-                Id = g2.ToString(),
-                ProductId = product.Id,
-                Alt = product.ProductName
+                Guid g2 = Guid.NewGuid();
+                var Thumbnail = new ProductImage()
+                {
+                    Id = g2.ToString(),
+                    ProductId = product.Id,
+                    Alt = product.ProductName
 
-            };
-            if (request.ThumbnailImage != null)
-            {
-                Thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
+                };
+                if (request.ThumbnailImage != null)
+                {
+                    Thumbnail.Path = await this.SaveFile(item);
+                }
+                else
+                {
+                    Thumbnail.Path = "no-image";
+                }
+                _context.ProductImages.Add(Thumbnail);
             }
-            else
-            {
-                Thumbnail.Path = "no-image";
-            }
+
             _context.Products.Add(product);
             _context.ProductMapCategories.Add(ProductMapCategory);
-            _context.ProductImages.Add(Thumbnail);
+
             await _context.SaveChangesAsync();
             return product.Id;
         }
+        #endregion
         //assign category
         public async Task<bool> CategoryAssign(string id, CategoryAssignRequest request)
         {
@@ -366,25 +375,31 @@ namespace CollabClothing.Application.Catalog.Products
                 Id = i.Id,
                 Alt = i.Alt,
                 Path = i.Path,
+                IsThumbnail = i.IsThumbnail,
             }).ToListAsync();
             return listProductImages;
         }
         public async Task<string> AddImages(string productId, ProductImageCreateRequest request)
         {
+            Guid g = Guid.NewGuid();
             var productImage = new ProductImage()
             {
-                Id = request.Id,
+                Id = g.ToString(),
                 ProductId = productId,
-                Alt = request.Alt
+                Alt = request.Alt,
+                IsThumbnail = request.IsThumbnail
             };
-            if (request.File != null)
+            foreach (var item in request.File)
             {
-                productImage.Path = await this.SaveFile(request.File);
+                if (request.File != null)
+                {
+                    productImage.Path = await this.SaveFile(item);
+                }
+                _context.ProductImages.Add(productImage);
+
             }
-            _context.ProductImages.Add(productImage);
             await _context.SaveChangesAsync();
             return productImage.Id;
-
         }
 
         //method remove file
@@ -417,11 +432,22 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 string fullPath = "wwwroot" + productImage.Path;
                 File.Delete(fullPath);
+                productImage.Id = productImage.Id;
                 productImage.Path = await this.SaveFile(request.File);
-                productImage.Alt = request.Alt;
+                productImage.Alt = request.Alt != null ? request.Alt : productImage.Alt;
+                productImage.IsThumbnail = request.IsThumbnail;
+                _context.ProductImages.Update(productImage);
+                return await _context.SaveChangesAsync();
             }
-            _context.ProductImages.Update(productImage);
-            return await _context.SaveChangesAsync();
+            else
+            {
+                productImage.Id = productImage.Id;
+                productImage.Path = productImage.Path;
+                productImage.Alt = request.Alt != null ? request.Alt : productImage.Alt;
+                productImage.IsThumbnail = request.IsThumbnail;
+                _context.ProductImages.Update(productImage);
+                return await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<ProductImageViewModel> GetProductImageById(string imageId)
@@ -436,12 +462,14 @@ namespace CollabClothing.Application.Catalog.Products
                 Id = productImage.Id,
                 Alt = productImage.Alt,
                 Path = productImage.Path,
+                IsThumbnail = productImage.IsThumbnail
             };
             return viewModel;
         }
 
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
+
             var query = (from p in _context.Products
                              //join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
                              //into ppmc
@@ -455,6 +483,7 @@ namespace CollabClothing.Application.Catalog.Products
                          join b in _context.Brands on p.BrandId equals b.Id
                          into pb
                          from b in pb.DefaultIfEmpty()
+                         where pimg.IsThumbnail == true
                          select new { p, pimg, b });
             List<ProductViewModel> data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
                 .Select(x => new ProductViewModel()
@@ -474,8 +503,44 @@ namespace CollabClothing.Application.Catalog.Products
                     BrandName = x.b.NameBrand
                 })
             .ToListAsync();
-            //data.GroupBy(x => x.Id)
-            //    .Select(o => o.First()).Distinct();
+            return data;
+        }
+
+        public async Task<List<ProductViewModel>> GetFeaturedProductsCategory(string idCate, int take)
+        {
+
+            var query = (from p in _context.Products
+                         join cateMap in _context.ProductMapCategories on p.Id equals cateMap.ProductId
+                         into pcateMap
+                         from cateMap in pcateMap.DefaultIfEmpty()
+                         join cate in _context.Categories on cateMap.CategoryId equals cate.Id
+                         into cateMapcate
+                         from cate
+                         in cateMapcate.DefaultIfEmpty()
+                         join pimg in _context.ProductImages on p.Id equals pimg.ProductId
+                         join b in _context.Brands on p.BrandId equals b.Id
+                         into pb
+                         from b in pb.DefaultIfEmpty()
+                         where (pimg.IsThumbnail == true) && (cate.ParentId.Equals(idCate))
+                         select new { p, pimg, b });
+            List<ProductViewModel> data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.p.Id,
+                    ProductName = x.p.ProductName,
+                    BrandId = x.b.NameBrand,
+                    Description = x.p.Description,
+                    Installment = x.p.Installment,
+                    PriceCurrent = x.p.PriceCurrent,
+                    PriceOld = x.p.PriceOld,
+                    SaleOff = x.p.SaleOff,
+                    Slug = x.p.Slug,
+                    SoldOut = x.p.SoldOut,
+                    //CategoryName = x.c.NameCategory,
+                    ThumbnailImage = x.pimg.Path,
+                    BrandName = x.b.NameBrand
+                })
+            .ToListAsync();
             return data;
         }
 

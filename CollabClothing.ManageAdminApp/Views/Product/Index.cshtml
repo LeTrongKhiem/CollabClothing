@@ -22,24 +22,24 @@
 	 <div class="m-b-10 m-r-15">
 	 </div>
 	 <div class="m-b-10">
-		<form asp-action="Index" method="get">
-			<div class="input-affix m-b-10">
-					<i class="prefix-icon anticon anticon-search"></i>
-					<input type="text" class="form-control" placeholder="Tìm kiếm" name="keyword" value="@ViewBag.Keyword">
-			
-				<div class="col-md-7">
-					<button type="submit" class="btn btn-primary">Tìm</button>
-					<button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Tất cả</button>
-				</div>
-			</div>
-			 <select class="custom-select" style="min-width: 180px; margin-top: 15px;" name="categoryId" 
-			   onchange="this.form.submit()" asp-items="ViewBag.Categories">
-		   <option selected value="all">---Chọn---</option>
-		   @*<option value="all">Tất cả</option>*@
-		  </select>
-		</form>
-		 
-	 
+	  <form asp-action="Index" method="get">
+	   <div class="input-affix m-b-10">
+		<i class="prefix-icon anticon anticon-search"></i>
+		<input type="text" class="form-control" placeholder="Tìm kiếm" name="keyword" value="@ViewBag.Keyword">
+
+		<div class="col-md-7">
+		 <button type="submit" class="btn btn-primary">Tìm</button>
+		 <button type="button" onclick="window.location.href='/Product/Index'" class="btn btn-dark">Tất cả</button>
+		</div>
+	   </div>
+	   <select class="custom-select" style="min-width: 180px; margin-top: 15px;" name="categoryId"
+									onchange="this.form.submit()" asp-items="ViewBag.Categories">
+		<option selected value="all">---Chọn---</option>
+								@*<option value="all">Tất cả</option>*@
+	   </select>
+	  </form>
+
+
 	 </div>
 	</div>
    </div>
@@ -53,108 +53,126 @@
    </div>
   </div>
   <div class="row">
-	  <div class="col-md-6"></div>
-	  <div class="col-md-6">
-	   @if (ViewBag.SuccessMsg != null)
-		{
-			<div class="alert alert-success" role="alert" id="msgAlert">
-				@ViewBag.SuccessMsg
-			</div>
-		}
+   <div class="col-md-6"></div>
+   <div class="col-md-6">
+				@if (ViewBag.SuccessMsg != null)
+				{
+		<div class="alert alert-success" role="alert" id="msgAlert">
+						@ViewBag.SuccessMsg
+		</div>
+				}
    </div>
   </div>
-		
+
   <div class="table-responsive">
    <table class="table table-hover e-commerce-table" id="data-table">
 	<thead>
-		<tr>
-			<th>
-				Tên SP
-			</th>
-			<th>
-				Giá hiện tại
-			</th>
-			<th>
-				Giá cũ
-			</th>
-			<th>
-				Giảm giá (%)
-			</th>
-			<th>
-				Thương hiệu
-			</th>
-			<th>
-				Đã bán hết
-			</th>
-			<th>
-				Trả góp
-			</th>
-			<th>
-				Slug
-			</th>
-			<th></th>
-			<th>
-				Hình ảnh
-			</th>
-			<th>
-				Tên danh mục
-			</th>
-			<th></th>
-		</tr>
+	 <tr>
+	  <th>
+	   Tên SP
+	  </th>
+	  <th>
+	   Giá hiện tại
+	  </th>
+	  <th>
+	   Giá cũ
+	  </th>
+	  <th>
+	   Giảm giá (%)
+	  </th>
+	  <th>
+	   Thương hiệu
+	  </th>
+	  <th>
+	   Đã bán hết
+	  </th>
+	  <th>
+	   Trả góp
+	  </th>
+	  <th>
+	   Slug
+	  </th>
+	  <th></th>
+	  <th>
+	   Hình ảnh
+	  </th>
+	  <th>
+	   Tên danh mục
+	  </th>
+	  <th></th>
+	 </tr>
 	</thead>
 	<tbody>
-		@{
-										// define format VND
-										var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+					@{
+						// define format VND
+						var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-								}
-		@foreach (var item in Model.Items) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.ProductName)
-			</td>
-			<td>
-				@String.Format(format, "{0:c0}", @item.PriceCurrent )
-			</td>
-			<td>
-				@String.Format(format, "{0:c0}", @item.PriceOld )
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.SaleOff)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.BrandName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.SoldOut)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Installment)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Slug)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Details)
-			</td>
-			<td>
-				<img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.ThumbnailImage)" width="100px" height="100px"/>
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.CategoryName)
-			</td>
-			<td>
-				 <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-				<a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
-				 <i class="anticon anticon-eye"></i>
-				</a>
-			   </button>
-			   <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-				<a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id">
-				 <i class="anticon anticon-edit"></i>
-				</a>
+					}
+					@foreach (var item in Model.Items)
+					{
+		 <tr>
+		  <td>
+								@Html.DisplayFor(modelItem => item.ProductName)
+		  </td>
+		  <td>
+								@String.Format(format, "{0:c0}", @item.PriceCurrent )
+		  </td>
+		  <td>
+								@String.Format(format, "{0:c0}", @item.PriceOld )
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.SaleOff)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.BrandName)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.SoldOut)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.Installment)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.Slug)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.Details)
+		  </td>
+		  <td>
+		   <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.ThumbnailImage)" width="100px" height="100px" />
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.CategoryName)
+		  </td>
+		  <td>
+		   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+			<a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
+			 <i class="anticon anticon-eye"></i>
+			</a>
+		   </button>
+		   <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+			<a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id">
+			 <i class="anticon anticon-edit"></i>
+			</a>
+		   </button>
 
-			   </button>
+		   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_@item.Id">
+			Thao tác
+		   </button>
+
+
+		   <div class="modal fade" id="myModal_@item.Id">
+			<div class="modal-dialog">
+			 <div class="modal-content">
+
+
+			  <div class="modal-header">
+			   <h4 class="modal-title">Chức năng</h4>
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
+			  </div>
+
+
+			  <div class="modal-body">
 			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
 				<a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id">
 				 <i class="anticon anticon-delete"></i>
@@ -180,26 +198,46 @@
 				 <i class="anticon anticon-paper-clip"></i>
 				</a>
 			   </button>
-			</td>
-		</tr>
-				}
+			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+				<a asp-controller="Product" asp-action="GetListImages" asp-route-id="@item.Id">
+				 <i class="anticon anticon-folder"></i>
+				</a>
+			   </button>
+			  </div>
+
+
+			  <div class="modal-footer">
+			   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			  </div>
+
+			 </div>
+			</div>
+		   </div>
+
+
+		  </td>
+		 </tr>
+					}
 	</tbody>
    </table>
   </div>
-  @await Component.InvokeAsync("Pager", Model)
+		@await Component.InvokeAsync("Pager", Model)
  </div>
 </div>
 
 @section Scripts{
 <!-- page js -->
-	<script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
-	<script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+<script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
+<script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
 
-	<script>
-		$('#data-table').DataTable();
-	 setTimeout(function() {
-		$('#msgAlert').fadeOut('slow');
-	 }, 2000);
- </script>
+<script>
+	   $('#data-table').DataTable();
+	setTimeout(function() {
+	   $('#msgAlert').fadeOut('slow');
+	}, 2000);
+</script>
+@*<script src="~/AdminAssets/js/jquery.slim.min.js"></script>*@
+<script src="~/AdminAssets/js/popper.min.js"></script>
+<script src="~/AdminAssets/js/bootstrap.bundle.min.js"></script>
 }
 

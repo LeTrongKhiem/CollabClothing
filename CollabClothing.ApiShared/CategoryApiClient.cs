@@ -136,5 +136,10 @@ namespace CollabClothing.ApiShared
         {
             return await GetListAsync<CategoryViewModel>("/api/categories/parent");
         }
+
+        public async Task<List<CategoryViewModel>> GetCateChild(string parentId)
+        {
+            return await GetListAsync<CategoryViewModel>($"/api/categories/category/{parentId}");
+        }
     }
 }

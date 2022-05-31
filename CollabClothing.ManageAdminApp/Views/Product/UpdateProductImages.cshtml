@@ -1,0 +1,47 @@
+﻿@using Microsoft.Extensions.Configuration
+@model CollabClothing.ViewModels.Catalog.ProductImages.ProductImageEditRequest
+
+@{
+    ViewData["Title"] = "Cập nhật hình ảnh sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject IConfiguration Configuration;
+<h1>UpdateProductImages</h1>
+
+<h4>ProductImageEditRequest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateProductImages" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Alt" class="control-label"></label>
+                <input asp-for="Alt" class="form-control" />
+                <span asp-validation-for="Alt" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsThumbnail" /> @Html.DisplayNameFor(model => model.IsThumbnail)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Path" class="control-label"></label>
+                <img src="@Configuration["BaseAddress"]@Model.Path" width="120px" height="120px"/>
+                <span asp-validation-for="Path" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" type="file" multiple/>
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="GetListImages" asp-route-id="@ViewData["IdPrevious"]">Back to List</a>
+</div>
+

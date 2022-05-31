@@ -17,5 +17,6 @@ namespace CollabClothing.Application.Catalog.Categories
         Task<CategoryViewModel> GetCateById(string Id);
         Task<List<CategoryViewModel>> GetAll();
         Task<List<CategoryViewModel>> GetParentCate();
+        Task<List<CategoryViewModel>> GetCateChild(string parentId);
     }
 }

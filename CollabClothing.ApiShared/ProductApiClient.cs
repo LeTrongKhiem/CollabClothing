@@ -1,4 +1,5 @@
 ﻿using CollabClothing.Utilities.Constants;
+using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
@@ -40,12 +41,16 @@ namespace CollabClothing.ApiShared
             if (request.ThumbnailImage != null)
             {
                 byte[] data;
-                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
+                foreach (var item in request.ThumbnailImage)
                 {
-                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
+                    using (var br = new BinaryReader(item.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)item.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, "thumbnailImage", item.FileName);
                 }
-                ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
+
             }
             requestContent.Add(new StringContent(request.ProductName), "productName");
             requestContent.Add(new StringContent(request.PriceCurrent.ToString()), "priceCurrent");
@@ -128,6 +133,11 @@ namespace CollabClothing.ApiShared
             return await GetListAsync<ProductViewModel>($"/api/products/featured/{take}");
         }
 
+        public async Task<List<ProductViewModel>> GetFeaturedProductsByCategory(string id, int take)
+        {
+            return await GetListAsync<ProductViewModel>($"/api/products/featured/{id}/{take}");
+        }
+
         public async Task<bool> UpdateCurrentPrice(string id, decimal newCurrentPrice)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
@@ -159,6 +169,75 @@ namespace CollabClothing.ApiShared
         public async Task<List<ProductViewModel>> GetAll()
         {
             return await GetListAsync<ProductViewModel>($"/api/products/");
+        }
+
+        public async Task<List<ProductImageViewModel>> GetAllImages(string id)
+        {
+            return await GetListAsync<ProductImageViewModel>($"/api/products/images/{id}");
+        }
+
+        public async Task<bool> CreateProductImages(string productId, ProductImageCreateRequest request)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+
+            var requestContent = new MultipartFormDataContent();
+            //chuyen thumbnail image sang binary array
+            if (request.File != null)
+            {
+                byte[] data;
+                foreach (var item in request.File)
+                {
+                    using (var br = new BinaryReader(item.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)item.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, "file", item.FileName);
+                }
+
+            }
+            requestContent.Add(new StringContent(request.Alt), "alt");
+            requestContent.Add(new StringContent(request.IsThumbnail.ToString()), "isThumbnail");
+
+            var response = await client.PostAsync($"/api/products/{productId}/images", requestContent);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateProductImages(string id, ProductImageEditRequest request)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var requestContent = new MultipartFormDataContent();
+            if (request.File != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.File.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.File.OpenReadStream().Length);
+                }
+                ByteArrayContent byteArrayContent = new ByteArrayContent(data);
+                requestContent.Add(byteArrayContent, "file", request.File.FileName);
+
+            }
+            requestContent.Add(new StringContent(request.Alt), "alt");
+            requestContent.Add(new StringContent(request.IsThumbnail.ToString()), "isThumbnail");
+            var response = await client.PutAsync($"/api/products/images/{id}", requestContent);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteProductImages(string id)
+        {
+            return await DeleteAsync($"/api/products/images/{id}");
+        }
+
+        public async Task<ProductImageViewModel> GetProductImagesById(string id)
+        {
+            return await GetAsync<ProductImageViewModel>($"/api/products/images/product/{id}");
         }
     }
 }
