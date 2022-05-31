@@ -292,6 +292,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["idPrevious"] = id;
                 ViewData["IdPrevious"] = id;
+                ViewBag.IdPrevious = id;
             }
             return View(result);
         }
@@ -302,6 +303,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
         {
             //ViewBag.IdPrevious = TempData["idPrevious"];
             ViewData["IdPrevious"] = TempData["idPrevious"];
+            ViewBag.IdPrevious = TempData["idPrevious"];
             return View();
         }
         [HttpPost]
@@ -313,13 +315,13 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return View(ModelState);
             }
             //ViewBag.IdPrevious = TempData["idPrevious"];
-            //string productId = ViewBag.IdPrevious;
-            var productId = TempData["idPrevious"].ToString();
+            string productId = ViewBag.IdPrevious;
+            //var productId = TempData["idPrevious"].ToString();
             var result = await _productApiClient.CreateProductImages(productId, request);
             if (result)
             {
                 TempData["resultImages"] = "Tạo hình ảnh thành công";
-                //ViewBag.IdPrevious = TempData["idPrevious"];
+                ViewBag.IdPrevious = TempData["idPrevious"];
                 return RedirectToAction("GetListImages", new { @id = productId });
             }
             ModelState.AddModelError("", "Thêm hình ảnh thất bại");
@@ -344,6 +346,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 };
                 //ViewBag.IdPrevious = TempData["idPrevious"];
                 ViewData["IdPrevious"] = TempData["idPrevious"];
+                ViewBag.IdPrevious = TempData["idPrevious"];
                 return View(editProductImages);
             }
             return RedirectToAction("Error", "Home");
@@ -361,7 +364,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["resultImages"] = "Sửa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = ViewData["IdPrevious"] });
+                ViewBag.IdPrevious = TempData["idPrevious"];
+                return RedirectToAction("GetListImages", new { @id = TempData["idPrevious"] });
             }
             ModelState.AddModelError("", "Sửa hình ảnh thất bại");
             return View(request);
@@ -394,7 +398,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["resultImages"] = "Xóa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = ViewBag.IdPrevious });
+                return RedirectToAction("GetListImages", new { @id = ViewData["IdPrevious"] });
             }
             ModelState.AddModelError("", "Xóa hình ảnh thất bại");
             return View(request);
