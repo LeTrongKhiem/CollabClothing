@@ -5,116 +5,20 @@
 	ViewData["Title"] = "Trang chủ";
 }
 @section Csss {
+<link rel="stylesheet" type="text/css" href="~/assets/css/grid.css">
 <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="~/css/index.css" />
-<link rel="stylesheet" type="text/css" href="~/assets/css/grid.css">
+
 }
 @inject IConfiguration Configuration;
 <div class="grid wide">
- <!-- Product Phone -->
- <div class="row container__item">
-  <div class="col l-12 m-12 c-12">
-   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-	<ol class="carousel-indicators">
-					@for (var i = 0; i < Model.ListBanner.Count; i++)
-					{
-		 <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(@i == 0 ? "active" : "")"></li>
-					}
-
-	</ol>
-	<div class="carousel-inner">
-					@foreach (var item in Model.ListBanner)
-					{
-		 <div class="carousel-item @(@Model.ListBanner.First() == item ? "active" : "")">
-		  <img src="@Configuration["BaseAddress"]@item.Images" class="d-block w-100" alt="@item.Alt">
-		  <div class="carousel-caption d-none d-md-block">
-		   <h5>@item.NameBanner</h5>
-		   <p>@item.NameBanner</p>
-		  </div>
-		 </div>
-					}
-	</div>
-	<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-	 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-	 <span class="sr-only">Previous</span>
-	</a>
-	<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-	 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-	 <span class="sr-only">Next</span>
-	</a>
-   </div>
-  </div>
- </div>
- <div class="row container__item">
-  <div class="col l-12 m-12 c-12">
-   <div id="carouselExampleIndicators1" class="carousel slide" data-ride="carousel">
-	<!-- Wrapper for slides -->
-	<div class="carousel-inner" role="listbox">
-					@{
-						List<List<ProductViewModel>> featureProducts = new List<List<ProductViewModel>>();
-						List<ProductViewModel> featurePart = new List<ProductViewModel>();
-					}
-					@for (int i = 0; i < Model.ListProductFeatured.Count; i++)
-					{
-						featurePart.Add(Model.ListProductFeatured[i]);
-						if (featurePart.Count == 4 || Model.ListProductFeatured.Count < 4)
-						{
-							featureProducts.Add(featurePart);
-							featurePart = new List<ProductViewModel>();
-						}
-					}
-					@for (int i = 0; i < featureProducts.Count; i++)
-					{
-		 <div class="carousel-item @(i==0 ? "active":"")">
-		  <div class="row">
-								@foreach (var item in featureProducts[i])
-								{
-			   <div class="col-xs-6 col-sm-3">
-				<div class="tcb-product-item">
-				 <div class="tcb-product-photo">
-				  <a href="#"><img src="@Configuration["BaseAddress"]@item.ThumbnailImage" class="img-responsive" alt="@item.ProductName" /></a>
-				 </div>
-				 <div class="tcb-product-info">
-				  <div class="tcb-product-title">
-				   <h4><a href="#">@item.ProductName </a></h4>
-
-				  </div>
-				  <div class="tcb-product-rating">
-				   <i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="active glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i>
-				   <a href="#">(4,585 ratings)</a>
-				  </div>
-												@{
-													var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-
-												}
-				  <div class="tcb-hline"></div>
-				  <div class="tcb-product-price">
-													@String.Format(format, "{0:c0}", @item.PriceCurrent )
-				  </div>
-				 </div>
-				</div>
-			   </div>
-								}
-
-		  </div>
-		 </div>
-					}
-
-	</div>
-	<!-- Controls -->
-	<a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev">
-	 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-	 <span class="sr-only">Previous</span>
-	</a>
-	<a class="carousel-control-next" href="#carouselExampleIndicators1" role="button" data-slide="next">
-	 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-	 <span class="sr-only">Next</span>
-	</a>
-   </div>
-  </div>
- </div>
-@await Component.InvokeAsync("CategoryChildMenu", "d93e95a9-38bd-4011-a457-29a763189a81")
-
+ <!-- Banner -->
+	@await Component.InvokeAsync("Banner");
+ <!-- Product Futured -->
+	@await Component.InvokeAsync("ProductFeatured");
+ <!-- Child Category Woman -->
+	@await Component.InvokeAsync("CategoryChildMenu", "d93e95a9-38bd-4011-a457-29a763189a81")
+ <!-- Filter Product -->
  <div class="col l-12 m-12 c-12">
   <div class="container-filter">
    <div class="container-filter__item">
@@ -452,7 +356,7 @@
    </div>
   </div>
 
- @await Component.InvokeAsync("CategoryChildMenu", "29919101-ff6c-466f-907b-66a2f669be7f")
+		@await Component.InvokeAsync("CategoryChildMenu", "29919101-ff6c-466f-907b-66a2f669be7f")
 
   <div class="col l-12 m-12 c-12">
    <div class="container-filter">

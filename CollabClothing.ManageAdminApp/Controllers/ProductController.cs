@@ -14,6 +14,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
 {
     public class ProductController : BaseController
     {
+        #region Constructor
         private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
         private readonly ICategoryApiClient _categoryApiClient;
@@ -25,6 +26,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
             _categoryApiClient = categoryApiClient;
             _brandApiClient = brandApiClient;
         }
+        #endregion
+        #region Index
         public async Task<IActionResult> Index(string keyword, string categoryId, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetManageProductRequestPaging()
@@ -49,6 +52,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             }
             return View(data);
         }
+        #endregion
         #region Create
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -322,7 +326,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["resultImages"] = "Tạo hình ảnh thành công";
                 ViewBag.IdPrevious = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = productId });
+                return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Thêm hình ảnh thất bại");
             return View(request);
@@ -365,7 +369,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 TempData["resultImages"] = "Sửa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
                 ViewBag.IdPrevious = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = TempData["idPrevious"] });
+                //return RedirectToAction("GetListImages", new { @id = TempData["idPrevious"] });
+                return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Sửa hình ảnh thất bại");
             return View(request);
