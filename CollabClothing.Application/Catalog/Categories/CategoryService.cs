@@ -196,7 +196,7 @@ namespace CollabClothing.Application.Catalog.Categories
 
         public async Task<List<CategoryViewModel>> GetAll()
         {
-            var query = from c in _context.Categories select new { c };
+            var query = from c in _context.Categories orderby c.Order select new { c };
             return await query.Select(x => new CategoryViewModel()
             {
                 CategoryId = x.c.Id,

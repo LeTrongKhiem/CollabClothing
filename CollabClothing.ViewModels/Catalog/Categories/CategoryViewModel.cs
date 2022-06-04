@@ -18,5 +18,6 @@ namespace CollabClothing.ViewModels.Catalog.Categories
         [Display(Name = "Hình ảnh")]
         public string Icon { get; set; }
         public string ParentName { get; set; }
+        public int Order { get; set; }
     }
 }

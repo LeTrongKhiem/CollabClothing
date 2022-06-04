@@ -220,6 +220,8 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.Order)
+                .HasMaxLength(2);
             });
 
             modelBuilder.Entity<Color>(entity =>

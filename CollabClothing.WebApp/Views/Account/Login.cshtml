@@ -1,0 +1,35 @@
+﻿@using CollabClothing.ViewModels.System.Users
+@model LoginRequest
+@section Csss {
+	<link rel="stylesheet" href="~/assets/css/dangnhap.css">
+}
+@{
+	ViewData["Title"] = "Đăng nhập";
+}
+<div class="v2-login-area">
+	<form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
+		<div class="form-signin-heading text-center">
+			<h1 class="sign-title">Đăng nhập</h1>
+		</div>
+		<div class="v2-login-wrap">
+			<input type="text" class="form-control" value="" placeholder="Tên đăng nhập/Email/Số điện thoại"
+				   autofocus="" asp-for="UserName" required="">
+			<input type="password" class="form-control" placeholder="Mật khẩu" id="password" asp-for="Password"
+				   required="">
+			<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+			<button class="btn btn-lg btn-login" type="submit">Đăng nhập</button>
+		</div>
+		<div class="v2-login-bottom">
+			<span class="v2-left">
+				<span class="v2-hide">Chưa có tài khoản</span><a href="./dangki.html"
+																 class="v2-register-now"> ( Đăng ký ngay )</a>
+			</span>
+			<span class="v2-right">
+				<a class="v2-remember-password" href=""> Quên mật khẩu ?</a>
+			</span>
+		</div>
+	</form>
+</div>
+@section Scripts {
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+}
