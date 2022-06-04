@@ -1,25 +1,73 @@
-﻿	<header class="header">
-			<div class="grid wide">
-				<div class="header__container">
-					<div class="header__logo">
-						<div class="header__logo-link">
-							<a href="/trang-chu" class="header__logo-img"></a>
-						</div>
-					</div>
-					@await Component.InvokeAsync("NavBar");
-					<form action="" class="header-search">
-						<input type="text" class="header-search__input" placeholder="Tìm kiếm">
-						<button type="submit" class="header-search__button">
-							<i class="header-search__icon"></i>
-						</button>
-					</form>
-					<div class="header__cart">
-						<a href="" class="header__cart-link">
-							<i class="header__cart-icon"></i>
-							<span class="header__cart-count">0</span>
-						</a>
-					</div>
+﻿<header class="header">
+	<div class="grid wide">
+		<div class="header__container">
+			<div class="header__logo">
+				<div class="header__logo-link">
+					<a href="/trang-chu" class="header__logo-img"></a>
 				</div>
 			</div>
-		</header>
-		<label class="header-mobile-nav__overlay"></label>
+			@await Component.InvokeAsync("NavBar");
+			<form action="" class="header-search">
+				<input type="text" class="header-search__input" placeholder="Tìm kiếm">
+				<button type="submit" class="header-search__button">
+					<i class="header-search__icon"></i>
+				</button>
+			</form>
+			<div class="header__cart">
+				<a href="" class="header__cart-link">
+					<i class="header__cart-icon"></i>
+					<span class="header__cart-count">0</span>
+				</a>
+			</div>
+			<div class="col l-1 m-0 c-0">
+
+				@if (@User.Identity.IsAuthenticated == true)
+				{
+		<div class="header-nav__item">
+		 <li class="header__navbar-items header__navbar-user header__navbar-items--separate">
+		  <span class="header__navbar-user-name">@User.Identity.Name</span>
+		  <ul class="header__navbar-user-menu">
+		   <li class="header__navber-user-item">
+			<a href="./thongtincanhan.html" class="header-nav__log-link">
+			 Tài khoản
+			 của tôi
+			</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Tra cứu bảo hành</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Đơn đặt hàng</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Lịch sử mua hàng</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Lịch sử sữa chữa</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Sổ địa chỉ</a>
+		   </li>
+		   <li class="header__navber-user-item header__navber-user-item--separate">
+			<a href="/Account/Logout" class="header-nav__log-link">Đăng xuất</a>
+		   </li>
+		  </ul>
+		</div>
+				}
+				else
+				{
+		<div class="button-login">
+		 <ul class="button-login__log">
+		  <li class="button-login__log-item">
+		   <a href="/Account/Login" class="button-login__log-link">Đăng nhập</a>
+		  </li>
+		 </ul>
+		</div>
+				}
+   </div>
+  </div>
+
+ </div>
+
+</header>
+<label class="header-mobile-nav__overlay"></label>

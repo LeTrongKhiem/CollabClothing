@@ -1,5 +1,6 @@
 using CollabClothing.ApiShared;
 using CollabClothing.WebApp.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,12 @@ namespace CollabClothing.WebApp
 
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+            {
+                option.LoginPath = "/Account/Login";
+                option.AccessDeniedPath = "/User/Forbidden";
+            }
+               );
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -57,6 +64,7 @@ namespace CollabClothing.WebApp
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IBrandApiClient, BrandApiClient>();
+            services.AddTransient<IUserApiClient, UserApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,10 +84,10 @@ namespace CollabClothing.WebApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
-            app.UseSession();
             app.UseAuthentication();
+            app.UseRouting();
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
