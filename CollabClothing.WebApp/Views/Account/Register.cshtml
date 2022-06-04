@@ -1,0 +1,77 @@
+﻿@using CollabClothing.ViewModels.System.Users
+@model RegisterRequest
+@section Csss {
+	<link rel="stylesheet" href="~/assets/css/dangki.css">
+}
+@{
+	ViewData["Title"] = "Đăng ký";
+}
+
+ <div class="verification-code">
+            <div class="v2-verification-code">
+                <form class="form-signin" asp-controller="Account" asp-action="Register" method="post" name="formdk" onsubmit="checkPassWord()">
+                    <input type="hidden" name="_token">
+                    <div class="">
+                        <div class="v2-title">
+                            <p>Thông tin cá nhân</p>
+                        </div>
+                        <div class="v2-group-info">
+                            <p class="v2-error-check v2-color-red" id="error-name"></p>
+                            <div class="form-group">
+                                <input type="text" asp-for="UserName" class="name" value="" placeholder="Username" required="">
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" asp-for="FirstName" class="name" value="" placeholder="Họ" required="">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" asp-for="LastName" class="name" value="" placeholder="Tên" required="">
+                            </div>
+                            <p class="v2-error-check v2-color-red" id="error-email"></p>
+                            <div class="form-group">
+                                <input type="email" asp-for="Email" class="email" value="" placeholder="Email..."
+                                    required="">
+                            </div>
+                            <p class="v2-error-check v2-color-red" id="error-phone"></p>
+                            <div class="form-group">
+                                <input type="text" asp-for="Phone" class="phone" placeholder="Số Điện Thoại" value=""
+                                    required="">
+                            </div>
+                            <div class="form-group">
+                                <input type="date" asp-for="Dob" class="phone" placeholder="Ngày sinh" value=""
+                                    required="">
+                            </div>
+                            <p class="v2-error-check v2-color-red" id="error-password"></p>
+                            <div class="form-group">
+                                <input type="password" asp-for="Password" class="password" placeholder="Mật khẩu"
+                                    required="">
+                                     <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <p class="v2-error-check v2-color-red" id="check-re-password"></p>
+                            <div class="form-group">
+                                <input type="password" asp-for="ComfirmPassword" class="re-password"
+                                    placeholder="Nhập lại mật khẩu" required="">
+                            </div>
+                            <input type="hidden" name="step" value="3">
+                            <div class="text-danger warning" asp-validation-summary="All"></div>
+                            <div class="form-group">
+                                <button type="submit">Xác nhận</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+@section Scripts {
+     function checkPassWord() {
+        let mk1 = document.formdk.password.value;
+        let mk2 = document.formdk.re_password.value;
+        if (mk1 == mk2) {
+            return true;
+        } else {
+            alert('Mật khẩu không khớp');
+        }
+    }
+}

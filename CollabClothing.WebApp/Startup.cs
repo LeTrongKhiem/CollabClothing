@@ -1,5 +1,7 @@
 using CollabClothing.ApiShared;
+using CollabClothing.ViewModels.System.Users;
 using CollabClothing.WebApp.Data;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +52,7 @@ namespace CollabClothing.WebApp
             }
                );
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             IMvcBuilder builder = services.AddRazorPages();
