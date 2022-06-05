@@ -130,5 +130,20 @@ namespace CollabClothing.ApiShared
             }
             return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
         }
+
+        public async Task<ResultApi<bool>> ConfirmEmail(string id, string code)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/users/confirm");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+            }
+            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
+        }
     }
 }

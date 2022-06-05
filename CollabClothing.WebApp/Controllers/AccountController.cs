@@ -120,5 +120,19 @@ namespace CollabClothing.WebApp.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.ConfirmEmail(userId, code);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Error");
+        }
     }
 }

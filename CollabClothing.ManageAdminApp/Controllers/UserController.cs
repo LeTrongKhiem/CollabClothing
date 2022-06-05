@@ -206,7 +206,5 @@ namespace CollabClothing.ManageAdminApp.Controllers
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Login");
         }
-
-
     }
 }

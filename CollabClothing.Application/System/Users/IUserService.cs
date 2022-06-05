@@ -14,5 +14,6 @@ namespace CollabClothing.Application.System.Users
         public Task<ResultApi<UserViewModel>> GetById(Guid Id);
         public Task<ResultApi<bool>> Delete(Guid Id);
         public Task<ResultApi<bool>> RoleAssign(Guid Id, RoleAssignRequest request);
+        public Task<ResultApi<bool>> ConfirmEmail(string userId, string code);
     }
 }

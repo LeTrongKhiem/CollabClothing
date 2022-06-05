@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Security.Policy;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -74,15 +75,43 @@ namespace CollabClothing.Application.System.Users
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                _logger.LogInformation("Create new account success");
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-
-                return new ResultApiSuccessed<bool>();
+                var url = $"~/Account/ConfirmEmail?userId={user.Id}&code={code}";
+                await _emailSender.SendEmailAsync(request.Email, "Xác nhận địa chỉ email",
+                        $"Hãy xác nhận địa chỉ email bằng cách <a href='{url}'>Bấm vào đây</a>.");
+                if (_userManager.Options.SignIn.RequireConfirmedEmail)
+                {
+                    return new ResultApiSuccessed<bool>();
+                }
+                else
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return new ResultApiError<bool>("Đăng kí không thành công");
+                }
+                //return new ResultApiSuccessed<bool>();
             }
             return new ResultApiError<bool>("Đăng kí không thành công");
         }
+        #region ConfirmEmail
+        public async Task<ResultApi<bool>> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return new ResultApiError<bool>("Confirm Failed");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            // Xác thực email
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, false);
+                return new ResultApiSuccessed<bool>();
+            }
+            return new ResultApiError<bool>("Confirm Failed");
+        }
+        #endregion
         #endregion
         #region Authenticate
         public async Task<ResultApi<string>> Authenticate(LoginRequest request)

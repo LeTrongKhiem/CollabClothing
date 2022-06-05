@@ -33,6 +33,5 @@ namespace CollabClothing.BackendApi.Controllers
             var sendMail = _emailSender.SendEmailAsync("lekhiem2001@gmail.com", "test", "demo");
             return Ok();
         }
-
     }
 }

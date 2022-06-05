@@ -49,6 +49,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(resultToken);
         }
+        [HttpPut("confirm")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string code)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.ConfirmEmail(userId, code);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest("Unconfimred");
+            }
+            return Ok();
+        }
 
         //https://localhost/api/users/paging?pageIndex=1&pageSize=10&keyword=
         [HttpGet("paging")]
