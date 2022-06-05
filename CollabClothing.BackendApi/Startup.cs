@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +29,9 @@ using CollabClothing.Application.Catalog.Categories;
 using CollabClothing.Application.System.Roles;
 using CollabClothing.Application.Catalog.Brands;
 using CollabClothing.Application.Catalog.Banners;
+using CollabClothing.ViewModels.System.Mail;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using CollabClothing.Application.System.Mail;
 
 namespace CollabClothing.BackendApi
 {
@@ -46,8 +49,16 @@ namespace CollabClothing.BackendApi
         {
 
             services.AddDbContext<CollabClothingDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
+            //services.AddOptions();
+            //var mailSettings = Configuration.GetSection("MailSettings");
+            //services.Configure<MailSettings>(mailSettings);               // đăng ký để Inject
+            //services.AddTransient<IEmailSender, MailService>();
+            var emailConfig = Configuration.GetSection("MailSettings").Get<MailSettings>();
+            services.AddSingleton(emailConfig);
 
+            services.AddScoped<IEmailSender, MailService>();
             services.AddIdentity<AppUser, AppRole>()
+            //.AddDefaultUI()
             .AddEntityFrameworkStores<CollabClothingDBContext>()
             .AddDefaultTokenProviders();
             services.AddTransient<IPublicProductService, PublicProductService>();
@@ -61,8 +72,10 @@ namespace CollabClothing.BackendApi
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 
+
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
+            // Đăng ký dịch vụ Mail
             // services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             // services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>(); vi khai bao fv => fv.RegisterValidatorsFromAssemblyContaining
 
