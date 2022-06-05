@@ -13,6 +13,9 @@ using CollabClothing.Data.EF;
 using CollabClothing.ViewModels.Common;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -23,14 +26,20 @@ namespace CollabClothing.Application.System.Users
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly CollabClothingDBContext _context;
+        private readonly ILogger<UserService> _logger;
+        private readonly IEmailSender _emailSender;
+
         #region Constructor
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context,
+            ILogger<UserService> logger, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = configuration;
             _context = context;
+            _logger = logger;
+            _emailSender = emailSender;
         }
         #endregion
         #region Register
@@ -38,7 +47,7 @@ namespace CollabClothing.Application.System.Users
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             var email = await _userManager.FindByEmailAsync(request.Email);
-            var role = await _roleManager.FindByNameAsync("Role User");
+            var role = await _roleManager.FindByNameAsync("User");
             if (user != null)
             {
                 return new ResultApiError<bool>("Username đã tồn tại");
@@ -65,6 +74,11 @@ namespace CollabClothing.Application.System.Users
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
+                _logger.LogInformation("Create new account success");
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+
                 return new ResultApiSuccessed<bool>();
             }
             return new ResultApiError<bool>("Đăng kí không thành công");

@@ -1,5 +1,8 @@
-using CollabClothing.ApiShared;
+﻿using CollabClothing.ApiShared;
+using CollabClothing.ViewModels.System.Mail;
+using CollabClothing.ViewModels.System.Users;
 using CollabClothing.WebApp.Data;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,7 +53,12 @@ namespace CollabClothing.WebApp
                 option.AccessDeniedPath = "/User/Forbidden";
             }
                );
+
+
+
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             IMvcBuilder builder = services.AddRazorPages();
@@ -65,6 +74,7 @@ namespace CollabClothing.WebApp
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<IUserApiClient, UserApiClient>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

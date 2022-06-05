@@ -40,30 +40,6 @@ namespace CollabClothing.WebApp.Controllers
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Home");
         }
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(ModelState);
-            }
-            var result = await _userApiClient.Authenticate(request);
-            if (result.ResultObject == null)
-            {
-                ModelState.AddModelError("", result.Message);
-                return View();
-            }
-            var userPrincipal = this.ValidateToken(result.ResultObject);
-            var authProperties = new AuthenticationProperties()
-            {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                IsPersistent = true
-            };
-            HttpContext.Session.SetString("Token", result.ResultObject);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
-            return RedirectToAction("Index", "Home");
-        }
 
         public ClaimsPrincipal ValidateToken(string jwtToken)
         {
@@ -82,6 +58,67 @@ namespace CollabClothing.WebApp.Controllers
 
             return principal;
 
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _userApiClient.Authenticate(request);
+            if (result.ResultObject == null)
+            {
+                ModelState.AddModelError("", "Vui lòng kiểm tra lại tài khoản hoặc mật khẩu");
+                return View();
+            }
+            var userPrincipal = this.ValidateToken(result.ResultObject);
+            var authProperties = new AuthenticationProperties()
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                IsPersistent = true
+            };
+            HttpContext.Session.SetString("Token", result.ResultObject);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.Register(request);
+
+            var resultLogin = await _userApiClient.Authenticate(new LoginRequest()
+            {
+                UserName = request.UserName,
+                Password = request.Password,
+                RememberMe = true
+            });
+            if (!result.IsSuccessed)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View(request);
+            }
+            var userPrincipal = this.ValidateToken(resultLogin.ResultObject);
+            var authProperties = new AuthenticationProperties()
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                IsPersistent = true
+            };
+
+            HttpContext.Session.SetString("Token", resultLogin.ResultObject);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

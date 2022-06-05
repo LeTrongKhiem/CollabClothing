@@ -8,6 +8,7 @@
 }
 <div class="v2-login-area">
 	<form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
+		
 		<div class="form-signin-heading text-center">
 			<h1 class="sign-title">Đăng nhập</h1>
 		</div>
@@ -17,11 +18,12 @@
 			<input type="password" class="form-control" placeholder="Mật khẩu" id="password" asp-for="Password"
 				   required="">
 			<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+			 <div class="text-danger warning" asp-validation-summary="All"></div>
 			<button class="btn btn-lg btn-login" type="submit">Đăng nhập</button>
 		</div>
 		<div class="v2-login-bottom">
 			<span class="v2-left">
-				<span class="v2-hide">Chưa có tài khoản</span><a href="./dangki.html"
+				<span class="v2-hide">Chưa có tài khoản</span><a href="/Account/Register"
 																 class="v2-register-now"> ( Đăng ký ngay )</a>
 			</span>
 			<span class="v2-right">
