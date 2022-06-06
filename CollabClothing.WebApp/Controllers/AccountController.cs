@@ -148,15 +148,5 @@ namespace CollabClothing.WebApp.Controllers
         {
             return View();
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Confirm()
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View();
-        //    }
-        //    ViewBag.Email = TempData["Email"];
-        //    return View();
-        //}
     }
 }
