@@ -31,6 +31,11 @@ namespace CollabClothing.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
@@ -66,17 +71,18 @@ namespace CollabClothing.WebApp.Controllers
             {
                 return View(ModelState);
             }
+
             var result = await _userApiClient.Authenticate(request);
             if (result.ResultObject == null)
             {
-                ModelState.AddModelError("", "Vui lòng kiểm tra lại tài khoản hoặc mật khẩu");
+                ModelState.AddModelError("", result.Message);
                 return View();
             }
             var userPrincipal = this.ValidateToken(result.ResultObject);
             var authProperties = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                IsPersistent = true
+                IsPersistent = false
             };
             HttpContext.Session.SetString("Token", result.ResultObject);
 
@@ -104,6 +110,8 @@ namespace CollabClothing.WebApp.Controllers
                 Password = request.Password,
                 RememberMe = true
             });
+            ViewBag.Email = request.Email;
+            TempData["Email"] = request.Email;
             if (!result.IsSuccessed)
             {
                 ModelState.AddModelError("", result.Message);
@@ -118,7 +126,27 @@ namespace CollabClothing.WebApp.Controllers
 
             HttpContext.Session.SetString("Token", resultLogin.ResultObject);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Confirm", "Account");
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.ConfirmEmail(userId, code);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Login", "Account");
+
+            }
+            return RedirectToAction("Error");
+        }
+        [HttpGet]
+        public IActionResult Confirm()
+        {
+            return View();
         }
     }
 }

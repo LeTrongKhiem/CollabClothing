@@ -3,6 +3,7 @@ using CollabClothing.ViewModels.System.Mail;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -30,9 +31,9 @@ namespace CollabClothing.BackendApi.Controllers
         [AllowAnonymous]
         public IActionResult SendMailDemo()
         {
-            var sendMail = _emailSender.SendEmailAsync("lekhiem2001@gmail.com", "test", "demo");
+            var url = $"https://localhost:5003/Account/ConfirmEmail?userId={1}&code={2}";
+            var sendMail = _emailSender.SendEmailAsync("lekhiem2001@gmail.com", "test", $"{url}");
             return Ok();
         }
-
     }
 }
