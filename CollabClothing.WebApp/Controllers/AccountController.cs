@@ -31,6 +31,11 @@ namespace CollabClothing.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
@@ -66,6 +71,7 @@ namespace CollabClothing.WebApp.Controllers
             {
                 return View(ModelState);
             }
+
             var result = await _userApiClient.Authenticate(request);
             if (result.ResultObject == null)
             {
@@ -76,7 +82,7 @@ namespace CollabClothing.WebApp.Controllers
             var authProperties = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                IsPersistent = true
+                IsPersistent = false
             };
             HttpContext.Session.SetString("Token", result.ResultObject);
 
@@ -104,6 +110,8 @@ namespace CollabClothing.WebApp.Controllers
                 Password = request.Password,
                 RememberMe = true
             });
+            ViewBag.Email = request.Email;
+            TempData["Email"] = request.Email;
             if (!result.IsSuccessed)
             {
                 ModelState.AddModelError("", result.Message);
@@ -118,7 +126,7 @@ namespace CollabClothing.WebApp.Controllers
 
             HttpContext.Session.SetString("Token", resultLogin.ResultObject);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Confirm", "Account");
         }
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
@@ -135,5 +143,20 @@ namespace CollabClothing.WebApp.Controllers
             }
             return RedirectToAction("Error");
         }
+        [HttpGet]
+        public IActionResult Confirm()
+        {
+            return View();
+        }
+        //[HttpPost]
+        //public async Task<IActionResult> Confirm()
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View();
+        //    }
+        //    ViewBag.Email = TempData["Email"];
+        //    return View();
+        //}
     }
 }

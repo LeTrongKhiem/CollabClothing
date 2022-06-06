@@ -29,6 +29,10 @@ namespace CollabClothing.ManageAdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }

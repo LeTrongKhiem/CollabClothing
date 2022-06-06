@@ -6,6 +6,10 @@
 @{
 	ViewData["Title"] = "Đăng nhập";
 }
+@*@if (User.Identity.IsAuthenticated)
+{
+	return new RedirectToPageResult("/Portal/Login");
+}*@
 <div class="v2-login-area">
 	<form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
 		

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Policy;
+using Microsoft.AspNetCore.Http;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -122,6 +123,7 @@ namespace CollabClothing.Application.System.Users
                 return new ResultApiError<string>("Username không tồn tại");
             }
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+
             if (!result.Succeeded)
             {
                 return new ResultApiError<string>("Đăng nhập thất bại");
