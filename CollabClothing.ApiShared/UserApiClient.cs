@@ -137,13 +137,13 @@ namespace CollabClothing.ApiShared
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.GetAsync($"/api/users/confirm");
+            var response = await client.GetAsync($"/api/users/confirm?userId={id}&code={code}");
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+                return new ResultApiSuccessed<bool>();
             }
-            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
+            return new ResultApiError<bool>();
         }
     }
 }

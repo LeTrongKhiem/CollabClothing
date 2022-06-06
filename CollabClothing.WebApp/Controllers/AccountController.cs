@@ -130,7 +130,8 @@ namespace CollabClothing.WebApp.Controllers
             var result = await _userApiClient.ConfirmEmail(userId, code);
             if (result.IsSuccessed)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Login", "Account");
+
             }
             return RedirectToAction("Error");
         }

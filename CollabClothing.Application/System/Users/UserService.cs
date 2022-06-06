@@ -77,7 +77,7 @@ namespace CollabClothing.Application.System.Users
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var url = $"~/Account/ConfirmEmail?userId={user.Id}&code={code}";
+                var url = $"https://localhost:5003/Account/ConfirmEmail?userId={user.Id}&code={code}";
                 await _emailSender.SendEmailAsync(request.Email, "Xác nhận địa chỉ email",
                         $"Hãy xác nhận địa chỉ email bằng cách <a href='{url}'>Bấm vào đây</a>.");
                 if (_userManager.Options.SignIn.RequireConfirmedEmail)
@@ -87,7 +87,7 @@ namespace CollabClothing.Application.System.Users
                 else
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return new ResultApiError<bool>("Đăng kí không thành công");
+                    return new ResultApiError<bool>("Vui lòng kiểm tra Email để xác nhận tài khoản");
                 }
                 //return new ResultApiSuccessed<bool>();
             }

@@ -49,7 +49,7 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(resultToken);
         }
-        [HttpPut("confirm")]
+        [HttpGet("confirm")]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string code)
         {
