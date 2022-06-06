@@ -75,7 +75,7 @@ namespace CollabClothing.WebApp.Controllers
             var result = await _userApiClient.Authenticate(request);
             if (result.ResultObject == null)
             {
-                ModelState.AddModelError("", "Vui lòng kiểm tra lại tài khoản hoặc mật khẩu");
+                ModelState.AddModelError("", result.Message);
                 return View();
             }
             var userPrincipal = this.ValidateToken(result.ResultObject);

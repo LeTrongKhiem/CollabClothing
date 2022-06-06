@@ -118,15 +118,16 @@ namespace CollabClothing.Application.System.Users
         public async Task<ResultApi<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
+            var email = await _userManager.FindByEmailAsync(user.Email);
             if (user == null)
             {
                 return new ResultApiError<string>("Username không tồn tại");
             }
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
 
-            if (!result.Succeeded)
+            if (!result.Succeeded || !email.EmailConfirmed)
             {
-                return new ResultApiError<string>("Đăng nhập thất bại");
+                return new ResultApiError<string>("Đăng nhập thất bại. Vui lòng kiểm tra Email và xác nhận");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[] {
