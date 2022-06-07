@@ -38,7 +38,9 @@ namespace CollabClothing.WebApp.Controllers
             var product = await _productApiClient.GetById(id);
             var productDetails = new ProductDetailsViewModel()
             {
-                Products = product
+                Products = product,
+                ProductsImages = await _productApiClient.GetAllImages(id),
+                ProductRelated = await _productApiClient.GetFeaturedProducts(8)
             };
             return View(productDetails);
         }

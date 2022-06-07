@@ -406,7 +406,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["resultImages"] = "Xóa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = ViewData["IdPrevious"] });
+                return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Xóa hình ảnh thất bại");
             return View(request);

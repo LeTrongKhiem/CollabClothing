@@ -1,11 +1,11 @@
-﻿@using Microsoft.Extensions.Configuration
+﻿@using CollabClothing.ViewModels.Catalog.Products
+@using Microsoft.Extensions.Configuration
 @model ProductDetailsViewModel
 @{
 	ViewData["Title"] = "Danh mục";
 }
-@inject IConfiguration Configuration 
+@inject IConfiguration Configuration
 @section Csss {
-    @*<link rel="stylesheet" href="~/assets/css/style.css">*@
 <link rel="stylesheet" href="~/assets/css/detail.css">
 }
 <div class="container grid wide">
@@ -14,9 +14,9 @@
    <a href="/trang-chu">Home</a>
    <meta property="position" content="1">
   </li>
-  @*<li>
-   <a href="/danh-muc/@Model.Categories.CategoryId">@Model.Categories</a>
-  </li>*@
+		@*<li>
+			<a href="/danh-muc/@Model.Categories.CategoryId">@Model.Categories</a>
+			</li>*@
   <li>
    <a href="/Product/Detail/@Model.Products.Id">@Model.Products.ProductName</a>
   </li>
@@ -25,7 +25,7 @@
   <div class="detail-left col l-6">
    <div class="main">
 	<img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
-					 alt="" class="img-feature image-item">
+					 alt="@Model.Products.ProductName" class="img-feature image-item">
 	<div class="control prev">
 	 <i class="bx bx-chevron-left"></i>
 	</div>
@@ -33,12 +33,17 @@
 	 <i class="bx bx-chevron-right"></i>
 	</div>
    </div>
+   
    <div class="list-image">
-	<div>
-	 <img class="image-item"
-						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-1-1.jpg"
-						 alt="">
-	</div>
+	   @foreach (var item in Model.ProductsImages)
+				{
+		<div>
+		 <img class="image-item"
+						 src="@Configuration["BaseAddress"]@item.Path"
+						 alt="@item.Alt">
+		</div>
+				
+		   }
 	<div>
 	 <img class="image-item"
 						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-3-1.jpg"
@@ -72,21 +77,22 @@
 
 
    </div>
+
   </div>
   <div class="detail-right col l-6">
    <div class="box_productInfor">
 	<div class="detail-title">
 	 <h3>
-	  @Model.Products.ProductName
+						@Model.Products.ProductName
 	 </h3>
 	</div>
 	<div class="detail-top">
 	 <span class="product-code">Mã sản phẩm: @Model.Products.Id</span>
 	</div>
 	<div class="detail-price">
-		@{
-			var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-		}
+					@{
+						var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+					}
 	 <span class="price-current">@String.Format(format, "{0:c0}", @Model.Products.PriceCurrent)</span>
 	 <span class="price-old">@String.Format(format, "{0:c0}", @Model.Products.PriceOld)</span>
 	</div>
@@ -98,8 +104,8 @@
 	 <ul>
 	  <li class="act">
 	   <div class="imgPro">
-		<img src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-4-1-2-3-200x200.jpg"
-									 alt="Hồng" class=" ls-is-cached lazyloaded">
+		<img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
+									 alt="@Model.Products.ProductName" class=" ls-is-cached lazyloaded">
 	   </div>
 	  </li>
 	 </ul>
@@ -226,7 +232,47 @@
 <section class="wraplock grid wide">
  <p class="detail-product-ttl">Có thể bạn thích</p>
  <div class="promo-listProduct-product row ">
-  <div class="promo-product col l-3 ">
+	 @{
+			List<List<ProductViewModel>> productRelated = new List<List<ProductViewModel>>();
+			List<ProductViewModel> relatedPart = new List<ProductViewModel>();
+	 }
+		@*@for(int i = 0; i < productRelated.Count; i++)
+		{
+			relatedPart.Add(Model.ProductRelated[i]);
+			if (relatedPart.Count == 4 || Model.ProductRelated.Count < 4)
+			{
+				
+			}
+		}*@
+		@foreach(var item in Model.ProductRelated)
+		{
+			  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="@Configuration["BaseAddress"]@item.ThumbnailImage"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">@item.ProductName </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   @String.Format(format, "{0:c0}", @item.PriceCurrent)
+	  </p>
+	  <p class="product-item-price-old">
+	   @String.Format(format, "{0:c0}", @item.PriceOld)
+	  </p>
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+		}
+  @*<div class="promo-product col l-3 ">
    <li class="product-item">
 	<a href="" class="product-item__link">
 	 <div class="item-wrap">
@@ -441,7 +487,7 @@
    </li>
 
 
-  </div>
+  </div>*@
 
  </div>
 

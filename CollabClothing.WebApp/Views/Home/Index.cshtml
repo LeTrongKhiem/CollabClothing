@@ -170,7 +170,7 @@
  </div>
 
 
- <!-- Product Tool -->
+ <!-- Woman clothing -->
  <div class="row container__item">
   <div class="col l-12 m-12 c-12">
    <div class="banner">
@@ -276,7 +276,7 @@
 		   </div>
 		   <div class="container-product__item-wrap">
 			<div class="container-product__item-info">
-			 <a href="#" class="container-product__item-name">
+			 <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
 											@item.ProductName
 			 </a>
 			 <i class="container-product__item-sale-icon fas fa-gift"></i>
@@ -335,7 +335,7 @@
   </div>
  </div>
 
- <!-- Product Fix -->
+ <!-- Child Clothing -->
  <div class="row container__item">
   <div class="col l-12 m-12 c-12">
    <div class="banner">
@@ -442,7 +442,7 @@
 		   </div>
 		   <div class="container-product__item-wrap">
 			<div class="container-product__item-info">
-			 <a href="#" class="container-product__item-name">
+			 <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
 											@item.ProductName
 			 </a>
 			 <i class="container-product__item-sale-icon fas fa-gift"></i>
