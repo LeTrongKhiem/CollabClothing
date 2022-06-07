@@ -93,7 +93,8 @@ namespace CollabClothing.Application.Catalog.Products
                 {
                     Id = g2.ToString(),
                     ProductId = product.Id,
-                    Alt = product.ProductName
+                    Alt = product.ProductName,
+                    IsThumbnail = true
 
                 };
                 if (request.ThumbnailImage != null)
@@ -284,10 +285,6 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.b.NameBrand.Contains(request.Keyword));
             }
-            //if (!string.IsNullOrEmpty(request.CategoryIds.ToString()))
-            //{
-            //    query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
-            //}
             if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
             {
                 query = query.Where(x => x.pmc.CategoryId == request.CategoryId);
@@ -376,6 +373,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Alt = i.Alt,
                 Path = i.Path,
                 IsThumbnail = i.IsThumbnail,
+                productId = productId
             }).ToListAsync();
             return listProductImages;
         }

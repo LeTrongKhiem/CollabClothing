@@ -103,7 +103,7 @@
 		  </div>
 		  <div class="container-product__item-wrap">
 		   <div class="container-product__item-info">
-			<a href="#" class="container-product__item-name">
+			<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
 										@item.ProductName
 			</a>
 			<i class="container-product__item-sale-icon fas fa-gift"></i>
@@ -118,7 +118,7 @@
 										@*@Model.ParseToVND(@item.PriceCurrent)*@
 
 			 <div class="cta-btn">
-			  <span class="old-price">@item.PriceOld</span>
+			  <span class="old-price">@String.Format(format, "{0:c0}", @item.PriceOld )</span>
 			  <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
 			 </div>
 			</span>
@@ -522,4 +522,13 @@
 	});
 	}
 	</script>*@
+	@*<script>
+	 $(".col l-2-4 l-3-m m-4 c-6").slice(0,2).show();
+	 $("#next").on("click", function() {
+		 $(".col l-2-4 l-3-m m-4 c-6:hidden").slice(0,2).show();
+		 if ($(".col l-2-4 l-3-m m-4 c-6:hidden").length == 0) {
+			  $("#next").fadeOut();
+		 }
+	 });
+ </script>*@
 }

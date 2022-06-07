@@ -29,10 +29,6 @@ namespace CollabClothing.ManageAdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
@@ -53,7 +49,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             var authProperties = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = true
+                IsPersistent = false
             };
             HttpContext.Session.SetString("Token", result.ResultObject);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
