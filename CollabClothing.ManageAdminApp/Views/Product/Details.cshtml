@@ -18,12 +18,9 @@
 </div>
 <div>
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
+        @{
+            var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+        }
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ProductName)
         </dt>
@@ -34,13 +31,13 @@
             @Html.DisplayNameFor(model => model.PriceCurrent)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PriceCurrent)
+            @String.Format(format, "{0:c0}", @Model.PriceCurrent)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PriceOld)
+             @Html.DisplayNameFor(model => model.PriceOld)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PriceOld)
+            @String.Format(format, "{0:c0}", @Model.PriceOld)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.SaleOff)
@@ -92,10 +89,10 @@
             <img src="@Configuration["BaseAddress"]@Model.ThumbnailImage" width="120px" height="120px" style="margin-left: 50px;"/>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryName)
+            @Html.DisplayNameFor(model => model.Categories)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryName)
+            @Html.DisplayFor(model => model.Categories)
         </dd>
     </dl>
 </div>

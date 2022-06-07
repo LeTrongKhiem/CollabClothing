@@ -303,30 +303,33 @@ namespace CollabClothing.ManageAdminApp.Controllers
         #endregion
         #region AddImages
         [HttpGet]
-        public IActionResult CreateImages()
+        [Route("Product/CreateImages/{productId}")]
+        public IActionResult CreateImages(string productId)
         {
-            //ViewBag.IdPrevious = TempData["idPrevious"];
-            ViewData["IdPrevious"] = TempData["idPrevious"];
-            ViewBag.IdPrevious = TempData["idPrevious"];
-            return View();
+            ViewBag.IdPrevious = productId;
+            var productImagesCreate = new ProductImageCreateRequest()
+            {
+                ProductId = productId
+            };
+            return View(productImagesCreate);
         }
         [HttpPost]
+        [Route("Product/CreateImages/{productId}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateImages([FromForm] ProductImageCreateRequest request)
+        public async Task<IActionResult> CreateImages([FromRoute] string productId, [FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
-            //ViewBag.IdPrevious = TempData["idPrevious"];
-            string productId = ViewBag.IdPrevious;
-            //var productId = TempData["idPrevious"].ToString();
+            ViewBag.IdPrevious = TempData["idPrevious"];
             var result = await _productApiClient.CreateProductImages(productId, request);
+
             if (result)
             {
                 TempData["resultImages"] = "Tạo hình ảnh thành công";
                 ViewBag.IdPrevious = TempData["idPrevious"];
-                return RedirectToAction("Index");
+                return RedirectToAction("GetListImages", new { id = productId });
             }
             ModelState.AddModelError("", "Thêm hình ảnh thất bại");
             return View(request);
@@ -403,7 +406,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["resultImages"] = "Xóa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = ViewData["IdPrevious"] });
+                return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Xóa hình ảnh thất bại");
             return View(request);

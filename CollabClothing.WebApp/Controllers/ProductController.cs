@@ -33,9 +33,16 @@ namespace CollabClothing.WebApp.Controllers
             });
         }
 
-        public IActionResult Detail(string id)
+        public async Task<IActionResult> Detail(string id)
         {
-            return View();
+            var product = await _productApiClient.GetById(id);
+            var productDetails = new ProductDetailsViewModel()
+            {
+                Products = product,
+                ProductsImages = await _productApiClient.GetAllImages(id),
+                ProductRelated = await _productApiClient.GetFeaturedProducts(8)
+            };
+            return View(productDetails);
         }
     }
 }

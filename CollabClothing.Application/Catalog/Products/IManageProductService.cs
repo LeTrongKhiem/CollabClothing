@@ -21,6 +21,7 @@ namespace CollabClothing.Application.Catalog.Products
         Task<bool> UpdatePriceOld(string productId, decimal newPrice);
         Task<bool> UpdateSaleOff(string productId, int newSaleOff);
         Task<List<ProductViewModel>> GetFeaturedProducts(int take);
+        Task<List<ProductViewModel>> GetRelatedProduct(string cateId, int take);
         Task<List<ProductViewModel>> GetFeaturedProductsCategory(string idCate, int take);
         Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request);
 

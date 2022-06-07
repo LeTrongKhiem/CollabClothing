@@ -1,5 +1,498 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using CollabClothing.ViewModels.Catalog.Products
+@using Microsoft.Extensions.Configuration
+@model ProductDetailsViewModel
 @{
+	ViewData["Title"] = "Danh mục";
+}
+@inject IConfiguration Configuration
+@section Csss {
+<link rel="stylesheet" href="~/assets/css/detail.css">
+}
+<div class="container grid wide">
+ <ul class="breadcrumb">
+  <li>
+   <a href="/trang-chu">Home</a>
+   <meta property="position" content="1">
+  </li>
+		@*<li>
+			<a href="/danh-muc/@Model.Categories.CategoryId">@Model.Categories</a>
+			</li>*@
+  <li>
+   <a href="/Product/Detail/@Model.Products.Id">@Model.Products.ProductName</a>
+  </li>
+ </ul>
+ <div class="container-detail row">
+  <div class="detail-left col l-6">
+   <div class="main">
+	<img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
+					 alt="@Model.Products.ProductName" class="img-feature image-item">
+	<div class="control prev">
+	 <i class="bx bx-chevron-left"></i>
+	</div>
+	<div class="control next">
+	 <i class="bx bx-chevron-right"></i>
+	</div>
+   </div>
+   
+   <div class="list-image">
+	   @foreach (var item in Model.ProductsImages)
+				{
+		<div>
+		 <img class="image-item"
+						 src="@Configuration["BaseAddress"]@item.Path"
+						 alt="@item.Alt">
+		</div>
+				
+		   }
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-3-1.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-4-1.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-5.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-6.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-7.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-8.jpg"
+						 alt="">
+	</div>
+
+
+   </div>
+
+  </div>
+  <div class="detail-right col l-6">
+   <div class="box_productInfor">
+	<div class="detail-title">
+	 <h3>
+						@Model.Products.ProductName
+	 </h3>
+	</div>
+	<div class="detail-top">
+	 <span class="product-code">Mã sản phẩm: @Model.Products.Id</span>
+	</div>
+	<div class="detail-price">
+					@{
+						var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+					}
+	 <span class="price-current">@String.Format(format, "{0:c0}", @Model.Products.PriceCurrent)</span>
+	 <span class="price-old">@String.Format(format, "{0:c0}", @Model.Products.PriceOld)</span>
+	</div>
+	<div class="select-color">
+	 <p class="select-color-ttl">
+	  Chọn màu:
+	  <span>Hồng</span>
+	 </p>
+	 <ul>
+	  <li class="act">
+	   <div class="imgPro">
+		<img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
+									 alt="@Model.Products.ProductName" class=" ls-is-cached lazyloaded">
+	   </div>
+	  </li>
+	 </ul>
+	</div>
+	<div class="select-size">
+	 <div class="size-top">
+	  <p class="size-top-left">Chọn size: <span>S</span></p>
+	 </div>
+	 <ul class="size-list">
+	  <li class="size-list-item active">
+	   S
+	  </li>
+	  <li class="size-list-item">
+	   M
+	  </li>
+	  <li class="size-list-item">
+	   L
+	  </li>
+	  <li class="size-list-item">
+	   XL
+	  </li>
+	 </ul>
+	</div>
+	<div class="box-promo">
+	 <p class="box-promo-txt">Khuyến mãi (Đến 31/05)</p>
+	 <ul class="box-promo-list">
+	  <li class="box-promo-item">
+	   Nhập mã&nbsp;AVAFASHION&nbsp;giảm 10% tối đa 100.000đ cho đơn hàng từ 300.000đ trở
+	   lên khi thanh toán qua Ví Moca trên ứng dụng Grab
+	  </li>
+	  <li class="box-promo-item">
+	   Nhập mã&nbsp;AVA50&nbsp;giảm 10% tối đa 50.000đ khi thanh toán quét QRcode qua App
+	   của ngân hàng
+	  </li>
+	 </ul>
+	</div>
+	<div class="detail-btn">
+	 <a href="" class="btn btn-addcart">
+	  <p class="txt">Thêm vào giỏ</p>
+	 </a>
+	 <span class="btn btn-spmarket">Xem cửa hàng còn hàng</span>
+	</div>
+	<div class="policy">
+	 <li class="doitra ">
+	  <div class="iconl">
+	   <i class="icon-doitra"></i>
+	  </div>
+	  <p>
+	   Đổi trả <b>30 ngày</b> (với sản phẩm chưa sử dụng)
+	   <a href=""> Xem chi tiết </a>
+	  </p>
+	 </li>
+	 <li class="doitra ">
+	  <div class="iconl">
+	   <i class="icon-cod"></i>
+	  </div>
+	  <p>Giao hàng thu tiền, thanh toán online nhiều phương thức</p>
+	 </li>
+	 <li class="doitra ">
+	  <div class="iconl">
+	   <i class="icon-phone"></i>
+	  </div>
+	  <p>Tổng đài: <a href="tel:1900866673">1900.866.673</a> (7h30 - 22h00)</p>
+	 </li>
+	</div>
+	<div class="highlights">
+	 <li>Chất liệu Viscose hoa - 100% polyester.</li>
+	 <li>
+	  Form <a href="http://www.avafashion.com/vay-dam-nu-dam">đầm nữ</a> xòe cùng&nbsp;thiết
+	  kế nơ cánh tay nữ tính.
+	 </li>
+	 <li>
+	  <a href="http://www.avafashion.com/vay-dam-nu">Váy đầm nữ</a> với dáng cổ tim giúp tôn
+	  lên đường cong của người mặc.
+	 </li>
+	 <li>
+	  Sản phẩm <a href="https://www.avafashion.com/vay-dam-nu/dam-nu-co-tim-avafashion-ttp-hong">
+	   đầm
+	   nữ cổ tim ttp hồng
+	  </a> có&nbsp;bề mặt mịn màng, thoáng mát, phù hợp với nhiều hoạt
+	  động khác nhau.
+	 </li>
+	 <li>Thương hiệu AVAFashion đến từ Việt Nam.</li>
+	</div>
+	<div class="parameter">
+	 <p class="parameter-title info-title">Thông tin chi tiết</p>
+	 <div class="parameter-content info-content">
+	  <ul class="parameter-article info-article ">
+	   <li>
+		<p class="txt01">Người sử dụng</p>
+		<p class="txt02">Nữ</p>
+	   </li>
+
+	   <li>
+		<p class="txt01">Loại sản phẩm</p>
+		<p class="txt02">Đầm</p>
+	   </li>
+	   <li>
+		<p class="txt01">Kiểu dáng</p>
+		<p class="txt02">Xòe</p>
+	   </li>
+	   <li>
+		<p class="txt01">Chất liệu vải</p>
+		<p class="txt02">Viscose hoa - 100% polyester</p>
+	   </li>
+	   <li>
+		<p class="txt01">Sản xuất tại</p>
+		<p class="txt02">Việt Nam</p>
+	   </li>
+
+	   <li>
+		<p class="txt01">Thương hiệu</p>
+		<p class="txt02">AVAFashion (Việt Nam)</p>
+	   </li>
+
+	  </ul>
+	 </div>
+	</div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<section class="wraplock grid wide">
+ <p class="detail-product-ttl">Có thể bạn thích</p>
+ <div class="promo-listProduct-product row ">
+	 @{
+			List<List<ProductViewModel>> productRelated = new List<List<ProductViewModel>>();
+			List<ProductViewModel> relatedPart = new List<ProductViewModel>();
+	 }
+		@*@for(int i = 0; i < productRelated.Count; i++)
+		{
+			relatedPart.Add(Model.ProductRelated[i]);
+			if (relatedPart.Count == 4 || Model.ProductRelated.Count < 4)
+			{
+				
+			}
+		}*@
+		@foreach(var item in Model.ProductRelated)
+		{
+			  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="@Configuration["BaseAddress"]@item.ThumbnailImage"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">@item.ProductName </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   @String.Format(format, "{0:c0}", @item.PriceCurrent)
+	  </p>
+	  <p class="product-item-price-old">
+	   @String.Format(format, "{0:c0}", @item.PriceOld)
+	  </p>
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+		}
+  @*<div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>
+  <div class="promo-product col l-3 ">
+   <li class="product-item">
+	<a href="" class="product-item__link">
+	 <div class="item-wrap">
+	  <div class="product-item__img">
+
+	   <img src="https://cdn.tgdd.vn/Products/Images/10239/276138/chan-vay-caro-midi-avafashion-nb01-kem-5-1-600x600.jpg"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+	  </div>
+	 </div>
+	 <h3 class="product-item-heading">Chân váy caro midi - Kem </h3>
+	 <div class="product-item-price">
+	  <p class="product-item-price-current">
+	   279.000₫
+	  </p>
+	  <p class="product-item-price-old">
+	   399.000₫
+	  </p>
+	  <span class="lb-percent">-30%</span>
+
+	 </div>
+	</a>
+
+   </li>
+
+
+  </div>*@
+
+ </div>
+
+</section>
+
+@section Scripts {
+<script src="~/js/detail.js"></script>
 }

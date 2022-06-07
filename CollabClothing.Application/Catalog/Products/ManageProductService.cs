@@ -93,7 +93,8 @@ namespace CollabClothing.Application.Catalog.Products
                 {
                     Id = g2.ToString(),
                     ProductId = product.Id,
-                    Alt = product.ProductName
+                    Alt = product.ProductName,
+                    IsThumbnail = true
 
                 };
                 if (request.ThumbnailImage != null)
@@ -284,10 +285,6 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.b.NameBrand.Contains(request.Keyword));
             }
-            //if (!string.IsNullOrEmpty(request.CategoryIds.ToString()))
-            //{
-            //    query = query.Where(p => request.CategoryIds.Contains(p.pmc.CategoryId));
-            //}
             if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
             {
                 query = query.Where(x => x.pmc.CategoryId == request.CategoryId);
@@ -376,6 +373,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Alt = i.Alt,
                 Path = i.Path,
                 IsThumbnail = i.IsThumbnail,
+                productId = productId
             }).ToListAsync();
             return listProductImages;
         }
@@ -469,17 +467,8 @@ namespace CollabClothing.Application.Catalog.Products
 
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
-
             var query = (from p in _context.Products
-                             //join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId
-                             //into ppmc
-                             //from pmc in ppmc.DefaultIfEmpty()
-                             //join c in _context.Categories on pmc.CategoryId equals c.Id
-                             //into pmcc
-                             //from c in pmcc.DefaultIfEmpty()
                          join pimg in _context.ProductImages on p.Id equals pimg.ProductId
-                         //into ppimg
-                         //from pimg in ppimg.DefaultIfEmpty()
                          join b in _context.Brands on p.BrandId equals b.Id
                          into pb
                          from b in pb.DefaultIfEmpty()
@@ -591,6 +580,36 @@ namespace CollabClothing.Application.Catalog.Products
                 TotalRecord = totalRow
             };
             return pageResult;
+        }
+
+        public async Task<List<ProductViewModel>> GetRelatedProduct(string cateId, int take)
+        {
+            var query = (from p in _context.Products
+                         join pimg in _context.ProductImages on p.Id equals pimg.ProductId
+                         join b in _context.Brands on p.BrandId equals b.Id
+                         into pb
+                         from b in pb.DefaultIfEmpty()
+                         where pimg.IsThumbnail == true
+                         select new { p, pimg, b });
+            List<ProductViewModel> data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
+               .Select(x => new ProductViewModel()
+               {
+                   Id = x.p.Id,
+                   ProductName = x.p.ProductName,
+                   BrandId = x.b.NameBrand,
+                   Description = x.p.Description,
+                   Installment = x.p.Installment,
+                   PriceCurrent = x.p.PriceCurrent,
+                   PriceOld = x.p.PriceOld,
+                   SaleOff = x.p.SaleOff,
+                   Slug = x.p.Slug,
+                   SoldOut = x.p.SoldOut,
+                   //CategoryName = x.c.NameCategory,
+                   ThumbnailImage = x.pimg.Path,
+                   BrandName = x.b.NameBrand
+               })
+           .ToListAsync();
+            return data;
         }
     }
 }
