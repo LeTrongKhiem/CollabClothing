@@ -279,6 +279,7 @@ namespace CollabClothing.Application.Catalog.Products
                         from pimg in ppimg.DefaultIfEmpty()
                         join b in _context.Brands on p.BrandId equals b.Id into pb
                         from b in pb.DefaultIfEmpty()
+                        where pimg.IsThumbnail == true
                         select new { p, pmc, c, pimg, b };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))

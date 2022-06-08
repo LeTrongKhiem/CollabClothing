@@ -1,0 +1,17 @@
+﻿@using CollabClothing.ViewModels.Catalog.Banners
+@using Microsoft.Extensions.Configuration
+@model BannerViewModel
+@inject IConfiguration Configuration
+
+<div class="col l-12 m-12 c-12">
+   <div class="banner">
+	<div class="row">
+	 <div class="col l-12 m-6 c-0">
+	  <a href="#" class="banner__link">
+	   <img src="@Configuration["BaseAddress"]@Model.Images"
+								 alt="@Model.Alt" class="banner__img">
+	  </a>
+	 </div>
+	</div>
+   </div>
+  </div>

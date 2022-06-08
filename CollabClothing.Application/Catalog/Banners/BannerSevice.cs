@@ -36,6 +36,7 @@ namespace CollabClothing.Application.Catalog.Banners
                 NameBanner = request.NameBanner,
                 Text = request.Text,
                 TypeBannerId = request.TypeBannerId,
+
             };
             if (request.Images != null)
             {
@@ -125,7 +126,21 @@ namespace CollabClothing.Application.Catalog.Banners
                                       Text = x.Text,
                                       TypeBannerId = x.TypeBannerId
                                   }).ToListAsync();
-            return banner;
+            var banner1 = from b in _context.Banners
+                          join bt in _context.BannerTypes
+                            on b.TypeBannerId equals bt.Id into bbt
+                          from bt in bbt.DefaultIfEmpty()
+                          select new { b, bt };
+            var result = await banner1.OrderBy(x => x.b.Id).Where(x => x.bt.NameBannerType.Equals("Khuyến mãi thời trang")).Select(x => new BannerViewModel()
+            {
+                Id = x.b.Id,
+                Alt = x.b.Alt,
+                Images = x.b.Images,
+                NameBanner = x.b.NameBanner,
+                Text = x.b.Text,
+                TypeBannerId = x.b.TypeBannerId
+            }).ToListAsync();
+            return result;
 
         }
 
@@ -162,6 +177,16 @@ namespace CollabClothing.Application.Catalog.Banners
                 PageSize = request.PageSize
             };
             return pageResult;
+        }
+
+        public async Task<List<BannerTypeViewModel>> GetAllType()
+        {
+            var banner = from b in _context.BannerTypes select new { b };
+            return await banner.Select(x => new BannerTypeViewModel()
+            {
+                Id = x.b.Id,
+                NameBannerType = x.b.NameBannerType
+            }).ToListAsync();
         }
 
         public async Task<BannerViewModel> GetBannerById(string id)
