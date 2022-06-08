@@ -59,7 +59,7 @@
   <div class="container-product">
    <div class="row no-gutters phone-products">
 	<!-- Thêm từng điện thoại vào -->
-				@foreach (var item in Model.ListProductFeaturedByMen)
+				@foreach (var item in Model.ListProductFeaturedByWoman)
 				{
 		<div class="col l-2-4 l-3-m m-4 c-6">
 		 <div class="container-product__item">
@@ -170,26 +170,9 @@
  </div>
 
 
- <!-- Woman clothing -->
+ <!-- Men clothing -->
  <div class="row container__item">
-  <div class="col l-12 m-12 c-12">
-   <div class="banner">
-	<div class="row">
-	 <div class="col l-6 m-6 c-0">
-	  <a href="#" class="banner__link">
-	   <img src="https://cdn.mobilecity.vn/mobilecity-vn/images/2020/08/airpod-2-2.jpg"
-								 alt="Banner 1" class="banner__img">
-	  </a>
-	 </div>
-	 <div class="col l-6 m-6 c-0">
-	  <a href="#" class="banner__link">
-	   <img src="https://cdn.mobilecity.vn/mobilecity-vn/images/2019/11/untitled-1.jpg"
-								 alt="Banner 2" class="banner__img">
-	  </a>
-	 </div>
-	</div>
-   </div>
-  </div>
+		@await Component.InvokeAsync("BannerPartial", "56b0670f-8f60-422e-ad77-0dc1dfbe9d05")
 		@await Component.InvokeAsync("CategoryChildMenu", "82AAE383-3EDF-45F0-AA5B-9B4A514EA7A9")
 
   <div class="col l-12 m-12 c-12">
@@ -232,7 +215,7 @@
    <div class="container-product">
 	<div class="row no-gutters tool-products">
 	 <!-- Thêm phụ kiện -->
-					@foreach (var item in Model.ListProductFeaturedByWoman)
+					@foreach (var item in Model.ListProductFeaturedByMen)
 					{
 		 <div class="col l-2-4 l-3-m m-4 c-6">
 		  <div class="container-product__item">
@@ -337,25 +320,7 @@
 
  <!-- Child Clothing -->
  <div class="row container__item">
-  <div class="col l-12 m-12 c-12">
-   <div class="banner">
-	<div class="row">
-	 <div class="col l-6 m-6 c-0">
-	  <a href="#" class="banner__link">
-	   <img src="https://cdn.mobilecity.vn/mobilecity-vn/images/2020/08/airpods-pro-rep.jpg"
-								 alt="Banner 1" class="banner__img">
-	  </a>
-	 </div>
-	 <div class="col l-6 m-6 c-0">
-	  <a href="#" class="banner__link">
-	   <img src="https://cdn.mobilecity.vn/mobilecity-vn/images/2020/08/airpod-2-3.jpg"
-								 alt="Banner 2" class="banner__img">
-	  </a>
-	 </div>
-	</div>
-   </div>
-  </div>
-
+		@await Component.InvokeAsync("BannerPartial", "24eeaba6-b27a-4f9e-a9b7-807befb20a14")
 		@await Component.InvokeAsync("CategoryChildMenu", "29919101-ff6c-466f-907b-66a2f669be7f")
 
   <div class="col l-12 m-12 c-12">

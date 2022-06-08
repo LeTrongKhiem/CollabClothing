@@ -7,8 +7,8 @@
 				</div>
 			</div>
 			@await Component.InvokeAsync("NavBar");
-			<form action="" class="header-search">
-				<input type="text" class="header-search__input" placeholder="Tìm kiếm">
+			<form asp-controller="Product" asp-action="Category" method="get" class="header-search">
+				<input type="text" class="header-search__input" name="keyword" value="@ViewBag.Keyword" placeholder="Tìm kiếm">
 				<button type="submit" class="header-search__button">
 					<i class="header-search__icon"></i>
 				</button>

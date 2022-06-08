@@ -18,21 +18,28 @@ namespace CollabClothing.WebApp.Controllers
             _productApiClient = productApiClient;
             _categoryApiClient = categoryApiClient;
         }
-        public async Task<IActionResult> Category(string id, int pageIndex = 1)
+        public async Task<IActionResult> Category(string id, string slug, string keyword, int pageIndex = 1)
         {
+            if (id == null)
+            {
+                id = "all";
+            }
             var products = await _productApiClient.GetAll(new GetManageProductRequestPaging()
             {
                 CategoryId = id,
                 PageIndex = pageIndex,
-                PageSize = 10
+                PageSize = 10,
+                Slug = slug,
+                Keyword = keyword
             });
-            return View(new ProductCategoryViewModel()
+            ViewBag.Keyword = keyword;
+            var viewModel = new ProductCategoryViewModel()
             {
-                Category = await _categoryApiClient.GetById(id),
+                Category = !id.Equals("all") ? await _categoryApiClient.GetById(id) : null,
                 Products = products
-            });
+            };
+            return View(viewModel);
         }
-
         public async Task<IActionResult> Detail(string id)
         {
             var product = await _productApiClient.GetById(id);

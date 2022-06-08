@@ -2,6 +2,7 @@
 using CollabClothing.ViewModels.Catalog.Banners;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,20 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(data);
         }
         [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var banner = await _bannerApiClient.GetById(id);
+            if (banner == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(banner);
+        }
+        [HttpGet]
         public IActionResult Delete(string id)
         {
             var banner = new BannerDeleteRequest()
@@ -61,8 +76,19 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(request);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var bannerType = await _bannerApiClient.GetAllBannerType();
+            ViewBag.BannerType = bannerType.Select(x => new SelectListItem()
+            {
+                Text = x.NameBannerType,
+                Value = x.Id,
+                Selected = x.Id != null
+            });
             return View();
         }
         [HttpPost]
@@ -73,6 +99,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 return View(ModelState);
             }
+
             var result = await _bannerApiClient.Create(request);
             if (result)
             {

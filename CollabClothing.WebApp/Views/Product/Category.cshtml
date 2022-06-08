@@ -1,5 +1,4 @@
-﻿
-@using Microsoft.Extensions.Configuration
+﻿@using Microsoft.Extensions.Configuration
 @{
 	ViewData["Title"] = "Danh mục";
 }
@@ -10,21 +9,31 @@
 }
 <div class="grid wide">
  <div class="container-breadcrumb">
-  <ol class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
-   <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-	<a itemprop="item" href="/">
+  <ol class="breadcrumb">
+   <li itemprop="itemListElement">
+	<a itemprop="item" href="/trang-chu">
 	 <span itemprop="name" content="Trang chủ">
-	  <i class="fas fa-home"></i></i> Trang chủ
+	  <i class="fas fa-home"></i> Trang chủ
 	 </span>
 	</a>
 	<meta itemprop="position" content="1" />
    </li>
 
-   <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-	<i class="itemListElement-icon fa fa-angle-right"></i> <a itemprop="item"
-																		  href="/tranglaptop.html"
+   <li itemprop="itemListElement">
+				@if (@Model.Category != null)
+				{
+		<i class="itemListElement-icon fa fa-angle-right"></i> <a itemprop="item"
+																		  href="/danh-muc/@Model.Category.CategoryId"
 																		  title=""
-																		  class="actived"><span itemprop="name" content="Laptop">Laptop</span></a>
+																		  class="actived"><span itemprop="name" content="Laptop">@Model.Category.CategoryName</span></a>
+				} else
+				{
+					<i class="itemListElement-icon fa fa-angle-right"></i> <a itemprop="item"
+																		  href=""
+																		  title=""
+																		  class="actived"><span itemprop="name" content="Laptop">@ViewBag.Keyword</span></a>
+				}
+
 	<meta itemprop="position" content="2" />
    </li>
   </ol>
