@@ -70,6 +70,7 @@ namespace CollabClothing.WebApp
 #endif
 
             services.AddTransient<IBannerApiClient, BannerApiClient>();
+            services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IBrandApiClient, BrandApiClient>();
@@ -109,6 +110,14 @@ namespace CollabClothing.WebApp
 
                   });
                 endpoints.MapControllerRoute(
+                  name: "Product Brand",
+                  pattern: "/danh-muc/thuong-hieu/{brandId}", new
+                  {
+                      controller = "Product",
+                      action = "Category"
+
+                  });
+                endpoints.MapControllerRoute(
                   name: "Product Category",
                   pattern: "/danh-muc/{slug}", new
                   {
@@ -116,6 +125,24 @@ namespace CollabClothing.WebApp
                       action = "Category"
 
                   });
+
+                endpoints.MapControllerRoute(
+                  name: "Product LoadMore",
+                  pattern: "/danh-muc/load/{cateId}", new
+                  {
+                      controller = "LoadMore",
+                      action = "Index"
+
+                  });
+                endpoints.MapControllerRoute(
+                 name: "Product LoadMore",
+                 pattern: "/danh-muc/load/{brandId}", new
+                 {
+                     controller = "LoadMore",
+                     action = "Brand"
+
+                 });
+
                 endpoints.MapControllerRoute(
                     name: "Product Details",
                     pattern: "{controller=Product}/{action=Detail}/{id?}");

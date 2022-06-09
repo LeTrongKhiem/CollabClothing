@@ -1,4 +1,5 @@
-﻿@using Microsoft.Extensions.Configuration
+﻿
+@using Microsoft.Extensions.Configuration
 @{
 	ViewData["Title"] = "Danh mục";
 }
@@ -26,9 +27,10 @@
 																		  href="/danh-muc/@Model.Category.CategoryId"
 																		  title=""
 																		  class="actived"><span itemprop="name" content="Laptop">@Model.Category.CategoryName</span></a>
-				} else
+				}
+				else
 				{
-					<i class="itemListElement-icon fa fa-angle-right"></i> <a itemprop="item"
+		<i class="itemListElement-icon fa fa-angle-right"></i> <a itemprop="item"
 																		  href=""
 																		  title=""
 																		  class="actived"><span itemprop="name" content="Laptop">@ViewBag.Keyword</span></a>
@@ -43,86 +45,124 @@
  </div>
  <div class="col l-12 m-12 c-12">
   <div class="container-product">
-   <div class="row no-gutters laptop-products">
+   <div class="row no-gutters laptop-products" id="content">
 	<!-- Thêm sản phẩm -->
-				@foreach (var item in Model.Products.Items)
+				@if (@Model.Products.Items.Count <= 0)
 				{
-		<div class="col l-2-4 l-3-m m-4 c-6">
-		 <div class="container-product__item">
-		  <div class="container-product__item-heading">
-		   <div class="container-product__item-img"
+		<h2 style="text-align : center; margin : auto;">Không tìm thấy sản phẩm</h2>
+				}
+				else
+				{
+					@foreach (var item in Model.Products.Items)
+					{
+			<div class="productCount col l-2-4 l-3-m m-4 c-6">
+			 <div class="container-product__item">
+			  <div class="container-product__item-heading">
+			   <div class="container-product__item-img"
 								 style="">
-			<img src="@Configuration["BaseAddress"]@item.ThumbnailImage" alt="@item.ProductName">
-		   </div>
+				<img src="@Configuration["BaseAddress"]@item.ThumbnailImage" alt="@item.ProductName">
+			   </div>
 
-		   <div class="container-product-guarantee">
-			<a href="@item.Id" class="container-product__item-link">
-			 <div class="container-product-guarantee__heading">
-			  <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
+			   <div class="container-product-guarantee">
+				<a href="@item.Id" class="container-product__item-link">
+				 <div class="container-product-guarantee__heading">
+				  <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
 											 alt="Guarantee"
 											 class="container-product-guarantee__heading-img">
-			  <h3 class="container-product-guarantee__heading-text">
-			   MobileCity
-			   Care
-			  </h3>
-			 </div>
+				  <h3 class="container-product-guarantee__heading-text">
+				   MobileCity
+				   Care
+				  </h3>
+				 </div>
 
-			 <ul class="container-product-guarantee__list">
-			  <li class="container-product-guarantee__item">Đổi trả nếu phát hiện hàng không chính hãng</li>
-			  <li class="container-product-guarantee__item">
-			   Đổi mới 30 ngày đầu
-			   tiên
-			  </li>
-			  <li class="container-product-guarantee__item">Tặng voncher cho lần mua tiếp theo</li>
-			 </ul>
-			</a>
-			<a href=${product.linkGuarantee}
+				 <ul class="container-product-guarantee__list">
+				  <li class="container-product-guarantee__item">Đổi trả nếu phát hiện hàng không chính hãng</li>
+				  <li class="container-product-guarantee__item">
+				   Đổi mới 30 ngày đầu
+				   tiên
+				  </li>
+				  <li class="container-product-guarantee__item">Tặng voncher cho lần mua tiếp theo</li>
+				 </ul>
+				</a>
+				<a href=${product.linkGuarantee}
 								   class="container-product-guarantee__btn">Bảo hành vàng</a>
-		   </div>
-		  </div>
-		  <div class="container-product__item-wrap">
-		   <div class="container-product__item-info">
-			<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
-										@item.ProductName
-			</a>
-			<i class="container-product__item-sale-icon fas fa-gift"></i>
-		   </div>
-		   <div class="container-product__item-buy">
-			<span class="container-product__item-price">
-										@{
-											var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+			   </div>
+			  </div>
+			  <div class="container-product__item-wrap">
+			   <div class="container-product__item-info">
+				<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
+											@item.ProductName
+				</a>
+				<i class="container-product__item-sale-icon fas fa-gift"></i>
+			   </div>
+			   <div class="container-product__item-buy">
+				<span class="container-product__item-price">
+											@{
+												var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-										}
-										@String.Format(format, "{0:c0}", @item.PriceCurrent )
-			</span>
-			<a href=${product.linkProduct} class="container-product__item-btn">MUA</a>
-		   </div>
-		  </div>
-		  <ul class="container-product__item-gifts-list">
-		   <li class="container-product__item-gift">
-			<span class="container-product__item-span">Khuyến mãi</span>
-			Tặng Phiếu mua hàng 1.500.000đ
-		   </li>
+											}
+											@String.Format(format, "{0:c0}", @item.PriceCurrent )
+				</span>
+				<a href=${product.linkProduct} class="container-product__item-btn">MUA</a>
+			   </div>
+			  </div>
+			  <ul class="container-product__item-gifts-list">
+			   <li class="container-product__item-gift">
+				<span class="container-product__item-span">Khuyến mãi</span>
+				Tặng Phiếu mua hàng 1.500.000đ
+			   </li>
 
-		  </ul>
-		  <ul class="container-product-marker__list">
-		   <li class="container-product-marker__item container-product-marker__item--new">
-			Mới
-		   </li>
-		   <li class="container-product-marker__item container-product-marker__item--hot">
-			Hot
-		   </li>
-		  </ul>
-		 </div>
-		</div>
+			  </ul>
+			  <ul class="container-product-marker__list">
+			   <li class="container-product-marker__item container-product-marker__item--new">
+				Mới
+			   </li>
+			   <li class="container-product-marker__item container-product-marker__item--hot">
+				Hot
+			   </li>
+			  </ul>
+			 </div>
+			</div>
+					}
 				}
+
+
 
    </div>
   </div>
  </div>
  <div class="col l-12 m-12 c-12">
   <div class="container-view-more">
-   <a href="#" class="container-btn-extend">Xem thêm</a>
+   <button class="container-btn-extend" onclick="loadMore()">Xem thêm</button>
   </div>
  </div>
+
 </div>
+@section Scripts{
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+		function loadMore() {
+		var amount = document.getElementsByClassName('productCount').length;
+		jQuery.ajax({
+			
+			url: @Model.Brand == null ? 'load/@Model.Category.CategoryId', : 'load/@Model.Brand.Id',
+			contentType: "application/json; charset=utf-8",
+			type: "get", //send it through get method
+			data: {
+				exits: amount
+			},
+			success: function (data) {
+				var row = document.getElementById('content');
+				row.innerHTML += data;
+			},
+			error: function (xhr) {
+
+			}
+		});
+	}
+</script>
+
+}
