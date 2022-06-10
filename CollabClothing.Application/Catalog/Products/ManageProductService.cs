@@ -280,6 +280,7 @@ namespace CollabClothing.Application.Catalog.Products
                         join b in _context.Brands on p.BrandId equals b.Id into pb
                         from b in pb.DefaultIfEmpty()
                         where pimg.IsThumbnail == true
+                        orderby p.Id ascending
                         select new { p, pmc, c, pimg, b };
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -289,6 +290,10 @@ namespace CollabClothing.Application.Catalog.Products
             if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
             {
                 query = query.Where(x => x.pmc.CategoryId == request.CategoryId);
+            }
+            if (!string.IsNullOrEmpty(request.BrandId))
+            {
+                query = query.Where(x => x.p.BrandId == request.BrandId);
             }
             //3. paging
             //ham skip lay data tiep theo vd trang 1 (1-1 * 5) = 0 lay 5 sp tiep theo la den sp thu 1 den 5
@@ -611,6 +616,11 @@ namespace CollabClothing.Application.Catalog.Products
                })
            .ToListAsync();
             return data;
+        }
+
+        public async Task<PageResult<ProductViewModel>> GetProductLoadMore(int amount, string cateId)
+        {
+            throw new Exception();
         }
     }
 }

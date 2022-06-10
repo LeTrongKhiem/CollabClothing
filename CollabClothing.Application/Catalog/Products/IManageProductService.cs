@@ -25,6 +25,8 @@ namespace CollabClothing.Application.Catalog.Products
         Task<List<ProductViewModel>> GetFeaturedProductsCategory(string idCate, int take);
         Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request);
 
+        //loadmore
+        Task<PageResult<ProductViewModel>> GetProductLoadMore(int amount, string cateId);
 
         // method productimage
 
