@@ -64,16 +64,10 @@
                 Mã danh cha 
             </th>
             <th>
-                Level
-            </th>
-            <th>
                 ShowWeb
             </th>
             <th>
                 Slug
-            </th>
-            <th>
-                FileIcon
             </th>
             <th>
                 FileIcon
@@ -98,9 +92,6 @@
                 }
             
             <td>
-                @Html.DisplayFor(modelItem => item.Level)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.IsShowWeb)
             </td>
             <td>
@@ -108,9 +99,6 @@
             </td>
             <td>
                <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.Icon)" width="100px" height="100px"/>
-            </td>
-             <td>
-              @Html.DisplayFor(modelItem => item.ParentName)
             </td>
             <td>
                  <button class="btn btn-icon btn-hover btn-sm btn-rounded">
