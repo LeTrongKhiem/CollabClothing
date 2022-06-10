@@ -71,6 +71,9 @@ namespace CollabClothing.Application.Catalog.Categories
 
             var query = from cate in _context.Categories orderby cate.Level select new { cate };
             var query2 = _context.Categories.Where(x => x.ParentId == x.Id).Select(o => o.NameCategory).ToString();
+
+            var listCateParent = (from cate in _context.Categories orderby cate.Level where cate.ParentId == null select cate.NameCategory).FirstOrDefault();
+
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.cate.NameCategory.Contains(request.Keyword));
@@ -229,6 +232,12 @@ namespace CollabClothing.Application.Catalog.Categories
                 Icon = x.c.Icon,
                 Slug = x.c.Slug
             }).ToListAsync();
+        }
+
+        public async Task<string> GetParentNameById(string id)
+        {
+            var query = (from c in _context.Categories where c.Id == id select c.NameCategory).FirstOrDefault();
+            return query;
         }
     }
 }

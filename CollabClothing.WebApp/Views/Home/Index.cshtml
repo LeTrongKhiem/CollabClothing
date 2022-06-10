@@ -57,11 +57,11 @@
 
  <div class="col l-12 m-12 c-12">
   <div class="container-product">
-   <div class="row no-gutters phone-products">
+   <div class="row no-gutters phone-products" id="content">
 	<!-- Thêm từng điện thoại vào -->
 				@foreach (var item in Model.ListProductFeaturedByWoman)
 				{
-		<div class="col l-2-4 l-3-m m-4 c-6">
+		<div class=" productCount col l-2-4 l-3-m m-4 c-6">
 		 <div class="container-product__item">
 		  <div class="container-product__item-heading">
 		   <div class="container-product__item-img">
@@ -158,14 +158,7 @@
 
  <div class="col l-12 m-12 c-12">
   <div class="container-view-more">
-   <a id="next" class="container-btn-extend">Xem thêm sản phẩm</a>
-			@*<a data-ajax="true"
-				data-ajax-loading="loader"
-				data-ajax-mode="replace"
-				data-ajax-update="change"
-				href='@Url.Action("Index", "Home")'
-				class="container-btn-extend">Xem thêm sản phẩm
-				</a>*@
+   <button class="container-btn-extend" onclick="loadMore1()">Xem thêm</button>
   </div>
  </div>
 
@@ -213,11 +206,11 @@
 
   <div class="col l-12 m-12 c-12">
    <div class="container-product">
-	<div class="row no-gutters tool-products">
+	<div class="row no-gutters tool-products" id="content2">
 	 <!-- Thêm phụ kiện -->
 					@foreach (var item in Model.ListProductFeaturedByMen)
 					{
-		 <div class="col l-2-4 l-3-m m-4 c-6">
+		 <div class="productCount2 col l-2-4 l-3-m m-4 c-6">
 		  <div class="container-product__item">
 		   <div class="container-product__item-heading">
 			<div class="container-product__item-img">
@@ -312,10 +305,10 @@
   </div>
 
   <div class="col l-12 m-12 c-12">
-   <div class="container-view-more">
-	<a href="#" class="container-btn-extend">Xem thêm phụ kiện</a>
-   </div>
+  <div class="container-view-more">
+   <button class="container-btn-extend" onclick="loadMore2()">Xem thêm</button>
   </div>
+ </div>
  </div>
 
  <!-- Child Clothing -->
@@ -361,11 +354,11 @@
 
   <div class="col l-12 m-12 c-12">
    <div class="container-product">
-	<div class="row no-gutters fix-products">
+	<div class="row no-gutters fix-products" id="content3">
 	 <!-- Thêm sản phẩm -->
 					@foreach (var item in Model.ListProductFeaturedByChild)
 					{
-		 <div class="col l-2-4 l-3-m m-4 c-6">
+		 <div class="productCount3 col l-2-4 l-3-m m-4 c-6">
 		  <div class="container-product__item">
 		   <div class="container-product__item-heading">
 			<div class="container-product__item-img">
@@ -460,40 +453,74 @@
   </div>
 
   <div class="col l-12 m-12 c-12">
-   <div class="container-view-more">
-	<a href="#" class="container-btn-extend">Xem thêm</a>
-   </div>
+  <div class="container-view-more">
+   <button class="container-btn-extend" onclick="loadMore3()">Xem thêm</button>
   </div>
+ </div>
  </div>
 </div>
 
 @section Scripts {
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.min.js"></script>
-@*<script>
-	$("#next").click(function () {
-	GetData();
-	});
+@*<script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.min.js"></script>*@
+<script>
+		function loadMore1() {
+		var amount = document.getElementsByClassName('productCount').length;
+		jQuery.ajax({
+			url: 'danh-muc/load/b1d5cf80-70b8-4504-bb80-2cbfcf1d8600',
+			contentType: "application/json; charset=utf-8",
+			type: "get", //send it through get method
+			data: {
+				exits: amount
+			},
+			success: function (data) {
+				var row = document.getElementById('content');
+				row.innerHTML += data;
+			},
+			error: function (xhr) {
 
-	function GetData() {
-
-	$.ajax({
-	type: "GET",
-	url: '@Url.Action("Index" ,"Home")',
-	dataType: "json",
-	success:
-	error: function () { alert('Niesukces'); },
-	});
+			}
+		});
 	}
-	</script>*@
-	@*<script>
-	 $(".col l-2-4 l-3-m m-4 c-6").slice(0,2).show();
-	 $("#next").on("click", function() {
-		 $(".col l-2-4 l-3-m m-4 c-6:hidden").slice(0,2).show();
-		 if ($(".col l-2-4 l-3-m m-4 c-6:hidden").length == 0) {
-			  $("#next").fadeOut();
-		 }
-	 });
- </script>*@
+	function loadMore2() {
+		var amount = document.getElementsByClassName('productCount2').length;
+		jQuery.ajax({
+			url: 'danh-muc/load/2a809ece-5ee5-4cb2-bdb4-ba98c6e8022d',
+			contentType: "application/json; charset=utf-8",
+			type: "get", //send it through get method
+			data: {
+				exits: amount
+			},
+			success: function (data) {
+				var row = document.getElementById('content2');
+				row.innerHTML += data;
+			},
+			error: function (xhr) {
+
+			}
+		});
+	}
+	function loadMore3() {
+		var amount = document.getElementsByClassName('productCount3').length;
+		jQuery.ajax({
+			url: 'danh-muc/load/29919101-ff6c-466f-907b-66a2f669be7f',
+			contentType: "application/json; charset=utf-8",
+			type: "get", //send it through get method
+			data: {
+				exits: amount
+			},
+			success: function (data) {
+				var row = document.getElementById('content3');
+				row.innerHTML += data;
+			},
+			error: function (xhr) {
+
+			}
+		});
+	}
+</script>
 }

@@ -1,7 +1,9 @@
-﻿@using CollabClothing.ViewModels.Common
+﻿@using CollabClothing.ApiShared
+@using CollabClothing.ViewModels.Common
 @using Microsoft.Extensions.Configuration
 @model PageResult<CollabClothing.ViewModels.Catalog.Categories.CategoryViewModel>
 @inject IConfiguration Configuration
+@inject ICategoryApiClient _categoryApiClient
 @{
     ViewData["Title"] = "Danh sách danh mục";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -85,9 +87,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParentId)
-            </td>
+            
+                                @if (@item.ParentId.Equals("null"))
+                                {
+                                    <td>Danh mục cha</td>
+                        } else
+                                {
+                                var parentName = await _categoryApiClient.GetParentName(@item.ParentId);
+                                   <td>@parentName.ToString()</td>
+                }
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Level)
             </td>

@@ -20,6 +20,7 @@ namespace CollabClothing.Data.Entities
         public bool IsShowWeb { get; set; }
         public string Slug { get; set; }
         public int? Order { get; set; }
+        public Category ParentName { get; set; }
 
         public virtual ICollection<ProductMapCategory> ProductMapCategories { get; set; }
     }
