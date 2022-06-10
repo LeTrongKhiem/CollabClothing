@@ -131,7 +131,7 @@
    </div>
   </div>
  </div>
- <div class="col l-12 m-12 c-12">
+	 <div class="col l-12 m-12 c-12">
   <div class="container-view-more">
    <button class="container-btn-extend" onclick="loadMore()">Xem thêm</button>
   </div>
@@ -146,9 +146,11 @@
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
+		var action;
+		
 		jQuery.ajax({
-			
-			url: @Model.Brand == null ? 'load/@Model.Category.CategoryId', : 'load/@Model.Brand.Id',
+			url: action,
+			url: 'load/@Model.Category.CategoryId',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {

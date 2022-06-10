@@ -136,7 +136,7 @@ namespace CollabClothing.WebApp
                   });
                 endpoints.MapControllerRoute(
                  name: "Product LoadMore",
-                 pattern: "/danh-muc/load/{brandId}", new
+                 pattern: "/danh-muc/load/thuong-hieu/{brandId}", new
                  {
                      controller = "LoadMore",
                      action = "Brand"

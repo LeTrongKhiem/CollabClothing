@@ -20,15 +20,19 @@ namespace CollabClothing.WebApp.Controllers
         {
             String amount = HttpContext.Request.Query["exits"];
             int amountI = int.Parse(amount);
-            double page = amountI / 5;
+            double page = amountI / 2;
             int pageI = (int)Math.Floor(page) + 1;
+
             var product = await _productApiClient.GetAll(new GetManageProductRequestPaging()
             {
                 PageIndex = pageI,
-                PageSize = 5,
+                PageSize = 2,
                 CategoryId = cateId,
             });
-
+            if (amountI >= product.TotalRecord)
+            {
+                return null;
+            }
             return View(product);
         }
         public async Task<IActionResult> Brand(string brandId)
@@ -43,7 +47,10 @@ namespace CollabClothing.WebApp.Controllers
                 PageSize = 5,
                 BrandId = brandId,
             });
-
+            if (amountI >= product.TotalRecord)
+            {
+                return null;
+            }
             return View(product);
         }
     }
