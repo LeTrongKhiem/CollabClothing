@@ -141,5 +141,16 @@ namespace CollabClothing.ApiShared
         {
             return await GetListAsync<CategoryViewModel>($"/api/categories/category/{parentId}");
         }
+
+        public async Task<string> GetParentName(string id)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/categories/parentname/{id}");
+            var result = await response.Content.ReadAsStringAsync();
+            return result;
+        }
     }
 }
