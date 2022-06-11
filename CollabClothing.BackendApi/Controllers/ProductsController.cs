@@ -5,6 +5,7 @@ using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.Application.Catalog.Products;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -46,6 +47,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //get paging product admin
         [HttpGet("paging")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductRequestPaging request)
         {
             if (!ModelState.IsValid)

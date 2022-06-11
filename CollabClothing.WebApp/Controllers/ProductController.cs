@@ -51,7 +51,7 @@ namespace CollabClothing.WebApp.Controllers
             {
                 Products = product,
                 ProductsImages = await _productApiClient.GetAllImages(id),
-                ProductRelated = await _productApiClient.GetFeaturedProducts(8)
+                ProductRelated = await _productApiClient.GetFeaturedProducts(8),
             };
             return View(productDetails);
         }

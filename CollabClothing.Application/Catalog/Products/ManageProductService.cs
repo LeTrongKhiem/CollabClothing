@@ -284,8 +284,6 @@ namespace CollabClothing.Application.Catalog.Products
                          where (pimg.IsThumbnail == true)
                          orderby p.Id ascending
                          select new { p, pmc, c, pimg, b });
-            var parentCate = query.Where(x => x.c.ParentId.Equals("null"));
-            var cate = _context.Categories.FindAsync(request.CategoryId);
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
