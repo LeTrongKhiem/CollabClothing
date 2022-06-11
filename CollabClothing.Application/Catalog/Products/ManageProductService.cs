@@ -27,10 +27,12 @@ namespace CollabClothing.Application.Catalog.Products
         private readonly CollabClothingDBContext _context;
         private readonly IStorageService _storageService;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
-        public ManageProductService(CollabClothingDBContext context, IStorageService storageService)
+        private readonly IUtilities _utilitiesHelp;
+        public ManageProductService(CollabClothingDBContext context, IStorageService storageService, IUtilities utilitiesHelp)
         {
             _context = context;
             _storageService = storageService;
+            _utilitiesHelp = utilitiesHelp;
         }
 
 
@@ -77,7 +79,7 @@ namespace CollabClothing.Application.Catalog.Products
                 SoldOut = request.SoldOut,
                 Installment = request.Installment,
                 Description = request.Description,
-                Slug = request.Slug,
+                Slug = _utilitiesHelp.SEOUrl(request.ProductName),
                 Details = request.Details,
 
             };
@@ -270,18 +272,18 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPaging request)
         {
             //1. Select join
-            var query = from p in _context.Products
-                        join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
-                        from pmc in ppmc.DefaultIfEmpty()
-                        join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
-                        from c in pmcc.DefaultIfEmpty()
-                        join pimg in _context.ProductImages on p.Id equals pimg.ProductId into ppimg
-                        from pimg in ppimg.DefaultIfEmpty()
-                        join b in _context.Brands on p.BrandId equals b.Id into pb
-                        from b in pb.DefaultIfEmpty()
-                        where pimg.IsThumbnail == true
-                        orderby p.Id ascending
-                        select new { p, pmc, c, pimg, b };
+            var query = (from p in _context.Products
+                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
+                         from pmc in ppmc.DefaultIfEmpty()
+                         join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
+                         from c in pmcc.DefaultIfEmpty()
+                         join pimg in _context.ProductImages on p.Id equals pimg.ProductId into ppimg
+                         from pimg in ppimg.DefaultIfEmpty()
+                         join b in _context.Brands on p.BrandId equals b.Id into pb
+                         from b in pb.DefaultIfEmpty()
+                         where (pimg.IsThumbnail == true)
+                         orderby p.Id ascending
+                         select new { p, pmc, c, pimg, b });
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
@@ -321,7 +323,6 @@ namespace CollabClothing.Application.Catalog.Products
                     BrandName = x.b.NameBrand
                 })
                 .ToListAsync();
-
             //4. select and projection
             var pagedResult = new PageResult<ProductViewModel>()
             {

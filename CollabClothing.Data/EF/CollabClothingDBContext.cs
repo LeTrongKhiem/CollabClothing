@@ -361,8 +361,10 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(255)
                     .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
                 entity.Property(e => e.Details)
-                    .HasColumnType("text").IsUnicode(true)
-                    .UseCollation("Vietnamese_100_CI_AS");
+                     //.HasColumnType("text").IsUnicode(true)
+                     //.UseCollation("Vietnamese_100_CI_AS");
+                     .HasColumnType("nvarchar(MAX)")
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
                 entity.Property(e => e.Slug)
                     .IsRequired()
                     .HasColumnType("text");

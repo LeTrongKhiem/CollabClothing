@@ -60,7 +60,7 @@ namespace CollabClothing.ApiShared
             requestContent.Add(new StringContent(request.SoldOut.ToString()), "soldOut");
             requestContent.Add(new StringContent(request.Installment.ToString()), "installment");
             requestContent.Add(new StringContent(request.Description), "description");
-            requestContent.Add(new StringContent(request.Slug), "slug");
+            //requestContent.Add(new StringContent(request.Slug), "slug");
             requestContent.Add(new StringContent(request.Details), "details");
             requestContent.Add(new StringContent(request.CategoryId), "categoryId");
 
