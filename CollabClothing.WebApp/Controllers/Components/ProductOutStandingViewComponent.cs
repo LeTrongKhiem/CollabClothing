@@ -21,8 +21,8 @@ namespace CollabClothing.WebApp.Controllers.Components
             var listProduct = _productApiClient.GetFeaturedProductsByCategory(id, quantity);
             var result = new HomeViewModel()
             {
-                GetProductOutStanding = await listProduct
-
+                GetProductOutStanding = await listProduct,
+                categoryId = id
             };
             return View(result);
         }

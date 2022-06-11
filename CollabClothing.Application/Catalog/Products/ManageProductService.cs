@@ -284,6 +284,8 @@ namespace CollabClothing.Application.Catalog.Products
                          where (pimg.IsThumbnail == true)
                          orderby p.Id ascending
                          select new { p, pmc, c, pimg, b });
+            var parentCate = query.Where(x => x.c.ParentId.Equals("null"));
+            var cate = _context.Categories.FindAsync(request.CategoryId);
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
@@ -291,7 +293,7 @@ namespace CollabClothing.Application.Catalog.Products
             }
             if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
             {
-                query = query.Where(x => x.pmc.CategoryId == request.CategoryId);
+                query = query.Where(x => x.pmc.CategoryId == request.CategoryId || x.c.ParentId == request.CategoryId);
             }
             if (!string.IsNullOrEmpty(request.BrandId))
             {

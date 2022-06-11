@@ -30,7 +30,7 @@ namespace CollabClothing.WebApp.Controllers
             {
                 CategoryId = id,
                 PageIndex = pageIndex,
-                PageSize = 2,
+                PageSize = 5,
                 Slug = slug,
                 Keyword = keyword,
                 BrandId = brandId

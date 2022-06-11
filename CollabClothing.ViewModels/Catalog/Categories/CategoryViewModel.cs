@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CollabClothing.ViewModels.Catalog.Categories
@@ -19,5 +20,6 @@ namespace CollabClothing.ViewModels.Catalog.Categories
         public string Icon { get; set; }
         public string ParentName { get; set; }
         public int Order { get; set; }
+        public ICollection<CategoryViewModel> ChildCategory { get; set; }
     }
 }
