@@ -2,7 +2,7 @@
 @using Microsoft.Extensions.Configuration
 @model ProductDetailsViewModel
 @{
-	ViewData["Title"] = "Danh mục";
+	ViewData["Title"] = "Chi tiết sản phẩm";
 }
 @inject IConfiguration Configuration
 @section Csss {
@@ -202,7 +202,7 @@
 	   </li>
 	   <li>
 		<p class="txt01">Kiểu dáng</p>
-		<p class="txt02">Xòe</p>
+		<p class="txt02">@Html.Raw(@Model.Products.Details)</p>
 	   </li>
 	   <li>
 		<p class="txt01">Chất liệu vải</p>

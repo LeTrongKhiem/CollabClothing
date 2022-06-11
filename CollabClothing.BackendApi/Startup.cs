@@ -67,6 +67,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<IBannerService, BannerSevice>();
+            services.AddTransient<IUtilities, UtilitiesHelp>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
