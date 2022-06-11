@@ -44,11 +44,6 @@
 				<input asp-for="ProductName" class="form-control" />
 				<span asp-validation-for="ProductName" class="text-danger"></span>
 			</div>
-			@*<div class="form-group col-md-6">
-				<label asp-for="Slug" class="control-label"></label>
-				<input asp-for="Slug" class="form-control" placeholder="/Slug"/>
-				<span asp-validation-for="Slug" class="text-danger"></span>
-			</div>*@
 			</div>
 			<div class="row">
 				<div class="form-group col-md-4">
@@ -69,16 +64,6 @@
 			</div>
 			
 		   <div class="row">
-			  @* <div class="form-group col-md-6">
-					<label asp-for="BrandId" class="control-label"></label>
-					<input asp-for="BrandId" class="form-control" />
-					<span asp-validation-for="BrandId" class="text-danger"></span>
-				</div>*@
-			 @*<div class="form-group col-md-6">
-				<label asp-for="CategoryId" class="control-label"></label>
-				<input asp-for="CategoryId" class="form-control" />
-				<span asp-validation-for="CategoryId" class="text-danger"></span>
-			</div>*@
 			<div class="form-group col-md-6">
 			 <label asp-for="BrandId" class="font-weight-semibold"></label>
 			 <select asp-for="BrandId" class="custom-select" style="min-width:200px;" asp-items="ViewBag.Brands">

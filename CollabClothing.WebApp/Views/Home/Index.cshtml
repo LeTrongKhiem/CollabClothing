@@ -56,10 +56,10 @@
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script>
-		function loadMore1() {
+		 function loadMore1() {
 		var amount = document.getElementsByClassName('productCount').length;
 		jQuery.ajax({
-			url: 'danh-muc/load/b1d5cf80-70b8-4504-bb80-2cbfcf1d8600',
+			url: 'danh-muc/load/@Model.categoryId',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {
@@ -67,43 +67,6 @@
 			},
 			success: function (data) {
 				var row = document.getElementById('content');
-				row.innerHTML += data;
-			},
-			error: function (xhr) {
-
-			}
-		});
-	}
-	function loadMore2() {
-		var amount = document.getElementsByClassName('productCount2').length;
-		jQuery.ajax({
-			url: 'danh-muc/load/2a809ece-5ee5-4cb2-bdb4-ba98c6e8022d',
-			contentType: "application/json; charset=utf-8",
-			type: "get", //send it through get method
-			data: {
-				exits: amount,
-
-			},
-			success: function (data) {
-				var row = document.getElementById('content2');
-				row.innerHTML += data;
-			},
-			error: function (xhr) {
-
-			}
-		});
-	}
-	function loadMore3() {
-		var amount = document.getElementsByClassName('productCount3').length;
-		jQuery.ajax({
-			url: 'danh-muc/load/29919101-ff6c-466f-907b-66a2f669be7f',
-			contentType: "application/json; charset=utf-8",
-			type: "get", //send it through get method
-			data: {
-				exits: amount
-			},
-			success: function (data) {
-				var row = document.getElementById('content3');
 				row.innerHTML += data;
 			},
 			error: function (xhr) {

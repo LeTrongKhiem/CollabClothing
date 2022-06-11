@@ -18,6 +18,7 @@ namespace CollabClothing.WebApp.Models
         public List<ProductViewModel> ListProductFeaturedByChild { get; set; }
         public List<CategoryViewModel> ListCate { get; set; }
         public List<ProductViewModel> GetProductOutStanding { get; set; }
+        public string categoryId { get; set; }
         public string ParseToVND(decimal price)
         {
             string a = string.Format("{ 0:0,0 vnđ}", price);
