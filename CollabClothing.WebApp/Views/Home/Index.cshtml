@@ -19,142 +19,9 @@
  <!-- Child Category Woman -->
 	@await Component.InvokeAsync("CategoryChildMenu", "d93e95a9-38bd-4011-a457-29a763189a81")
  <!-- Filter Product -->
- <div class="col l-12 m-12 c-12">
-  <div class="container-filter">
-   <div class="container-filter__item">
-	Giá từ cao đến thấp
-	<i class="container-filter__icon-down fas fa-chevron-down"></i>
-	<ul class="container-filter__list">
-	 <li class="container-filter__list-item">
-	  Giá từ cao đến thấp
-	 </li>
-	 <li class="container-filter__list-item">
-	  Giá từ thấp đến cao
-	 </li>
-	</ul>
-   </div>
-
-   <div class="container-filter__item">
-	Bán chạy
-	<i class="container-filter__icon-down fas fa-chevron-down"></i>
-	<ul class="container-filter__list">
-	 <li class="container-filter__list-item">
-	  Bán chạy
-	 </li>
-	 <li class="container-filter__list-item">
-	  Phổ biến
-	 </li>
-	 <li class="container-filter__list-item">
-	  Khuyến mãi
-	 </li>
-	 <li class="container-filter__list-item">
-	  Hàng mới về
-	 </li>
-	</ul>
-   </div>
-  </div>
- </div>
-
- <div class="col l-12 m-12 c-12">
-  <div class="container-product">
-   <div class="row no-gutters phone-products" id="content">
-	<!-- Thêm từng điện thoại vào -->
-				@foreach (var item in Model.ListProductFeaturedByWoman)
-				{
-		<div class=" productCount col l-2-4 l-3-m m-4 c-6">
-		 <div class="container-product__item">
-		  <div class="container-product__item-heading">
-		   <div class="container-product__item-img">
-			<img src="@Configuration["BaseAddress"]@item.ThumbnailImage" />
-		   </div>
-
-		   <div class="container-product-guarantee">
-			<a href='#' class="container-product__item-link">
-			 <div class="container-product-guarantee__heading">
-			  <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
-											 alt="Guarantee"
-											 class="container-product-guarantee__heading-img">
-			  <h3 class="container-product-guarantee__heading-text">
-			   CollabClothing
-			  </h3>
-			 </div>
-
-			 <ul class="container-product-guarantee__list">
-			  <li class="container-product-guarantee__item">
-			   Hỗ trợ đổi trả trong
-			   vòng 7 ngày
-			  </li>
-			  <li class="container-product-guarantee__item">
-			   Cam kết hàng chính
-			   hãng
-			  </li>
-			  <li class="container-product-guarantee__item">
-			   Tặng Voncher cho các
-			   lần mua sau
-			  </li>
-			  <li class="container-product-guarantee__item">
-			   Hoàn tiền nếu phát
-			   hiện hàng giả
-			  </li>
-			 </ul>
-			</a>
-			<a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
-		   </div>
-		  </div>
-		  <div class="container-product__item-wrap">
-		   <div class="container-product__item-info">
-			<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
-										@item.ProductName
-			</a>
-			<i class="container-product__item-sale-icon fas fa-gift"></i>
-		   </div>
-								@{
-									// define format VND
-									var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-
-								}
-		   <div class="container-product__item-buy">
-			<span class="container-product__item-price">
-										@*@Model.ParseToVND(@item.PriceCurrent)*@
-
-			 <div class="cta-btn">
-			  <span class="old-price">@String.Format(format, "{0:c0}", @item.PriceOld )</span>
-			  <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
-			 </div>
-			</span>
-			<a href='#' class="container-product__item-btn">MUA</a>
-		   </div>
-		  </div>
-		  <ul class="container-product__item-gifts-list">
-		   <li class="container-product__item-gift">
-			1. Cam kết:
-			<span class="container-product__item-gift--highlight">
-			 Hàng chính hãng
-			</span>
-			khi mua BHV
-		   </li>
-		   <li class="container-product__item-gift">
-			2. Voncher:
-			<span class="container-product__item-gift--highlight">
-			 Lên tới 100k
-			</span>
-		   </li>
-		  </ul>
-		  <ul class="container-product-marker__list ${markers}">
-		   <li class="container-product-marker__item container-product-marker__item--new">
-			Mới
-		   </li>
-		   <li class="container-product-marker__item container-product-marker__item--hot">
-			Hot
-		   </li>
-		  </ul>
-		 </div>
-		</div>
-				}
-
-   </div>
-  </div>
- </div>
+	@await Component.InvokeAsync("Filter")
+ <!-- Product -->
+	@await Component.InvokeAsync("ProductOutStanding", "d93e95a9-38bd-4011-a457-29a763189a81")
 
  <div class="col l-12 m-12 c-12">
   <div class="container-view-more">
@@ -168,147 +35,16 @@
 		@await Component.InvokeAsync("BannerPartial", "56b0670f-8f60-422e-ad77-0dc1dfbe9d05")
 		@await Component.InvokeAsync("CategoryChildMenu", "82AAE383-3EDF-45F0-AA5B-9B4A514EA7A9")
 
-  <div class="col l-12 m-12 c-12">
-   <div class="container-filter">
-	<div class="container-filter__item">
-	 Giá từ cao đến thấp
-	 <i class="container-filter__icon-down fas fa-chevron-down"></i>
-	 <ul class="container-filter__list">
-	  <li class="container-filter__list-item">
-	   Giá từ cao đến thấp
-	  </li>
-	  <li class="container-filter__list-item">
-	   Giá từ thấp đến cao
-	  </li>
-	 </ul>
-	</div>
+  <!-- Filter Product -->
+		@await Component.InvokeAsync("Filter")
 
-	<div class="container-filter__item">
-	 Bán chạy
-	 <i class="container-filter__icon-down fas fa-chevron-down"></i>
-	 <ul class="container-filter__list">
-	  <li class="container-filter__list-item">
-	   Bán chạy
-	  </li>
-	  <li class="container-filter__list-item">
-	   Phổ biến
-	  </li>
-	  <li class="container-filter__list-item">
-	   Khuyến mãi
-	  </li>
-	  <li class="container-filter__list-item">
-	   Hàng mới về
-	  </li>
-	 </ul>
-	</div>
+		@await Component.InvokeAsync("ProductOutStanding", "82AAE383-3EDF-45F0-AA5B-9B4A514EA7A9")
+
+  <div class="col l-12 m-12 c-12">
+   <div class="container-view-more">
+	<button class="container-btn-extend" onclick="loadMore2()">Xem thêm</button>
    </div>
   </div>
-
-  <div class="col l-12 m-12 c-12">
-   <div class="container-product">
-	<div class="row no-gutters tool-products" id="content2">
-	 <!-- Thêm phụ kiện -->
-					@foreach (var item in Model.ListProductFeaturedByMen)
-					{
-		 <div class="productCount2 col l-2-4 l-3-m m-4 c-6">
-		  <div class="container-product__item">
-		   <div class="container-product__item-heading">
-			<div class="container-product__item-img">
-			 <img src="@Configuration["BaseAddress"]@item.ThumbnailImage" />
-			</div>
-
-			<div class="container-product-guarantee">
-			 <a href='#' class="container-product__item-link">
-			  <div class="container-product-guarantee__heading">
-			   <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
-												 alt="Guarantee"
-												 class="container-product-guarantee__heading-img">
-			   <h3 class="container-product-guarantee__heading-text">
-				CollabClothing
-			   </h3>
-			  </div>
-
-			  <ul class="container-product-guarantee__list">
-			   <li class="container-product-guarantee__item">
-				Hỗ trợ đổi trả trong
-				vòng 7 ngày
-			   </li>
-			   <li class="container-product-guarantee__item">
-				Cam kết hàng chính
-				hãng
-			   </li>
-			   <li class="container-product-guarantee__item">
-				Tặng Voncher cho các
-				lần mua sau
-			   </li>
-			   <li class="container-product-guarantee__item">
-				Hoàn tiền nếu phát
-				hiện hàng giả
-			   </li>
-			  </ul>
-			 </a>
-			 <a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
-			</div>
-		   </div>
-		   <div class="container-product__item-wrap">
-			<div class="container-product__item-info">
-			 <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
-											@item.ProductName
-			 </a>
-			 <i class="container-product__item-sale-icon fas fa-gift"></i>
-			</div>
-									@{
-										// define format VND
-										var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-
-									}
-			<div class="container-product__item-buy">
-			 <span class="container-product__item-price">
-											@*@Model.ParseToVND(@item.PriceCurrent)*@
-
-			  <div class="cta-btn">
-			   <span class="old-price">@item.PriceOld</span>
-			   <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
-			  </div>
-			 </span>
-			 <a href='#' class="container-product__item-btn">MUA</a>
-			</div>
-		   </div>
-		   <ul class="container-product__item-gifts-list">
-			<li class="container-product__item-gift">
-			 1. Cam kết:
-			 <span class="container-product__item-gift--highlight">
-			  Hàng chính hãng
-			 </span>
-			 khi mua BHV
-			</li>
-			<li class="container-product__item-gift">
-			 2. Voncher:
-			 <span class="container-product__item-gift--highlight">
-			  Lên tới 100k
-			 </span>
-			</li>
-		   </ul>
-		   <ul class="container-product-marker__list ${markers}">
-			<li class="container-product-marker__item container-product-marker__item--new">
-			 Mới
-			</li>
-			<li class="container-product-marker__item container-product-marker__item--hot">
-			 Hot
-			</li>
-		   </ul>
-		  </div>
-		 </div>
-					}
-	</div>
-   </div>
-  </div>
-
-  <div class="col l-12 m-12 c-12">
-  <div class="container-view-more">
-   <button class="container-btn-extend" onclick="loadMore2()">Xem thêm</button>
-  </div>
- </div>
  </div>
 
  <!-- Child Clothing -->
@@ -316,157 +52,25 @@
 		@await Component.InvokeAsync("BannerPartial", "24eeaba6-b27a-4f9e-a9b7-807befb20a14")
 		@await Component.InvokeAsync("CategoryChildMenu", "29919101-ff6c-466f-907b-66a2f669be7f")
 
-  <div class="col l-12 m-12 c-12">
-   <div class="container-filter">
-	<div class="container-filter__item">
-	 Giá từ cao đến thấp
-	 <i class="container-filter__icon-down fas fa-chevron-down"></i>
-	 <ul class="container-filter__list">
-	  <li class="container-filter__list-item">
-	   Giá từ cao đến thấp
-	  </li>
-	  <li class="container-filter__list-item">
-	   Giá từ thấp đến cao
-	  </li>
-	 </ul>
-	</div>
+  <!-- Filter Product -->
+		@await Component.InvokeAsync("Filter")
 
-	<div class="container-filter__item">
-	 Bán chạy
-	 <i class="container-filter__icon-down fas fa-chevron-down"></i>
-	 <ul class="container-filter__list">
-	  <li class="container-filter__list-item">
-	   Bán chạy
-	  </li>
-	  <li class="container-filter__list-item">
-	   Phổ biến
-	  </li>
-	  <li class="container-filter__list-item">
-	   Khuyến mãi
-	  </li>
-	  <li class="container-filter__list-item">
-	   Hàng mới về
-	  </li>
-	 </ul>
-	</div>
+		@await Component.InvokeAsync("ProductOutStanding", "29919101-ff6c-466f-907b-66a2f669be7f")
+
+  <div class="col l-12 m-12 c-12">
+   <div class="container-view-more">
+	<button class="container-btn-extend" onclick="loadMore3()">Xem thêm</button>
    </div>
   </div>
-
-  <div class="col l-12 m-12 c-12">
-   <div class="container-product">
-	<div class="row no-gutters fix-products" id="content3">
-	 <!-- Thêm sản phẩm -->
-					@foreach (var item in Model.ListProductFeaturedByChild)
-					{
-		 <div class="productCount3 col l-2-4 l-3-m m-4 c-6">
-		  <div class="container-product__item">
-		   <div class="container-product__item-heading">
-			<div class="container-product__item-img">
-			 <img src="@Configuration["BaseAddress"]@item.ThumbnailImage" />
-			</div>
-
-			<div class="container-product-guarantee">
-			 <a href='#' class="container-product__item-link">
-			  <div class="container-product-guarantee__heading">
-			   <img src="https://mobilecity.vn/public/assets/img/icon-mobilecity-care.png"
-												 alt="Guarantee"
-												 class="container-product-guarantee__heading-img">
-			   <h3 class="container-product-guarantee__heading-text">
-				CollabClothing
-			   </h3>
-			  </div>
-
-			  <ul class="container-product-guarantee__list">
-			   <li class="container-product-guarantee__item">
-				Hỗ trợ đổi trả trong
-				vòng 7 ngày
-			   </li>
-			   <li class="container-product-guarantee__item">
-				Cam kết hàng chính
-				hãng
-			   </li>
-			   <li class="container-product-guarantee__item">
-				Tặng Voncher cho các
-				lần mua sau
-			   </li>
-			   <li class="container-product-guarantee__item">
-				Hoàn tiền nếu phát
-				hiện hàng giả
-			   </li>
-			  </ul>
-			 </a>
-			 <a href='#' class="container-product-guarantee__btn">Bảo hành vàng</a>
-			</div>
-		   </div>
-		   <div class="container-product__item-wrap">
-			<div class="container-product__item-info">
-			 <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="container-product__item-name">
-											@item.ProductName
-			 </a>
-			 <i class="container-product__item-sale-icon fas fa-gift"></i>
-			</div>
-									@{
-										// define format VND
-										var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-
-									}
-			<div class="container-product__item-buy">
-			 <span class="container-product__item-price">
-											@*@Model.ParseToVND(@item.PriceCurrent)*@
-
-			  <div class="cta-btn">
-			   <span class="old-price">@item.PriceOld</span>
-			   <span class="new-price">@String.Format(format, "{0:c0}", @item.PriceCurrent )</span>
-			  </div>
-			 </span>
-			 <a href='#' class="container-product__item-btn">MUA</a>
-			</div>
-		   </div>
-		   <ul class="container-product__item-gifts-list">
-			<li class="container-product__item-gift">
-			 1. Cam kết:
-			 <span class="container-product__item-gift--highlight">
-			  Hàng chính hãng
-			 </span>
-			 khi mua BHV
-			</li>
-			<li class="container-product__item-gift">
-			 2. Voncher:
-			 <span class="container-product__item-gift--highlight">
-			  Lên tới 100k
-			 </span>
-			</li>
-		   </ul>
-		   <ul class="container-product-marker__list ${markers}">
-			<li class="container-product-marker__item container-product-marker__item--new">
-			 Mới
-			</li>
-			<li class="container-product-marker__item container-product-marker__item--hot">
-			 Hot
-			</li>
-		   </ul>
-		  </div>
-		 </div>
-					}
-	</div>
-   </div>
-  </div>
-
-  <div class="col l-12 m-12 c-12">
-  <div class="container-view-more">
-   <button class="container-btn-extend" onclick="loadMore3()">Xem thêm</button>
-  </div>
- </div>
  </div>
 </div>
 
 @section Scripts {
-script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-@*<script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.min.js"></script>*@
 <script>
 		function loadMore1() {
 		var amount = document.getElementsByClassName('productCount').length;
@@ -493,7 +97,8 @@ script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {
-				exits: amount
+				exits: amount,
+
 			},
 			success: function (data) {
 				var row = document.getElementById('content2');

@@ -142,12 +142,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.CategoryId)) {
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
 		@*"'load/thuong-hieu/@Model.Brand.Id'"*@
 		jQuery.ajax({
-			@*url: action,*@
 			url: 'load/@Model.Category.CategoryId',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
@@ -164,5 +164,30 @@
 		});
 	}
 </script>
+		}
+
+		@if (@Model.Brand != null && !string.IsNullOrEmpty(@Model.Brand.Id)) {
+<script>
+		function loadMore() {
+		var amount = document.getElementsByClassName('productCount').length;
+		jQuery.ajax({
+			url: 'load/@Model.Brand.Id',
+			contentType: "application/json; charset=utf-8",
+			type: "get", //send it through get method
+			data: {
+				exits: amount
+			},
+			success: function (data) {
+				var row = document.getElementById('content');
+				row.innerHTML += data;
+			},
+			error: function (xhr) {
+
+			}
+		});
+	}
+</script>
+		}
+
 
 }
