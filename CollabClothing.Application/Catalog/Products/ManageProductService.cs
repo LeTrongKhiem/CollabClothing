@@ -88,6 +88,17 @@ namespace CollabClothing.Application.Catalog.Products
                 ProductId = product.Id,
                 CategoryId = request.CategoryId
             };
+            Guid productDetailsId = Guid.NewGuid();
+            var productDetails = new ProductDetail()
+            {
+                Id = productDetailsId.ToString(),
+                ProductId = product.Id,
+                Consumer = request.Consumer,
+                Cotton = request.Cotton,
+                Form = request.Form,
+                Type = request.Type,
+                MadeIn = request.MadeIn
+            };
             foreach (var item in request.ThumbnailImage)
             {
                 Guid g2 = Guid.NewGuid();
@@ -112,7 +123,7 @@ namespace CollabClothing.Application.Catalog.Products
 
             _context.Products.Add(product);
             _context.ProductMapCategories.Add(ProductMapCategory);
-
+            _context.ProductDetails.Add(productDetails);
             await _context.SaveChangesAsync();
             return product.Id;
         }
@@ -177,8 +188,9 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<int> Update(string id, ProductEditRequest request)
         {
             var product = await _context.Products.FindAsync(id);
+            var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == id);
             var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
-            if (product == null)
+            if (product == null || productDetails == null)
             {
                 throw new CollabException($"Cannot find product with Id: {id}");
             }
@@ -187,6 +199,13 @@ namespace CollabClothing.Application.Catalog.Products
             product.BrandId = request.BrandId;
             product.Details = request.Details;
             product.Slug = request.Slug;
+
+            productDetails.Form = request.Form;
+            productDetails.Consumer = request.Consumer;
+            productDetails.Cotton = request.Cotton;
+            productDetails.MadeIn = request.MadeIn;
+            productDetails.Type = request.Type;
+
             if (image == null)
             {
                 Guid g = Guid.NewGuid();
@@ -240,6 +259,7 @@ namespace CollabClothing.Application.Catalog.Products
                                     where pmc.ProductId == productId
                                     select c.NameCategory).ToListAsync();
             var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
+            var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with id: {productId}");
@@ -258,7 +278,12 @@ namespace CollabClothing.Application.Catalog.Products
                 SoldOut = product.SoldOut,
                 Categories = categories,
                 ThumbnailImage = image != null ? image.Path : "no-image.jpg",
-                Details = product.Details
+                Details = product.Details,
+                Consumer = productDetails.Consumer,
+                Type = productDetails.Type,
+                Cotton = productDetails.Cotton,
+                Form = productDetails.Form,
+                MadeIn = productDetails.MadeIn,
             };
             return viewModel;
         }

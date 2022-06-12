@@ -5,23 +5,23 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Scripts{
-	<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-	<script>
-		ClassicEditor
-		.create( document.querySelector( '#txt_details' ), {
-		} )
-		.then( editor => {
-			window.editor = editor;
-		} )
-		.catch( err => {
-			console.error( err.stack );
-		} );
-	</script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+<script>
+	ClassicEditor
+	.create( document.querySelector( '#txt_details' ), {
+	} )
+	.then( editor => {
+		window.editor = editor;
+	} )
+	.catch( err => {
+		console.error( err.stack );
+	} );
+</script>
 }
 <style>
-.ck-editor__editable_inline {
-	min-height: 400px;
-}
+ .ck-editor__editable_inline {
+  min-height: 400px;
+ }
 </style>
 <h1>Thêm sản phẩm</h1>
 <hr />
@@ -35,84 +35,121 @@
  </div>
 </div>
 <div class="row">
-	<div class="col-md-8">
-		<form asp-action="Create" enctype="multipart/form-data" method="post">
-			<div asp-validation-summary="All" class="text-danger"></div>
-			<div class="row">
-				<div class="form-group col-md-6">
-				<label asp-for="ProductName" class="control-label"></label>
-				<input asp-for="ProductName" class="form-control" />
-				<span asp-validation-for="ProductName" class="text-danger"></span>
-			</div>
-			</div>
-			<div class="row">
-				<div class="form-group col-md-4">
-					<label asp-for="PriceCurrent" class="control-label"></label>
-					<input asp-for="PriceCurrent" class="form-control" />
-					<span asp-validation-for="PriceCurrent" class="text-danger"></span>
-				</div>
-				<div class="form-group col-md-4">
-					<label asp-for="PriceOld" class="control-label"></label>
-					<input asp-for="PriceOld" class="form-control" />
-					<span asp-validation-for="PriceOld" class="text-danger"></span>
-				</div>
-				<div class="form-group col-md-4">
-					<label asp-for="SaleOff" class="control-label"></label>
-					<input asp-for="SaleOff" class="form-control" />
-					<span asp-validation-for="SaleOff" class="text-danger"></span>
-				</div>
-			</div>
-			
-		   <div class="row">
-			<div class="form-group col-md-6">
-			 <label asp-for="BrandId" class="font-weight-semibold"></label>
-			 <select asp-for="BrandId" class="custom-select" style="min-width:200px;" asp-items="ViewBag.Brands">
-			  <option value="" disabled selected>Chọn thương hiệu</option>
-			 </select>
-			</div>
-			<div class="form-group col-md-6">
-			 <label asp-for="CategoryId" class="font-weight-semibold"></label>
-			 <select asp-for="CategoryId" class="custom-select" style="min-width:200px;" asp-items="ViewBag.Categories">
-			  <option value="" disabled selected>Chọn danh mục</option>
-			 </select>
-			</div>
-		   </div>
-			
-			<div class="form-group form-check">
-				<label class="form-check-label">
-					<input class="form-check-input" asp-for="SoldOut" /> @Html.DisplayNameFor(model => model.SoldOut)
-				</label>
-			</div>
-			<div class="form-group">
-				<label asp-for="Installment" class="control-label"></label>
-				<input asp-for="Installment" class="form-control" />
-				<span asp-validation-for="Installment" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Description" class="control-label"></label>
-				<input asp-for="Description" class="form-control" />
-				<span asp-validation-for="Description" class="text-danger"></span>
-			</div>
-			
-			<div class="form-group">
-				<label asp-for="ThumbnailImage" class="control-label"></label>
-				<input asp-for="ThumbnailImage" class="form-control" type="file" multiple/>
-				<span asp-validation-for="ThumbnailImage" class="text-danger"></span>
-			</div>
-		   
-			<div class="form-group">
-				<label asp-for="Details" class="control-label"></label>
-				<textarea id="txt_details" asp-for="Details" rows="10" class="form-control"></textarea>
-				<span asp-validation-for="Details" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="Tạo" class="btn btn-primary" />
-			</div>
-		</form>
+ <div class="col-md-12">
+  <form asp-action="Create" enctype="multipart/form-data" method="post">
+   <div asp-validation-summary="All" class="text-danger"></div>
+   <div class="row">
+	<div class="form-group col-md-6">
+	 <label asp-for="ProductName" class="control-label"></label>
+	 <input asp-for="ProductName" class="form-control" />
+	 <span asp-validation-for="ProductName" class="text-danger"></span>
 	</div>
+	<div class="form-group form-check col-md-6" style="margin-top: 37px;">
+	 <label class="form-check-label">
+	  <input class="form-check-input" asp-for="SoldOut" /> @Html.DisplayNameFor(model => model.SoldOut)
+	 </label>
+	</div>
+   </div>
+   <div class="row">
+	<div class="form-group col-md-3">
+	 <label asp-for="PriceCurrent" class="control-label"></label>
+	 <input asp-for="PriceCurrent" class="form-control" />
+	 <span asp-validation-for="PriceCurrent" class="text-danger"></span>
+	</div>
+	<div class="form-group col-md-3">
+	 <label asp-for="PriceOld" class="control-label"></label>
+	 <input asp-for="PriceOld" class="form-control" />
+	 <span asp-validation-for="PriceOld" class="text-danger"></span>
+	</div>
+	<div class="form-group col-md-3">
+	 <label asp-for="SaleOff" class="control-label"></label>
+	 <input asp-for="SaleOff" class="form-control" />
+	 <span asp-validation-for="SaleOff" class="text-danger"></span>
+	</div>
+
+	<div class="form-group col-md-3">
+	 <label asp-for="Installment" class="control-label"></label>
+	 <input asp-for="Installment" class="form-control" />
+	 <span asp-validation-for="Installment" class="text-danger"></span>
+	</div>
+   </div>
+
+   <div class="row">
+	<div class="form-group col-md-6">
+	 <label asp-for="BrandId" class="font-weight-semibold"></label>
+	 <select asp-for="BrandId" class="custom-select" style="min-width:200px;" asp-items="ViewBag.Brands">
+	  <option value="" disabled selected>Chọn thương hiệu</option>
+	 </select>
+	</div>
+	<div class="form-group col-md-6">
+	 <label asp-for="CategoryId" class="font-weight-semibold"></label>
+	 <select asp-for="CategoryId" class="custom-select" style="min-width:200px;" asp-items="ViewBag.Categories">
+	  <option value="" disabled selected>Chọn danh mục</option>
+	 </select>
+	</div>
+   </div>
+   <div class="row">
+	<div class="form-group col-md-8">
+	 <label asp-for="Description" class="control-label"></label>
+	 <input asp-for="Description" class="form-control" />
+	 <span asp-validation-for="Description" class="text-danger"></span>
+	</div>
+
+	<div class="form-group col-md-4">
+	 <label asp-for="ThumbnailImage" class="control-label"></label>
+	 <input asp-for="ThumbnailImage" class="form-control" type="file" multiple />
+	 <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
+	</div>
+   </div>
+   <div class="row">
+	<div class="form-group col-md-2">
+	 <label asp-for="Consumer" class="control-label"></label>
+	 <select class="custom-select">
+		  <option value="" disabled selected>Chọn người sử dụng</option>
+	  <option value="1">Nam</option>
+	  <option value="0">Nữ</option>
+	 </select>
+	 <span asp-validation-for="Consumer" class="text-danger"></span>
+	</div>
+	<div class="form-group col-md-2">
+	 <label asp-for="Type" class="control-label"></label>
+	 <input asp-for="Type" class="form-control" type="text" />
+	 <span asp-validation-for="Type" class="text-danger"></span>
+	</div>
+	<div class="form-group col-md-3">
+	 <label asp-for="Form" class="control-label"></label>
+	 <input asp-for="Form" class="form-control" type="text" />
+	 <span asp-validation-for="Form" class="text-danger"></span>
+	</div>
+
+	<div class="form-group col-md-3">
+	 <label asp-for="Cotton" class="control-label"></label>
+	 <select class="custom-select">
+		  <option value="" disabled selected>Chọn chất liệu</option>
+	  <option value="1">Vải thun Cotton co giãn 4 chiều</option>
+	  <option value="0">Vải thun Cotton co giãn 2 chiều</option>
+	 </select>
+	 <span asp-validation-for="Cotton" class="text-danger"></span>
+	</div>
+	<div class="form-group col-md-2">
+	 <label asp-for="MadeIn" class="control-label"></label>
+	 <input asp-for="MadeIn" class="form-control" type="text" />
+	 <span asp-validation-for="MadeIn" class="text-danger"></span>
+	</div>
+   </div>
+   <div class="form-group">
+	<label asp-for="Details" class="control-label"></label>
+	<textarea id="txt_details" asp-for="Details" rows="10" class="form-control"></textarea>
+	<span asp-validation-for="Details" class="text-danger"></span>
+   </div>
+   <div class="form-group">
+	<input type="submit" value="Tạo" class="btn btn-primary" />
+   </div>
+  </form>
+ </div>
 </div>
 
 <div>
-	<a asp-action="Index">Trở lại</a>
+ <a asp-action="Index">Trở lại</a>
 </div>
 

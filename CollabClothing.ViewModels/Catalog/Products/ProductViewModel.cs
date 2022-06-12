@@ -25,5 +25,11 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public List<string> Categories { get; set; } = new List<string>();
         public string CategoryName { get; set; }
         public string BrandName { get; set; }
+
+        public bool Consumer { get; set; }
+        public string Type { get; set; }
+        public string Form { get; set; }
+        public bool Cotton { get; set; }
+        public string MadeIn { get; set; }
     }
 }

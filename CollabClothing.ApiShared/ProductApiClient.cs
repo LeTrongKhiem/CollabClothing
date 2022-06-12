@@ -64,6 +64,11 @@ namespace CollabClothing.ApiShared
             requestContent.Add(new StringContent(request.Details), "details");
             requestContent.Add(new StringContent(request.CategoryId), "categoryId");
 
+            requestContent.Add(new StringContent(request.Consumer.ToString()), "consumer");
+            requestContent.Add(new StringContent(request.Form), "form");
+            requestContent.Add(new StringContent(request.Type), "type");
+            requestContent.Add(new StringContent(request.MadeIn), "madeIn");
+            requestContent.Add(new StringContent(request.Cotton.ToString()), "cotton");
             var response = await client.PostAsync($"/api/products/", requestContent);
             return response.IsSuccessStatusCode;
 
@@ -92,6 +97,12 @@ namespace CollabClothing.ApiShared
             requestContent.Add(new StringContent(request.Slug), "slug");
             //requestContent.Add(new StringContent(request.ImagePath), "imagePath");
             requestContent.Add(new StringContent(request.BrandId), "brandId");
+
+            requestContent.Add(new StringContent(request.Consumer.ToString()), "consumer");
+            requestContent.Add(new StringContent(request.Form), "form");
+            requestContent.Add(new StringContent(request.Type), "type");
+            requestContent.Add(new StringContent(request.MadeIn), "madeIn");
+            requestContent.Add(new StringContent(request.Cotton.ToString()), "cotton");
             var response = await client.PutAsync($"/api/products/{id}", requestContent);
             return response.IsSuccessStatusCode;
         }

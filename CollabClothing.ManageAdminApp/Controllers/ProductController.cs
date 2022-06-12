@@ -133,7 +133,12 @@ namespace CollabClothing.ManageAdminApp.Controllers
                     Description = productResult.Description,
                     BrandId = productResult.BrandId,
                     Slug = productResult.Slug,
-                    ImagePath = productResult.ThumbnailImage
+                    ImagePath = productResult.ThumbnailImage,
+                    Consumer = productResult.Consumer,
+                    Form = productResult.Form,
+                    Type = productResult.Type,
+                    Cotton = productResult.Cotton,
+                    MadeIn = productResult.MadeIn
                 };
                 return View(editProduct);
             }
@@ -153,6 +158,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 TempData["result"] = "Cập nhật thành công";
                 return RedirectToAction("Index");
             }
+            ModelState.AddModelError("", "Cập nhật thất bại");
             return View(request);
         }
         #endregion

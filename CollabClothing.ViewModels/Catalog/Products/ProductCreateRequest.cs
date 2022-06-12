@@ -42,6 +42,16 @@ namespace CollabClothing.ViewModels.Catalog.Products
         // public ProductImageViewModel productImage { get; set; }
         // public CategoryViewModel CategoryViewModel { get; set; }
         // public Size Size { get; set; }
+        [Display(Name = "Người sử dụng")]
+        public bool Consumer { get; set; }
+        [Display(Name = "Loại sản phẩm")]
+        public string? Type { get; set; }
+        [Display(Name = "Kiểu dáng")]
+        public string? Form { get; set; }
+        [Display(Name = "Chất liệu vải")]
+        public bool Cotton { get; set; }
+        [Display(Name = "Sản xuất tại")]
+        public string? MadeIn { get; set; }
 
     }
 }

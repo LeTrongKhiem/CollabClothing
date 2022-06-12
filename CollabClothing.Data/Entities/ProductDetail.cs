@@ -11,6 +11,11 @@ namespace CollabClothing.Data.Entities
         public string ProductId { get; set; }
         public string Details { get; set; }
 
+        public bool Consumer { get; set; }
+        public string Type { get; set; }
+        public string Form { get; set; }
+        public bool Cotton { get; set; }
+        public string MadeIn { get; set; }
         public virtual Product Product { get; set; }
     }
 }
