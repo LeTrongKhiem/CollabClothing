@@ -152,6 +152,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 return View(ModelState);
             }
+            ViewBag.Product = request;
             var result = await _productApiClient.Edit(id, request);
             if (result)
             {

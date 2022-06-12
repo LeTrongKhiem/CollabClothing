@@ -194,24 +194,24 @@
 	  <ul class="parameter-article info-article ">
 	   <li>
 		<p class="txt01">Người sử dụng</p>
-		<p class="txt02">Nữ</p>
+		<p class="txt02">@(Model.Products.Consumer == true ? "Nam" : "Nữ")</p>
 	   </li>
 
 	   <li>
 		<p class="txt01">Loại sản phẩm</p>
-		<p class="txt02"></p>
+		<p class="txt02">@Model.Products.Type</p>
 	   </li>
 	   <li>
 		<p class="txt01">Kiểu dáng</p>
-		<p class="txt02"></p>
+		<p class="txt02">@Model.Products.Form</p>
 	   </li>
 	   <li>
 		<p class="txt01">Chất liệu vải</p>
-		<p class="txt02">Viscose hoa - 100% polyester</p>
+		<p class="txt02">@(Model.Products.Cotton == true ? "Vải cotton co dãn 4 chiều" : "Vải cotton co dãn 2 chiều")</p>
 	   </li>
 	   <li>
 		<p class="txt01">Sản xuất tại</p>
-		<p class="txt02">Việt Nam</p>
+		<p class="txt02">@Model.Products.MadeIn</p>
 	   </li>
 
 	   <li>
