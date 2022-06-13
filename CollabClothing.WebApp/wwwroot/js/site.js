@@ -5,5 +5,15 @@
 $('body').on('click', '.container-product__item-btn', function (e) {
     e.preventDefault();
     const id = $(this).data('id');
-    alert(id);
+    $.ajax({
+        type: "POST",
+        url: '/Cart/AddToCart/',
+        success: function (response) {
+            console.log(response)
+        },
+        data: {
+            id : id
+        },
+        dataType: 'json'
+    });
 })
