@@ -5,6 +5,7 @@ using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.Application.Catalog.Products;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -46,6 +47,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         //get paging product admin
         [HttpGet("paging")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductRequestPaging request)
         {
             if (!ModelState.IsValid)
@@ -53,6 +55,21 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var product = await _manageProductService.GetAllPaging(request);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+        [HttpGet("getbrand/{productId}")]
+        [AllowAnonymous]
+        public IActionResult GetBrandNameByProductId(string productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = _manageProductService.GetBrandByProductId(productId);
             if (product == null)
             {
                 return BadRequest("Not found");
@@ -68,6 +85,20 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var product = await _manageProductService.GetProductById(productId);
+            if (product == null)
+            {
+                return BadRequest("Cannot find product");
+            }
+            return Ok(product);
+        }
+        [HttpGet("sizename/{productId}")]
+        public IActionResult GetSizeName(string productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = _manageProductService.GetNameSize(productId);
             if (product == null)
             {
                 return BadRequest("Cannot find product");
@@ -131,6 +162,20 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest();
             }
             var result = await _manageProductService.CategoryAssign(id, request);
+            if (!result)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("sizes/{id}")]
+        public async Task<IActionResult> SizesAssign(string id, SizeAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.SizeAssign(id, request);
             if (!result)
             {
                 return BadRequest(result);

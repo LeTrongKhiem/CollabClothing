@@ -24,7 +24,7 @@ namespace CollabClothing.Application.Catalog.Products
         Task<List<ProductViewModel>> GetRelatedProduct(string cateId, int take);
         Task<List<ProductViewModel>> GetFeaturedProductsCategory(string idCate, int take);
         Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request);
-
+        string GetBrandByProductId(string productId);
         //loadmore
         Task<PageResult<ProductViewModel>> GetProductLoadMore(int amount, string cateId);
 
@@ -37,6 +37,8 @@ namespace CollabClothing.Application.Catalog.Products
         Task<ProductImageViewModel> GetProductImageById(string imageId);
         //assign category
         Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
+        //assign size
+        Task<bool> SizeAssign(string id, SizeAssignRequest request);
 
         // Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();
@@ -44,6 +46,9 @@ namespace CollabClothing.Application.Catalog.Products
 
         //method phan chia product voi category
 
+        #region Get Name
+        List<string> GetNameSize(string productId);
+        #endregion
 
 
     }

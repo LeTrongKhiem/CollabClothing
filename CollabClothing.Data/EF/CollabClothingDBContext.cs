@@ -396,6 +396,15 @@ namespace CollabClothing.Data.EF
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_product_productDetails");
+                entity.Property(e => e.Type)
+                     .HasMaxLength(255)
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.Form)
+                    .HasMaxLength(255)
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.MadeIn)
+                    .HasMaxLength(255)
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>

@@ -88,6 +88,17 @@ namespace CollabClothing.Application.Catalog.Products
                 ProductId = product.Id,
                 CategoryId = request.CategoryId
             };
+            Guid productDetailsId = Guid.NewGuid();
+            var productDetails = new ProductDetail()
+            {
+                Id = productDetailsId.ToString(),
+                ProductId = product.Id,
+                Consumer = request.Consumer,
+                Cotton = request.Cotton,
+                Form = request.Form,
+                Type = request.Type,
+                MadeIn = request.MadeIn
+            };
             foreach (var item in request.ThumbnailImage)
             {
                 Guid g2 = Guid.NewGuid();
@@ -112,7 +123,7 @@ namespace CollabClothing.Application.Catalog.Products
 
             _context.Products.Add(product);
             _context.ProductMapCategories.Add(ProductMapCategory);
-
+            _context.ProductDetails.Add(productDetails);
             await _context.SaveChangesAsync();
             return product.Id;
         }
@@ -145,6 +156,34 @@ namespace CollabClothing.Application.Catalog.Products
             await _context.SaveChangesAsync();
             return true;
         }
+        #region Size Assign
+        public async Task<bool> SizeAssign(string id, SizeAssignRequest request)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return false;
+            }
+            foreach (var size in request.Sizes)
+            {
+                var productMapSize = await _context.ProductMapSizes.FirstOrDefaultAsync(x => x.SizeId == size.Id && x.ProductId == product.Id);
+                if (productMapSize != null && size.Selected == false)
+                {
+                    _context.ProductMapSizes.Remove(productMapSize);
+                }
+                else if (productMapSize == null && size.Selected == true)
+                {
+                    await _context.ProductMapSizes.AddAsync(new ProductMapSize()
+                    {
+                        ProductId = id,
+                        SizeId = size.Id
+                    });
+                }
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        #endregion
         //method dung de delete product khai bao bien product dung de tim kiem product bang id
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
         public async Task<int> Delete(string productId)
@@ -177,8 +216,9 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<int> Update(string id, ProductEditRequest request)
         {
             var product = await _context.Products.FindAsync(id);
+            var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == id);
             var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == product.Id);
-            if (product == null)
+            if (product == null || productDetails == null)
             {
                 throw new CollabException($"Cannot find product with Id: {id}");
             }
@@ -187,6 +227,13 @@ namespace CollabClothing.Application.Catalog.Products
             product.BrandId = request.BrandId;
             product.Details = request.Details;
             product.Slug = request.Slug;
+
+            productDetails.Form = request.Form;
+            productDetails.Consumer = request.Consumer;
+            productDetails.Cotton = request.Cotton;
+            productDetails.MadeIn = request.MadeIn;
+            productDetails.Type = request.Type;
+
             if (image == null)
             {
                 Guid g = Guid.NewGuid();
@@ -239,7 +286,12 @@ namespace CollabClothing.Application.Catalog.Products
                                     join pmc in _context.ProductMapCategories on c.Id equals pmc.CategoryId
                                     where pmc.ProductId == productId
                                     select c.NameCategory).ToListAsync();
+            var sizes = await (from size in _context.Sizes
+                               join pms in _context.ProductMapSizes on size.Id equals pms.SizeId
+                               where pms.ProductId == productId
+                               select size.NameSize).ToListAsync();
             var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
+            var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with id: {productId}");
@@ -258,7 +310,13 @@ namespace CollabClothing.Application.Catalog.Products
                 SoldOut = product.SoldOut,
                 Categories = categories,
                 ThumbnailImage = image != null ? image.Path : "no-image.jpg",
-                Details = product.Details
+                Details = product.Details,
+                Consumer = productDetails.Consumer,
+                Type = productDetails.Type,
+                Cotton = productDetails.Cotton,
+                Form = productDetails.Form,
+                MadeIn = productDetails.MadeIn,
+                Sizes = sizes
             };
             return viewModel;
         }
@@ -284,8 +342,6 @@ namespace CollabClothing.Application.Catalog.Products
                          where (pimg.IsThumbnail == true)
                          orderby p.Id ascending
                          select new { p, pmc, c, pimg, b });
-            var parentCate = query.Where(x => x.c.ParentId.Equals("null"));
-            var cate = _context.Categories.FindAsync(request.CategoryId);
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
             {
@@ -624,6 +680,30 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<PageResult<ProductViewModel>> GetProductLoadMore(int amount, string cateId)
         {
             throw new Exception();
+        }
+
+        public string GetBrandByProductId(string productId)
+        {
+            var query = from p in _context.Products
+                        join b in _context.Brands on p.BrandId equals b.Id
+                        into pb
+                        from b in pb.DefaultIfEmpty()
+                        where p.Id == productId
+                        select new { p, b };
+            var result = query.Select(x => x.b.NameBrand).FirstOrDefault();
+            return result;
+        }
+
+        public List<string> GetNameSize(string productId)
+        {
+            var query = from s in _context.Sizes
+                        join pms in _context.ProductMapSizes on s.Id equals pms.SizeId
+                        into pmss
+                        from pms in pmss.DefaultIfEmpty()
+                        where pms.ProductId == productId
+                        select new { s, pms };
+            var result = query.Select(x => x.s.NameSize).ToList();
+            return result;
         }
     }
 }

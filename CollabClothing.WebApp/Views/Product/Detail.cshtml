@@ -1,10 +1,12 @@
-﻿@using CollabClothing.ViewModels.Catalog.Products
+﻿@using CollabClothing.ApiShared
+@using CollabClothing.ViewModels.Catalog.Products
 @using Microsoft.Extensions.Configuration
 @model ProductDetailsViewModel
 @{
 	ViewData["Title"] = "Chi tiết sản phẩm";
 }
 @inject IConfiguration Configuration
+@inject IProductApiClient _productApiClient
 @section Csss {
 <link rel="stylesheet" href="~/assets/css/detail.css">
 }
@@ -74,8 +76,9 @@
 
 
    </div>
-
+   <div style="margin-top:50%; font-size : 20px;">@Html.Raw(@Model.Products.Details)</div>
   </div>
+  
   <div class="detail-right col l-6">
    <div class="box_productInfor">
 	<div class="detail-title">
@@ -112,10 +115,17 @@
 	  <p class="size-top-left">Chọn size: <span>S</span></p>
 	 </div>
 	 <ul class="size-list">
-	  <li class="size-list-item active">
-	   S
-	  </li>
-	  <li class="size-list-item">
+		 @{
+							var sizes = await _productApiClient.GetSizeNameByProductId(@Model.Products.Id);
+	 }
+						@foreach(var size in sizes)
+						{
+							<li class="size-list-item @(sizes.First() == size ? "active" : "")">
+							   @size.ToString()
+							  </li>
+						}
+	  
+	@*  <li class="size-list-item">
 	   M
 	  </li>
 	  <li class="size-list-item">
@@ -123,7 +133,7 @@
 	  </li>
 	  <li class="size-list-item">
 	   XL
-	  </li>
+	  </li>*@
 	 </ul>
 	</div>
 	<div class="box-promo">
@@ -169,23 +179,25 @@
 	 </li>
 	</div>
 	<div class="highlights">
-	 <li>Chất liệu Viscose hoa - 100% polyester.</li>
+	 <li>Chất liệu @(Model.Products.Cotton == true ? "Vải cotton co dãn 4 chiều" : "Vải cotton co dãn 2 chiều")</li>
 	 <li>
-	  Form <a href="http://www.avafashion.com/vay-dam-nu-dam">đầm nữ</a> xòe cùng&nbsp;thiết
+	  Form <a href="">@Model.Products.Form</a> xòe cùng&nbsp;thiết
 	  kế nơ cánh tay nữ tính.
 	 </li>
 	 <li>
-	  <a href="http://www.avafashion.com/vay-dam-nu">Váy đầm nữ</a> với dáng cổ tim giúp tôn
+	  <a href="">@Model.Products.Type</a> với dáng cổ tim giúp tôn
 	  lên đường cong của người mặc.
 	 </li>
 	 <li>
-	  Sản phẩm <a href="https://www.avafashion.com/vay-dam-nu/dam-nu-co-tim-avafashion-ttp-hong">
-	   đầm
-	   nữ cổ tim ttp hồng
+		 @{
+			var brand = await _productApiClient.GetBrandNameByProductId(@Model.Products.Id);
+		}
+	  Sản phẩm <a href="/Product/Detail/@Model.Products.Id">
+	   @Model.Products.ProductName
 	  </a> có&nbsp;bề mặt mịn màng, thoáng mát, phù hợp với nhiều hoạt
 	  động khác nhau.
 	 </li>
-	 <li>Thương hiệu AVAFashion đến từ Việt Nam.</li>
+	 <li>Thương hiệu @brand.ToString() đến từ @Model.Products.MadeIn.</li>
 	</div>
 	<div class="parameter">
 	 <p class="parameter-title info-title">Thông tin chi tiết</p>
@@ -193,29 +205,30 @@
 	  <ul class="parameter-article info-article ">
 	   <li>
 		<p class="txt01">Người sử dụng</p>
-		<p class="txt02">Nữ</p>
+		<p class="txt02">@(Model.Products.Consumer == true ? "Nam" : "Nữ")</p>
 	   </li>
 
 	   <li>
 		<p class="txt01">Loại sản phẩm</p>
-		<p class="txt02">Đầm</p>
+		<p class="txt02">@Model.Products.Type</p>
 	   </li>
 	   <li>
 		<p class="txt01">Kiểu dáng</p>
-		<p class="txt02">@Html.Raw(@Model.Products.Details)</p>
+		<p class="txt02">@Model.Products.Form</p>
 	   </li>
 	   <li>
 		<p class="txt01">Chất liệu vải</p>
-		<p class="txt02">Viscose hoa - 100% polyester</p>
+		<p class="txt02">@(Model.Products.Cotton == true ? "Vải cotton co dãn 4 chiều" : "Vải cotton co dãn 2 chiều")</p>
 	   </li>
 	   <li>
 		<p class="txt01">Sản xuất tại</p>
-		<p class="txt02">Việt Nam</p>
+		<p class="txt02">@Model.Products.MadeIn</p>
 	   </li>
 
 	   <li>
 		<p class="txt01">Thương hiệu</p>
-		<p class="txt02">AVAFashion (Việt Nam)</p>
+		
+		<p class="txt02">@brand.ToString()</p>
 	   </li>
 
 	  </ul>
