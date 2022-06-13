@@ -178,9 +178,14 @@
 				 <i class="anticon anticon-delete"></i>
 				</a>
 			   </button>
-			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+			   <button class="btn btn-icon btn-hover btn-sm btn-rounded" style="width : 100px;">
 				<a asp-controller="Product" asp-action="CategoriesAssign" asp-route-id="@item.Id">
-				 <i class="anticon anticon-sliders"></i>
+				 Categories
+				</a>
+			   </button>
+			    <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+				<a asp-controller="Product" asp-action="SizesAssign" asp-route-id="@item.Id">
+				Size
 				</a>
 			   </button>
 			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
@@ -203,6 +208,7 @@
 				 <i class="anticon anticon-folder"></i>
 				</a>
 			   </button>
+
 			  </div>
 
 

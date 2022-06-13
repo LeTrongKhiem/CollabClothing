@@ -2,3 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+$('body').on('click', '.container-product__item-btn', function (e) {
+    e.preventDefault();
+    const id = $(this).data('id');
+    alert(id);
+})

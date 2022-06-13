@@ -32,6 +32,7 @@ using CollabClothing.Application.Catalog.Banners;
 using CollabClothing.ViewModels.System.Mail;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using CollabClothing.Application.System.Mail;
+using CollabClothing.Application.Catalog.Sizes;
 
 namespace CollabClothing.BackendApi
 {
@@ -68,6 +69,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<IBannerService, BannerSevice>();
             services.AddTransient<IUtilities, UtilitiesHelp>();
+            services.AddTransient<ISizeService, SizeService>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();

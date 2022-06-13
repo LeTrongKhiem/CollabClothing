@@ -156,6 +156,34 @@ namespace CollabClothing.Application.Catalog.Products
             await _context.SaveChangesAsync();
             return true;
         }
+        #region Size Assign
+        public async Task<bool> SizeAssign(string id, SizeAssignRequest request)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return false;
+            }
+            foreach (var size in request.Sizes)
+            {
+                var productMapSize = await _context.ProductMapSizes.FirstOrDefaultAsync(x => x.SizeId == size.Id && x.ProductId == product.Id);
+                if (productMapSize != null && size.Selected == false)
+                {
+                    _context.ProductMapSizes.Remove(productMapSize);
+                }
+                else if (productMapSize == null && size.Selected == true)
+                {
+                    await _context.ProductMapSizes.AddAsync(new ProductMapSize()
+                    {
+                        ProductId = id,
+                        SizeId = size.Id
+                    });
+                }
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        #endregion
         //method dung de delete product khai bao bien product dung de tim kiem product bang id
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
         public async Task<int> Delete(string productId)
@@ -258,6 +286,10 @@ namespace CollabClothing.Application.Catalog.Products
                                     join pmc in _context.ProductMapCategories on c.Id equals pmc.CategoryId
                                     where pmc.ProductId == productId
                                     select c.NameCategory).ToListAsync();
+            var sizes = await (from size in _context.Sizes
+                               join pms in _context.ProductMapSizes on size.Id equals pms.SizeId
+                               where pms.ProductId == productId
+                               select size.NameSize).ToListAsync();
             var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
             var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product == null)
@@ -284,6 +316,7 @@ namespace CollabClothing.Application.Catalog.Products
                 Cotton = productDetails.Cotton,
                 Form = productDetails.Form,
                 MadeIn = productDetails.MadeIn,
+                Sizes = sizes
             };
             return viewModel;
         }
@@ -647,6 +680,30 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<PageResult<ProductViewModel>> GetProductLoadMore(int amount, string cateId)
         {
             throw new Exception();
+        }
+
+        public string GetBrandByProductId(string productId)
+        {
+            var query = from p in _context.Products
+                        join b in _context.Brands on p.BrandId equals b.Id
+                        into pb
+                        from b in pb.DefaultIfEmpty()
+                        where p.Id == productId
+                        select new { p, b };
+            var result = query.Select(x => x.b.NameBrand).FirstOrDefault();
+            return result;
+        }
+
+        public List<string> GetNameSize(string productId)
+        {
+            var query = from s in _context.Sizes
+                        join pms in _context.ProductMapSizes on s.Id equals pms.SizeId
+                        into pmss
+                        from pms in pmss.DefaultIfEmpty()
+                        where pms.ProductId == productId
+                        select new { s, pms };
+            var result = query.Select(x => x.s.NameSize).ToList();
+            return result;
         }
     }
 }

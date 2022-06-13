@@ -1,6 +1,7 @@
 ﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Sizes;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,12 +20,14 @@ namespace CollabClothing.ManageAdminApp.Controllers
         private readonly IConfiguration _configuration;
         private readonly ICategoryApiClient _categoryApiClient;
         private readonly IBrandApiClient _brandApiClient;
-        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient)
+        private readonly ISizeApiClient _sizeApiClient;
+        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient, ISizeApiClient sizeApiClient)
         {
             _productApiClient = productApiClient;
             _configuration = configuration;
             _categoryApiClient = categoryApiClient;
             _brandApiClient = brandApiClient;
+            _sizeApiClient = sizeApiClient;
         }
         #endregion
         #region Index
@@ -215,6 +218,49 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ModelState.AddModelError("Error", "");
             var rolesAssignRequest = GetCategoriesAssignRequest(request.Id);
             return View(rolesAssignRequest);
+        }
+        #endregion
+
+        #region SizeAssign
+        [HttpGet]
+        public async Task<IActionResult> SizesAssign(string id)
+        {
+            var sizeAssign = await GetSizesAssignRequest(id);
+            return View(sizeAssign);
+        }
+
+        private async Task<SizeAssignRequest> GetSizesAssignRequest(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            var sizes = await _sizeApiClient.GetAll();
+            var sizeAssign = new SizeAssignRequest();
+            foreach (var size in sizes)
+            {
+                sizeAssign.Sizes.Add(new SelectItem()
+                {
+                    Id = size.Id,
+                    Name = size.Name,
+                    Selected = product.Sizes.Contains(size.Name)
+                });
+            }
+            return sizeAssign;
+        }
+        [HttpPost]
+        public async Task<IActionResult> SizesAssign(SizeAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.SizeAssign(request.Id, request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật danh mục sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("Error", "");
+            var sizesAssignRequest = GetCategoriesAssignRequest(request.Id);
+            return View(sizesAssignRequest);
         }
         #endregion
         #region UpdateCurrentPrice

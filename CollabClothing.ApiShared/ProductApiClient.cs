@@ -250,5 +250,49 @@ namespace CollabClothing.ApiShared
         {
             return await GetAsync<ProductImageViewModel>($"/api/products/images/product/{id}");
         }
+
+        public async Task<string> GetBrandNameByProductId(string productId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/getbrand/{productId}");
+            var result = await response.Content.ReadAsStringAsync();
+            return result;
+        }
+
+        public async Task<bool> SizeAssign(string id, SizeAssignRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PutAsync($"/api/products/sizes/{id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<bool>(result);
+            }
+            return JsonConvert.DeserializeObject<bool>(result);
+        }
+
+        public async Task<List<string>> GetSizeNameByProductId(string productId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/sizename/{productId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<string> data = (List<string>)JsonConvert.DeserializeObject(result, typeof(List<string>));
+                return data;
+            }
+            throw new Exception(result);
+        }
     }
 }

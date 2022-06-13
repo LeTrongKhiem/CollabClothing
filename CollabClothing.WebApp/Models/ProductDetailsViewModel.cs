@@ -1,4 +1,5 @@
-﻿using CollabClothing.ViewModels.Catalog.Categories;
+﻿using CollabClothing.ViewModels.Catalog.Brands;
+using CollabClothing.ViewModels.Catalog.Categories;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 using System;
@@ -14,5 +15,6 @@ namespace CollabClothing.WebApp.Models
         public ProductViewModel Products { get; set; }
         public List<ProductViewModel> ProductRelated { get; set; }
         public List<ProductImageViewModel> ProductsImages { get; set; }
+        public BrandViewModel Brands { get; set; }
     }
 }
