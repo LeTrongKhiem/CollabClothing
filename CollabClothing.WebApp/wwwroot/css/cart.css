@@ -180,9 +180,16 @@ input-cart {
     background-repeat: no-repeat;
     background-position-x: 95%;
     background-position-y: center;
+    height: 40px;
 }
 
 .img-fluid {
     width: 8rem;
     margin-top: 7px;
+}
+.border-quantity-cart {
+    padding: 0 15px;
+    text-decoration : none;
+    width : 48px;
+    text-align : center;
 }

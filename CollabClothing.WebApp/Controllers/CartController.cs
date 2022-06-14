@@ -55,19 +55,31 @@ namespace CollabClothing.WebApp.Controllers
             int quantity = 1;
             if (currentCart.Any(x => x.productId == id))
             {
-                quantity = currentCart.First(x => x.productId == id).Quantity + 1;
+                //quantity = currentCart.FirstOrDefault(x => x.productId == id).Quantity + 1;
+                foreach (var item in currentCart)
+                {
+                    if (item.productId == id)
+                    {
+                        item.Quantity = (currentCart.First(x => x.productId == id).Quantity + 1);
+                    }
+                }
             }
-            var cartVm = new CartItemViewModel()
+            else
             {
-                productId = id,
-                Quantity = quantity,
-                Name = product.ProductName,
-                Price = product.PriceCurrent,
-                Image = product.ThumbnailImage,
-                BrandName = await _productApiClient.GetBrandNameByProductId(product.Id)
+                var cartVm = new CartItemViewModel()
+                {
+                    productId = id,
+                    Quantity = quantity,
+                    Name = product.ProductName,
+                    Price = product.PriceCurrent,
+                    Image = product.ThumbnailImage,
+                    BrandName = await _productApiClient.GetBrandNameByProductId(product.Id),
+                    Type = product.Type
 
-            };
-            currentCart.Add(cartVm);
+                };
+                currentCart.Add(cartVm);
+            }
+
             HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }

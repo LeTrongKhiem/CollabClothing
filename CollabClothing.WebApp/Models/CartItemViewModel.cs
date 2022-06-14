@@ -14,5 +14,6 @@ namespace CollabClothing.WebApp.Models
         public string Size { get; set; }
         public string Image { get; set; }
         public string BrandName { get; set; }
+        public string Type { get; set; }
     }
 }
