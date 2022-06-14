@@ -69,7 +69,7 @@ namespace CollabClothing.WebApp.Controllers
             };
             currentCart.Add(cartVm);
             HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));
-            return Ok();
+            return Ok(currentCart);
         }
     }
 }

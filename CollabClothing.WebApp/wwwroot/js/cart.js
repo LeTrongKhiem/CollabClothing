@@ -9,7 +9,7 @@
             success: function (response) {
                 var html = '';
                 var total = 0;
-
+                var count = 0;
                 $.each(response, function (e, item) {
                     html += "<div class=\"row border - top border - bottom\">"
                         + "<div class=\"row main-cart align-items-center\" >"
@@ -23,13 +23,16 @@
                         + "<div class=\"col\" style=\"margin : auto\">"
                         + "<a href=\"#\">-</a><a href=\"#\" class=\"border\">" + item.quantity + "</a><a href=\"#\">+</a>"
                         + "</div>"
-                        + " <div class=\"col\" style=\"margin : auto\"> "+item.price+" <a class=\"close\">&#10005;</a></div>"
+                        + " <div class=\"col\" style=\"margin : auto\"> " + item.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) + " <a class=\"close\">&#10005;</a></div>"
                         + "</div>"
                         + "</div>"
                     total += item.price * item.quantity
+                    count += item.quantity
+                    console.log(count);
                 });
                 $('#cart-body').html(html);
-                $('#total-cart').text(total + ' đ');
+                $('#total-cart').text(total.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
+                $('.count-cart').text(count);
             },
         });
     }

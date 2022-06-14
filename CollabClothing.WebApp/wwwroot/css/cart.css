@@ -4,14 +4,16 @@
 
 .card {
     margin: auto;
-    max-width: 1000px;
+    max-width: 1100px;
     width: 90%;
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1rem;
     border: transparent;
     font-size : 15px;
 }
-
+.total-base {
+    margin-top: 135px;
+}
 @media(max-width:767px) {
     .card {
         margin: 3vh auto;
@@ -81,7 +83,7 @@
 .col-2, .col {
     padding: 0 1vh;
 }
-a {
+.a-link {
     padding: 0 1vh;
 }
 
@@ -163,12 +165,12 @@ input-cart {
         color : #ccc;
     }
 
-a {
+.a-link {
     color: black;
     text-decoration : none;
 }
 
-    a:hover {
+    .a-link:hover {
         color: black;
         text-decoration: none;
     }

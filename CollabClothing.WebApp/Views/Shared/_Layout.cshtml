@@ -24,7 +24,7 @@
 </head>
 
 <body>
-	<input type="hidden" id="hiBaseAddress" value="@Configuration["BaseAddress"]"/>
+	<input type="hidden" id="hiBaseAddress" value="@Configuration["BaseAddress"]" />
 	<div class="main">
 		@await Html.PartialAsync("_HeaderPartialView");
 	</div>
@@ -244,6 +244,11 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="~/js/site.js"></script>
+	<script type="text/javascript" src="~/js/cart.js"></script>
+	<script>
+		var siteController = new SiteController();
+		siteController.initialize();
+	</script>
 	@await RenderSectionAsync("ScriptsSecond", required:false)
 
 </body>

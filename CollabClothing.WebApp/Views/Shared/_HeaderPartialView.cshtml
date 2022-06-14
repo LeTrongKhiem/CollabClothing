@@ -1,10 +1,10 @@
-﻿@*@section ScriptsSecond {
+﻿@section ScriptsSecond {
     <script type="text/javascript" src="~/js/cart.js"></script>
    <script>
         var cartJS = new CartJS();
         cartJS.initialize();
    </script>
-}*@
+}
 <header class="header">
 	<div class="grid wide">
 		<div class="header__container">
@@ -23,7 +23,7 @@
 			<div class="header__cart">
 				<a asp-controller="Cart" asp-action="Index" class="header__cart-link">
 					<i class="header__cart-icon"></i>
-					<span class="header__cart-count">0</span>
+					<span class="header__cart-count count-cart" id="count-cart-quantity">0</span>
 
 					
 				</a>
