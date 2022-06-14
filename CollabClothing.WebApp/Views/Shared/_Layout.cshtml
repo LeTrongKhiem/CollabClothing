@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration;
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -21,13 +24,14 @@
 </head>
 
 <body>
-<div class="main">
+	<input type="hidden" id="hiBaseAddress" value="@Configuration["BaseAddress"]"/>
+	<div class="main">
 		@await Html.PartialAsync("_HeaderPartialView");
 	</div>
 
-			<div class="container">
-				@RenderBody()
-			</div>
+	<div class="container">
+		@RenderBody()
+	</div>
 	<div class="footer">
 		<div class="grid wide">
 			<div class="row">
@@ -45,15 +49,15 @@
 									<div class="footer-place__item-location">
 										Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh
 										<a href="#" class="footer-place__item-link footer-place__item-link--highlight">
-											
-											
-											
+
+
+
 											|
 											Xem
 											bản đồ
-										
-										
-										
+
+
+
 										</a>
 									</div>
 									<div class="footer-place__item-contact">
@@ -67,15 +71,15 @@
 									<div class="footer-place__item-location">
 										Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh
 										<a href="#" class="footer-place__item-link footer-place__item-link--highlight">
-											
-											
-											
+
+
+
 											|
 											Xem
 											bản đồ
-										
-										
-										
+
+
+
 										</a>
 									</div>
 									<div class="footer-place__item-contact">
@@ -89,15 +93,15 @@
 									<div class="footer-place__item-location">
 										Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh
 										<a href="#" class="footer-place__item-link footer-place__item-link--highlight">
-											
-											
-											
+
+
+
 											|
 											Xem
 											bản đồ
-										
-										
-										
+
+
+
 										</a>
 									</div>
 									<div class="footer-place__item-contact">
@@ -235,9 +239,13 @@
 		<i class="go-to-top__icon fas fa-chevron-circle-up"></i>
 	</a>
 	@await RenderSectionAsync("Scripts", required:false)
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="~/js/site.js"></script>
 	@await RenderSectionAsync("ScriptsSecond", required:false)
-	
+
 </body>
 
 </html>

@@ -63,6 +63,9 @@ namespace CollabClothing.WebApp.Controllers
                 Quantity = quantity,
                 Name = product.ProductName,
                 Price = product.PriceCurrent,
+                Image = product.ThumbnailImage,
+                BrandName = await _productApiClient.GetBrandNameByProductId(product.Id)
+
             };
             currentCart.Add(cartVm);
             HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));

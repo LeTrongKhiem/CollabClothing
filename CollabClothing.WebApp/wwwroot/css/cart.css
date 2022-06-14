@@ -4,7 +4,7 @@
 
 .card {
     margin: auto;
-    max-width: 950px;
+    max-width: 1000px;
     width: 90%;
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1rem;
@@ -43,7 +43,8 @@
     border-bottom-right-radius: 1rem;
     padding: 4vh;
     color: rgb(65, 65, 65);
-    margin-left: 118px;
+    margin-left: auto;
+    position: relative;
     width: 395px;
 }
 
@@ -80,15 +81,17 @@
 .col-2, .col {
     padding: 0 1vh;
 }
-
 a {
     padding: 0 1vh;
 }
 
 .close {
-    margin-left: auto;
+    margin-left: 10px;
     font-size: 1.2rem;
 
+}
+.close:hover {
+    cursor : pointer;
 }
 
 .img-cart {
@@ -178,5 +181,6 @@ a {
 }
 
 .img-fluid {
-    width: 3.5rem;
+    width: 8rem;
+    margin-top: 7px;
 }
