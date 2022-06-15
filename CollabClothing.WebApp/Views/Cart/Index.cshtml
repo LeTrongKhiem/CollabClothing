@@ -15,7 +15,17 @@
         cartJS.initialize();
    </script>
 }
-<div class="card">
+<div class="cart__empty-area" id="cart-empty">
+    <div class="cart__empty-img">
+        <img class="cart__empty-img-link" src="~/img/Illustration_EmptyCart_BF.png"/>
+    </div>
+    <div class="cart__empty-text">Chưa có sản phẩm trong giỏ hàng của bạn</div>
+    <a href="/trang-chu">
+        <button class="cart__empty-back">Trở lại trang chủ</button>
+    </a>
+    
+</div>
+<div class="card" id="cart-content">
             <div class="row">
                 <div class="col-md-8 cart">
                     <div class="title">

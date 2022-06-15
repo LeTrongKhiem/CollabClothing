@@ -13,7 +13,7 @@
 					<a href="/trang-chu" class="header__logo-img"></a>
 				</div>
 			</div>
-			@await Component.InvokeAsync("NavBar");
+			@await Component.InvokeAsync("NavBar")
 			<form asp-controller="Product" asp-action="Category" method="get" class="header-search">
 				<input type="text" class="header-search__input" name="keyword" value="@ViewBag.Keyword" placeholder="Tìm kiếm">
 				<button type="submit" class="header-search__button">
@@ -28,7 +28,7 @@
 					
 				</a>
 				<div class="header__cart-list">
-                                <img src="/assets/img/no_cart.png" alt="" class="header__cart-no-cart-img">
+                                <img src="" alt="" class="header__cart-no-cart-img">
                                 <span class="header__cart-list-no-cart-msg">Chưa có sản phẩm</span>
 
                                 <h4 class="header__cart-heading">Sản phẩm đã thêm</h4>

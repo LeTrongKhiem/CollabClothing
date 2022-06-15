@@ -83,5 +83,32 @@ namespace CollabClothing.WebApp.Controllers
             HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }
+        public IActionResult UpdateCart(string id, int quantity)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var session = HttpContext.Session.GetString(SystemConstans.SessionCart);
+            List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
+            if (session != null)
+            {
+                currentCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
+            }
+            foreach (var item in currentCart)
+            {
+                if (item.productId == id)
+                {
+                    if (quantity == 0)
+                    {
+                        currentCart.Remove(item);
+                        break;
+                    }
+                    item.Quantity = quantity;
+                }
+            }
+            HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));
+            return Ok(currentCart);
+        }
     }
 }
