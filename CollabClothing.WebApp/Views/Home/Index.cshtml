@@ -68,6 +68,10 @@
 			success: function (data) {
 				var row = document.getElementById('content');
 				row.innerHTML += data;
+				if (exits === 6) {
+					$('.container-btn-extend').css('display', 'none');
+				}
+				console.log(amount);
 			},
 			error: function (xhr) {
 

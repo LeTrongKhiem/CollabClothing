@@ -17,7 +17,7 @@ namespace CollabClothing.WebApp.Controllers.Components
         }
         public async Task<IViewComponentResult> InvokeAsync(string id)
         {
-            int quantity = 3;
+            int quantity = 8;
             var listProduct = _productApiClient.GetFeaturedProductsByCategory(id, quantity);
             var result = new HomeViewModel()
             {

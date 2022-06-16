@@ -55,7 +55,6 @@ namespace CollabClothing.WebApp.Controllers
             int quantity = 1;
             if (currentCart.Any(x => x.productId == id))
             {
-                //quantity = currentCart.FirstOrDefault(x => x.productId == id).Quantity + 1;
                 foreach (var item in currentCart)
                 {
                     if (item.productId == id)

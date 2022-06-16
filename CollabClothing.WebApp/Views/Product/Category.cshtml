@@ -102,7 +102,7 @@
 											}
 											@String.Format(format, "{0:c0}", @item.PriceCurrent )
 				</span>
-				<a href=${product.linkProduct} class="container-product__item-btn">MUA</a>
+				<a href="#" data-id="@item.Id" class="container-product__item-btn">MUA</a>
 			   </div>
 			  </div>
 			  <ul class="container-product__item-gifts-list">
@@ -146,7 +146,6 @@
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
-		@*"'load/thuong-hieu/@Model.Brand.Id'"*@
 		jQuery.ajax({
 			url: 'load/@Model.Category.CategoryId',
 			contentType: "application/json; charset=utf-8",
@@ -157,9 +156,10 @@
 			success: function (data) {
 				var row = document.getElementById('content');
 				row.innerHTML += data;
+
 			},
 			error: function (xhr) {
-
+					$('.container-btn-extend').css('display', 'none');
 			}
 		});
 	}
@@ -182,7 +182,7 @@
 				row.innerHTML += data;
 			},
 			error: function (xhr) {
-
+				$('.container-btn-extend').css('display', 'none');
 			}
 		});
 	}

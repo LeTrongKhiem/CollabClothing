@@ -126,7 +126,16 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
-
+        [HttpGet("related/{productId}/{take}")]
+        public async Task<IActionResult> GetRelatedProductsById(string productId, int take)
+        {
+            var products = await _manageProductService.GetRelatedProduct(productId, take);
+            if (products == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(products);
+        }
         [HttpGet("/category/{cateId}")]
         public async Task<IActionResult> GetProductByCategoryId(string cateId)
         {

@@ -148,5 +148,28 @@ namespace CollabClothing.WebApp.Controllers
         {
             return View();
         }
+
+        #region Forgot Password
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.ForgotPassword(request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("ResetPassword", "Account");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+        #endregion
     }
 }
