@@ -3,6 +3,7 @@
 @model HomeViewModel
 @inject IConfiguration Configuration;
 
+<input type="hidden" />
  <div class="col l-12 m-12 c-12">
   <div class="container-product">
    <div class="row no-gutters phone-products" id="content">
@@ -105,6 +106,6 @@
  </div>
   <div class="col l-12 m-12 c-12">
   <div class="container-view-more">
-   <button class="container-btn-extend" onclick="loadMore1()">Xem thêm</button>
+   <a class="container-btn-extend" href="/danh-muc/@Model.categoryId">Xem thêm</a>
   </div>
  </div>

@@ -50,10 +50,7 @@ namespace CollabClothing.BackendApi
         {
 
             services.AddDbContext<CollabClothingDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
-            //services.AddOptions();
-            //var mailSettings = Configuration.GetSection("MailSettings");
-            //services.Configure<MailSettings>(mailSettings);               // đăng ký để Inject
-            //services.AddTransient<IEmailSender, MailService>();
+
             var emailConfig = Configuration.GetSection("MailSettings").Get<MailSettings>();
             services.AddSingleton(emailConfig);
 
@@ -62,6 +59,13 @@ namespace CollabClothing.BackendApi
             //.AddDefaultUI()
             .AddEntityFrameworkStores<CollabClothingDBContext>()
             .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);  // Khóa 2 phút
+                options.Lockout.MaxFailedAccessAttempts = 3;                        // Thất bại 3 lần thì khóa
+            });
+
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();

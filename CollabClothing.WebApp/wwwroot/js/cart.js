@@ -75,7 +75,7 @@
                     console.log(count);
                 });
                 $('#cart-body').html(html);
-                $('#total-cart').text(total.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
+                $('.total-cart').text(total.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
                 $('.count-cart').text(count);
             },
         });

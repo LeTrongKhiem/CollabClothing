@@ -145,5 +145,38 @@ namespace CollabClothing.ApiShared
             }
             return new ResultApiError<bool>();
         }
+
+        public async Task<ResultApi<bool>> ForgotPassword(ForgotPasswordRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var response = await client.PostAsync($"/api/users/forgotpassword", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
+            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
+        }
+
+        public async Task<ResultApi<bool>> ResetPassword(ResetPasswordRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PostAsync($"/api/users/resetpassword", httpContent);
+            //var response = await client.PostAsync($"/api/users/resetpassword?Email={request.Email}&Password={request.Password}&ConfirmPassword={request.ConfirmPassword}&Code={request.Code}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return new ResultApiSuccessed<bool>();
+            }
+            return new ResultApiError<bool>(result);
+        }
     }
 }

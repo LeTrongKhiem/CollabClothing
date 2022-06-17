@@ -4,7 +4,7 @@
 
 .card {
     margin: auto;
-    max-width: 1100px;
+    max-width: 1200px;
     width: 90%;
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1rem;
@@ -29,6 +29,7 @@
     padding: 4vh 5vh;
     border-bottom-left-radius: 1rem;
     border-top-left-radius: 1rem;
+    width:60%;
 }
 
 @media(max-width:767px) {
@@ -38,7 +39,12 @@
         border-top-right-radius: 1rem;
     }
 }
-
+.text-muted {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 150px;
+    white-space: nowrap;
+}
 .summary {
     background-color: #ddd;
     border-top-right-radius: 1rem;
@@ -223,3 +229,7 @@ input-cart {
         background-color: #63a98e;
         color: #fff;
     }
+
+.c_no-product-in-cart {
+    display:none;
+}
