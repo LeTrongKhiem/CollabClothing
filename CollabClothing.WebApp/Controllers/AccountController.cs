@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -165,10 +166,43 @@ namespace CollabClothing.WebApp.Controllers
             var result = await _userApiClient.ForgotPassword(request);
             if (result.IsSuccessed)
             {
-                return RedirectToAction("ResetPassword", "Account");
+                return RedirectToAction("Confirm", "Account");
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+        #endregion
+        #region Reset Password
+        [HttpGet]
+        public IActionResult ResetPassword(string code = null)
+        {
+            if (code == null)
+            {
+                return RedirectToAction("Confirm", "Account");
+            }
+            ResetPasswordRequest result = new ResetPasswordRequest()
+            {
+                // Giải mã lại code từ code trong url (do mã này khi gửi mail
+                // đã thực hiện Encode bằng WebEncoders.Base64UrlEncode)
+                Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                //Code = code
+            };
+            return View(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.ResetPassword(request);
+            if (!result.IsSuccessed)
+            {
+                ModelState.AddModelError("", "Đã có lỗi xảy ra. Vui lòng thử lại sau!!!");
+                return View(request);
+            }
+            return RedirectToAction("Login");
         }
         #endregion
     }

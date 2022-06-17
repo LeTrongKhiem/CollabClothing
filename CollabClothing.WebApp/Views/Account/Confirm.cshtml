@@ -1,19 +1,60 @@
-﻿ 
-<div class="v2-login-area" style="padding-top: 100px">
-            <form class="form-signin" action="LoginController" method="post" name="formdn" id="formdn">
-                <div class="form-signin-heading text-center">
-                    <h1 class="sign-title" style="font-size: 29px; text-align: center">Vui lòng xác minh tài khoản</h1>
-                    <p style="font-size: 13px; text-align: center">Email xác minh đã được gửi vào email: <a
-                            href="">@ViewBag.Email</a>
-                        .Vui lòng kiểm tra trong hòm thư</p>
-                </div>
-                <div class="v2-login-wrap">
-                    <button class="btn btn-lg btn-login" type="submit" href="/Account/Login">Xác nhận</button>
-                </div>
-                <div class="v2-login-bottom" style="margin-left: 72px">
-                    <span class="v2-center"><span class="v2-hide">Bạn chưa nhận được mã</span><a href=""
-                            class="v2-register-now"> ( Gửi lại mã )</a>
-                    </span>
-                </div>
-            </form>
-        </div>
+﻿@using CollabClothing.ViewModels.System.Users
+@model ForgotPasswordRequest
+@{
+	ViewData["Title"] = "Xác nhận Email";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+ .input-forgot {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+ }
+
+ .btn-forgot {
+  width: 100%;
+  background-color: #63a98e;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration : none;
+  text-align : center;
+ }
+
+  .btn-forgot:hover {
+   background-color: #45a049;
+  }
+
+ .forgot-container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  width: 40%;
+  margin: auto;
+  font-size: 15px;
+  padding-top : 50px;
+ }
+
+ .title-forgot {
+  margin: 50px 40%;
+  font-size: 30px;
+ }
+ .your-email {
+	 margin-bottom : 20px;
+ }
+</style>
+
+<div class="forgot-container">
+ <form method="post">
+  <label asp-for="Email" class="your-email">Đã gửi Email xác nhận vui lòng kiểm tra Email của bạn</label>
+  <a asp-controller="Home" asp-action="Index" type="submit" class="btn-forgot">Trở lại trang chủ</a>
+ </form>
+</div>

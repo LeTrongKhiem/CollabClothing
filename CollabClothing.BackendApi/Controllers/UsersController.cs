@@ -49,7 +49,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(result);
         }
-
+        [HttpPost("resetpassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.ResetPassword(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest("Reset failed");
+            }
+            return Ok();
+        }
         [HttpPost("authenticate")]
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)

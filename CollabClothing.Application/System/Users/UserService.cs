@@ -108,7 +108,8 @@ namespace CollabClothing.Application.System.Users
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var url = $"https://localhost:5003/Account/ForgotPassword?code={code}";
+            //code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var url = $"https://localhost:5003/Account/ResetPassword?code={code}";
             await _emailSender.SendEmailAsync(request.Email, "Xác nhận thay đổi mật khẩu",
                 $"Bạn đã yêu cầu thay đổi mật khẩu. Vui lòng <a href='{url}'>bấm vào đây</a>. Nếu không bạn có thể bỏ qua email này.");
             return new ResultApiSuccessed<bool>();
@@ -137,14 +138,18 @@ namespace CollabClothing.Application.System.Users
         public async Task<ResultApi<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
-            var email = await _userManager.FindByEmailAsync(user.Email);
             if (user == null)
             {
                 return new ResultApiError<string>("Username không tồn tại");
             }
+            var email = await _userManager.FindByEmailAsync(user.Email);
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
 
-            if (!result.Succeeded || !email.EmailConfirmed)
+            if (!result.Succeeded)
+            {
+                return new ResultApiError<string>("Đăng nhập thất bại. Vui lòng kiểm tra lại mật khẩu");
+            }
+            if (!email.EmailConfirmed)
             {
                 return new ResultApiError<string>("Đăng nhập thất bại. Vui lòng kiểm tra Email và xác nhận");
             }
@@ -289,6 +294,20 @@ namespace CollabClothing.Application.System.Users
 
         }
 
+        public async Task<ResultApi<bool>> ResetPassword(ResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Email không tồn tại, Vui lòng kiểm tra lại");
+            }
+            var result = await _userManager.ResetPasswordAsync(user, request.Code, request.Password);
 
+            if (!result.Succeeded)
+            {
+                return new ResultApiError<bool>("Reset Password Failed. Please try again!!!");
+            }
+            return new ResultApiSuccessed<bool>();
+        }
     }
 }

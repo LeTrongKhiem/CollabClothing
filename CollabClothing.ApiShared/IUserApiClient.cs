@@ -19,5 +19,6 @@ namespace CollabClothing.ApiShared
         Task<ResultApi<bool>> ConfirmEmail(string id, string code);
 
         Task<ResultApi<bool>> ForgotPassword(ForgotPasswordRequest request);
+        Task<ResultApi<bool>> ResetPassword(ResetPasswordRequest request);
     }
 }
