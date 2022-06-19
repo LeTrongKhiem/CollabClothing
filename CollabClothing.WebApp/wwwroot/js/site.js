@@ -48,8 +48,8 @@ var SiteController = function () {
 				$('#count-cart-quantity').text(count);
 				console.log(count)
 				var html = '';
-
 				$.each(response, (e, item) => {
+				const selectSize = $('#select-size').val();
 
 					html += "<a style=\"text-decoration:none;\" href=\"/Product/Detail/" + item.productId + "\">"
 						+ "<li class=\"header__cart-item\">"
@@ -64,7 +64,7 @@ var SiteController = function () {
 						+ "</div>"
 						+ "</div>"
 						+ "<div class=\"header__cart-item-body\">"
-						+ "<span class=\"header__cart-item-desciption\">Phân loại: Size M</span>"
+						+ "<span class=\"header__cart-item-desciption\">Phân loại: Size " + $('#select-size').val() + "</span>"
 						+ "<a class=\"header__cart-remove\" data-id=\"" + item.productId + "\">Xóa</a>"
 						+ "</div>"
 						+ "</div>"
@@ -188,6 +188,7 @@ var SiteController = function () {
 		$('body').on('click', '.container-product__item-btn', function (e) {
 			e.preventDefault();
 			const id = $(this).data('id');
+			const selectSize = $('#select-size').val();
 			$.ajax({
 				type: "POST",
 				url: '/Cart/AddToCart/',
@@ -198,6 +199,7 @@ var SiteController = function () {
 					$('#count-cart-quantity').text(count);
 					console.log(count);
 					loadCartData();
+					console.log(selectSize);
 				},
 				data: {
 					id: id
@@ -205,5 +207,4 @@ var SiteController = function () {
 			});
 		})
 	}
-	
 }

@@ -293,7 +293,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ShipAddress)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ShipEmail)
                     .IsRequired()
@@ -303,7 +303,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ShipName)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ShipPhoneNumber)
                     .IsRequired()
@@ -322,6 +322,10 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.SizeId)
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
 

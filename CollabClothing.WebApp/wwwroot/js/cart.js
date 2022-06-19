@@ -61,7 +61,7 @@
                         + "<div class=\"col\">"
                         + "<div class=\"row-in text-muted\">" + item.name + "</div>"
                         + "<div class=\"row-in\">" + item.type + "</div>"
-                        + " <div class=\"row-in\">Size: S</div>"
+                        + " <div class=\"row-in\">Size: " + $('#select-size').val()+"</div>"
                         + " <div class=\"row-in\">Brand: " + item.brandName + "</div>"
                         + "</div>"
                         + "<div class=\"col\" style=\"margin : auto\">"

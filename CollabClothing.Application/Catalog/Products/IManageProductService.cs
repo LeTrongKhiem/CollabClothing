@@ -1,5 +1,6 @@
 ﻿using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Sizes;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -47,7 +48,7 @@ namespace CollabClothing.Application.Catalog.Products
         //method phan chia product voi category
 
         #region Get Name
-        List<string> GetNameSize(string productId);
+        List<SizeViewModel> GetNameSize(string productId);
         #endregion
 
 

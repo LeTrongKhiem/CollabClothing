@@ -205,5 +205,44 @@ namespace CollabClothing.WebApp.Controllers
             return RedirectToAction("Login");
         }
         #endregion
+        #region Edit Profile
+        [HttpGet]
+        public async Task<IActionResult> EditProfile(Guid id)
+        {
+            //var user = await _userApiClient.GetById(id);
+            //if (user.IsSuccessed)
+            //{
+            //    var userResult = user.ResultObject;
+            //    var editUser = new UserEditRequest()
+            //    {
+            //        Id = id,
+            //        Dob = userResult.Dob,
+            //        Email = userResult.Email,
+            //        FirstName = userResult.FirstName,
+            //        LastName = userResult.LastName,
+            //        PhoneNumber = userResult.PhoneNumber
+            //    };
+            //    return View(editUser);
+            //}
+            //return RedirectToAction("Index", "ErrorPage");
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(UserEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _userApiClient.Edit(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Cập nhật thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+        #endregion
     }
 }

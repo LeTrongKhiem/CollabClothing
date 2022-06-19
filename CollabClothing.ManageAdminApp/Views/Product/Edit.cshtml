@@ -5,8 +5,20 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration; // lay duong dan localhost:5001
+@section Csss {
+	<link href="~/css/select2.min.css" rel="stylesheet" />
+}
 @section Scripts{
 <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+<script src="~/js/select2.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$('#multi-append').select2({
+			multiple:true,
+			tags:true
+		});
+	})
+</script>
 <script>
 	ClassicEditor
 	.create( document.querySelector( '#txt_details' ), {

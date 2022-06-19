@@ -19,6 +19,7 @@ using CollabClothing.ViewModels.Catalog.ProductImages;
 using Microsoft.AspNetCore.Hosting;
 using CollabClothing.Data.EF;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CollabClothing.ViewModels.Catalog.Sizes;
 
 namespace CollabClothing.Application.Catalog.Products
 {
@@ -68,6 +69,17 @@ namespace CollabClothing.Application.Catalog.Products
         public async Task<string> Create(ProductCreateRequest request)
         {
             Guid g = Guid.NewGuid();
+            List<ProductMapCategory> cates = new List<ProductMapCategory>();
+            foreach (var item in request.CategoryId)
+            {
+                cates.Add(new ProductMapCategory()
+                {
+                    ProductId = g.ToString(),
+                    CategoryId = item.ToString()
+                });
+                //_context.ProductMapCategories.Add(ProductMapCategory);
+
+            }
             var product = new Product()
             {
                 Id = g.ToString(),
@@ -81,13 +93,14 @@ namespace CollabClothing.Application.Catalog.Products
                 Description = request.Description,
                 Slug = _utilitiesHelp.SEOUrl(request.ProductName),
                 Details = request.Details,
+                ProductMapCategories = cates
 
             };
-            var ProductMapCategory = new ProductMapCategory()
-            {
-                ProductId = product.Id,
-                CategoryId = request.CategoryId
-            };
+            //var ProductMapCategory = new ProductMapCategory()
+            //{
+            //    ProductId = product.Id,
+            //    CategoryId = request.CategoryId
+            //};
             Guid productDetailsId = Guid.NewGuid();
             var productDetails = new ProductDetail()
             {
@@ -122,7 +135,7 @@ namespace CollabClothing.Application.Catalog.Products
             }
 
             _context.Products.Add(product);
-            _context.ProductMapCategories.Add(ProductMapCategory);
+            //_context.ProductMapCategories.Add(ProductMapCategory);
             _context.ProductDetails.Add(productDetails);
             await _context.SaveChangesAsync();
             return product.Id;
@@ -188,9 +201,10 @@ namespace CollabClothing.Application.Catalog.Products
         //va bien image tim cac hinh anh cos ma san pham tuong ung duyet qua va xoa
         public async Task<int> Delete(string productId)
         {
-            var productMapCate = await _context.ProductMapCategories.FirstOrDefaultAsync(x => x.ProductId == productId);
+            var productMapCate = await _context.ProductMapCategories.Where(x => x.ProductId == productId).ToListAsync();
             var product = await _context.Products.FindAsync(productId);
             var productImage = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == productId);
+            var productDetail = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product.Id == null)
                 throw new CollabException($"Cannot find a product: {productId}");
             var images = _context.ProductImages.Where(i => i.ProductId == productId);
@@ -208,8 +222,12 @@ namespace CollabClothing.Application.Catalog.Products
                 });
             }
             _context.ProductImages.Remove(productImage);
-            _context.ProductMapCategories.Remove(productMapCate);
+            foreach (var item in productMapCate)
+            {
+                _context.ProductMapCategories.Remove(item);
+            }
             _context.Products.Remove(product);
+            _context.ProductDetails.Remove(productDetail);
             return await _context.SaveChangesAsync();
         }
 
@@ -702,7 +720,7 @@ namespace CollabClothing.Application.Catalog.Products
             return result;
         }
 
-        public List<string> GetNameSize(string productId)
+        public List<SizeViewModel> GetNameSize(string productId)
         {
             var query = from s in _context.Sizes
                         join pms in _context.ProductMapSizes on s.Id equals pms.SizeId
@@ -710,7 +728,11 @@ namespace CollabClothing.Application.Catalog.Products
                         from pms in pmss.DefaultIfEmpty()
                         where pms.ProductId == productId
                         select new { s, pms };
-            var result = query.Select(x => x.s.NameSize).ToList();
+            var result = query.Select(x => new SizeViewModel()
+            {
+                Id = x.s.Id,
+                Name = x.s.NameSize
+            }).ToList();
             return result;
         }
     }

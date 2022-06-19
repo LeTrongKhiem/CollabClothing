@@ -21,5 +21,6 @@ namespace CollabClothing.ViewModels.Catalog.Categories
         public string ParentName { get; set; }
         public int Order { get; set; }
         public ICollection<CategoryViewModel> ChildCategory { get; set; }
+        public List<string> ListChildCates { get; set; } = new List<string>();
     }
 }

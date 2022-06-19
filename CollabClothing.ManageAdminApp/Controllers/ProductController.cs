@@ -78,11 +78,11 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+        public async Task<IActionResult> Create(ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View(request);
             }
             var result = await _productApiClient.Create(request);
             if (result)

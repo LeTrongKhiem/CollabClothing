@@ -15,7 +15,8 @@
 }
 
 .header__logo-img {
-    background-image: url(//cdn.tgdd.vn/mwgcart/stag-bluefashion/images/common/icon-bluefashion_desktop.png?v=2);
+        background-image: url(//cdn.tgdd.vn/mwgcart/stag-bluefashion/images/common/icon-bluefashion_desktop.png?v=2);
+/*    background-image: url(/img/logo.png);*/
     background-repeat: no-repeat;
     display: inline-block;
     height: 30px;
