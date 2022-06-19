@@ -1,6 +1,7 @@
 ﻿using CollabClothing.Utilities.Constants;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Sizes;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -62,7 +63,10 @@ namespace CollabClothing.ApiShared
             requestContent.Add(new StringContent(request.Description), "description");
             //requestContent.Add(new StringContent(request.Slug), "slug");
             requestContent.Add(new StringContent(request.Details), "details");
-            requestContent.Add(new StringContent(request.CategoryId), "categoryId");
+            foreach (var item in request.CategoryId)
+            {
+                requestContent.Add(new StringContent(item.ToString()), "categoryId");
+            }
 
             requestContent.Add(new StringContent(request.Consumer.ToString()), "consumer");
             requestContent.Add(new StringContent(request.Form), "form");
@@ -279,7 +283,7 @@ namespace CollabClothing.ApiShared
             return JsonConvert.DeserializeObject<bool>(result);
         }
 
-        public async Task<List<string>> GetSizeNameByProductId(string productId)
+        public async Task<List<SizeViewModel>> GetSizeNameByProductId(string productId)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
@@ -289,7 +293,7 @@ namespace CollabClothing.ApiShared
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                List<string> data = (List<string>)JsonConvert.DeserializeObject(result, typeof(List<string>));
+                List<SizeViewModel> data = (List<SizeViewModel>)JsonConvert.DeserializeObject(result, typeof(List<SizeViewModel>));
                 return data;
             }
             throw new Exception(result);

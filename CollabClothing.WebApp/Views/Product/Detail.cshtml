@@ -32,17 +32,17 @@
 	 <i class="bx bx-chevron-right"></i>
 	</div>
    </div>
-   
+
    <div class="list-image">
-	   @foreach (var item in Model.ProductsImages)
+				@foreach (var item in Model.ProductsImages)
 				{
 		<div>
 		 <img class="image-item"
 						 src="@Configuration["BaseAddress"]@item.Path"
 						 alt="@item.Alt">
 		</div>
-				
-		   }
+
+				}
 	<div>
 	 <img class="image-item"
 						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-3-1.jpg"
@@ -78,7 +78,7 @@
    </div>
    <div style="margin-top:50%; font-size : 20px;">@Html.Raw(@Model.Products.Details)</div>
   </div>
-  
+
   <div class="detail-right col l-6">
    <div class="box_productInfor">
 	<div class="detail-title">
@@ -114,17 +114,17 @@
 	 <div class="size-top">
 	  <p class="size-top-left">Chọn size: <span>S</span></p>
 	 </div>
-	 <ul class="size-list">
-		 @{
+	 <select class="size-list" id="select-size">
+						@{
 							var sizes = await _productApiClient.GetSizeNameByProductId(@Model.Products.Id);
-	 }
-						@foreach(var size in sizes)
-						{
-							<li class="size-list-item @(sizes.First() == size ? "active" : "")">
-							   @size.ToString()
-							  </li>
 						}
-	 </ul>
+						@foreach (var size in sizes)
+						{
+		  <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Name">
+									@size.Name.ToString()
+		  </option>
+						}
+	 </select>
 	</div>
 	<div class="box-promo">
 	 <p class="box-promo-txt">Khuyến mãi (Đến 31/05)</p>
@@ -179,11 +179,11 @@
 	  lên đường cong của người mặc.
 	 </li>
 	 <li>
-		 @{
-			var brand = await _productApiClient.GetBrandNameByProductId(@Model.Products.Id);
-		}
+						@{
+							var brand = await _productApiClient.GetBrandNameByProductId(@Model.Products.Id);
+						}
 	  Sản phẩm <a href="/Product/Detail/@Model.Products.Id">
-	   @Model.Products.ProductName
+							@Model.Products.ProductName
 	  </a> có&nbsp;bề mặt mịn màng, thoáng mát, phù hợp với nhiều hoạt
 	  động khác nhau.
 	 </li>
@@ -217,7 +217,7 @@
 
 	   <li>
 		<p class="txt01">Thương hiệu</p>
-		
+
 		<p class="txt02">@brand.ToString()</p>
 	   </li>
 
@@ -232,37 +232,37 @@
 <section class="wraplock grid wide">
  <p class="detail-product-ttl">Có thể bạn thích</p>
  <div class="promo-listProduct-product row ">
-	 @{
+		@{
 			List<List<ProductViewModel>> productRelated = new List<List<ProductViewModel>>();
 			List<ProductViewModel> relatedPart = new List<ProductViewModel>();
-	 }
-		@foreach(var item in Model.ProductRelated)
+		}
+		@foreach (var item in Model.ProductRelated)
 		{
-			  <div class="promo-product col l-3 ">
-   <li class="product-item">
-	<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="product-item__link">
-	 <div class="item-wrap">
-	  <div class="product-item__img">
+	  <div class="promo-product col l-3 ">
+	   <li class="product-item">
+		<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="product-item__link">
+		 <div class="item-wrap">
+		  <div class="product-item__img">
 
-	   <img src="@Configuration["BaseAddress"]@item.ThumbnailImage"
+		   <img src="@Configuration["BaseAddress"]@item.ThumbnailImage"
 								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+		  </div>
+		 </div>
+		 <h3 class="product-item-heading">@item.ProductName </h3>
+		 <div class="product-item-price">
+		  <p class="product-item-price-current">
+								@String.Format(format, "{0:c0}", @item.PriceCurrent)
+		  </p>
+		  <p class="product-item-price-old">
+								@String.Format(format, "{0:c0}", @item.PriceOld)
+		  </p>
+		 </div>
+		</a>
+
+	   </li>
+
+
 	  </div>
-	 </div>
-	 <h3 class="product-item-heading">@item.ProductName </h3>
-	 <div class="product-item-price">
-	  <p class="product-item-price-current">
-	   @String.Format(format, "{0:c0}", @item.PriceCurrent)
-	  </p>
-	  <p class="product-item-price-old">
-	   @String.Format(format, "{0:c0}", @item.PriceOld)
-	  </p>
-	 </div>
-	</a>
-
-   </li>
-
-
-  </div>
 		}
 
  </div>

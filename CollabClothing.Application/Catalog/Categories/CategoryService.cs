@@ -70,7 +70,6 @@ namespace CollabClothing.Application.Catalog.Categories
         {
 
             var query = from cate in _context.Categories orderby cate.Level select new { cate };
-            var query2 = _context.Categories.Where(x => x.ParentId == x.Id).Select(o => o.NameCategory).ToString();
 
             var listCateParent = (from cate in _context.Categories orderby cate.Level where cate.ParentId == null select cate.NameCategory).FirstOrDefault();
 
@@ -91,6 +90,7 @@ namespace CollabClothing.Application.Catalog.Categories
                              ParentId = x.cate.ParentId,
                              Slug = x.cate.Slug,
                              //ParentName = query2
+
                          }).ToListAsync();
 
             var pageResult = new PageResult<CategoryViewModel>()
@@ -111,6 +111,14 @@ namespace CollabClothing.Application.Catalog.Categories
             {
                 throw new CollabException($"Not find Category with id: {Id}");
             }
+            List<string> childCate = new List<string>();
+            foreach (var item in _context.Categories)
+            {
+                if (item.ParentId == Id)
+                {
+                    childCate.Add(item.NameCategory);
+                }
+            }
             var cate1 = new CategoryViewModel()
             {
                 CategoryId = cate.Id,
@@ -119,7 +127,8 @@ namespace CollabClothing.Application.Catalog.Categories
                 IsShowWeb = cate.IsShowWeb,
                 Icon = cate.Icon,
                 Level = cate.Level,
-                Slug = cate.Slug
+                Slug = cate.Slug,
+                ListChildCates = childCate
             };
 
             Category category = new Category();

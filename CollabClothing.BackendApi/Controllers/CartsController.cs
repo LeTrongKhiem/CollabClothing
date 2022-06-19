@@ -1,0 +1,79 @@
+﻿using CollabClothing.Application.Catalog.Cart;
+using CollabClothing.ViewModels.Catalog.Cart;
+using CollabClothing.ViewModels.Common;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace CollabClothing.BackendApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class CartsController : ControllerBase
+    {
+        private readonly ICartService _cartService;
+        public CartsController(ICartService cartService)
+        {
+            _cartService = cartService;
+        }
+        #region Create Checkout
+        #endregion
+
+        #region GetAllOrder
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllOrder([FromQuery] PagingCart request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _cartService.GetAllCheckout(request);
+            if (result == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(result);
+        }
+        #endregion
+        #region GetOrderDetails
+        [HttpGet("orderdetails/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetOrderDetails(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _cartService.GetCheckoutById(id);
+            if (result == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(result);
+        }
+        #endregion
+        #region Create Checkout
+        [HttpPost]
+        [AllowAnonymous]
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateOrder([FromBody] CheckoutRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var order = await _cartService.Create(request);
+            if (order == null)
+            {
+                return BadRequest("Don't Create");
+            }
+            return Ok(request);
+        }
+        #endregion
+    }
+}

@@ -38,7 +38,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
         [Display(Name = "Ảnh sản phẩm")]
         public List<IFormFile> ThumbnailImage { get; set; }
         [Display(Name = "Danh mục")]
-        public string CategoryId { get; set; }
+        public List<string> CategoryId { get; set; } = new List<string>();
         // public ProductImageViewModel productImage { get; set; }
         // public CategoryViewModel CategoryViewModel { get; set; }
         // public Size Size { get; set; }

@@ -1,0 +1,91 @@
+﻿@model CollabClothing.ViewModels.System.Users.UserEditRequest
+
+@{
+	ViewData["Title"] = "Chỉnh sửa thông tin cá nhân";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Csss {
+<link rel="stylesheet" href="~/css/profile.css">
+}
+<style>
+ .input-forgot {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+ }
+
+ .btn-forgot {
+  width: 100%;
+  background-color: #63a98e;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+ }
+
+  .btn-forgot:hover {
+   background-color: #45a049;
+  }
+
+ .forgot-container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  width: 40%;
+  margin: auto;
+  font-size: 15px;
+  padding-top: 50px;
+ }
+
+ .title-forgot {
+  margin: 50px 40%;
+  font-size: 30px;
+ }
+
+ .your-email {
+  margin-bottom: 20px;
+ }
+</style>
+
+<div class="forgot-container">
+  <form asp-action="EditProfile" method="post">
+   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+   <input asp-for="Id" class="form-control" type="hidden" />
+   <div>
+	<label asp-for="FirstName" class="your-email">Họ</label>
+	<input type="text" asp-for="FirstName" placeholder="FirstName" class="input-forgot">
+	<div asp-validation-for="Email" class="text-danger-forgot" style="color:red;"></div>
+   </div>
+   <div>
+	<label asp-for="LastName" class="your-email">Tên</label>
+	<input type="text" asp-for="LastName" placeholder="LastName" class="input-forgot">
+	<div asp-validation-for="LastName" class="text-danger-forgot" style="color:red;"></div>
+   </div>
+   <div>
+	<label asp-for="PhoneNumber" class="your-email">Số điện thoại</label>
+	<input type="number" asp-for="PhoneNumber" placeholder="PhoneNumber" class="input-forgot">
+	<div asp-validation-summary="All" class="text-danger-forgot" style="color:red; text-align : center; list-style : none;"></div>
+	<div asp-validation-for="PhoneNumber" class="text-danger-forgot" style="color:red;"></div>
+   </div>
+   <div>
+	<label asp-for="Dob" class="your-email">Ngày sinh của bạn</label>
+	<input type="datetime" asp-for="Dob" placeholder="Dob" class="input-forgot">
+	<div asp-validation-for="Dob" class="text-danger-forgot" style="color:red;"></div>
+   </div>
+   <div class="form-group">
+	<input type="submit" value="Lưu" class="btn-forgot"/>
+   </div>
+  </form>
+ </div>
+
+<div>
+ <a asp-action="Index">Trở lại</a>
+</div>
+
