@@ -26,9 +26,9 @@ namespace CollabClothing.Application.Catalog.Cart
         #region Create Checkout
         public async Task<string> Create(CheckoutRequest request)
         {
-            Order order;
+            //Order order;
             Guid gOrder = Guid.NewGuid();
-            Guid gOrderDetails = Guid.NewGuid();
+
             var orderDetails = new List<OrderDetail>();
             if (request.OrderDetails.Count == 0)
             {
@@ -39,6 +39,7 @@ namespace CollabClothing.Application.Catalog.Cart
                 foreach (var item in request.OrderDetails)
                 {
                     var product = await _context.Products.FindAsync(item.ProductId);
+                    Guid gOrderDetails = Guid.NewGuid();
                     orderDetails.Add(new OrderDetail()
                     {
                         Id = gOrderDetails.ToString(),
@@ -51,12 +52,11 @@ namespace CollabClothing.Application.Catalog.Cart
                     });
                 }
             }
-
             if (request.UserId != null)
             {
                 Guid userId = new Guid(request.UserId);
                 var user = await _context.AppUsers.FindAsync(userId);
-                order = new Order()
+                Order orderUserId = new Order()
                 {
                     Id = gOrder.ToString(),
                     ShipAddress = request.Address,
@@ -69,10 +69,12 @@ namespace CollabClothing.Application.Catalog.Cart
                     OrderDate = DateTime.Now,
                     UserId = userId
                 };
+                _context.Orders.Add(orderUserId);
             }
             else
             {
-                order = new Order()
+                Guid gUserId = Guid.Parse("D74C0DB1-12FB-42A1-AA67-09C660D508F6");
+                Order orderNoUserId = new Order()
                 {
                     Id = gOrder.ToString(),
                     ShipAddress = request.Address,
@@ -82,18 +84,24 @@ namespace CollabClothing.Application.Catalog.Cart
                     Status = false,
                     OrderDetails = orderDetails,
                     OrderDate = DateTime.Now,
-                    UserId = null
+                    UserId = gUserId
                 };
-
+                _context.Orders.Add(orderNoUserId);
             }
-            _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            return order.Id;
+            return gOrder.ToString();
         }
         #endregion
-        public Task<bool> DeleteCheckout(string id)
+        public async Task<int> DeleteCheckout(string id)
         {
-            throw new NotImplementedException();
+            var order = await _context.Orders.FindAsync(id);
+            var orderDetails = await _context.OrderDetails.Where(x => x.OrderId == id).ToListAsync();
+            foreach (var item in orderDetails)
+            {
+                _context.OrderDetails.Remove(item);
+            }
+            _context.Orders.Remove(order);
+            return await _context.SaveChangesAsync();
         }
 
         public Task<bool> EditCheckout(string id, CheckoutRequest request)
@@ -167,7 +175,8 @@ namespace CollabClothing.Application.Catalog.Cart
                 PhoneNumber = order.ShipPhoneNumber,
                 Name = order.ShipName,
                 Status = order.Status,
-                OrderDetails = checkoutOrderDetails
+                OrderDetails = checkoutOrderDetails,
+                OrderId = order.Id
             };
             return checkoutVm;
         }

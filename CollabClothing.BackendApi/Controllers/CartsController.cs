@@ -77,5 +77,23 @@ namespace CollabClothing.BackendApi.Controllers
             return CreatedAtAction(nameof(orderId), new { id = orderId }, orderDetail);
         }
         #endregion
+
+        #region Delete Order
+        [HttpDelete("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DeleteOrder(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _cartService.DeleteCheckout(id);
+            if (result == 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        #endregion
     }
 }

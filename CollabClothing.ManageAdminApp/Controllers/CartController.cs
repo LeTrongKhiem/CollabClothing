@@ -1,4 +1,5 @@
 ﻿using CollabClothing.ApiShared;
+using CollabClothing.ViewModels.Catalog.Cart;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             _orderApiClient = orderApiClient;
             _configuration = configuration;
         }
+        #region Show Order and Details order
         public async Task<IActionResult> Index(string keyword, bool status = false, int pageIndex = 1, int pageSize = 10)
         {
             var request = new PagingCart()
@@ -52,5 +54,31 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ModelState.AddModelError("", "Not found !!!");
             return RedirectToAction("Error", "Home");
         }
+        #endregion
+        #region Delete Order
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            var orderId = new DeleteOrder()
+            {
+                Id = id
+            };
+            return View(orderId);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteOrder request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _orderApiClient.DeleteOrder(request.Id);
+            if (result)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(request);
+        }
+        #endregion
     }
 }

@@ -115,6 +115,8 @@ namespace CollabClothing.WebApp.Controllers
         #region Checkout
         public IActionResult Checkout()
         {
+            var session = HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var userId = HttpContext.User.Identity.Name;
             return View(GetCheckout());
         }
 
@@ -124,9 +126,11 @@ namespace CollabClothing.WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+
                 return View(ModelState);
             }
             var getCheckout = GetCheckout();
+            var userLogined = HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var orderDetails = new List<OrderDetailsViewModel>();
             foreach (var item in getCheckout.CartItems)
             {
@@ -155,6 +159,8 @@ namespace CollabClothing.WebApp.Controllers
             if (result)
             {
                 TempData["result"] = "Đặt hàng thành công quý khách vui lòng xác nhận qua Email hoặc số điện thoại";
+                HttpContext.Session.Remove(SystemConstans.SessionCart);
+                return RedirectToAction("CheckoutSuccess");
             }
             ModelState.AddModelError("", "Đặt hàng thất bại. Vui lòng thử lại");
             return View(getCheckout);
@@ -175,6 +181,12 @@ namespace CollabClothing.WebApp.Controllers
 
             };
             return checkoutVm;
+        }
+        #endregion
+        #region Done Checkout
+        public IActionResult CheckoutSuccess()
+        {
+            return View();
         }
         #endregion
     }

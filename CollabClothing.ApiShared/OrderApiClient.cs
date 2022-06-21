@@ -19,17 +19,32 @@ namespace CollabClothing.ApiShared
         public OrderApiClient(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(httpClientFactory, httpContextAccessor, configuration)
         {
         }
+
+        public Task<bool> AcceptOrder(bool status)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> CreateOrder(CheckoutRequest request)
         {
             var json = JsonConvert.SerializeObject(request);
+            var orderDetailsJson = JsonConvert.SerializeObject(request.OrderDetails);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             var response = await client.PostAsync($"/api/carts", httpContent);
             return response.IsSuccessStatusCode;
         }
 
+        public async Task<bool> DeleteOrder(string id)
+        {
+            return await DeleteAsync($"/api/Carts/{id}");
+        }
+
+        public Task<bool> EditOrder(string id)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<PageResult<CheckoutRequest>> GetAll(PagingCart request)
         {
