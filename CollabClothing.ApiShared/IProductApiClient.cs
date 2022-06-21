@@ -27,6 +27,7 @@ namespace CollabClothing.ApiShared
         Task<List<ProductImageViewModel>> GetAllImages(string id);
         Task<string> GetBrandNameByProductId(string productId);
         Task<List<SizeViewModel>> GetSizeNameByProductId(string productId);
+        Task<string> GetNameProductById(string id);
 
         //images 
 

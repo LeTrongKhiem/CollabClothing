@@ -735,5 +735,11 @@ namespace CollabClothing.Application.Catalog.Products
             }).ToList();
             return result;
         }
+
+        public async Task<string> GetNameProductById(string id)
+        {
+            var query = (from p in _context.Products where p.Id == id select p.ProductName).FirstOrDefault();
+            return query;
+        }
     }
 }

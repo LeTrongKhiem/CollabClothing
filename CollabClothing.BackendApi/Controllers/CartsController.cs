@@ -67,12 +67,14 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var order = await _cartService.Create(request);
-            if (order == null)
+            var orderId = await _cartService.Create(request);
+            if (orderId == null || orderId.Equals(""))
             {
                 return BadRequest("Don't Create");
             }
-            return Ok(request);
+            var orderDetail = await _cartService.GetCheckoutById(orderId);
+
+            return CreatedAtAction(nameof(orderId), new { id = orderId }, orderDetail);
         }
         #endregion
     }

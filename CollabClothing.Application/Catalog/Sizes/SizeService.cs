@@ -27,5 +27,11 @@ namespace CollabClothing.Application.Catalog.Sizes
             var result = await query.ToListAsync();
             return result;
         }
+
+        public async Task<string> GetNameSize(string id)
+        {
+            var query = (from s in _context.Sizes where s.Id == id select s.NameSize).FirstOrDefault();
+            return query;
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace CollabClothing.ApiShared
     public interface ISizeApiClient
     {
         public Task<List<SizeViewModel>> GetAll();
+        public Task<string> GetNameSize(string id);
     }
 }

@@ -61,6 +61,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+        [HttpGet("getnameproduct/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetNameProductById(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetNameProductById(id);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
         [HttpGet("getbrand/{productId}")]
         [AllowAnonymous]
         public IActionResult GetBrandNameByProductId(string productId)
