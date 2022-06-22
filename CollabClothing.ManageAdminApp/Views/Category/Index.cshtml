@@ -1,7 +1,9 @@
-﻿@using CollabClothing.ViewModels.Common
+﻿@using CollabClothing.ApiShared
+@using CollabClothing.ViewModels.Common
 @using Microsoft.Extensions.Configuration
 @model PageResult<CollabClothing.ViewModels.Catalog.Categories.CategoryViewModel>
 @inject IConfiguration Configuration
+@inject ICategoryApiClient _categoryApiClient
 @{
     ViewData["Title"] = "Danh sách danh mục";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -62,16 +64,10 @@
                 Mã danh cha 
             </th>
             <th>
-                Level
-            </th>
-            <th>
                 ShowWeb
             </th>
             <th>
                 Slug
-            </th>
-            <th>
-                FileIcon
             </th>
             <th>
                 FileIcon
@@ -85,12 +81,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParentId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Level)
-            </td>
+            
+                                @if (@item.ParentId.Equals("null"))
+                                {
+                                    <td>Danh mục cha</td>
+                        } else
+                                {
+                                var parentName = await _categoryApiClient.GetParentName(@item.ParentId);
+                                   <td>@parentName.ToString()</td>
+                }
+            
             <td>
                 @Html.DisplayFor(modelItem => item.IsShowWeb)
             </td>
@@ -99,9 +99,6 @@
             </td>
             <td>
                <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.Icon)" width="100px" height="100px"/>
-            </td>
-             <td>
-              @Html.DisplayFor(modelItem => item.ParentName)
             </td>
             <td>
                  <button class="btn btn-icon btn-hover btn-sm btn-rounded">

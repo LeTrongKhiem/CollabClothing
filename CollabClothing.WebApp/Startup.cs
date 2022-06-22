@@ -1,11 +1,16 @@
-using CollabClothing.ApiShared;
+﻿using CollabClothing.ApiShared;
+using CollabClothing.ViewModels.System.Mail;
+using CollabClothing.ViewModels.System.Users;
 using CollabClothing.WebApp.Data;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,7 +47,18 @@ namespace CollabClothing.WebApp
 
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+            {
+                option.LoginPath = "/Account/Login";
+                option.AccessDeniedPath = "/User/Forbidden";
+            }
+               );
+
+
+
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             IMvcBuilder builder = services.AddRazorPages();
@@ -54,9 +70,12 @@ namespace CollabClothing.WebApp
 #endif
 
             services.AddTransient<IBannerApiClient, BannerApiClient>();
+            services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IBrandApiClient, BrandApiClient>();
+            services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<IOrderApiClient, OrderApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,10 +95,10 @@ namespace CollabClothing.WebApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
-            app.UseSession();
             app.UseAuthentication();
+            app.UseRouting();
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -92,8 +111,42 @@ namespace CollabClothing.WebApp
 
                   });
                 endpoints.MapControllerRoute(
+                  name: "Product Brand",
+                  pattern: "/danh-muc/thuong-hieu/{brandId}", new
+                  {
+                      controller = "Product",
+                      action = "Category"
+
+                  });
+                //endpoints.MapControllerRoute(
+                //  name: "Product Category",
+                //  pattern: "/danh-muc/{slug}", new
+                //  {
+                //      controller = "Product",
+                //      action = "Category"
+
+                //  });
+
+                endpoints.MapControllerRoute(
+                  name: "Product LoadMore",
+                  pattern: "/danh-muc/load/{cateId}", new
+                  {
+                      controller = "LoadMore",
+                      action = "Index"
+
+                  });
+                endpoints.MapControllerRoute(
+                 name: "Product LoadMore",
+                 pattern: "/danh-muc/thuong-hieu/load/{brandId}", new
+                 {
+                     controller = "LoadMore",
+                     action = "Brand"
+
+                 });
+
+                endpoints.MapControllerRoute(
                     name: "Product Details",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Product}/{action=Detail}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

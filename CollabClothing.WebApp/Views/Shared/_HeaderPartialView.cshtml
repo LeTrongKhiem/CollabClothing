@@ -1,25 +1,94 @@
-﻿	<header class="header">
-			<div class="grid wide">
-				<div class="header__container">
-					<div class="header__logo">
-						<div class="header__logo-link">
-							<a href="/trang-chu" class="header__logo-img"></a>
-						</div>
-					</div>
-					@await Component.InvokeAsync("NavBar");
-					<form action="" class="header-search">
-						<input type="text" class="header-search__input" placeholder="Tìm kiếm">
-						<button type="submit" class="header-search__button">
-							<i class="header-search__icon"></i>
-						</button>
-					</form>
-					<div class="header__cart">
-						<a href="" class="header__cart-link">
-							<i class="header__cart-icon"></i>
-							<span class="header__cart-count">0</span>
-						</a>
-					</div>
+
+﻿@section ScriptsSecond {
+    <script type="text/javascript" src="~/js/cart.js"></script>
+   <script>
+        var cartJS = new CartJS();
+        cartJS.initialize();
+   </script>
+}
+<header class="header">
+	<div class="grid wide">
+		<div class="header__container">
+			<div class="header__logo">
+				<div class="header__logo-link">
+					<a href="/trang-chu" class="header__logo-img"></a>
 				</div>
 			</div>
-		</header>
-		<label class="header-mobile-nav__overlay"></label>
+			@await Component.InvokeAsync("NavBar")
+			<form asp-controller="Product" asp-action="Category" method="get" class="header-search">
+				<input type="text" class="header-search__input" name="keyword" value="@ViewBag.Keyword" placeholder="Tìm kiếm">
+				<button type="submit" class="header-search__button">
+					<i class="header-search__icon"></i>
+				</button>
+			</form>
+			<div class="header__cart">
+				<a asp-controller="Cart" asp-action="Index" class="header__cart-link">
+					<i class="header__cart-icon"></i>
+					<span class="header__cart-count count-cart" id="count-cart-quantity">0</span>
+
+					
+				</a>
+				<div class="header__cart-list">
+                                <img src="" alt="" class="header__cart-no-cart-img">
+                                <span class="header__cart-list-no-cart-msg">Chưa có sản phẩm</span>
+								<span id="no-product-in-cart" class="c_no-product-in-cart" style="display : none;font-size: 15px;text-align: center;margin: 10px 0;">Chưa có sản phẩm</span>
+                                <h4 class="header__cart-heading">Sản phẩm đã thêm</h4>
+                                <ul class="header__cart-list-item" id="list_product_cart_item">
+                                    <!-- Cart item -->
+									
+                                </ul>
+                                <a href="/Cart/Index" class="header__cart-view btn btn--primary" style="font-size: 15px;">Xem giỏ hàng</a>
+                            </div>
+			</div>
+			<div class="col l-1 m-0 c-0">
+
+				@if (@User.Identity.IsAuthenticated == true)
+				{
+		<div class="header-nav__item">
+		 <li class="header__navbar-items header__navbar-user header__navbar-items--separate">
+		  <span class="header__navbar-user-name">@User.Identity.Name</span>
+		  <ul class="header__navbar-user-menu">
+		   <li class="header__navber-user-item">
+			<a href="./thongtincanhan.html" class="header-nav__log-link">
+			 Tài khoản
+			 của tôi
+			</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Tra cứu bảo hành</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Đơn đặt hàng</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Lịch sử mua hàng</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Lịch sử sữa chữa</a>
+		   </li>
+		   <li class="header__navber-user-item">
+			<a href="" class="header-nav__log-link">Sổ địa chỉ</a>
+		   </li>
+		   <li class="header__navber-user-item header__navber-user-item--separate">
+			<a href="/Account/Logout" class="header-nav__log-link">Đăng xuất</a>
+		   </li>
+		  </ul>
+		</div>
+				}
+				else
+				{
+		<div class="button-login">
+		 <ul class="button-login__log">
+		  <li class="button-login__log-item">
+		   <a href="/Account/Login" class="button-login__log-link">Đăng nhập</a>
+		  </li>
+		 </ul>
+		</div>
+				}
+   </div>
+  </div>
+
+ </div>
+
+</header>
+<label class="header-mobile-nav__overlay"></label>

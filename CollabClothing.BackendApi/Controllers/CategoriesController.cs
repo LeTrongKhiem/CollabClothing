@@ -18,6 +18,12 @@ namespace CollabClothing.BackendApi.Controllers
         {
             _categoryService = categoryService;
         }
+        [HttpGet("parentname/{id}")]
+        public async Task<IActionResult> GetParentName(string id)
+        {
+            var name = await _categoryService.GetParentNameById(id);
+            return Ok(name);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

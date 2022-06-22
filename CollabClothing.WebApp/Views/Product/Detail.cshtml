@@ -1,5 +1,274 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using CollabClothing.ApiShared
+@using CollabClothing.ViewModels.Catalog.Products
+@using Microsoft.Extensions.Configuration
+@model ProductDetailsViewModel
 @{
+	ViewData["Title"] = "Chi tiết sản phẩm";
+}
+@inject IConfiguration Configuration
+@inject IProductApiClient _productApiClient
+@section Csss {
+<link rel="stylesheet" href="~/assets/css/detail.css">
+}
+<div class="container grid wide">
+ <ul class="breadcrumb">
+  <li>
+   <a href="/trang-chu">Home</a>
+   <meta property="position" content="1">
+  </li>
+  <li>
+   <a href="/Product/Detail/@Model.Products.Id">@Model.Products.ProductName</a>
+  </li>
+ </ul>
+ <div class="container-detail row">
+  <div class="detail-left col l-6">
+   <div class="main">
+	<img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
+					 alt="@Model.Products.ProductName" class="img-feature image-item">
+	<div class="control prev">
+	 <i class="bx bx-chevron-left"></i>
+	</div>
+	<div class="control next">
+	 <i class="bx bx-chevron-right"></i>
+	</div>
+   </div>
+
+   <div class="list-image">
+				@foreach (var item in Model.ProductsImages)
+				{
+		<div>
+		 <img class="image-item"
+						 src="@Configuration["BaseAddress"]@item.Path"
+						 alt="@item.Alt">
+		</div>
+
+				}
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-3-1.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-4-1.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-5.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-6.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-7.jpg"
+						 alt="">
+	</div>
+	<div>
+	 <img class="image-item"
+						 src="https://cdn.tgdd.vn/Products/Images/10239/264202/dam-nu-co-tim-avafashion-ttp-hong-8.jpg"
+						 alt="">
+	</div>
+
+
+   </div>
+   <div style="margin-top:50%; font-size : 20px;">@Html.Raw(@Model.Products.Details)</div>
+  </div>
+
+  <div class="detail-right col l-6">
+   <div class="box_productInfor">
+	<div class="detail-title">
+	 <h3>
+						@Model.Products.ProductName
+	 </h3>
+	</div>
+	<div class="detail-top">
+	 <span class="product-code">Mã sản phẩm: @Model.Products.Id</span>
+	</div>
+	<div class="detail-price">
+					@{
+						var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+					}
+	 <span class="price-current">@String.Format(format, "{0:c0}", @Model.Products.PriceCurrent)</span>
+	 <span class="price-old">@String.Format(format, "{0:c0}", @Model.Products.PriceOld)</span>
+	</div>
+	<div class="select-color">
+	 <p class="select-color-ttl">
+	  Chọn màu:
+	  <span>Hồng</span>
+	 </p>
+	 <ul>
+	  <li class="act">
+	   <div class="imgPro">
+		<img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
+									 alt="@Model.Products.ProductName" class=" ls-is-cached lazyloaded">
+	   </div>
+	  </li>
+	 </ul>
+	</div>
+	<div class="select-size">
+	 <div class="size-top">
+	  <p class="size-top-left">Chọn size: <span>S</span></p>
+	 </div>
+	 <select class="size-list" id="select-size">
+						@{
+							var sizes = await _productApiClient.GetSizeNameByProductId(@Model.Products.Id);
+						}
+						@foreach (var size in sizes)
+						{
+		  <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Name">
+									@size.Name.ToString()
+		  </option>
+						}
+	 </select>
+	</div>
+	<div class="box-promo">
+	 <p class="box-promo-txt">Khuyến mãi (Đến 31/05)</p>
+	 <ul class="box-promo-list">
+	  <li class="box-promo-item">
+	   Nhập mã&nbsp;AVAFASHION&nbsp;giảm 10% tối đa 100.000đ cho đơn hàng từ 300.000đ trở
+	   lên khi thanh toán qua Ví Moca trên ứng dụng Grab
+	  </li>
+	  <li class="box-promo-item">
+	   Nhập mã&nbsp;AVA50&nbsp;giảm 10% tối đa 50.000đ khi thanh toán quét QRcode qua App
+	   của ngân hàng
+	  </li>
+	 </ul>
+	</div>
+	<div class="detail-btn">
+	 <a href="#" class="btn btn-addcart container-product__item-btn" data-id="@Model.Products.Id">
+	  <p class="txt">Thêm vào giỏ</p>
+	 </a>
+	 <span class="btn btn-spmarket">Xem cửa hàng còn hàng</span>
+	</div>
+	<div class="policy">
+	 <li class="doitra ">
+	  <div class="iconl">
+	   <i class="icon-doitra"></i>
+	  </div>
+	  <p>
+	   Đổi trả <b>30 ngày</b> (với sản phẩm chưa sử dụng)
+	   <a href=""> Xem chi tiết </a>
+	  </p>
+	 </li>
+	 <li class="doitra ">
+	  <div class="iconl">
+	   <i class="icon-cod"></i>
+	  </div>
+	  <p>Giao hàng thu tiền, thanh toán online nhiều phương thức</p>
+	 </li>
+	 <li class="doitra ">
+	  <div class="iconl">
+	   <i class="icon-phone"></i>
+	  </div>
+	  <p>Tổng đài: <a href="tel:0372253243">037.225.3243</a> (7h30 - 22h00)</p>
+	 </li>
+	</div>
+	<div class="highlights">
+	 <li>Chất liệu @(Model.Products.Cotton == true ? "Vải cotton co dãn 4 chiều" : "Vải cotton co dãn 2 chiều")</li>
+	 <li>
+	  Form <a href="">@Model.Products.Form</a> xòe cùng&nbsp;thiết
+	  kế nơ cánh tay nữ tính.
+	 </li>
+	 <li>
+	  <a href="">@Model.Products.Type</a> với dáng cổ tim giúp tôn
+	  lên đường cong của người mặc.
+	 </li>
+	 <li>
+						@{
+							var brand = await _productApiClient.GetBrandNameByProductId(@Model.Products.Id);
+						}
+	  Sản phẩm <a href="/Product/Detail/@Model.Products.Id">
+							@Model.Products.ProductName
+	  </a> có&nbsp;bề mặt mịn màng, thoáng mát, phù hợp với nhiều hoạt
+	  động khác nhau.
+	 </li>
+	 <li>Thương hiệu @brand.ToString() đến từ @Model.Products.MadeIn.</li>
+	</div>
+	<div class="parameter">
+	 <p class="parameter-title info-title">Thông tin chi tiết</p>
+	 <div class="parameter-content info-content">
+	  <ul class="parameter-article info-article ">
+	   <li>
+		<p class="txt01">Người sử dụng</p>
+		<p class="txt02">@(Model.Products.Consumer == true ? "Nam" : "Nữ")</p>
+	   </li>
+
+	   <li>
+		<p class="txt01">Loại sản phẩm</p>
+		<p class="txt02">@Model.Products.Type</p>
+	   </li>
+	   <li>
+		<p class="txt01">Kiểu dáng</p>
+		<p class="txt02">@Model.Products.Form</p>
+	   </li>
+	   <li>
+		<p class="txt01">Chất liệu vải</p>
+		<p class="txt02">@(Model.Products.Cotton == true ? "Vải cotton co dãn 4 chiều" : "Vải cotton co dãn 2 chiều")</p>
+	   </li>
+	   <li>
+		<p class="txt01">Sản xuất tại</p>
+		<p class="txt02">@Model.Products.MadeIn</p>
+	   </li>
+
+	   <li>
+		<p class="txt01">Thương hiệu</p>
+
+		<p class="txt02">@brand.ToString()</p>
+	   </li>
+
+	  </ul>
+	 </div>
+	</div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<section class="wraplock grid wide">
+ <p class="detail-product-ttl">Có thể bạn thích</p>
+ <div class="promo-listProduct-product row ">
+		@{
+			List<List<ProductViewModel>> productRelated = new List<List<ProductViewModel>>();
+			List<ProductViewModel> relatedPart = new List<ProductViewModel>();
+		}
+		@foreach (var item in Model.ProductRelated)
+		{
+	  <div class="promo-product col l-3 ">
+	   <li class="product-item">
+		<a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="product-item__link">
+		 <div class="item-wrap">
+		  <div class="product-item__img">
+
+		   <img src="@Configuration["BaseAddress"]@item.ThumbnailImage"
+								 alt="Samsung Galaxy S10 Plus" class="product-item__img">
+		  </div>
+		 </div>
+		 <h3 class="product-item-heading">@item.ProductName </h3>
+		 <div class="product-item-price">
+		  <p class="product-item-price-current">
+								@String.Format(format, "{0:c0}", @item.PriceCurrent)
+		  </p>
+		  <p class="product-item-price-old">
+								@String.Format(format, "{0:c0}", @item.PriceOld)
+		  </p>
+		 </div>
+		</a>
+
+	   </li>
+
+
+	  </div>
+		}
+
+ </div>
+
+</section>
+
+@section Scripts {
+<script src="~/js/detail.js"></script>
 }

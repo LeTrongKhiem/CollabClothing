@@ -16,5 +16,9 @@ namespace CollabClothing.ApiShared
         Task<ResultApi<UserViewModel>> GetById(Guid id);
         Task<ResultApi<bool>> Delete(Guid id);
         Task<ResultApi<bool>> RolesAssign(Guid id, RoleAssignRequest request);
+        Task<ResultApi<bool>> ConfirmEmail(string id, string code);
+
+        Task<ResultApi<bool>> ForgotPassword(ForgotPasswordRequest request);
+        Task<ResultApi<bool>> ResetPassword(ResetPasswordRequest request);
     }
 }

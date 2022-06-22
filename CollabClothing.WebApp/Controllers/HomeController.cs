@@ -42,11 +42,7 @@ namespace CollabClothing.WebApp.Controllers
             var id = "";
             var data = new HomeViewModel()
             {
-                ListBanner = await _bannerApiClient.GetAll(),
                 ListProductFeatured = await _productApiClient.GetFeaturedProducts(rows),
-                ListProductFeaturedByMen = await _productApiClient.GetFeaturedProductsByCategory("82AAE383-3EDF-45F0-AA5B-9B4A514EA7A9", 8),
-                ListProductFeaturedByWoman = await _productApiClient.GetFeaturedProductsByCategory("d93e95a9-38bd-4011-a457-29a763189a81", 8),
-                ListProductFeaturedByChild = await _productApiClient.GetFeaturedProductsByCategory("29919101-ff6c-466f-907b-66a2f669be7f", 8),
             };
             return View(data);
         }

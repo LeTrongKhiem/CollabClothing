@@ -1,0 +1,61 @@
+﻿
+@{
+	ViewData["Title"] = "Thanh toán thành công";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+ .input-forgot {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+ }
+
+ .btn-forgot {
+  width: 100%;
+  background-color: #63a98e;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration : none;
+  text-align : center;
+ }
+
+  .btn-forgot:hover {
+   background-color: #45a049;
+  }
+
+ .forgot-container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  width: 40%;
+  margin: auto;
+  font-size: 15px;
+  padding-top : 50px;
+ }
+
+ .title-forgot {
+  margin: 50px 40%;
+  font-size: 30px;
+ }
+ .your-email {
+	 margin-bottom : 20px;
+ }
+</style>
+
+<div class="forgot-container">
+ <form method="post">
+  <label>Xác nhận thông tin thanh toán thành công. Quý khách vui lòng xác nhận lại Email và Số điện thoại</label>
+  <a asp-controller="Home" asp-action="Index" type="submit" class="btn-forgot">Trở lại trang chủ</a>
+ </form>
+</div>
+

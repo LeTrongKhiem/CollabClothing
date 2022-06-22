@@ -28,6 +28,17 @@ namespace CollabClothing.ViewModels.Catalog.Products
         // public ProductImage productImage { get; set; }
         [Display(Name = "Giá hiện tại")]
         public decimal PriceCurrent { get; set; }
+        [Display(Name = "Giá cũ")]
         public decimal PriceOld { get; set; }
+        [Display(Name = "Người sử dụng")]
+        public bool Consumer { get; set; }
+        [Display(Name = "Loại sản phẩm")]
+        public string? Type { get; set; }
+        [Display(Name = "Kiểu dáng")]
+        public string? Form { get; set; }
+        [Display(Name = "Chất liệu vải")]
+        public bool Cotton { get; set; }
+        [Display(Name = "Sản xuất tại")]
+        public string? MadeIn { get; set; }
     }
 }

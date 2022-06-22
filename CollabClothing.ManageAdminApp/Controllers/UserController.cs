@@ -1,4 +1,4 @@
-﻿    using AspNetCoreHero.ToastNotification.Abstractions;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
@@ -206,7 +206,5 @@ namespace CollabClothing.ManageAdminApp.Controllers
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Login");
         }
-
-
     }
 }

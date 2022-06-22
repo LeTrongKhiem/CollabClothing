@@ -83,6 +83,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("banner/bannerType")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllBannerType()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _bannerService.GetAllType();
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()

@@ -89,6 +89,11 @@ namespace CollabClothing.ApiShared
             return GetListAsync<BannerViewModel>($"/api/banners");
         }
 
+        public Task<List<BannerTypeViewModel>> GetAllBannerType()
+        {
+            return GetListAsync<BannerTypeViewModel>($"/api/banners/banner/bannerType");
+        }
+
         public async Task<BannerViewModel> GetById(string id)
         {
             return await GetAsync<BannerViewModel>($"/api/banners/id?id={id}");

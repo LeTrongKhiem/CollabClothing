@@ -220,6 +220,8 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.Order)
+                .HasMaxLength(2);
             });
 
             modelBuilder.Entity<Color>(entity =>
@@ -291,7 +293,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ShipAddress)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ShipEmail)
                     .IsRequired()
@@ -301,7 +303,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ShipName)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ShipPhoneNumber)
                     .IsRequired()
@@ -320,6 +322,10 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.SizeId)
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
 
@@ -359,8 +365,10 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(255)
                     .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
                 entity.Property(e => e.Details)
-                    .HasColumnType("text").IsUnicode(true)
-                    .UseCollation("Vietnamese_100_CI_AS");
+                     //.HasColumnType("text").IsUnicode(true)
+                     //.UseCollation("Vietnamese_100_CI_AS");
+                     .HasColumnType("nvarchar(MAX)")
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
                 entity.Property(e => e.Slug)
                     .IsRequired()
                     .HasColumnType("text");
@@ -392,6 +400,15 @@ namespace CollabClothing.Data.EF
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_product_productDetails");
+                entity.Property(e => e.Type)
+                     .HasMaxLength(255)
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.Form)
+                    .HasMaxLength(255)
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.MadeIn)
+                    .HasMaxLength(255)
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>

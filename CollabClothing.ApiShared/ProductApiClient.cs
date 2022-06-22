@@ -1,6 +1,7 @@
 ﻿using CollabClothing.Utilities.Constants;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Sizes;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -60,10 +61,18 @@ namespace CollabClothing.ApiShared
             requestContent.Add(new StringContent(request.SoldOut.ToString()), "soldOut");
             requestContent.Add(new StringContent(request.Installment.ToString()), "installment");
             requestContent.Add(new StringContent(request.Description), "description");
-            requestContent.Add(new StringContent(request.Slug), "slug");
+            //requestContent.Add(new StringContent(request.Slug), "slug");
             requestContent.Add(new StringContent(request.Details), "details");
-            requestContent.Add(new StringContent(request.CategoryId), "categoryId");
+            foreach (var item in request.CategoryId)
+            {
+                requestContent.Add(new StringContent(item.ToString()), "categoryId");
+            }
 
+            requestContent.Add(new StringContent(request.Consumer.ToString()), "consumer");
+            requestContent.Add(new StringContent(request.Form), "form");
+            requestContent.Add(new StringContent(request.Type), "type");
+            requestContent.Add(new StringContent(request.MadeIn), "madeIn");
+            requestContent.Add(new StringContent(request.Cotton.ToString()), "cotton");
             var response = await client.PostAsync($"/api/products/", requestContent);
             return response.IsSuccessStatusCode;
 
@@ -92,6 +101,12 @@ namespace CollabClothing.ApiShared
             requestContent.Add(new StringContent(request.Slug), "slug");
             //requestContent.Add(new StringContent(request.ImagePath), "imagePath");
             requestContent.Add(new StringContent(request.BrandId), "brandId");
+
+            requestContent.Add(new StringContent(request.Consumer.ToString()), "consumer");
+            requestContent.Add(new StringContent(request.Form), "form");
+            requestContent.Add(new StringContent(request.Type), "type");
+            requestContent.Add(new StringContent(request.MadeIn), "madeIn");
+            requestContent.Add(new StringContent(request.Cotton.ToString()), "cotton");
             var response = await client.PutAsync($"/api/products/{id}", requestContent);
             return response.IsSuccessStatusCode;
         }
@@ -99,7 +114,7 @@ namespace CollabClothing.ApiShared
 
         public async Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request)
         {
-            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}");
+            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}&brandId={request.BrandId}");
         }
 
         public async Task<ProductViewModel> GetById(string id)
@@ -239,5 +254,61 @@ namespace CollabClothing.ApiShared
         {
             return await GetAsync<ProductImageViewModel>($"/api/products/images/product/{id}");
         }
+
+        public async Task<string> GetBrandNameByProductId(string productId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/getbrand/{productId}");
+            var result = await response.Content.ReadAsStringAsync();
+            return result;
+        }
+
+        public async Task<bool> SizeAssign(string id, SizeAssignRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PutAsync($"/api/products/sizes/{id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<bool>(result);
+            }
+            return JsonConvert.DeserializeObject<bool>(result);
+        }
+
+        public async Task<List<SizeViewModel>> GetSizeNameByProductId(string productId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/sizename/{productId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<SizeViewModel> data = (List<SizeViewModel>)JsonConvert.DeserializeObject(result, typeof(List<SizeViewModel>));
+                return data;
+            }
+            throw new Exception(result);
+        }
+
+        public async Task<string> GetNameProductById(string id)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/getnameproduct/{id}");
+            var result = await response.Content.ReadAsStringAsync();
+            return result;
+        }
+
     }
 }

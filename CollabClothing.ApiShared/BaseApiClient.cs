@@ -65,9 +65,9 @@ namespace CollabClothing.ApiShared
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<bool>(result);
+                return true;
             }
-            return JsonConvert.DeserializeObject<bool>(result);
+            return false;
         }
 
     }

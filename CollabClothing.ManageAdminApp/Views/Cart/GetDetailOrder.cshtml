@@ -1,0 +1,83 @@
+﻿@using CollabClothing.ApiShared
+@model CollabClothing.ViewModels.Catalog.Cart.CheckoutRequest
+
+@{
+	ViewData["Title"] = "Chi tiết đơn hàng";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject ISizeApiClient sizeApiClient
+@inject IProductApiClient productApiClient
+<h1>Chi tiết đơn hàng</h1>
+<div class="page-header">
+ <div class="header-sub-title">
+  <nav class="breadcrumb breadcrumb-dash">
+   <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+   <a class="breadcrumb-item" asp-controller="Order" asp-action="Index">Danh sách đơn hàng</a>
+   <a class="breadcrumb-item" asp-controller="Order" asp-action="GetDetailOrder">Chi tiết đơn hàng</a>
+  </nav>
+ </div>
+</div>
+<div class="table-responsive">
+ <table class="table table-hover e-commerce-table" id="data-table">
+  <thead>
+   <tr>
+	<th>
+	 Mã sản phẩm
+	</th>
+	<th>
+	 Số lượng
+	</th>
+	<th>
+	 Size
+	</th>
+	<th>
+	 Màu
+	</th>
+	<th>
+	 Giá
+	</th>
+	<th></th>
+   </tr>
+  </thead>
+  <tbody>
+			@{
+				var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+			}
+			@foreach (var item in Model.OrderDetails)
+			{
+	   <tr>
+		<td>
+						@{
+							var product = await productApiClient.GetNameProductById(item.ProductId);
+						}
+						@product.ToString()
+		</td>
+		<td>
+						@Html.DisplayFor(modelItem => item.Quantity)
+		</td>
+		<td>
+						@{
+							var size = await sizeApiClient.GetNameSize(item.SizeId);
+						}
+
+						@size.ToString()
+		</td>
+		<td>
+						@Html.DisplayFor(modelItem => item.ColorId)
+		</td>
+		<td>
+						@String.Format(format, "{0:c0}", @item.Price )
+		</td>
+
+		<td>
+		</td>
+	   </tr>
+			}
+  </tbody>
+ </table>
+</div>
+<div>
+	@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+ <a asp-action="Index">Back to List</a>
+</div>

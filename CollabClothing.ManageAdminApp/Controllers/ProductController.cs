@@ -1,6 +1,7 @@
 ﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Sizes;
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,17 +15,22 @@ namespace CollabClothing.ManageAdminApp.Controllers
 {
     public class ProductController : BaseController
     {
+        #region Constructor
         private readonly IProductApiClient _productApiClient;
         private readonly IConfiguration _configuration;
         private readonly ICategoryApiClient _categoryApiClient;
         private readonly IBrandApiClient _brandApiClient;
-        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient)
+        private readonly ISizeApiClient _sizeApiClient;
+        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient, ISizeApiClient sizeApiClient)
         {
             _productApiClient = productApiClient;
             _configuration = configuration;
             _categoryApiClient = categoryApiClient;
             _brandApiClient = brandApiClient;
+            _sizeApiClient = sizeApiClient;
         }
+        #endregion
+        #region Index
         public async Task<IActionResult> Index(string keyword, string categoryId, int pageIndex = 1, int pageSize = 10)
         {
             var request = new GetManageProductRequestPaging()
@@ -49,6 +55,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             }
             return View(data);
         }
+        #endregion
         #region Create
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -71,11 +78,11 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+        public async Task<IActionResult> Create(ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View(request);
             }
             var result = await _productApiClient.Create(request);
             if (result)
@@ -129,7 +136,12 @@ namespace CollabClothing.ManageAdminApp.Controllers
                     Description = productResult.Description,
                     BrandId = productResult.BrandId,
                     Slug = productResult.Slug,
-                    ImagePath = productResult.ThumbnailImage
+                    ImagePath = productResult.ThumbnailImage,
+                    Consumer = productResult.Consumer,
+                    Form = productResult.Form,
+                    Type = productResult.Type,
+                    Cotton = productResult.Cotton,
+                    MadeIn = productResult.MadeIn
                 };
                 return View(editProduct);
             }
@@ -143,12 +155,14 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 return View(ModelState);
             }
+            ViewBag.Product = request;
             var result = await _productApiClient.Edit(id, request);
             if (result)
             {
                 TempData["result"] = "Cập nhật thành công";
                 return RedirectToAction("Index");
             }
+            ModelState.AddModelError("", "Cập nhật thất bại");
             return View(request);
         }
         #endregion
@@ -204,6 +218,49 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ModelState.AddModelError("Error", "");
             var rolesAssignRequest = GetCategoriesAssignRequest(request.Id);
             return View(rolesAssignRequest);
+        }
+        #endregion
+
+        #region SizeAssign
+        [HttpGet]
+        public async Task<IActionResult> SizesAssign(string id)
+        {
+            var sizeAssign = await GetSizesAssignRequest(id);
+            return View(sizeAssign);
+        }
+
+        private async Task<SizeAssignRequest> GetSizesAssignRequest(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            var sizes = await _sizeApiClient.GetAll();
+            var sizeAssign = new SizeAssignRequest();
+            foreach (var size in sizes)
+            {
+                sizeAssign.Sizes.Add(new SelectItem()
+                {
+                    Id = size.Id,
+                    Name = size.Name,
+                    Selected = product.Sizes.Contains(size.Name)
+                });
+            }
+            return sizeAssign;
+        }
+        [HttpPost]
+        public async Task<IActionResult> SizesAssign(SizeAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.SizeAssign(request.Id, request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật danh mục sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("Error", "");
+            var sizesAssignRequest = GetCategoriesAssignRequest(request.Id);
+            return View(sizesAssignRequest);
         }
         #endregion
         #region UpdateCurrentPrice
@@ -299,21 +356,28 @@ namespace CollabClothing.ManageAdminApp.Controllers
         #endregion
         #region AddImages
         [HttpGet]
-        public IActionResult CreateImages()
+        [Route("Product/CreateImages/{productId}")]
+        public IActionResult CreateImages(string productId)
         {
-            //ViewBag.IdPrevious = TempData["idPrevious"];
-            ViewData["IdPrevious"] = TempData["idPrevious"];
-            ViewBag.IdPrevious = TempData["idPrevious"];
-            return View();
+            ViewBag.IdPrevious = productId;
+            var productImagesCreate = new ProductImageCreateRequest()
+            {
+                ProductId = productId
+            };
+            return View(productImagesCreate);
         }
         [HttpPost]
+        [Route("Product/CreateImages/{productId}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateImages([FromForm] ProductImageCreateRequest request)
+        public async Task<IActionResult> CreateImages([FromRoute] string productId, [FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
+            ViewBag.IdPrevious = TempData["idPrevious"];
+            var result = await _productApiClient.CreateProductImages(productId, request);
+
             //ViewBag.IdPrevious = TempData["idPrevious"];
             string productId = ViewBag.IdPrevious;
             //var productId = TempData["idPrevious"].ToString();
@@ -322,7 +386,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["resultImages"] = "Tạo hình ảnh thành công";
                 ViewBag.IdPrevious = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = productId });
+                return RedirectToAction("GetListImages", new { id = productId });
             }
             ModelState.AddModelError("", "Thêm hình ảnh thất bại");
             return View(request);
@@ -365,7 +429,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 TempData["resultImages"] = "Sửa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
                 ViewBag.IdPrevious = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = TempData["idPrevious"] });
+                return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Sửa hình ảnh thất bại");
             return View(request);
@@ -398,7 +462,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
             {
                 TempData["resultImages"] = "Xóa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
-                return RedirectToAction("GetListImages", new { @id = ViewData["IdPrevious"] });
+                return RedirectToAction("Index");
+
             }
             ModelState.AddModelError("", "Xóa hình ảnh thất bại");
             return View(request);

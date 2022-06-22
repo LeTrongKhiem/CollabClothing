@@ -70,7 +70,9 @@ namespace CollabClothing.Application.Catalog.Categories
         {
 
             var query = from cate in _context.Categories orderby cate.Level select new { cate };
-            var query2 = _context.Categories.Where(x => x.ParentId == x.Id).Select(o => o.NameCategory).ToString();
+
+            var listCateParent = (from cate in _context.Categories orderby cate.Level where cate.ParentId == null select cate.NameCategory).FirstOrDefault();
+
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.cate.NameCategory.Contains(request.Keyword));
@@ -88,6 +90,7 @@ namespace CollabClothing.Application.Catalog.Categories
                              ParentId = x.cate.ParentId,
                              Slug = x.cate.Slug,
                              //ParentName = query2
+
                          }).ToListAsync();
 
             var pageResult = new PageResult<CategoryViewModel>()
@@ -108,6 +111,14 @@ namespace CollabClothing.Application.Catalog.Categories
             {
                 throw new CollabException($"Not find Category with id: {Id}");
             }
+            List<string> childCate = new List<string>();
+            foreach (var item in _context.Categories)
+            {
+                if (item.ParentId == Id)
+                {
+                    childCate.Add(item.NameCategory);
+                }
+            }
             var cate1 = new CategoryViewModel()
             {
                 CategoryId = cate.Id,
@@ -116,7 +127,8 @@ namespace CollabClothing.Application.Catalog.Categories
                 IsShowWeb = cate.IsShowWeb,
                 Icon = cate.Icon,
                 Level = cate.Level,
-                Slug = cate.Slug
+                Slug = cate.Slug,
+                ListChildCates = childCate
             };
 
             Category category = new Category();
@@ -196,13 +208,14 @@ namespace CollabClothing.Application.Catalog.Categories
 
         public async Task<List<CategoryViewModel>> GetAll()
         {
-            var query = from c in _context.Categories select new { c };
+            var query = from c in _context.Categories orderby c.Level, c.Order select new { c };
             return await query.Select(x => new CategoryViewModel()
             {
                 CategoryId = x.c.Id,
                 CategoryName = x.c.NameCategory,
                 ParentId = x.c.ParentId,
-                Icon = x.c.Icon
+                Icon = x.c.Icon,
+                Slug = x.c.Slug
             }).ToListAsync();
         }
 
@@ -225,8 +238,15 @@ namespace CollabClothing.Application.Catalog.Categories
                 CategoryId = x.c.Id,
                 CategoryName = x.c.NameCategory,
                 ParentId = x.c.ParentId,
-                Icon = x.c.Icon
+                Icon = x.c.Icon,
+                Slug = x.c.Slug
             }).ToListAsync();
+        }
+
+        public async Task<string> GetParentNameById(string id)
+        {
+            var query = (from c in _context.Categories where c.Id == id select c.NameCategory).FirstOrDefault();
+            return query;
         }
     }
 }

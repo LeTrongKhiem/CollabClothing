@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +29,11 @@ using CollabClothing.Application.Catalog.Categories;
 using CollabClothing.Application.System.Roles;
 using CollabClothing.Application.Catalog.Brands;
 using CollabClothing.Application.Catalog.Banners;
+using CollabClothing.ViewModels.System.Mail;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using CollabClothing.Application.System.Mail;
+using CollabClothing.Application.Catalog.Sizes;
+using CollabClothing.Application.Catalog.Cart;
 
 namespace CollabClothing.BackendApi
 {
@@ -47,22 +52,39 @@ namespace CollabClothing.BackendApi
 
             services.AddDbContext<CollabClothingDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString(SystemConstans.MainConnection)));
 
+            var emailConfig = Configuration.GetSection("MailSettings").Get<MailSettings>();
+            services.AddSingleton(emailConfig);
+
+            services.AddScoped<IEmailSender, MailService>();
             services.AddIdentity<AppUser, AppRole>()
+            //.AddDefaultUI()
             .AddEntityFrameworkStores<CollabClothingDBContext>()
             .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);  // Khóa 2 phút
+                options.Lockout.MaxFailedAccessAttempts = 3;                        // Thất bại 3 lần thì khóa
+            });
+
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<IBannerService, BannerSevice>();
+            services.AddTransient<IUtilities, UtilitiesHelp>();
+            services.AddTransient<ISizeService, SizeService>();
+            services.AddTransient<ICartService, CartService>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 
+
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
+            // Đăng ký dịch vụ Mail
             // services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
             // services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>(); vi khai bao fv => fv.RegisterValidatorsFromAssemblyContaining
 
