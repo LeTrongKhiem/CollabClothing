@@ -309,5 +309,6 @@ namespace CollabClothing.ApiShared
             var result = await response.Content.ReadAsStringAsync();
             return result;
         }
+
     }
 }

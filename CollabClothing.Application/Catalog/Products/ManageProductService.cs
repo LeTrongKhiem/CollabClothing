@@ -122,6 +122,7 @@ namespace CollabClothing.Application.Catalog.Products
                     Alt = product.ProductName,
                     IsThumbnail = true
 
+
                 };
                 if (request.ThumbnailImage != null)
                 {
@@ -137,6 +138,7 @@ namespace CollabClothing.Application.Catalog.Products
             _context.Products.Add(product);
             //_context.ProductMapCategories.Add(ProductMapCategory);
             _context.ProductDetails.Add(productDetails);
+
             await _context.SaveChangesAsync();
             return product.Id;
         }
@@ -550,6 +552,7 @@ namespace CollabClothing.Application.Catalog.Products
 
         public async Task<List<ProductViewModel>> GetFeaturedProducts(int take)
         {
+
             var query = (from p in _context.Products
                          join pimg in _context.ProductImages on p.Id equals pimg.ProductId
                          join b in _context.Brands on p.BrandId equals b.Id
@@ -593,7 +596,9 @@ namespace CollabClothing.Application.Catalog.Products
                          join b in _context.Brands on p.BrandId equals b.Id
                          into pb
                          from b in pb.DefaultIfEmpty()
+
                          where (pimg.IsThumbnail == true) && (cate.ParentId.Equals(idCate) || cate.Id.Equals(idCate))
+
                          select new { p, pimg, b });
             List<ProductViewModel> data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
                 .Select(x => new ProductViewModel()

@@ -141,7 +141,6 @@ namespace CollabClothing.ApiShared
         {
             return await GetListAsync<CategoryViewModel>($"/api/categories/category/{parentId}");
         }
-
         public async Task<string> GetParentName(string id)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
