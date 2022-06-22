@@ -67,12 +67,48 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var order = await _cartService.Create(request);
-            if (order == null)
+            var orderId = await _cartService.Create(request);
+            if (orderId == null || orderId.Equals(""))
             {
                 return BadRequest("Don't Create");
             }
-            return Ok(request);
+            var orderDetail = await _cartService.GetCheckoutById(orderId);
+
+            return CreatedAtAction(nameof(orderId), new { id = orderId }, orderDetail);
+        }
+        #endregion
+
+        #region Delete Order
+        [HttpDelete("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DeleteOrder(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _cartService.DeleteCheckout(id);
+            if (result == 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        #endregion
+        #region Accept Checkout
+        [HttpPut("{id}/{status}")]
+        public async Task<IActionResult> AcceptOrder(string id, bool status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _cartService.AcceptOrder(id, status);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
         #endregion
     }

@@ -1,0 +1,122 @@
+﻿@model CheckoutViewModel
+@{
+	ViewData["Title"] = "Thanh toán";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Csss {
+<link rel="stylesheet" href="~/css/cart.css" />
+<style>
+    .row-checkout {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  margin: 0 -16px;
+  width: 122%;
+}
+
+.col-25 {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+}
+.container-checkout {
+      padding: 5px 39px 27px 12px;
+  border-radius: 3px;
+}
+.col-50-checkout {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+.col-75 {
+  -ms-flex: 75%; /* IE10 */
+  flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 16px;
+}
+
+.input-checkout{
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.label-checkout {
+  margin-bottom: 10px;
+  display: block;
+}
+</style>
+}
+@section ScriptsSecond {
+
+<script type="text/javascript" src="~/js/cart.js"></script>
+<script>
+	var cartJS = new CartJS();
+	cartJS.initialize();
+</script>
+}
+<div class="cart__empty-area" id="cart-empty">
+ <div class="cart__empty-img">
+  <img class="cart__empty-img-link" src="~/img/Illustration_EmptyCart_BF.png" />
+ </div>
+ <div class="cart__empty-text">Chưa có sản phẩm trong giỏ hàng của bạn</div>
+ <a href="/trang-chu">
+  <button class="cart__empty-back">Trở lại trang chủ</button>
+ </a>
+
+</div>
+<div class="card" id="cart-content">
+ <div class="row">
+  <div class="col-md-8 cart">
+   <div class="title">
+	<div class="row">
+	 <div class="col"><h4><b>Giỏ hàng</b></h4></div>
+	</div>
+   </div>
+   <div id="cart-body">
+   </div>
+   <div class="back-to-shop"><a class="a-link" href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+  </div>
+  <div class="col-md-4 summary">
+
+   <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+	<div class="col">TỔNG TIỀN</div>
+	<div class="col text-right total-cart"></div>
+   </div>
+   <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+	
+	<div class="row-checkout">
+  <div class="col-75">
+    <div class="container-checkout">
+     <form asp-action="Checkout" method="post">
+        <div class="row-checkout">
+          <div class="col-50-checkout">
+            <h3>Thông tin khách hàng</h3>
+            <label class="label-checkout" for="fname"><i class="fa fa-user"></i> Họ tên</label>
+            <input class="input-checkout" asp-for="CheckoutRequest.Name" type="text" placeholder="John M. Doe">
+            <label class="label-checkout" for="email"><i class="fa fa-envelope"></i> Email</label>
+            <input class="input-checkout" asp-for="CheckoutRequest.Email" type="text" placeholder="john@example.com">
+            <label class="label-checkout" for="adr"><i class="fa fa-address-card-o"></i> Địa chỉ</label>
+            <input class="input-checkout" asp-for="CheckoutRequest.Address" type="text" placeholder="542 W. 15th Street">
+            <label class="label-checkout" for="city"><i class="fa fa-institution"></i> Số điện thoại</label>
+            <input class="input-checkout" asp-for="CheckoutRequest.PhoneNumber" type="text" placeholder="0372253243">
+          </div>
+
+        </div>
+        <input type="submit" value="XÁC NHẬN" class="btn-cart">
+      </form>
+    </div>
+  </div>
+</div>
+   </div>
+  </div>
+ </div>
+
+</div>
+

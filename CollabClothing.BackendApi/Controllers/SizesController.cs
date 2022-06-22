@@ -30,5 +30,19 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetNameSize(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _sizeService.GetNameSize(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

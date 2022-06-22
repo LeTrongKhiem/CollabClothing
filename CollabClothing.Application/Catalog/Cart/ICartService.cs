@@ -13,7 +13,7 @@ namespace CollabClothing.Application.Catalog.Cart
         Task<PageResult<CheckoutRequest>> GetAllCheckout(PagingCart request);
         Task<string> Create(CheckoutRequest request);
         Task<bool> AcceptOrder(string id, bool status);
-        Task<bool> DeleteCheckout(string id);
+        Task<int> DeleteCheckout(string id);
         Task<bool> EditCheckout(string id, CheckoutRequest request);
         Task<CheckoutRequest> GetCheckoutById(string id);
     }

@@ -24,6 +24,7 @@ namespace CollabClothing.BackendApi.Controllers
         //api get all product 
         //url mac dinh cua get http://localhost:port/controller
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             var product = await _publicProductService.GetAll();
@@ -55,6 +56,21 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var product = await _manageProductService.GetAllPaging(request);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+        [HttpGet("getnameproduct/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetNameProductById(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetNameProductById(id);
             if (product == null)
             {
                 return BadRequest("Not found");

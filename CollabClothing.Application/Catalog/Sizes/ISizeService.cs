@@ -10,6 +10,7 @@ namespace CollabClothing.Application.Catalog.Sizes
     public interface ISizeService
     {
         Task<List<SizeViewModel>> GetAllSize();
+        Task<string> GetNameSize(string id);
 
     }
 }

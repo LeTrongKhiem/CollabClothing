@@ -13,19 +13,14 @@
     /* justify-content: space-between; */
     align-items: center;
 }
-
 .header__logo-img {
-        background-image: url(//cdn.tgdd.vn/mwgcart/stag-bluefashion/images/common/icon-bluefashion_desktop.png?v=2);
-/*    background-image: url(/img/logo.png);*/
-    background-repeat: no-repeat;
+    background: url(/assets/img/logocollab.png) no-repeat center/cover;
     display: inline-block;
-    height: 30px;
-    width: 30px;
     line-height: 30px;
     vertical-align: middle;
-    background-size: 505px 117px;
-    height: 40px;
+    height: 65px;
     width: 165px;
+    margin-top: 20px;
 }
 
 .header__navbar-list {

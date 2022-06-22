@@ -49,6 +49,7 @@ namespace CollabClothing.Application.Catalog.Products
 
         #region Get Name
         List<SizeViewModel> GetNameSize(string productId);
+        Task<string> GetNameProductById(string id);
         #endregion
 
 

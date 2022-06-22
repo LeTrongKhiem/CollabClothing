@@ -15,9 +15,11 @@ namespace CollabClothing.WebApp.Controllers
     public class CartController : Controller
     {
         private readonly IProductApiClient _productApiClient;
-        public CartController(IProductApiClient productApiClient)
+        private readonly IOrderApiClient _orderApiClient;
+        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient)
         {
             _productApiClient = productApiClient;
+            _orderApiClient = orderApiClient;
         }
         public IActionResult Index()
         {
@@ -113,17 +115,22 @@ namespace CollabClothing.WebApp.Controllers
         #region Checkout
         public IActionResult Checkout()
         {
+            var session = HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var userId = HttpContext.User.Identity.Name;
             return View(GetCheckout());
         }
 
         [HttpPost]
+        //[Consumes("multipart/form-data")]
         public async Task<IActionResult> Checkout(CheckoutViewModel request)
         {
             if (!ModelState.IsValid)
             {
+
                 return View(ModelState);
             }
             var getCheckout = GetCheckout();
+            var userLogined = HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var orderDetails = new List<OrderDetailsViewModel>();
             foreach (var item in getCheckout.CartItems)
             {
@@ -136,19 +143,26 @@ namespace CollabClothing.WebApp.Controllers
                     ColorId = item.Color
                 });
             }
-            var checkoutRrequest = new CheckoutRequest()
+            var checkoutRequest = new CheckoutRequest()
             {
                 Address = request.CheckoutRequest.Address,
                 Email = request.CheckoutRequest.Email,
                 Name = request.CheckoutRequest.Name,
                 PhoneNumber = request.CheckoutRequest.PhoneNumber,
                 Status = request.CheckoutRequest.Status,
+                UserId = request.CheckoutRequest.UserId,
                 OrderDetails = orderDetails
             };
 
             //api
-
-            TempData["result"] = "Đặt hàng thành công quý khách vui lòng xác nhận qua Email hoặc số điện thoại";
+            var result = await _orderApiClient.CreateOrder(checkoutRequest);
+            if (result)
+            {
+                TempData["result"] = "Đặt hàng thành công quý khách vui lòng xác nhận qua Email hoặc số điện thoại";
+                HttpContext.Session.Remove(SystemConstans.SessionCart);
+                return RedirectToAction("CheckoutSuccess");
+            }
+            ModelState.AddModelError("", "Đặt hàng thất bại. Vui lòng thử lại");
             return View(getCheckout);
         }
 
@@ -156,7 +170,7 @@ namespace CollabClothing.WebApp.Controllers
         {
             var session = HttpContext.Session.GetString(SystemConstans.SessionCart);
             List<CartItemViewModel> listItemInCart = new List<CartItemViewModel>();
-            if (session == null)
+            if (session != null)
             {
                 listItemInCart = JsonConvert.DeserializeObject<List<CartItemViewModel>>(session);
             }
@@ -167,6 +181,12 @@ namespace CollabClothing.WebApp.Controllers
 
             };
             return checkoutVm;
+        }
+        #endregion
+        #region Done Checkout
+        public IActionResult CheckoutSuccess()
+        {
+            return View();
         }
         #endregion
     }
