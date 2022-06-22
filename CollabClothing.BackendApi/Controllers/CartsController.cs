@@ -95,5 +95,21 @@ namespace CollabClothing.BackendApi.Controllers
             return Ok(result);
         }
         #endregion
+        #region Accept Checkout
+        [HttpPut("{id}/{status}")]
+        public async Task<IActionResult> AcceptOrder(string id, bool status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _cartService.AcceptOrder(id, status);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+        #endregion
     }
 }

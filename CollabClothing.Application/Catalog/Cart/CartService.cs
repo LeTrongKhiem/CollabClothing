@@ -19,9 +19,11 @@ namespace CollabClothing.Application.Catalog.Cart
             _context = context;
         }
 
-        public Task<bool> AcceptOrder(string id, bool status)
+        public async Task<bool> AcceptOrder(string id, bool status)
         {
-            throw new NotImplementedException();
+            var order = await _context.Orders.FindAsync(id);
+            order.Status = status;
+            return await _context.SaveChangesAsync() > 0;
         }
         #region Create Checkout
         public async Task<string> Create(CheckoutRequest request)
