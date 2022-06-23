@@ -97,7 +97,8 @@ namespace CollabClothing.BackendApi.Controllers
         #endregion
         #region Accept Checkout
         [HttpPut("{id}/{status}")]
-        public async Task<IActionResult> AcceptOrder(string id, bool status)
+        [AllowAnonymous]
+        public async Task<IActionResult> AcceptOrder(string id, bool status = true)
         {
             if (!ModelState.IsValid)
             {
