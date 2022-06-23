@@ -20,9 +20,16 @@ namespace CollabClothing.ApiShared
         {
         }
 
-        public Task<bool> AcceptOrder(bool status)
+        public async Task<bool> AcceptOrder(string id, bool status)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(status); //object to json
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PutAsync($"/api/carts/{id}/true", httpContent);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> CreateOrder(CheckoutRequest request)
@@ -41,7 +48,7 @@ namespace CollabClothing.ApiShared
             return await DeleteAsync($"/api/Carts/{id}");
         }
 
-        public Task<bool> EditOrder(string id)
+        public Task<bool> EditOrder(string id, CheckoutRequest request)
         {
             throw new NotImplementedException();
         }
