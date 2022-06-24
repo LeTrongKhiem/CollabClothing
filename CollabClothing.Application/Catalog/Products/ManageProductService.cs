@@ -336,6 +336,11 @@ namespace CollabClothing.Application.Catalog.Products
                                join pms in _context.ProductMapSizes on size.Id equals pms.SizeId
                                where pms.ProductId == productId
                                select size.NameSize).ToListAsync();
+            var promotions = await (from p in _context.PromotionDetails
+                                    join pmp in _context.Promotions
+                                    on p.Id equals pmp.Id
+                                    where pmp.ProductId == productId
+                                    select p.NamePromotion).ToListAsync();
             var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
             var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product == null)
@@ -362,7 +367,8 @@ namespace CollabClothing.Application.Catalog.Products
                 Cotton = productDetails.Cotton,
                 Form = productDetails.Form,
                 MadeIn = productDetails.MadeIn,
-                Sizes = sizes
+                Sizes = sizes,
+                Promotions = promotions
             };
             return viewModel;
         }
