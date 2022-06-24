@@ -127,6 +127,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(users);
         }
+        [HttpGet("get/{username}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByUsername(string username)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var users = await _userService.GetByUsername(username);
+            if (users == null)
+            {
+                return BadRequest("No User find");
+            }
+            return Ok(users);
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(Guid id, [FromBody] UserEditRequest request)
@@ -136,6 +151,21 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userService.Edit(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("newpassword/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdatePassword(Guid id, [FromBody] EditPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.UpdatePassword(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

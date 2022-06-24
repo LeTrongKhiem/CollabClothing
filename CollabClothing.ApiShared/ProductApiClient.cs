@@ -283,6 +283,22 @@ namespace CollabClothing.ApiShared
             return JsonConvert.DeserializeObject<bool>(result);
         }
 
+        public async Task<bool> PromotionAssign(string id, PromotionAssignRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PutAsync($"/api/products/{id}/promotions", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<bool>(result);
+            }
+            return JsonConvert.DeserializeObject<bool>(result);
+        }
         public async Task<List<SizeViewModel>> GetSizeNameByProductId(string productId)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
@@ -309,6 +325,5 @@ namespace CollabClothing.ApiShared
             var result = await response.Content.ReadAsStringAsync();
             return result;
         }
-
     }
 }

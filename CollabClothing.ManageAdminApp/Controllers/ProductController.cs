@@ -21,13 +21,15 @@ namespace CollabClothing.ManageAdminApp.Controllers
         private readonly ICategoryApiClient _categoryApiClient;
         private readonly IBrandApiClient _brandApiClient;
         private readonly ISizeApiClient _sizeApiClient;
-        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient, ISizeApiClient sizeApiClient)
+        private readonly IPromotionApiClient _promotionApiClient;
+        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient, ISizeApiClient sizeApiClient, IPromotionApiClient promotionApiClient)
         {
             _productApiClient = productApiClient;
             _configuration = configuration;
             _categoryApiClient = categoryApiClient;
             _brandApiClient = brandApiClient;
             _sizeApiClient = sizeApiClient;
+            _promotionApiClient = promotionApiClient;
         }
         #endregion
         #region Index
@@ -220,7 +222,48 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(rolesAssignRequest);
         }
         #endregion
+        #region PromotionAssign
+        [HttpGet]
+        public async Task<IActionResult> PromotionsAssign(string id)
+        {
+            var promotionsAssignRequest = await GetPromotionsAssignRequest(id);
+            return View(promotionsAssignRequest);
+        }
 
+        private async Task<PromotionAssignRequest> GetPromotionsAssignRequest(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            var promotions = await _promotionApiClient.GetAll();
+            var promotionAssignRequest = new PromotionAssignRequest();
+            foreach (var promotion in promotions)
+            {
+                promotionAssignRequest.Promotions.Add(new SelectItem()
+                {
+                    Id = promotion.Id,
+                    Name = promotion.NamePromotion,
+                    Selected = product.Categories.Contains(promotion.NamePromotion)
+                });
+            }
+            return promotionAssignRequest;
+        }
+        [HttpPost]
+        public async Task<IActionResult> PromotionsAssign(PromotionAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.PromotionAssign(request.Id, request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật danh mục sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("Error", "");
+            var promotionsAssignRequest = GetCategoriesAssignRequest(request.Id);
+            return View(promotionsAssignRequest);
+        }
+        #endregion
         #region SizeAssign
         [HttpGet]
         public async Task<IActionResult> SizesAssign(string id)
@@ -469,5 +512,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(request);
         }
         #endregion
+
+
     }
 }

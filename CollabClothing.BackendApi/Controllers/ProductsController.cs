@@ -209,6 +209,20 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(result);
         }
+        [HttpPut("{id}/promotions")]
+        public async Task<IActionResult> PromotionAssign(string id, PromotionAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.PromotionAssign(id, request);
+            if (!result)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
         //update product
         [HttpPut("{id}")]
         [Consumes("multipart/form-data")]

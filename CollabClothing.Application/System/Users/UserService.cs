@@ -309,5 +309,52 @@ namespace CollabClothing.Application.System.Users
             }
             return new ResultApiSuccessed<bool>();
         }
+
+        public async Task<ResultApi<bool>> UpdatePassword(Guid id, EditPasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Không tìm thấy người dùng");
+            }
+            if (request.NewPassword != request.NewPasswordConfirm)
+            {
+                return new ResultApiError<bool>("Mật khẩu xác nhận không đúng");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                return new ResultApiError<bool>("Password phải chứa kí tự in hoa, chữ số và kí tự đặc biệt");
+            }
+            return new ResultApiSuccessed<bool>();
+        }
+
+        public Task<ResultApi<bool>> UpdateEmail(Guid id, string newEmail)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ResultApi<UserViewModel>> GetByUsername(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return new ResultApiError<UserViewModel>("Tài khoản không tồn tại");
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var userViewModel = new UserViewModel()
+            {
+                Id = user.Id,
+                Dob = user.Dob,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName,
+                Roles = roles
+            };
+            return new ResultApiSuccessed<UserViewModel>(userViewModel);
+        }
     }
 }
