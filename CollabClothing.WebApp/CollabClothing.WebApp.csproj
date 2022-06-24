@@ -6,9 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<Compile Remove="Areas\**" />
 	<Compile Remove="Extensions\**" />
+	<Content Remove="Areas\**" />
 	<Content Remove="Extensions\**" />
+	<EmbeddedResource Remove="Areas\**" />
 	<EmbeddedResource Remove="Extensions\**" />
+	<None Remove="Areas\**" />
 	<None Remove="Extensions\**" />
   </ItemGroup>
 
@@ -33,10 +37,6 @@
 	<PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
 	<PackageReference Include="MimeKit" Version="3.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<Folder Include="Areas\Identity\Data\" />
   </ItemGroup>
 
   <ItemGroup>
