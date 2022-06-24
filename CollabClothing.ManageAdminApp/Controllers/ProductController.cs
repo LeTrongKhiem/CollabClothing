@@ -421,6 +421,10 @@ namespace CollabClothing.ManageAdminApp.Controllers
             ViewBag.IdPrevious = TempData["idPrevious"];
             var result = await _productApiClient.CreateProductImages(productId, request);
 
+            //ViewBag.IdPrevious = TempData["idPrevious"];
+            string productId = ViewBag.IdPrevious;
+            //var productId = TempData["idPrevious"].ToString();
+            var result = await _productApiClient.CreateProductImages(productId, request);
             if (result)
             {
                 TempData["resultImages"] = "Tạo hình ảnh thành công";
@@ -468,7 +472,6 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 TempData["resultImages"] = "Sửa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
                 ViewBag.IdPrevious = TempData["idPrevious"];
-                //return RedirectToAction("GetListImages", new { @id = TempData["idPrevious"] });
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Sửa hình ảnh thất bại");
@@ -503,6 +506,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 TempData["resultImages"] = "Xóa hình ảnh thành công";
                 ViewData["IdPrevious"] = TempData["idPrevious"];
                 return RedirectToAction("Index");
+
             }
             ModelState.AddModelError("", "Xóa hình ảnh thất bại");
             return View(request);

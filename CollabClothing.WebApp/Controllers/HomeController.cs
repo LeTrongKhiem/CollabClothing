@@ -39,6 +39,7 @@ namespace CollabClothing.WebApp.Controllers
             int rows = 12;
             var session = _httpContextAccessor.HttpContext.Session.GetInt32("data");
             session = rows;
+            var id = "";
             var data = new HomeViewModel()
             {
                 ListProductFeatured = await _productApiClient.GetFeaturedProducts(rows),
