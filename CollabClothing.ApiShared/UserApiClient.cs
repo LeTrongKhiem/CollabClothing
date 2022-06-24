@@ -1,5 +1,4 @@
-﻿using CollabClothing.Utilities.Constants;
-using CollabClothing.ViewModels.Common;
+﻿using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -48,24 +47,6 @@ namespace CollabClothing.ApiShared
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
             var response = await client.PutAsync($"/api/users/{id}", httpContent);
-            var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                return JsonConvert.DeserializeObject<ResultApiSuccessed<bool>>(result);
-            }
-            return JsonConvert.DeserializeObject<ResultApiError<bool>>(result);
-        }
-
-        public async Task<ResultApi<bool>> EditPassword(Guid id, EditPasswordRequest request)
-        {
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.PutAsync($"/api/users/newpassword/{id}", httpContent);
-
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -196,22 +177,6 @@ namespace CollabClothing.ApiShared
                 return new ResultApiSuccessed<bool>();
             }
             return new ResultApiError<bool>(result);
-        }
-
-        public async Task<ResultApi<UserViewModel>> GetByUsername(string username)
-        {
-            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-
-            var response = await client.GetAsync($"/api/users/get/{username}");
-            var body = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                return JsonConvert.DeserializeObject<ResultApiSuccessed<UserViewModel>>(body);
-            }
-            return JsonConvert.DeserializeObject<ResultApiError<UserViewModel>>(body);
         }
     }
 }

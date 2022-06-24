@@ -498,31 +498,26 @@ namespace CollabClothing.Data.EF
             modelBuilder.Entity<Promotion>(entity =>
             {
                 entity.ToTable("Promotion");
-                entity.HasKey(e => new { e.ProductId, e.Id })
-                   .HasName("PK__ProductM__159C556D63F46B0A");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+                entity.Property(e => e.NamePromotion)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ProductId)
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Promotions)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_product_promotion");
-
-                entity.HasOne(d => d.PromotionDetail)
-                    .WithMany(p => p.Promotions)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_promotion_promotiondetails");
             });
 
             modelBuilder.Entity<PromotionDetail>(entity =>
@@ -533,14 +528,20 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.NamePromotion)
-                   .IsRequired()
-                   .HasMaxLength(255)
-                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
-
                 entity.Property(e => e.Info)
                     .HasMaxLength(255)
-                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PromotionId)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Promotion)
+                    .WithMany(p => p.PromotionDetails)
+                    .HasForeignKey(d => d.PromotionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_promo_promodetail");
             });
 
             modelBuilder.Entity<Size>(entity =>

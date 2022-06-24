@@ -13,7 +13,8 @@ namespace CollabClothing.Application.Catalog.Promotions
         Task<string> Create(PromotionCreateRequest request);
         Task<bool> Edit(string id, PromotionEditRequest request);
         Task<bool> Delete(string id);
-        Task<PageResult<PromotionViewModel>> GetAllPaging(PromotionPaging request);
+        Task<PageResult<PromotionViewModel>> GetAllPaging(PagingWithKeyword request);
+        Task<PromotionViewModel> GetBannerById(string id);
         Task<List<PromotionViewModel>> GetAll();
     }
 }
