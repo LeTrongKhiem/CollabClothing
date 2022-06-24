@@ -117,29 +117,5 @@ namespace CollabClothing.Application.Catalog.Promotions
             };
             return pageResult;
         }
-
-        public async Task<List<PromotionViewModel>> GetByProductId(string id)
-        {
-            var query = from promotion in _context.PromotionDetails
-                        join promotionMap in _context.Promotions
-                        on promotion.Id equals promotionMap.Id
-                        into promotionMapProduct
-                        from promotionMap in promotionMapProduct.DefaultIfEmpty()
-                        join product in _context.Products
-                        on promotionMap.ProductId equals product.Id
-                        into pp
-                        from product in pp.DefaultIfEmpty()
-                        where product.Id == id
-                        select new { product, promotion };
-            var data = await query.Select(x => new PromotionViewModel()
-            {
-                Id = x.promotion.Id,
-                Info = x.promotion.Info,
-                More = x.promotion.More,
-                NamePromotion = x.promotion.NamePromotion,
-                Online = x.promotion.OnlinePromotion
-            }).ToListAsync();
-            return data;
-        }
     }
 }

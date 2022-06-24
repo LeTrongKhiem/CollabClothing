@@ -32,6 +32,5 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public bool Cotton { get; set; }
         public string MadeIn { get; set; }
         public List<string> Sizes { get; set; } = new List<string>();
-        public List<string> Promotions { get; set; } = new List<string>();
     }
 }
