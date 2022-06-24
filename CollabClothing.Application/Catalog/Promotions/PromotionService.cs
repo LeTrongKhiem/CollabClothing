@@ -38,18 +38,34 @@ namespace CollabClothing.Application.Catalog.Promotions
 
         public async Task<bool> Delete(string id)
         {
+            var promotionMap = await _context.Promotions.Where(x => x.Id == id).ToListAsync();
             var promotion = await _context.PromotionDetails.FindAsync(id);
             if (promotion == null)
             {
                 throw new CollabException("Not found");
             }
+            foreach (var item in promotionMap)
+            {
+                _context.Promotions.Remove(item);
+            }
             _context.PromotionDetails.Remove(promotion);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> Edit(string id, PromotionEditRequest request)
+        public async Task<bool> Edit(string id, PromotionEditRequest request)
         {
-            throw new NotImplementedException();
+            var promotion = await _context.PromotionDetails.FindAsync(id);
+            if (promotion == null)
+            {
+                throw new CollabException("Not found promotion");
+            }
+            promotion.NamePromotion = request.NamePromotion ?? promotion.NamePromotion;
+            promotion.More = request.More;
+            promotion.OnlinePromotion = request.Online;
+            promotion.Info = request.Info ?? promotion.Info;
+            _context.PromotionDetails.Update(promotion);
+            return await _context.SaveChangesAsync() > 0;
+
         }
 
         public async Task<List<PromotionViewModel>> GetAll()
@@ -57,6 +73,7 @@ namespace CollabClothing.Application.Catalog.Promotions
             var query = from promotion in _context.PromotionDetails select promotion;
             var result = await query.Select(x => new PromotionViewModel()
             {
+                Id = x.Id,
                 Info = x.Info,
                 More = x.More,
                 NamePromotion = x.NamePromotion,
@@ -65,14 +82,40 @@ namespace CollabClothing.Application.Catalog.Promotions
             return result;
         }
 
-        public Task<PageResult<PromotionViewModel>> GetAllPaging(PagingWithKeyword request)
+        public async Task<PageResult<PromotionViewModel>> GetAllPaging(PromotionPaging request)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<PromotionViewModel> GetBannerById(string id)
-        {
-            throw new NotImplementedException();
+            var query = from promotion in _context.PromotionDetails select promotion;
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.NamePromotion.Contains(request.Keyword));
+            }
+            if (request.Online == true)
+            {
+                query = query.Where(x => x.OnlinePromotion == true);
+            }
+            if (request.More == true)
+            {
+                query = query.Where(x => x.More == true);
+            }
+            int countPage = await _context.PromotionDetails.CountAsync();
+            var items = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                            .Take(request.PageSize)
+                            .Select(x => new PromotionViewModel()
+                            {
+                                Id = x.Id,
+                                Info = x.Info,
+                                More = x.More,
+                                NamePromotion = x.NamePromotion,
+                                Online = x.OnlinePromotion
+                            }).ToListAsync();
+            var pageResult = new PageResult<PromotionViewModel>()
+            {
+                Items = items,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                TotalRecord = countPage
+            };
+            return pageResult;
         }
     }
 }
