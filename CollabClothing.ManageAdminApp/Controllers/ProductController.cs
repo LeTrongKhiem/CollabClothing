@@ -419,10 +419,10 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 return View(ModelState);
             }
             ViewBag.IdPrevious = TempData["idPrevious"];
-            var result = await _productApiClient.CreateProductImages(productId, request);
+            //var result = await _productApiClient.CreateProductImages(productId, request);
 
-            //ViewBag.IdPrevious = TempData["idPrevious"];
-            string productId = ViewBag.IdPrevious;
+            ////ViewBag.IdPrevious = TempData["idPrevious"];
+            //string productId = ViewBag.IdPrevious;
             //var productId = TempData["idPrevious"].ToString();
             var result = await _productApiClient.CreateProductImages(productId, request);
             if (result)

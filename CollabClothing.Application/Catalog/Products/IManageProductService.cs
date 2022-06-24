@@ -30,8 +30,8 @@ namespace CollabClothing.Application.Catalog.Products
         //loadmore
         Task<PageResult<ProductViewModel>> GetProductLoadMore(int amount, string cateId);
 
-        Task<List<ProductViewModel>> GetFeaturedProductsCategory(string idCate, int take);
-        Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request);
+        //Task<List<ProductViewModel>> GetFeaturedProductsCategory(string idCate, int take);
+        //Task<PageResult<ProductViewModel>> GetProductByCategory(GetPublicProductRequestPaging request);
 
 
         // method productimage
