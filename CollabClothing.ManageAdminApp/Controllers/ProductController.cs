@@ -241,7 +241,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 {
                     Id = promotion.Id,
                     Name = promotion.NamePromotion,
-                    Selected = product.Categories.Contains(promotion.NamePromotion)
+                    Selected = product.Promotions.Contains(promotion.NamePromotion)
                 });
             }
             return promotionAssignRequest;

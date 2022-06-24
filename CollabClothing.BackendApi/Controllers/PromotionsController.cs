@@ -98,5 +98,19 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("promotion/{productId}")]
+        public async Task<IActionResult> GetPromotionByProductId(string productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _promotionService.GetByProductId(productId);
+            if (result == null)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

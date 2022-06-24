@@ -15,5 +15,6 @@ namespace CollabClothing.Application.Catalog.Promotions
         Task<bool> Delete(string id);
         Task<PageResult<PromotionViewModel>> GetAllPaging(PromotionPaging request);
         Task<List<PromotionViewModel>> GetAll();
+        Task<List<PromotionViewModel>> GetByProductId(string id);
     }
 }
