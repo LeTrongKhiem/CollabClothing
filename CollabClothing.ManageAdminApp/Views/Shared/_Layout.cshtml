@@ -59,7 +59,7 @@
 
 	<!-- Core JS -->
 	<script src="~/AdminAssets/js/app.min.js"></script>
-	<script src="~/js/site.js"></script>
+	@*@await Component.InvokeAsync("Notyf")*@
 	@await RenderSectionAsync("Scripts", required:false)
 
 </body>

@@ -1,4 +1,4 @@
-﻿@model UserEditViewModel
+﻿@model CollabClothing.ViewModels.System.Users.UserEditRequest
 
 @{
 	ViewData["Title"] = "Chỉnh sửa thông tin cá nhân";
@@ -6,138 +6,86 @@
 }
 @section Csss {
 <link rel="stylesheet" href="~/css/profile.css">
-<style>
-	.submit-edit {
-		width : 100px;
-		height : 35px;
-		background-color : rgb(50, 155, 139);
-		font-size : 12px;
-		border-radius : 5px;
-	}
-</style>
 }
+<style>
+ .input-forgot {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+ }
 
-<div class="app">
- <div class="layout">
-  <div class="sidebar">
-   <div class="sidebar-wrapper">
-	<div class="navbar-main">
-	 <ul class="navbar-menu">
-	  <li class="navbar-item tab-item active">
-	   <div class="">
-		<span>Profile</span>
-	   </div>
-	  </li>
+ .btn-forgot {
+  width: 100%;
+  background-color: #63a98e;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+ }
 
-	  <li class="navbar-item tab-item">
-	   <div class="">
-		<span>Password</span>
-	   </div>
-	  </li>
-	 </ul>
-	</div>
+  .btn-forgot:hover {
+   background-color: #45a049;
+  }
+
+ .forgot-container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  width: 40%;
+  margin: auto;
+  font-size: 15px;
+  padding-top: 50px;
+ }
+
+ .title-forgot {
+  margin: 50px 40%;
+  font-size: 30px;
+ }
+
+ .your-email {
+  margin-bottom: 20px;
+ }
+</style>
+
+<div class="forgot-container">
+  <form asp-action="EditProfile" method="post">
+   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+   <input asp-for="Id" class="form-control" type="hidden" />
+   <div>
+	<label asp-for="FirstName" class="your-email">Họ</label>
+	<input type="text" asp-for="FirstName" placeholder="FirstName" class="input-forgot">
+	<div asp-validation-for="Email" class="text-danger-forgot" style="color:red;"></div>
    </div>
-  </div>
-
-  <div class="mainpage">
-   <div class="main-content">
-	<main class="section">
-	 <div class="container">
-	  <!-- Cá nhân -->
-	  <div class="tab-pane active">
-	   <nav class="navbar-user">
-		<h2>Cập nhật thông tin tài khoản</h2>
-		<form class="profile-form" asp-action="EditProfile" method="post">
-		 <input type="hidden" asp-for="@Model.EditRequest.Email" value="@Model.EditRequest.Email" />
-		 <div class="user-box">
-		  <input type="text" required="" value="@Model.EditRequest.FirstName" asp-for="@Model.EditRequest.FirstName">
-		  <label>Họ</label>
-		 </div>
-		 <div class="user-box">
-		  <input type="text" required="" value="@Model.EditRequest.LastName" asp-for="@Model.EditRequest.LastName">
-		  <label>Tên</label>
-		 </div>
-		 <div class="user-box">
-		  <input type="text" required="" value="@Model.EditRequest.PhoneNumber" asp-for="@Model.EditRequest.PhoneNumber">
-		  <label>Số điện thoại</label>
-		 </div>
-		 <div class="user-box">
-		  <input type="text" required="" value="@Model.EditRequest.Dob" asp-for="@Model.EditRequest.Dob">
-		  <label>Ngày sinh</label>
-		 </div>
-		 <div class="col-md-6">
-										@if (ViewBag.SuccessMsg != null)
-										{
-			  <div class="alert alert-success" role="alert" id="msgAlert" style="color:#fff; font-size : 15px; text-align:center; align-content:center;">
-												@ViewBag.SuccessMsg
-			  </div>
-										}
-		 </div>
-		 <input type="submit" value="Xác nhận" class="submit-edit">
-		</form>
-	   </nav>
-	  </div>
-	  <div class="tab-pane">
-	   <h2>Cập nhật thông tin Password</h2>
-	   <form class="profile-form" asp-action="EditProfilePassword" method="post">
-		<div class="user-box">
-		 <input type="text" required="" asp-for="@Model.EditPassword.NewPassword">
-		 <label>Mật khẩu</label>
-		</div>
-		<div class="user-box">
-		 <input type="password" required="" asp-for="@Model.EditPassword.NewPasswordConfirm">
-		 <label>Xác nhận mật khẩu mới</label>
-		</div>
-		 <div class="col-md-6">
-										@if (ViewBag.SuccessMsg != null)
-										{
-			  <div class="alert alert-success" role="alert" id="msgAlert" style="color:#fff; font-size : 15px; text-align:center; align-content:center;">
-												@ViewBag.SuccessMsg
-			  </div>
-										}
-		 </div>
-		 <div asp-validation-summary="All" class="text-danger" style="color:red; font-size:15px;"></div>
-		<input type="submit" value="Xác nhận" class="submit-edit">
-	   </form>
-	  </div>
-	  <div class="tab-pane"></div>
-	  <div class="tab-pane"></div>
-	  <div class="tab-pane"></div>
-	  <div class="tab-pane"></div>
-	 </div>
-
-	</main>
+   <div>
+	<label asp-for="LastName" class="your-email">Tên</label>
+	<input type="text" asp-for="LastName" placeholder="LastName" class="input-forgot">
+	<div asp-validation-for="LastName" class="text-danger-forgot" style="color:red;"></div>
    </div>
-  </div>
-
+   <div>
+	<label asp-for="PhoneNumber" class="your-email">Số điện thoại</label>
+	<input type="number" asp-for="PhoneNumber" placeholder="PhoneNumber" class="input-forgot">
+	<div asp-validation-summary="All" class="text-danger-forgot" style="color:red; text-align : center; list-style : none;"></div>
+	<div asp-validation-for="PhoneNumber" class="text-danger-forgot" style="color:red;"></div>
+   </div>
+   <div>
+	<label asp-for="Dob" class="your-email">Ngày sinh của bạn</label>
+	<input type="datetime" asp-for="Dob" placeholder="Dob" class="input-forgot">
+	<div asp-validation-for="Dob" class="text-danger-forgot" style="color:red;"></div>
+   </div>
+   <div class="form-group">
+	<input type="submit" value="Lưu" class="btn-forgot"/>
+   </div>
+  </form>
  </div>
-
-</div>
 
 <div>
  <a asp-action="Index">Trở lại</a>
 </div>
 
-@section ScriptsSecond{
-<script type="text/javascript">
-	var tabs = document.querySelectorAll('.tab-item');
-	var panes = document.querySelectorAll('.tab-pane');
-
-	tabs.forEach(function (item, index) {
-		item.addEventListener('click', function () {
-
-			document.querySelector('.tab-item.active').classList.remove('active');
-			this.classList.add('active');
-
-			document.querySelector('.tab-pane.active').classList.remove('active');
-			panes[index].classList.add('active');
-		})
-	})
-</script>
-<script>
-	setTimeout(function() {
-	   $('#msgAlert').fadeOut('slow');
-	}, 2000);
-</script>
-@*}*@
-}

@@ -6,7 +6,6 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <div class="page-header">
  <div class="header-sub-title">
   <nav class="breadcrumb breadcrumb-dash">
@@ -15,23 +14,6 @@
   </nav>
  </div>
 </div>
-
-<button class="btn btn-default" id="btn-confirm">Duyệt đơn hàng</button>
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
- <div class="modal-dialog modal-sm">
-  <div class="modal-content" style="width:410px; height:200px; top:300px;">
-   <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-	<h4 class="modal-title" id="myModalLabel" style="height:103px; margin-top: -4px; padding-top:50px;">Bạn xác nhận duyệt đơn hàng này?</h4>
-   </div>
-   <div class="modal-footer">
-	<button type="button" class="btn btn-default" id="modal-btn-si">Đồng ý</button>
-	<button type="button" class="btn btn-primary" id="modal-btn-no">Hủy</button>
-   </div>
-  </div>
- </div>
-</div>
-
 <div class="card">
  <div class="card-body">
   <div class="row m-b-30">
@@ -126,13 +108,12 @@
 		  <td>
 								@Html.DisplayFor(modelItem => item.PhoneNumber)
 		  </td>
-							@if (item.Status == true)
+								@if (item.Status == true)
+								{
+									<td>Đã duyệt</td>
+							} else
 							{
-			  <td>Đã duyệt</td>
-							}
-							else
-							{
-			  <td>Chưa duyệt</td>
+								<td>Chưa duyệt</td>
 							}
 		  <td>
 								@Html.DisplayFor(modelItem => item.UserId)
@@ -154,11 +135,6 @@
 			 <i class="anticon anticon-delete"></i>
 			</a>
 		   </button>
-		   <button class="btn btn-icon btn-hover btn-sm btn-rounded"  style="width : 100px;" >
-			<a asp-asp-controller="Cart" asp-action="AcceptOrder" asp-id="@item.OrderId" id="btn-confirm-accept" data-id="@item.OrderId">
-			 Accept
-			</a>
-		   </button>
 		  </td>
 		 </tr>
 					}
@@ -171,14 +147,8 @@
 
 @section Scripts{
 <!-- page js -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="~/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
 <script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
 <script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
-
 
 <script>
 	   $('#data-table').DataTable();
@@ -186,11 +156,6 @@
 	   $('#msgAlert').fadeOut('slow');
 	}, 2000);
 </script>
-<script>
-	var site = new SiteController();
-	site.initialize();
-</script>
 <script src="~/AdminAssets/js/popper.min.js"></script>
 <script src="~/AdminAssets/js/bootstrap.bundle.min.js"></script>
-
 }

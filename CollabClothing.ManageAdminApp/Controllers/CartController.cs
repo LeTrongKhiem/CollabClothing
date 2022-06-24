@@ -80,22 +80,5 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(request);
         }
         #endregion
-        #region Accept Order
-        public async Task<IActionResult> AcceptOrder(string id, bool status = true)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(ModelState);
-            }
-            var result = await _orderApiClient.AcceptOrder(id, status);
-            if (!result)
-            {
-                ModelState.AddModelError("", "Accept Error");
-                return View(id);
-            }
-            TempData["result"] = "Duyệt thành công đơn hàng";
-            return RedirectToAction("Index");
-        }
-        #endregion
     }
 }

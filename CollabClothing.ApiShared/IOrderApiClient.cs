@@ -14,7 +14,7 @@ namespace CollabClothing.ApiShared
         Task<PageResult<CheckoutRequest>> GetAll(PagingCart request);
         Task<CheckoutRequest> GetById(string id);
         Task<bool> DeleteOrder(string id);
-        Task<bool> EditOrder(string id, CheckoutRequest request);
-        Task<bool> AcceptOrder(string id, bool status);
+        Task<bool> EditOrder(string id);
+        Task<bool> AcceptOrder(bool status);
     }
 }
