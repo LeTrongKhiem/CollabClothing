@@ -221,9 +221,6 @@
     flex-wrap: wrap;
     margin-top: 10px;
     list-style: none;
-    font-size: 18px;
-    width: 70px;
-    margin-bottom: 16px;
 }
 
 .select-size .size-list li {
