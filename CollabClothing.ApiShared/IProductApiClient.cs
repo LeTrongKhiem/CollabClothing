@@ -1,6 +1,8 @@
 ﻿using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
+
 using CollabClothing.ViewModels.Catalog.Sizes;
+
 using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
@@ -28,9 +30,11 @@ namespace CollabClothing.ApiShared
         Task<bool> UpdatePriceOld(string id, decimal newPriceOld);
         Task<List<ProductViewModel>> GetAll();
         Task<List<ProductImageViewModel>> GetAllImages(string id);
+
         Task<string> GetBrandNameByProductId(string productId);
         Task<List<SizeViewModel>> GetSizeNameByProductId(string productId);
         Task<string> GetNameProductById(string id);
+
 
         //images 
 
