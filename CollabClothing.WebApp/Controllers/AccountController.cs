@@ -1,5 +1,7 @@
 ﻿using CollabClothing.ApiShared;
+using CollabClothing.Utilities.Constants;
 using CollabClothing.ViewModels.System.Users;
+using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -207,41 +209,76 @@ namespace CollabClothing.WebApp.Controllers
         #endregion
         #region Edit Profile
         [HttpGet]
-        public async Task<IActionResult> EditProfile(Guid id)
+        public async Task<IActionResult> EditProfile()
         {
-            //var user = await _userApiClient.GetById(id);
-            //if (user.IsSuccessed)
-            //{
-            //    var userResult = user.ResultObject;
-            //    var editUser = new UserEditRequest()
-            //    {
-            //        Id = id,
-            //        Dob = userResult.Dob,
-            //        Email = userResult.Email,
-            //        FirstName = userResult.FirstName,
-            //        LastName = userResult.LastName,
-            //        PhoneNumber = userResult.PhoneNumber
-            //    };
-            //    return View(editUser);
-            //}
-            //return RedirectToAction("Index", "ErrorPage");
-            return View();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = User.FindFirst(ClaimTypes.Name).Value;
+                var user = await _userApiClient.GetByUsername(userId);
+                if (user.IsSuccessed)
+                {
+                    var userResult = user.ResultObject;
+                    var editUser = new UserEditRequest()
+                    {
+                        Id = userResult.Id,
+                        Dob = userResult.Dob,
+                        Email = userResult.Email,
+                        FirstName = userResult.FirstName,
+                        LastName = userResult.LastName,
+                        PhoneNumber = userResult.PhoneNumber
+                    };
+
+                    var viewModel = new UserEditViewModel()
+                    {
+                        EditRequest = editUser
+                    };
+                    if (TempData["result"] != null)
+                    {
+                        ViewBag.SuccessMsg = TempData["result"];
+                    }
+                    return View(viewModel);
+                }
+            }
+            return RedirectToAction("Login", "Account");
         }
         [HttpPost]
-        public async Task<IActionResult> EditProfile(UserEditRequest request)
+        public async Task<IActionResult> EditProfile(UserEditViewModel request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
-            var result = await _userApiClient.Edit(request.Id, request);
+            string userId = User.FindFirst(ClaimTypes.Name).Value;
+            var user = await _userApiClient.GetByUsername(userId);
+            var result = await _userApiClient.Edit(user.ResultObject.Id, request.EditRequest);
             if (result.IsSuccessed)
             {
                 TempData["result"] = "Cập nhật thành công";
-                return RedirectToAction("Index");
+                return RedirectToAction("EditProfile", "Account");
             }
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+        #endregion
+        #region Change Password
+        [HttpPost]
+        public async Task<IActionResult> EditProfilePassword(UserEditViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            string username = User.FindFirst(ClaimTypes.Name).Value;
+            var user = await _userApiClient.GetByUsername(username);
+            var result = await _userApiClient.EditPassword(user.ResultObject.Id, request.EditPassword);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Cập nhật thành công";
+                return RedirectToAction("EditProfile", "Account");
+            }
+            TempData["result"] = "Cập nhật thất bại";
+            return RedirectToAction("EditProfile", "Account");
         }
         #endregion
     }

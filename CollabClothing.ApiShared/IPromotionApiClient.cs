@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CollabClothing.Application.Catalog.Promotions
+namespace CollabClothing.ApiShared
 {
-    public interface IPromotionService
+    public interface IPromotionApiClient
     {
-        Task<string> Create(PromotionCreateRequest request);
+        Task<PageResult<PromotionViewModel>> GetAllPaging(PromotionPaging request);
+        Task<bool> Create(PromotionCreateRequest request);
         Task<bool> Edit(string id, PromotionEditRequest request);
         Task<bool> Delete(string id);
-        Task<PageResult<PromotionViewModel>> GetAllPaging(PromotionPaging request);
         Task<List<PromotionViewModel>> GetAll();
     }
 }

@@ -34,6 +34,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using CollabClothing.Application.System.Mail;
 using CollabClothing.Application.Catalog.Sizes;
 using CollabClothing.Application.Catalog.Cart;
+using CollabClothing.Application.Catalog.Promotions;
 
 namespace CollabClothing.BackendApi
 {
@@ -76,6 +77,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<IUtilities, UtilitiesHelp>();
             services.AddTransient<ISizeService, SizeService>();
             services.AddTransient<ICartService, CartService>();
+            services.AddTransient<IPromotionService, PromotionService>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();

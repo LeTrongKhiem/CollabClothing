@@ -171,6 +171,32 @@ namespace CollabClothing.Application.Catalog.Products
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> PromotionAssign(string id, PromotionAssignRequest request)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return false;
+            }
+            foreach (var promotion in request.Promotions)
+            {
+                var promotionMap = await _context.Promotions.FirstOrDefaultAsync(x => x.Id == promotion.Id && x.ProductId == product.Id);
+                if (promotionMap != null && promotion.Selected == false)
+                {
+                    _context.Promotions.Remove(promotionMap);
+                }
+                else if (promotionMap == null && promotion.Selected == true)
+                {
+                    await _context.Promotions.AddAsync(new Promotion()
+                    {
+                        Id = promotion.Id,
+                        ProductId = id
+                    });
+                }
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
         #region Size Assign
         public async Task<bool> SizeAssign(string id, SizeAssignRequest request)
         {
@@ -746,5 +772,7 @@ namespace CollabClothing.Application.Catalog.Products
             var query = (from p in _context.Products where p.Id == id select p.ProductName).FirstOrDefault();
             return query;
         }
+
+
     }
 }

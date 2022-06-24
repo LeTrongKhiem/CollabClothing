@@ -45,6 +45,7 @@ namespace CollabClothing.Application.Catalog.Products
         Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
         //assign size
         Task<bool> SizeAssign(string id, SizeAssignRequest request);
+        Task<bool> PromotionAssign(string id, PromotionAssignRequest request);
 
         // Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();
