@@ -7,6 +7,7 @@
 }
 @inject IConfiguration Configuration
 @inject IProductApiClient _productApiClient
+@inject IPromotionApiClient _promotionApiClient
 @section Csss {
 <link rel="stylesheet" href="~/assets/css/detail.css">
 }
@@ -112,7 +113,7 @@
 	</div>
 	<div class="select-size">
 	 <div class="size-top">
-	  <p class="size-top-left">Chọn size: <span>S</span></p>
+	  <p class="size-top-left">Chọn size: <span id="selected-sizeid"></span></p>
 	 </div>
 	 <select class="size-list" id="select-size">
 						@{
@@ -121,11 +122,29 @@
 						@foreach (var size in sizes)
 						{
 		  <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Name">
-									@size.Name.ToString()
+								@size.Name.ToString()
 		  </option>
 						}
 	 </select>
 	</div>
+				@{
+					var promotions = await _promotionApiClient.GetPromotionByProductId(@Model.Products.Id);
+				}
+				@if (promotions != null)
+				{
+		<div class="box-promo">
+		 <p class="box-promo-txt">Khuyến mãi (đang diễn ra)</p>
+		 <ul class="box-promo-list">
+							@foreach (var item in promotions)
+							{
+								<li class="box-promo-item">
+		  @item.NamePromotion  @item.Info
+		  </li>
+							}
+		  
+		 </ul>
+		</div>
+				}
 	<div class="box-promo">
 	 <p class="box-promo-txt">Khuyến mãi (Đến 31/05)</p>
 	 <ul class="box-promo-list">

@@ -117,5 +117,25 @@ namespace CollabClothing.Application.Catalog.Promotions
             };
             return pageResult;
         }
+
+        public async Task<List<PromotionViewModel>> GetPromotionByProductId(string productId)
+        {
+            var query = from p in _context.PromotionDetails
+                        join pmp in _context.Promotions
+                        on p.Id equals pmp.Id
+                        into pmpp
+                        from pmp in pmpp.DefaultIfEmpty()
+                        where pmp.ProductId == productId
+                        select new { p, pmp };
+            var data = await query.Select(x => new PromotionViewModel()
+            {
+                Id = x.p.Id,
+                Info = x.p.Info,
+                More = x.p.More,
+                NamePromotion = x.p.NamePromotion,
+                Online = x.p.OnlinePromotion
+            }).ToListAsync();
+            return data;
+        }
     }
 }

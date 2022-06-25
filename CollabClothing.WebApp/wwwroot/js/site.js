@@ -7,6 +7,7 @@ var SiteController = function () {
 		loadCartData();
 		CartAddSite();
 		removeProductCart();
+		selectSize();
 		//ButtonLoadMore();
 	}
 	function removeProductCart() {
@@ -206,5 +207,15 @@ var SiteController = function () {
 				},
 			});
 		})
+	}
+
+	function selectSize() {
+		$(document).ready(function () {
+			$("#select-size").change(function () {
+				var select = $('#select-size option:selected').val();
+				//alert(select);
+			$('#selected-sizeid').html(select);
+			})
+		});
 	}
 }

@@ -15,5 +15,6 @@ namespace CollabClothing.ApiShared
         Task<bool> Edit(string id, PromotionEditRequest request);
         Task<bool> Delete(string id);
         Task<List<PromotionViewModel>> GetAll();
+        Task<List<PromotionViewModel>> GetPromotionByProductId(string id);
     }
 }
