@@ -279,48 +279,55 @@ namespace CollabClothing.Application.Catalog.Products
             productDetails.Cotton = request.Cotton;
             productDetails.MadeIn = request.MadeIn;
             productDetails.Type = request.Type;
-
-            if (image == null)
+            if (request.ThumbnailImage == null)
             {
-                Guid g = Guid.NewGuid();
-                var thumbnail = new ProductImage()
-                {
-                    Id = g.ToString(),
-                    ProductId = product.Id,
-                    Alt = product.ProductName,
-                };
-                if (request.ThumbnailImage != null)
-                {
-                    thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
-                }
-                _context.ProductImages.Add(thumbnail);
+                image.Path = image.Path;
                 return await _context.SaveChangesAsync();
             }
             else
             {
-                //delete old image file
-                string fullPath = "wwwroot" + image.Path;
-                if (File.Exists(fullPath))
+                if (image == null)
                 {
-                    await Task.Run(() =>
+                    Guid g = Guid.NewGuid();
+                    var thumbnail = new ProductImage()
                     {
-                        File.Delete(fullPath);
-                    });
-                }
-                //save image
-                if (request.ThumbnailImage != null)
-                {
-                    var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
-
-                    if (thumbnailImage != null)
+                        Id = g.ToString(),
+                        ProductId = product.Id,
+                        Alt = product.ProductName,
+                    };
+                    if (request.ThumbnailImage != null)
                     {
-                        // thumbnailImage.Id = request.productImage.Id;
-                        thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
-                        thumbnailImage.Alt = request.ProductName;
-                        _context.ProductImages.Update(thumbnailImage);
+                        thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
                     }
+                    _context.ProductImages.Add(thumbnail);
+                    return await _context.SaveChangesAsync();
                 }
-                return await _context.SaveChangesAsync();
+                else
+                {
+                    //delete old image file
+                    string fullPath = "wwwroot" + image.Path;
+                    if (File.Exists(fullPath))
+                    {
+                        await Task.Run(() =>
+                        {
+                            File.Delete(fullPath);
+                        });
+                    }
+                    //save image
+                    if (request.ThumbnailImage != null)
+                    {
+                        var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
+
+                        if (thumbnailImage != null)
+                        {
+                            // thumbnailImage.Id = request.productImage.Id;
+                            thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
+                            thumbnailImage.Alt = request.ProductName;
+                            _context.ProductImages.Update(thumbnailImage);
+                        }
+                    }
+                    return await _context.SaveChangesAsync();
+                }
             }
 
         }

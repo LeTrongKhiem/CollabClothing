@@ -10,6 +10,15 @@
 @inject IPromotionApiClient _promotionApiClient
 @section Csss {
 <link rel="stylesheet" href="~/assets/css/detail.css">
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+<style>
+	.table {
+		display:grid;
+	}
+	.media {
+		display:block;
+	}
+</style>
 }
 <div class="container grid wide">
  <ul class="breadcrumb">
@@ -78,6 +87,7 @@
 
    </div>
    <div style="margin-top:50%; font-size : 20px;">@Html.Raw(@Model.Products.Details)</div>
+
   </div>
 
   <div class="detail-right col l-6">
@@ -121,7 +131,7 @@
 						}
 						@foreach (var size in sizes)
 						{
-		  <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Name">
+		  <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Name" data-id="@size.Id">
 								@size.Name.ToString()
 		  </option>
 						}

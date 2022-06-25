@@ -213,7 +213,6 @@ var SiteController = function () {
 		$(document).ready(function () {
 			$("#select-size").change(function () {
 				var select = $('#select-size option:selected').val();
-				//alert(select);
 			$('#selected-sizeid').html(select);
 			})
 		});
