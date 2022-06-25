@@ -50,6 +50,22 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("promotion/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPromotionByProductId(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _promotionService.GetPromotionByProductId(id);
+
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] PromotionCreateRequest request)

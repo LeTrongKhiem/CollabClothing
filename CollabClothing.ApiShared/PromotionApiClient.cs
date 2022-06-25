@@ -58,5 +58,10 @@ namespace CollabClothing.ApiShared
         {
             return await GetAsync<PageResult<PromotionViewModel>>($"/api/promotions/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&online={request.Online}&more={request.More}");
         }
+
+        public async Task<List<PromotionViewModel>> GetPromotionByProductId(string id)
+        {
+            return await GetListAsync<PromotionViewModel>($"/api/promotions/promotion/{id}");
+        }
     }
 }
