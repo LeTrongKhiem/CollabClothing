@@ -187,9 +187,11 @@ var SiteController = function () {
 		})
 	}
 	function CartAddSite() {
+		/*data-sizeId="32BD8E51-8D32-4AC5-9E11-6CE8EFE4A88C"*/
 		$('body').on('click', '.container-product__item-btn', function (e) {
 			e.preventDefault();
 			const id = $(this).data('id');
+			const sizeid = $(this).data('sizeId');
 			const selectSize = $('#select-size').val();
 			$.ajax({
 				type: "POST",
@@ -199,12 +201,14 @@ var SiteController = function () {
 						return accumulator + object.quantity
 					}, 0);
 					$('#count-cart-quantity').text(count);
+					$('#add_product_cart_size').attr("data-sizeId", selectSize);
 					console.log(count);
 					loadCartData();
-					console.log(selectSize);
+					console.log(sizeid);
 				},
 				data: {
-					id: id
+					id: id,
+					sizeId: selectSize
 				},
 			});
 		})

@@ -13,10 +13,11 @@
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 <style>
 	.table {
-		display:grid;
+		display: grid;
 	}
+
 	.media {
-		display:block;
+		display: block;
 	}
 </style>
 }
@@ -125,17 +126,20 @@
 	 <div class="size-top">
 	  <p class="size-top-left">Chọn size: <span id="selected-sizeid"></span></p>
 	 </div>
-	 <select class="size-list" id="select-size">
-						@{
-							var sizes = await _productApiClient.GetSizeNameByProductId(@Model.Products.Id);
-						}
-						@foreach (var size in sizes)
-						{
-		  <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Name" data-id="@size.Id">
-								@size.Name.ToString()
-		  </option>
-						}
-	 </select>
+	 <form asp-controller="Cart" asp-action="AddToCart" method="post">
+	  <input type="hidden" value="@Model.Products.Id" asp-route-id="@Model.Products.Id"/>
+	  <select class="size-list" id="select-size" asp-for="Size.Id">
+							@{
+								var sizes = await _productApiClient.GetSizeNameByProductId(@Model.Products.Id);
+							}
+							@foreach (var size in sizes)
+							{
+		   <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Id" >
+									@size.Name.ToString()
+		   </option>
+							}
+	  </select>
+	 </form>
 	</div>
 				@{
 					var promotions = await _promotionApiClient.GetPromotionByProductId(@Model.Products.Id);
@@ -147,11 +151,11 @@
 		 <ul class="box-promo-list">
 							@foreach (var item in promotions)
 							{
-								<li class="box-promo-item">
-		  @item.NamePromotion  @item.Info
-		  </li>
+			  <li class="box-promo-item">
+									@item.NamePromotion  @item.Info
+			  </li>
 							}
-		  
+
 		 </ul>
 		</div>
 				}
@@ -169,11 +173,13 @@
 	 </ul>
 	</div>
 	<div class="detail-btn">
-	 <a href="#" class="btn btn-addcart container-product__item-btn" data-id="@Model.Products.Id">
-	  <p class="txt">Thêm vào giỏ</p>
-	 </a>
+					<a href="#" id="add_product_cart_size" class="btn btn-addcart container-product__item-btn" data-id="@Model.Products.Id" >
+						<p class="txt">Thêm vào giỏ</p>
+						</a>
+
 	 <span class="btn btn-spmarket">Xem cửa hàng còn hàng</span>
 	</div>
+
 	<div class="policy">
 	 <li class="doitra ">
 	  <div class="iconl">

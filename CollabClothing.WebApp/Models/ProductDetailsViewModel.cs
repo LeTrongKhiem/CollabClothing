@@ -2,6 +2,7 @@
 using CollabClothing.ViewModels.Catalog.Categories;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Sizes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace CollabClothing.WebApp.Models
         public List<ProductViewModel> ProductRelated { get; set; }
         public List<ProductImageViewModel> ProductsImages { get; set; }
         public BrandViewModel Brands { get; set; }
+        public SizeViewModel Size { get; set; }
     }
 }

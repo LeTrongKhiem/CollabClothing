@@ -332,7 +332,12 @@ namespace CollabClothing.ApiShared
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+
             var response = await client.GetAsync($"/api/products/getquantity/{productId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return 0;
+            }
             var result = await response.Content.ReadAsStringAsync();
             int quantity = Int32.Parse(result);
             return quantity;
