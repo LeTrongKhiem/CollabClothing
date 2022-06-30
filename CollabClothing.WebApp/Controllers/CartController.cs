@@ -16,10 +16,12 @@ namespace CollabClothing.WebApp.Controllers
     {
         private readonly IProductApiClient _productApiClient;
         private readonly IOrderApiClient _orderApiClient;
-        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient)
+        private readonly ISizeApiClient _sizeApiClient;
+        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient, ISizeApiClient sizeApiClient)
         {
             _productApiClient = productApiClient;
             _orderApiClient = orderApiClient;
+            _sizeApiClient = sizeApiClient;
         }
         public IActionResult Index()
         {
@@ -41,7 +43,7 @@ namespace CollabClothing.WebApp.Controllers
             }
             return Ok(currentCart);
         }
-        public async Task<IActionResult> AddToCart(string id)
+        public async Task<IActionResult> AddToCart(string id, string sizeId)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +58,7 @@ namespace CollabClothing.WebApp.Controllers
             }
 
             int quantity = 1;
-            if (currentCart.Any(x => x.productId == id))
+            if (currentCart.Any(x => x.productId == id) && currentCart.Any(x => x.Size == sizeId))
             {
                 foreach (var item in currentCart)
                 {
@@ -77,7 +79,8 @@ namespace CollabClothing.WebApp.Controllers
                     Image = product.ThumbnailImage,
                     BrandName = await _productApiClient.GetBrandNameByProductId(product.Id),
                     Type = product.Type,
-
+                    Size = sizeId,
+                    SizeName = _sizeApiClient.GetNameSize(sizeId).Result.ToString()
                 };
                 currentCart.Add(cartVm);
             }
