@@ -77,6 +77,54 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+        [HttpGet("getquantity/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetQuantityRemain(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetQuantityRemain(id);
+            if (product == 0)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+
+        [HttpGet("getwarehouse/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetWareHouse(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetWareHouse(id);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+
+        [HttpGet("getwarehouse/index")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetWareHouse([FromQuery] string id, [FromQuery] string sizeId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetWareHouse(id, sizeId);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+
         [HttpGet("getbrand/{productId}")]
         [AllowAnonymous]
         public IActionResult GetBrandNameByProductId(string productId)
@@ -359,5 +407,23 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(result);
         }
+
+        #region Update Quantity Remain
+        [HttpPut("quantityremain/{productId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateQuantityRemain(string productId, [FromBody] WareHouseRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _manageProductService.UpdateQuantityRemainProduct(productId, request);
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
+        #endregion
     }
 }

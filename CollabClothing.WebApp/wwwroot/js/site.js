@@ -65,7 +65,7 @@ var SiteController = function () {
 						+ "</div>"
 						+ "</div>"
 						+ "<div class=\"header__cart-item-body\">"
-						+ "<span class=\"header__cart-item-desciption\">Phân loại: Size " + $('#select-size').val() + "</span>"
+						+ "<span class=\"header__cart-item-desciption\">Phân loại " + item.type + "</span>"
 						+ "<a class=\"header__cart-remove\" data-id=\"" + item.productId + "\">Xóa</a>"
 						+ "</div>"
 						+ "</div>"
@@ -73,6 +73,7 @@ var SiteController = function () {
 						+ "</a>"
 				})
 				$('#list_product_cart_item').html(html);
+				console.log(response);
 			},
 		});
 	}
@@ -213,7 +214,8 @@ var SiteController = function () {
 		$(document).ready(function () {
 			$("#select-size").change(function () {
 				var select = $('#select-size option:selected').val();
-				//alert(select);
+				var selectSizeId = $(this).find(':selected').data('id');
+				console.log(selectSizeId);
 			$('#selected-sizeid').html(select);
 			})
 		});

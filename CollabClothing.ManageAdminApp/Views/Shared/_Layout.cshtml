@@ -35,9 +35,9 @@
 				<!-- Footer START -->
 				<footer class="footer">
 					<div class="footer-content">
-						<p class="m-b-0">Copyright © 2019 Theme_Nate. All rights reserved.</p>
+						<p class="m-b-0">Website quản trị của CollabClothing Store</p>
 						<span>
-							<a href="" class="text-gray m-r-15">Term &amp; Conditions</a>
+							<a href="" class="text-gray m-r-15">By Lê Trọng Khiêm</a>
 							<a href="" class="text-gray">Privacy &amp; Policy</a>
 						</span>
 					</div>
@@ -51,15 +51,22 @@
 
 
 	<!-- Core Vendors JS -->
-	<script src="~/AdminAssets/js/vendors.min.js"></script>
+	@*<script src="~/AdminAssets/js/vendors.min.js"></script>*@
 
 	<!-- page js -->
 	<script src="~/AdminAssets/vendors/chartjs/Chart.min.js"></script>
-	<script src="~/AdminAssets/js/pages/dashboard-e-commerce.js"></script>
+	@*<script src="~/AdminAssets/js/pages/dashboard-e-commerce.js"></script>*@
 
+	<!-- Ajax -->
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<!-- Core JS -->
-	<script src="~/AdminAssets/js/app.min.js"></script>
+	
 	<script src="~/js/site.js"></script>
+	<script>
+	 var siteController = new SiteController();
+	 siteController.initialize();
+ </script>
+ <script src="~/AdminAssets/js/app.min.js"></script>
 	@await RenderSectionAsync("Scripts", required:false)
 
 </body>

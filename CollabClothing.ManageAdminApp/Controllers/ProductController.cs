@@ -513,6 +513,61 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         #endregion
 
+        #region Update Quantity Remain
+        [HttpGet]
+        public async Task<IActionResult> UpdateQuantityRemain(string id, string sizeId)
+        {
+            var sizes = await _sizeApiClient.GetAll();
+            ViewBag.Size = sizes.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id,
+                Selected = x.Id != null
+            });
+            var remain = await _productApiClient.GetWareHouse(id, sizeId);
+            if (remain == null)
+            {
+                var wareHouse = new WareHouseRequest()
+                {
+                    ProductId = id,
+                    SizeId = sizeId
+                };
+                return View(wareHouse);
+            }
+            else
+            {
+                var wareHouse = new WareHouseRequest()
+                {
+                    Quantity = remain.Quantity,
+                    Id = remain.Id,
+                    ColorId = remain.ColorId,
+                    ProductId = remain.ProductId,
+                    SizeId = remain.SizeId
+                };
+                if (TempData["result"] != null)
+                {
+                    ViewBag.SuccessMsg = TempData["result"];
+                }
+                return View(wareHouse);
+            }
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantityRemain(WareHouseRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.UpdateQuantityRemain(request.ProductId, request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật số lượng sản phẩm thành công";
+                return RedirectToAction("UpdateQuantityRemain");
+            }
+            return View(result);
+        }
+        #endregion
 
     }
 }

@@ -279,48 +279,55 @@ namespace CollabClothing.Application.Catalog.Products
             productDetails.Cotton = request.Cotton;
             productDetails.MadeIn = request.MadeIn;
             productDetails.Type = request.Type;
-
-            if (image == null)
+            if (request.ThumbnailImage == null)
             {
-                Guid g = Guid.NewGuid();
-                var thumbnail = new ProductImage()
-                {
-                    Id = g.ToString(),
-                    ProductId = product.Id,
-                    Alt = product.ProductName,
-                };
-                if (request.ThumbnailImage != null)
-                {
-                    thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
-                }
-                _context.ProductImages.Add(thumbnail);
+                image.Path = image.Path;
                 return await _context.SaveChangesAsync();
             }
             else
             {
-                //delete old image file
-                string fullPath = "wwwroot" + image.Path;
-                if (File.Exists(fullPath))
+                if (image == null)
                 {
-                    await Task.Run(() =>
+                    Guid g = Guid.NewGuid();
+                    var thumbnail = new ProductImage()
                     {
-                        File.Delete(fullPath);
-                    });
-                }
-                //save image
-                if (request.ThumbnailImage != null)
-                {
-                    var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
-
-                    if (thumbnailImage != null)
+                        Id = g.ToString(),
+                        ProductId = product.Id,
+                        Alt = product.ProductName,
+                    };
+                    if (request.ThumbnailImage != null)
                     {
-                        // thumbnailImage.Id = request.productImage.Id;
-                        thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
-                        thumbnailImage.Alt = request.ProductName;
-                        _context.ProductImages.Update(thumbnailImage);
+                        thumbnail.Path = await this.SaveFile(request.ThumbnailImage);
                     }
+                    _context.ProductImages.Add(thumbnail);
+                    return await _context.SaveChangesAsync();
                 }
-                return await _context.SaveChangesAsync();
+                else
+                {
+                    //delete old image file
+                    string fullPath = "wwwroot" + image.Path;
+                    if (File.Exists(fullPath))
+                    {
+                        await Task.Run(() =>
+                        {
+                            File.Delete(fullPath);
+                        });
+                    }
+                    //save image
+                    if (request.ThumbnailImage != null)
+                    {
+                        var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == id);
+
+                        if (thumbnailImage != null)
+                        {
+                            // thumbnailImage.Id = request.productImage.Id;
+                            thumbnailImage.Path = await this.SaveFile(request.ThumbnailImage);
+                            thumbnailImage.Alt = request.ProductName;
+                            _context.ProductImages.Update(thumbnailImage);
+                        }
+                    }
+                    return await _context.SaveChangesAsync();
+                }
             }
 
         }
@@ -778,6 +785,84 @@ namespace CollabClothing.Application.Catalog.Products
             return query;
         }
 
+        public async Task<int> GetQuantityRemain(string productId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId
+                        select w;
+            var wareHouse = await query.Select(x => x.Quantity).FirstOrDefaultAsync();
+            return wareHouse;
+        }
 
+        public async Task<bool> UpdateQuantityRemainProduct(string productId, WareHouseRequest request)
+        {
+            var wareHouse = await _context.WareHouses.FirstOrDefaultAsync(x => x.ProductId == request.ProductId && x.SizeId == request.SizeId);
+            if (wareHouse == null)
+            {
+                Guid gWareHouse = Guid.NewGuid();
+                var createWareHouse = new WareHouse()
+                {
+                    Id = gWareHouse.ToString(),
+                    ProductId = productId,
+                    ColorId = request.ColorId,
+                    SizeId = request.SizeId,
+                    Quantity = request.Quantity
+                };
+                _context.WareHouses.Add(createWareHouse);
+            }
+            else
+            {
+                wareHouse.Quantity = request.Quantity;
+            }
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<WareHouseRequest> GetWareHouse(string productId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId
+                        select w;
+
+            var wareHouse = await query.Select(x => new WareHouseRequest()
+            {
+                Id = x.Id,
+                ColorId = x.ColorId,
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                SizeId = x.SizeId
+            }).FirstOrDefaultAsync();
+            if (wareHouse == null)
+            {
+                return null;
+            }
+            return wareHouse;
+        }
+
+        public async Task<WareHouseRequest> GetWareHouse(string productId, string sizeId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId
+                        select w;
+            if (!string.IsNullOrEmpty(sizeId))
+            {
+                query = query.Where(x => x.SizeId == sizeId);
+            }
+
+            var wareHouse = await query.Select(x => new WareHouseRequest()
+            {
+                Id = x.Id,
+                ColorId = x.ColorId,
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                SizeId = x.SizeId
+            }).FirstOrDefaultAsync();
+            return wareHouse;
+        }
     }
 }

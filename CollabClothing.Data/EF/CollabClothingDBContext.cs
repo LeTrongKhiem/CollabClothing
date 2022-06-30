@@ -48,6 +48,7 @@ namespace CollabClothing.Data.EF
         public virtual DbSet<SizeMapColor> SizeMapColors { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<TransactionOnline> TransactionOnlines { get; set; }
+        public virtual DbSet<WareHouse> WareHouses { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -85,6 +86,49 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<WareHouse>(entity =>
+            {
+                entity.ToTable("WareHouse");
+                entity.Property(e => e.Id)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProductId)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SizeId)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ColorId)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                //entity.Property(e => e.Quantity)
+                //    .IsRequired()
+                //    .HasMaxLength(5);
+
+                entity.HasOne(d => d.Color)
+                    .WithMany()
+                    .HasForeignKey(d => d.ColorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_warehouse_color");
+                entity.HasOne(d => d.Size)
+                   .WithMany()
+                   .HasForeignKey(d => d.SizeId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("fk_warehouse_size");
+                entity.HasOne(d => d.Product)
+                   .WithMany()
+                   .HasForeignKey(d => d.ProductId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("fk_warehouse_product");
             });
 
 
