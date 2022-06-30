@@ -47,6 +47,11 @@ namespace CollabClothing.Application.Catalog.Products
         Task<bool> SizeAssign(string id, SizeAssignRequest request);
         Task<bool> PromotionAssign(string id, PromotionAssignRequest request);
 
+        Task<int> GetQuantityRemain(string productId);
+        Task<bool> UpdateQuantityRemainProduct(string productId, WareHouseRequest request);
+        Task<WareHouseRequest> GetWareHouse(string productId);
+        Task<WareHouseRequest> GetWareHouse(string productId, string sizeId);
+
         // Task AddViewCount(string productId);
         Task<List<ProductViewModel>> GetAll();
         Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPaging request);

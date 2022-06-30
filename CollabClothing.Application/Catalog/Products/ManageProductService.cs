@@ -785,6 +785,84 @@ namespace CollabClothing.Application.Catalog.Products
             return query;
         }
 
+        public async Task<int> GetQuantityRemain(string productId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId
+                        select w;
+            var wareHouse = await query.Select(x => x.Quantity).FirstOrDefaultAsync();
+            return wareHouse;
+        }
 
+        public async Task<bool> UpdateQuantityRemainProduct(string productId, WareHouseRequest request)
+        {
+            var wareHouse = await _context.WareHouses.FirstOrDefaultAsync(x => x.ProductId == request.ProductId && x.SizeId == request.SizeId);
+            if (wareHouse == null)
+            {
+                Guid gWareHouse = Guid.NewGuid();
+                var createWareHouse = new WareHouse()
+                {
+                    Id = gWareHouse.ToString(),
+                    ProductId = productId,
+                    ColorId = request.ColorId,
+                    SizeId = request.SizeId,
+                    Quantity = request.Quantity
+                };
+                _context.WareHouses.Add(createWareHouse);
+            }
+            else
+            {
+                wareHouse.Quantity = request.Quantity;
+            }
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<WareHouseRequest> GetWareHouse(string productId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId
+                        select w;
+
+            var wareHouse = await query.Select(x => new WareHouseRequest()
+            {
+                Id = x.Id,
+                ColorId = x.ColorId,
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                SizeId = x.SizeId
+            }).FirstOrDefaultAsync();
+            if (wareHouse == null)
+            {
+                return null;
+            }
+            return wareHouse;
+        }
+
+        public async Task<WareHouseRequest> GetWareHouse(string productId, string sizeId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId
+                        select w;
+            if (!string.IsNullOrEmpty(sizeId))
+            {
+                query = query.Where(x => x.SizeId == sizeId);
+            }
+
+            var wareHouse = await query.Select(x => new WareHouseRequest()
+            {
+                Id = x.Id,
+                ColorId = x.ColorId,
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                SizeId = x.SizeId
+            }).FirstOrDefaultAsync();
+            return wareHouse;
+        }
     }
 }

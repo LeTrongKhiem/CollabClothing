@@ -92,6 +92,8 @@ namespace CollabClothing.WebApp.Controllers
                 return BadRequest();
             }
             var session = HttpContext.Session.GetString(SystemConstans.SessionCart);
+            var quantityRemainTask = _productApiClient.GetQuantityRemain(id);
+            int quantityRemain = quantityRemainTask.Result;
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
             if (session != null)
             {
@@ -106,6 +108,10 @@ namespace CollabClothing.WebApp.Controllers
                         currentCart.Remove(item);
                         break;
                     }
+                    if (quantity > quantityRemain)
+                    {
+                        break;
+                    }
                     item.Quantity = quantity;
                 }
             }
@@ -115,6 +121,8 @@ namespace CollabClothing.WebApp.Controllers
         #region Checkout
         public IActionResult Checkout()
         {
+            var quantityRemain = _productApiClient.GetQuantityRemain("352e1af2-4a0e-4d58-a0ef-cb07f2a7e74d");
+            int quantity = quantityRemain.Result;
             var session = HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
             var userId = HttpContext.User.Identity.Name;
             return View(GetCheckout());
@@ -126,7 +134,6 @@ namespace CollabClothing.WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-
                 return View(ModelState);
             }
             var getCheckout = GetCheckout();

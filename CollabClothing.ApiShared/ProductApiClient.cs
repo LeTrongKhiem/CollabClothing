@@ -325,5 +325,52 @@ namespace CollabClothing.ApiShared
             var result = await response.Content.ReadAsStringAsync();
             return result;
         }
+
+        public async Task<int> GetQuantityRemain(string productId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/getquantity/{productId}");
+            var result = await response.Content.ReadAsStringAsync();
+            int quantity = Int32.Parse(result);
+            return quantity;
+        }
+
+        public async Task<bool> UpdateQuantityRemain(string productId, WareHouseRequest request)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+
+            var response = await client.PutAsync($"/api/products/quantityremain/{productId}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<WareHouseRequest> GetWareHouse(string productId)
+        {
+            return await GetAsync<WareHouseRequest>($"/api/products/getwarehouse/{productId}");
+        }
+
+        public async Task<WareHouseRequest> GetWareHouse(string productId, string sizeId)
+        {
+            //return await GetAsync<WareHouseRequest>($"/api/products/getwarehouse/index?id={productId}&sizeId={sizeId}");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/getwarehouse/index?id={productId}&sizeId={sizeId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<WareHouseRequest>(result);
+            }
+            return null;
+        }
     }
 }
