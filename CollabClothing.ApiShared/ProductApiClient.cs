@@ -343,6 +343,23 @@ namespace CollabClothing.ApiShared
             return quantity;
         }
 
+        public async Task<int> GetQuantityRemain(string productId, string sizeId, string colorId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+
+            var response = await client.GetAsync($"/api/products/getquantitysizecolor?id={productId}&sizeId={sizeId}&colorId={colorId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return 0;
+            }
+            var result = await response.Content.ReadAsStringAsync();
+            int quantity = Int32.Parse(result);
+            return quantity;
+        }
+
         public async Task<bool> UpdateQuantityRemain(string productId, WareHouseRequest request)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
@@ -370,6 +387,21 @@ namespace CollabClothing.ApiShared
             client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
             var response = await client.GetAsync($"/api/products/getwarehouse/index?id={productId}&sizeId={sizeId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<WareHouseRequest>(result);
+            }
+            return null;
+        }
+
+        public async Task<WareHouseRequest> GetWareHouse(string productId, string sizeId, string colorId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/getwarehouse/filter?id={productId}&sizeId={sizeId}&colorId={colorId}");
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {

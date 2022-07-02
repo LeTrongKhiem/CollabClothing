@@ -27,6 +27,10 @@
 	<select asp-for="SizeId" class="custom-select" id="select-size" onchange="this.form.submit()" style="min-width:200px;" asp-items="ViewBag.Size">
 	 <option value="" disabled selected>Chọn kích cỡ</option>
 	</select>
+	<label asp-for="ColorId" class="font-weight-semibold"></label>
+	<select asp-for="ColorId" class="custom-select" id="select-color" onchange="this.form.submit()" style="min-width:200px;" asp-items="ViewBag.Color">
+	 <option value="" disabled selected>Chọn màu</option>
+	</select>
    </div>
   </form>
   <form asp-action="UpdateQuantityRemain">
@@ -34,7 +38,7 @@
    <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
    <input type="hidden" asp-for="Id" value="@Model.Id"/>
    <input type="hidden" asp-for="SizeId" value="@Model.SizeId"/>
-   <input type="hidden" asp-for="ColorId" value="CA95EEB7-94FD-4CAD-9384-A4A2BA78CF96"/>
+   <input type="hidden" asp-for="ColorId" value="@Model.ColorId"/>
    <div class="form-group">
 	<label asp-for="Quantity" class="control-label"></label>
 	<input asp-for="Quantity" class="form-control" />

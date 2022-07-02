@@ -796,9 +796,20 @@ namespace CollabClothing.Application.Catalog.Products
             return wareHouse;
         }
 
+        public async Task<int> GetQuantityRemain(string productId, string sizeId, string colorId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId && w.SizeId == sizeId && w.ColorId == colorId
+                        select w;
+            var wareHouse = await query.Select(x => x.Quantity).FirstOrDefaultAsync();
+            return wareHouse;
+        }
+
         public async Task<bool> UpdateQuantityRemainProduct(string productId, WareHouseRequest request)
         {
-            var wareHouse = await _context.WareHouses.FirstOrDefaultAsync(x => x.ProductId == request.ProductId && x.SizeId == request.SizeId);
+            var wareHouse = await _context.WareHouses.FirstOrDefaultAsync(x => x.ProductId == request.ProductId && x.SizeId == request.SizeId && x.ColorId == request.ColorId);
             if (wareHouse == null)
             {
                 Guid gWareHouse = Guid.NewGuid();
@@ -853,7 +864,32 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 query = query.Where(x => x.SizeId == sizeId);
             }
+            var wareHouse = await query.Select(x => new WareHouseRequest()
+            {
+                Id = x.Id,
+                ColorId = x.ColorId,
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                SizeId = x.SizeId
+            }).FirstOrDefaultAsync();
+            return wareHouse;
+        }
 
+        public async Task<WareHouseRequest> GetWareHouse(string productId, string sizeId, string colorId)
+        {
+            var query = from w in _context.WareHouses
+                        join p in _context.Products
+                        on w.ProductId equals p.Id
+                        where w.ProductId == productId
+                        select w;
+            if (!string.IsNullOrEmpty(sizeId))
+            {
+                query = query.Where(x => x.SizeId == sizeId);
+            }
+            if (!string.IsNullOrEmpty(colorId))
+            {
+                query = query.Where(x => x.ColorId == colorId);
+            }
             var wareHouse = await query.Select(x => new WareHouseRequest()
             {
                 Id = x.Id,
