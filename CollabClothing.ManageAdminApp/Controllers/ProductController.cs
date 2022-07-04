@@ -533,13 +533,14 @@ namespace CollabClothing.ManageAdminApp.Controllers
                 Value = x.Id,
                 Selected = x.Id != null
             });
-            var remain = await _productApiClient.GetWareHouse(id, sizeId);
+            var remain = await _productApiClient.GetWareHouse(id, sizeId, colorId);
             if (remain == null)
             {
                 var wareHouse = new WareHouseRequest()
                 {
                     ProductId = id,
-                    SizeId = sizeId
+                    SizeId = sizeId,
+                    ColorId = colorId
                 };
                 return View(wareHouse);
             }
