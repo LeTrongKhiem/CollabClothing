@@ -1,4 +1,6 @@
-﻿using CollabClothing.WebApp.Models;
+﻿using CollabClothing.ApiShared;
+using CollabClothing.WebApp.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +14,37 @@ namespace CollabClothing.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBannerApiClient _bannerApiClient;
+        private readonly IProductApiClient _productApiClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBannerApiClient bannerApiClient, IProductApiClient productApiClient
+            , IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
+            _bannerApiClient = bannerApiClient;
+            _productApiClient = productApiClient;
+            _httpContextAccessor = httpContextAccessor;
         }
-
-        public IActionResult Index()
+        [HttpGet("/trang-chu")]
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
         {
-            return View();
+
+            //var viewModel = new HomeViewModel()
+            //{
+            //    ListBanner = await _bannerApiClient.GetAll(),
+            //    ListProductFeatured = await _productApiClient.GetFeaturedProducts(12)
+            //};
+            int rows = 12;
+            var session = _httpContextAccessor.HttpContext.Session.GetInt32("data");
+            session = rows;
+            var id = "";
+            var data = new HomeViewModel()
+            {
+                ListProductFeatured = await _productApiClient.GetFeaturedProducts(rows),
+            };
+            return View(data);
         }
 
         public IActionResult Privacy()

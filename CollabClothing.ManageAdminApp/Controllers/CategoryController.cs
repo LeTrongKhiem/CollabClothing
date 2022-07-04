@@ -1,6 +1,7 @@
-﻿using CollabClothing.ManageAdminApp.Service;
+﻿using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.Catalog.Categories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 8)
         {
+           
             var request = new GetCategoryRequestPaging()
             {
                 Keyword = keyword,
@@ -29,6 +31,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             };
             var data = await _categoryApiClient.GetAllPaging(request);
             ViewBag.Keyword = keyword;
+
             if (TempData["result"] != null)
             {
                 ViewBag.SuccessMsg = TempData["result"];
@@ -36,8 +39,15 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(data.ResultObject);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var categories = await _categoryApiClient.GetParentCate();
+            ViewBag.Categories = categories.Select(x => new SelectListItem()
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId,
+                Selected = x.CategoryId != null
+            });
             return View();
         }
         [HttpPost]
@@ -84,33 +94,41 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         #region Update
         [HttpGet]
-        public IActionResult Edit(string cateId)
+        public async Task<IActionResult> Edit(string id)
         {
-            var cate = _categoryApiClient.GetById(cateId);
+            var cate = _categoryApiClient.GetById(id);
+            var categories = await _categoryApiClient.GetParentCate();
+            ViewBag.Categories = categories.Select(x => new SelectListItem()
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId,
+                Selected = x.CategoryId != null
+            });
             if (cate != null)
             {
-                var cateResult = cate.Result.ResultObject;
+                var cateResult = cate.Result;
                 var editCategory = new CategoryEditRequest()
                 {
                     CategoryName = cateResult.CategoryName,
                     IsShowWeb = cateResult.IsShowWeb,
                     Level = cateResult.Level,
                     ParentId = cateResult.ParentId,
-                    Slug = cateResult.Slug
+                    Slug = cateResult.Slug,
                 };
                 return View(editCategory);
             }
             return RedirectToAction("Error", "Home");
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, CategoryEditRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Edit(string id, [FromForm] CategoryEditRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View(ModelState);
             }
             var result = await _categoryApiClient.Edit(id, request);
-            if (result.IsSuccessed)
+            if (result)
             {
                 TempData["result"] = "Cập nhật thành công";
                 return RedirectToAction("Index");
@@ -119,6 +137,20 @@ namespace CollabClothing.ManageAdminApp.Controllers
         }
         #endregion
         #region Details
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _categoryApiClient.GetById(id);
+            if (result == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(result);
+        }
         #endregion
     }
 }

@@ -1,0 +1,19 @@
+﻿@using CollabClothing.ViewModels.Catalog.Categories
+@using Microsoft.Extensions.Configuration
+@model List<CategoryViewModel>
+
+
+<div class="col l-12 m-12 c-12">
+	<div class="container-nav">
+		<h2 class="container-nav__heading">Phụ kiện: </h2>
+		<ul class="container-nav__list">
+			@foreach (var item in Model)
+			{
+	   <li class="container-nav__item">
+		<a href="/danh-muc/@item.CategoryId" class="container-nav__item-link">@item.CategoryName</a>
+	   </li>
+			}
+
+  </ul>
+ </div>
+</div>

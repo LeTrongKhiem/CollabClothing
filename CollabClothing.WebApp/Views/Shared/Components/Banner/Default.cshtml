@@ -1,0 +1,37 @@
+﻿@using CollabClothing.ViewModels.Catalog.Products
+@using Microsoft.Extensions.Configuration
+@model HomeViewModel
+@inject IConfiguration Configuration;
+ <div class="row container__item">
+  <div class="col l-12 m-12 c-12">
+   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+	<ol class="carousel-indicators">
+					@for (var i = 0; i < Model.ListBanner.Count; i++)
+					{
+		 <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(@i == 0 ? "active" : "")"></li>
+					}
+
+	</ol>
+	<div class="carousel-inner">
+					@foreach (var item in Model.ListBanner)
+					{
+		 <div class="carousel-item @(@Model.ListBanner.First() == item ? "active" : "")">
+		  <img src="@Configuration["BaseAddress"]@item.Images" class="d-block w-100" alt="@item.Alt">
+		  <div class="carousel-caption d-none d-md-block">
+		   <h5>@item.NameBanner</h5>
+		   <p>@item.NameBanner</p>
+		  </div>
+		 </div>
+					}
+	</div>
+	<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+	 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	 <span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+	 <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	 <span class="sr-only">Next</span>
+	</a>
+   </div>
+  </div>
+ </div>

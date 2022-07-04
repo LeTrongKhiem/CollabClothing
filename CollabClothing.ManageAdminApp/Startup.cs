@@ -1,5 +1,5 @@
 using AspNetCoreHero.ToastNotification;
-using CollabClothing.ManageAdminApp.Service;
+using CollabClothing.ApiShared;
 using CollabClothing.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -58,6 +58,12 @@ namespace CollabClothing.ManageAdminApp
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
+            services.AddTransient<IBannerApiClient, BannerApiClient>();
+            services.AddTransient<IBrandApiClient, BrandApiClient>();
+            services.AddTransient<ISizeApiClient, SizeApiClient>();
+            services.AddTransient<IColorApiClient, ColorApiClient>();
+            services.AddTransient<IOrderApiClient, OrderApiClient>();
+            services.AddTransient<IPromotionApiClient, PromotionApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +79,7 @@ namespace CollabClothing.ManageAdminApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();

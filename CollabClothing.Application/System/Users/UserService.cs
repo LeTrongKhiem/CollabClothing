@@ -13,6 +13,11 @@ using CollabClothing.Data.EF;
 using CollabClothing.ViewModels.Common;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Security.Policy;
+using Microsoft.AspNetCore.Http;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -23,14 +28,20 @@ namespace CollabClothing.Application.System.Users
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly CollabClothingDBContext _context;
+        private readonly ILogger<UserService> _logger;
+        private readonly IEmailSender _emailSender;
+
         #region Constructor
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context,
+            ILogger<UserService> logger, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = configuration;
             _context = context;
+            _logger = logger;
+            _emailSender = emailSender;
         }
         #endregion
         #region Register
@@ -38,7 +49,7 @@ namespace CollabClothing.Application.System.Users
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             var email = await _userManager.FindByEmailAsync(request.Email);
-            var role = await _roleManager.FindByNameAsync("Role User");
+            var role = await _roleManager.FindByNameAsync("User");
             if (user != null)
             {
                 return new ResultApiError<bool>("Username đã tồn tại");
@@ -58,16 +69,69 @@ namespace CollabClothing.Application.System.Users
                 FirstName = request.FirstName,
                 LastName = request.LastName,
             };
-            //var userRole = new RoleManager()
-            //{
-
-            //};
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return new ResultApiSuccessed<bool>();
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var url = $"https://localhost:5003/Account/ConfirmEmail?userId={user.Id}&code={code}";
+                await _emailSender.SendEmailAsync(request.Email, "Xác nhận địa chỉ email",
+                        $"Hãy xác nhận địa chỉ email bằng cách <a href='{url}'>Bấm vào đây</a>.");
+                if (_userManager.Options.SignIn.RequireConfirmedEmail)
+                {
+                    return new ResultApiSuccessed<bool>();
+                }
+                else
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return new ResultApiError<bool>("Vui lòng kiểm tra Email để xác nhận tài khoản");
+                }
             }
             return new ResultApiError<bool>("Đăng kí không thành công");
+        }
+        #endregion
+        #region Forgot Password
+        public async Task<ResultApi<bool>> ForgotPassword(ForgotPasswordRequest request)
+        {
+            if (request.Email == null)
+            {
+                return new ResultApiError<bool>("Vui lòng nhập Email của bạn !");
+            }
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            {
+                return new ResultApiError<bool>("Email không tồn tại vui lòng kiểm tra lại.");
+            }
+            // Phát sinh Token để reset password
+            // Token sẽ được kèm vào link trong email,
+            // link dẫn đến trang /Account/ResetPassword để kiểm tra và đặt lại mật khẩu
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            //code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var url = $"https://localhost:5003/Account/ResetPassword?code={code}";
+            await _emailSender.SendEmailAsync(request.Email, "Xác nhận thay đổi mật khẩu",
+                $"Bạn đã yêu cầu thay đổi mật khẩu. Vui lòng <a href='{url}'>bấm vào đây</a>. Nếu không bạn có thể bỏ qua email này.");
+            return new ResultApiSuccessed<bool>();
+        }
+        #endregion
+        #region ConfirmEmail
+        public async Task<ResultApi<bool>> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return new ResultApiError<bool>("Confirm Failed");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            // Xác thực email
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, false);
+                return new ResultApiSuccessed<bool>();
+            }
+            return new ResultApiError<bool>("Confirm Failed");
         }
         #endregion
         #region Authenticate
@@ -78,10 +142,16 @@ namespace CollabClothing.Application.System.Users
             {
                 return new ResultApiError<string>("Username không tồn tại");
             }
+            var email = await _userManager.FindByEmailAsync(user.Email);
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+
             if (!result.Succeeded)
             {
-                return new ResultApiError<string>("Đăng nhập thất bại");
+                return new ResultApiError<string>("Đăng nhập thất bại. Vui lòng kiểm tra lại mật khẩu");
+            }
+            if (!email.EmailConfirmed)
+            {
+                return new ResultApiError<string>("Đăng nhập thất bại. Vui lòng kiểm tra Email và xác nhận");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[] {
@@ -103,27 +173,12 @@ namespace CollabClothing.Application.System.Users
         #region GetListUser
         public async Task<ResultApi<PageResult<UserViewModel>>> GetListUser(GetUserRequestPaging request)
         {
-            //var query = from user in _userManager.Users
-            //            join userrole in _context.UserRoles on user.Id equals userrole.UserId
-            //            into usermaprole
-            //            from userrole in usermaprole.DefaultIfEmpty()
-            //            join role in _roleManager.Roles on userrole.RoleId equals role.Id
-            //            into userrolerole
-            //            from role in userrolerole.DefaultIfEmpty()
-            //            select new { user, userrole, role };
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword) || x.PhoneNumber.Contains(request.Keyword) || x.LastName.Contains(request.Keyword)
                                         || x.Email.Contains(request.Keyword));
-                //query = query.Where(x => x.user.UserName.Contains(request.Keyword) || x.user.PhoneNumber.Contains(request.Keyword) || x.user.LastName.Contains(request.Keyword)
-                //|| x.user.Email.Contains(request.Keyword));
             }
-            //if (!string.IsNullOrEmpty(request.RoleId.ToString()))
-            //{
-            //    query = query.Where(x => x.role.Id == request.RoleId);
-            //}
-            //total row 
             var totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                             .Take(request.PageSize)
@@ -237,6 +292,69 @@ namespace CollabClothing.Application.System.Users
             }
             return new ResultApiSuccessed<bool>();
 
+        }
+
+        public async Task<ResultApi<bool>> ResetPassword(ResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Email không tồn tại, Vui lòng kiểm tra lại");
+            }
+            var result = await _userManager.ResetPasswordAsync(user, request.Code, request.Password);
+
+            if (!result.Succeeded)
+            {
+                return new ResultApiError<bool>("Reset Password Failed. Please try again!!!");
+            }
+            return new ResultApiSuccessed<bool>();
+        }
+
+        public async Task<ResultApi<bool>> UpdatePassword(Guid id, EditPasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ResultApiError<bool>("Không tìm thấy người dùng");
+            }
+            if (request.NewPassword != request.NewPasswordConfirm)
+            {
+                return new ResultApiError<bool>("Mật khẩu xác nhận không đúng");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                return new ResultApiError<bool>("Password phải chứa kí tự in hoa, chữ số và kí tự đặc biệt");
+            }
+            return new ResultApiSuccessed<bool>();
+        }
+
+        public Task<ResultApi<bool>> UpdateEmail(Guid id, string newEmail)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ResultApi<UserViewModel>> GetByUsername(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return new ResultApiError<UserViewModel>("Tài khoản không tồn tại");
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var userViewModel = new UserViewModel()
+            {
+                Id = user.Id,
+                Dob = user.Dob,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName,
+                Roles = roles
+            };
+            return new ResultApiSuccessed<UserViewModel>(userViewModel);
         }
     }
 }

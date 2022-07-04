@@ -1,0 +1,96 @@
+.container{
+    margin: 70px auto;
+}
+.container input{
+    padding:10px;
+    font-size:1.6rem;
+}
+.control-label{
+    font-size:1.6rem;
+}
+.text-center{
+    text-align:center;
+}
+.text-center h3{
+    margin:12px;
+    font-size: 2rem;
+    
+}
+/* .inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.inputfile + label {
+    height: 40px;
+    padding: 0 20px;
+    min-width: 70px;
+    max-width: 220px;
+    color: #000;
+    font-size:1.6rem;
+    display: inline-block;
+    cursor: pointer;
+    color: #555;
+    border: 1px solid rgba(0,0,0,.09);
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 3%);
+    align-items: center;
+}
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background: rgba(0,0,0,.02);
+} */
+.btn-image{
+    height: 40px;
+    padding: 0 20px;
+    min-width: 70px;
+    max-width: 220px;
+    color: #000;
+    font-size:1.6rem;
+    display: inline-flex;
+    cursor: pointer;
+    color: #555;
+    border: 1px solid rgba(0,0,0,.09);
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 3%);
+    align-items: center;
+    outline: 0;
+}
+.btn-image:hover{
+    background: rgba(0,0,0,.02);
+}
+.user-profile-left{
+    border: 1px solid rgba(0,0,0,.09);
+    box-shadow: 0 4px 4px 0 rgb(0 0 0 / 3%);
+    
+}
+.personal-info{
+    border: 1px solid rgba(0,0,0,.09);
+    box-shadow: 0 4px 4px 0 rgb(0 0 0 / 3%);
+}
+.personal-info h3{
+    font-size:2rem;
+    margin: 16px 0 30px 0;
+}
+.form-group{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+}
+.btn-save{
+    margin-right: 12px;
+    background-color: var(--primary-color);
+}
+.user-info{
+    margin-top: 20px;
+
+}
+.btn-default{
+    width: 86px;
+}
+.container-heading{
+    font-size:2rem;
+    margin-bottom:30px;
+    color: var(--primary-color)
+}

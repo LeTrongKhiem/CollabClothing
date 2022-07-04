@@ -19,6 +19,7 @@ namespace CollabClothing.Data.Entities
         public int Level { get; set; }
         public bool IsShowWeb { get; set; }
         public string Slug { get; set; }
+        public int? Order { get; set; }
 
         public virtual ICollection<ProductMapCategory> ProductMapCategories { get; set; }
     }

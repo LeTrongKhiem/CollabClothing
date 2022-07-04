@@ -1,6 +1,7 @@
 ﻿using CollabClothing.ViewModels.Catalog.Categories;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,12 +36,22 @@ namespace CollabClothing.ViewModels.Catalog.Products
         [Display(Name = "Chi tiết sản phẩm")]
         public string Details { get; set; }
         [Display(Name = "Ảnh sản phẩm")]
-        public IFormFile ThumbnailImage { get; set; }
+        public List<IFormFile> ThumbnailImage { get; set; }
         [Display(Name = "Danh mục")]
-        public string CategoryId { get; set; }
+        public List<string> CategoryId { get; set; } = new List<string>();
         // public ProductImageViewModel productImage { get; set; }
         // public CategoryViewModel CategoryViewModel { get; set; }
         // public Size Size { get; set; }
+        [Display(Name = "Người sử dụng")]
+        public bool Consumer { get; set; }
+        [Display(Name = "Loại sản phẩm")]
+        public string? Type { get; set; }
+        [Display(Name = "Kiểu dáng")]
+        public string? Form { get; set; }
+        [Display(Name = "Chất liệu vải")]
+        public bool Cotton { get; set; }
+        [Display(Name = "Sản xuất tại")]
+        public string? MadeIn { get; set; }
 
     }
 }

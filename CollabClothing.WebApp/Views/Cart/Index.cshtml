@@ -1,0 +1,64 @@
+﻿
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Csss {
+    <link rel="stylesheet" href="~/css/cart.css"/>
+}
+@section ScriptsSecond {
+
+    <script type="text/javascript" src="~/js/cart.js"></script>
+   <script>
+        var cartJS = new CartJS();
+        cartJS.initialize();
+   </script>
+}
+<div class="cart__empty-area" id="cart-empty">
+    <div class="cart__empty-img">
+        <img class="cart__empty-img-link" src="~/img/Illustration_EmptyCart_BF.png"/>
+    </div>
+    <div class="cart__empty-text">Chưa có sản phẩm trong giỏ hàng của bạn</div>
+    <a href="/trang-chu">
+        <button class="cart__empty-back">Trở lại trang chủ</button>
+    </a>
+    
+</div>
+<div class="card" id="cart-content">
+            <div class="row">
+                <div class="col-md-8 cart">
+                    <div class="title">
+                        <div class="row">
+                            <div class="col"><h4><b>Giỏ hàng</b></h4></div>
+                        </div>
+                    </div>    
+                    <div id="cart-body">
+                        
+                    </div>
+                    <div class="back-to-shop"><a class="a-link" href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+                </div>
+                <div class="col-md-4 summary">
+                    <div class="total-base"><h5><b>Tổng tiền</b></h5></div>
+                    <hr>
+                    <div class="row">
+                        Số lượng: 
+                        <div class="col count-cart" style="padding-left:0; margin-left : 4px; margin-right: 2px"></div>
+                        sản phẩm <br />
+                        <div class="col text-right total-cart" id=""></div>
+                    </div>
+                    <form class="form-cart">
+                        <p>Phương thức thanh toán</p>
+                        <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
+                        <p>MÃ GIẢM GIÁ</p>
+                        <input class="input-cart" id="code" placeholder="Enter your code">
+                    </form>
+                    <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                        <div class="col">TỔNG TIỀN</div>
+                        <div class="col text-right total-cart"></div>
+                    </div>
+                    <a asp-action="Checkout" style="color:#fff; text-decoration:none;"><button class="btn-cart">THANH TOÁN</button></a>
+                </div>
+            </div>
+            
+        </div>

@@ -1,8 +1,79 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using CollabClothing.ViewModels.Catalog.Products
+@using Microsoft.Extensions.Configuration
+@model HomeViewModel
+@{
+	ViewData["Title"] = "Trang chủ";
 }
+@section Csss {
+<link rel="stylesheet" type="text/css" href="~/assets/css/grid.css">
+<link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="~/css/index.css" />
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+}
+@inject IConfiguration Configuration;
+<div class="grid wide">
+ <!-- Banner -->
+	@await Component.InvokeAsync("Banner");
+ <!-- Product Futured -->
+	@await Component.InvokeAsync("ProductFeatured");
+ <!-- Child Category Woman -->
+	@await Component.InvokeAsync("CategoryChildMenu", "d93e95a9-38bd-4011-a457-29a763189a81")
+ <!-- Filter Product -->
+	@await Component.InvokeAsync("Filter")
+ <!-- Product -->
+	@await Component.InvokeAsync("ProductOutStanding", "d93e95a9-38bd-4011-a457-29a763189a81")
+
+ <!-- Men clothing -->
+ <div class="row container__item">
+		@await Component.InvokeAsync("BannerPartial", "56b0670f-8f60-422e-ad77-0dc1dfbe9d05")
+		@await Component.InvokeAsync("CategoryChildMenu", "82AAE383-3EDF-45F0-AA5B-9B4A514EA7A9")
+
+  <!-- Filter Product -->
+		@await Component.InvokeAsync("Filter")
+
+		@await Component.InvokeAsync("ProductOutStanding", "82AAE383-3EDF-45F0-AA5B-9B4A514EA7A9")
+ </div>
+
+ <!-- Child Clothing -->
+ <div class="row container__item">
+		@await Component.InvokeAsync("BannerPartial", "24eeaba6-b27a-4f9e-a9b7-807befb20a14")
+		@await Component.InvokeAsync("CategoryChildMenu", "29919101-ff6c-466f-907b-66a2f669be7f")
+
+  <!-- Filter Product -->
+		@await Component.InvokeAsync("Filter")
+
+		@await Component.InvokeAsync("ProductOutStanding", "29919101-ff6c-466f-907b-66a2f669be7f")
+ </div>
 </div>
+
+@section Scripts {
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script>
+		 function loadMore1() {
+		var amount = document.getElementsByClassName('productCount').length;
+		jQuery.ajax({
+			url: 'danh-muc/load/@Model.categoryId',
+			contentType: "application/json; charset=utf-8",
+			type: "get", //send it through get method
+			data: {
+				exits: amount
+			},
+			success: function (data) {
+				var row = document.getElementById('content');
+				row.innerHTML += data;
+				if (exits === 6) {
+					$('.container-btn-extend').css('display', 'none');
+				}
+				console.log(amount);
+			},
+			error: function (xhr) {
+
+			}
+		});
+	}
+</script>
+}

@@ -31,6 +31,7 @@ namespace CollabClothing.Application.Catalog.Categories
             _context = context;
             _storageService = storageService;
         }
+
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -68,7 +69,10 @@ namespace CollabClothing.Application.Catalog.Categories
         public async Task<ResultApi<PageResult<CategoryViewModel>>> GetAllPaging(GetCategoryRequestPaging request)
         {
 
-            var query = from cate in _context.Categories select new { cate };
+            var query = from cate in _context.Categories orderby cate.Level select new { cate };
+
+            var listCateParent = (from cate in _context.Categories orderby cate.Level where cate.ParentId == null select cate.NameCategory).FirstOrDefault();
+
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.cate.NameCategory.Contains(request.Keyword));
@@ -84,8 +88,11 @@ namespace CollabClothing.Application.Catalog.Categories
                              IsShowWeb = x.cate.IsShowWeb,
                              Level = x.cate.Level,
                              ParentId = x.cate.ParentId,
-                             Slug = x.cate.Slug
+                             Slug = x.cate.Slug,
+                             //ParentName = query2
+
                          }).ToListAsync();
+
             var pageResult = new PageResult<CategoryViewModel>()
             {
                 Items = data,
@@ -97,12 +104,20 @@ namespace CollabClothing.Application.Catalog.Categories
         }
         #endregion
 
-        public async Task<ResultApi<CategoryViewModel>> GetCateById(string Id)
+        public async Task<CategoryViewModel> GetCateById(string Id)
         {
             var cate = await _context.Categories.FindAsync(Id);
             if (cate == null)
             {
                 throw new CollabException($"Not find Category with id: {Id}");
+            }
+            List<string> childCate = new List<string>();
+            foreach (var item in _context.Categories)
+            {
+                if (item.ParentId == Id)
+                {
+                    childCate.Add(item.NameCategory);
+                }
             }
             var cate1 = new CategoryViewModel()
             {
@@ -112,12 +127,13 @@ namespace CollabClothing.Application.Catalog.Categories
                 IsShowWeb = cate.IsShowWeb,
                 Icon = cate.Icon,
                 Level = cate.Level,
-                Slug = cate.Slug
+                Slug = cate.Slug,
+                ListChildCates = childCate
             };
 
             Category category = new Category();
             category.CateMapping(new CategoryDTO());
-            return new ResultApiSuccessed<CategoryViewModel>(cate1);
+            return cate1;
         }
 
         public async Task<ResultApi<bool>> Edit(string cateId, CategoryEditRequest request)
@@ -132,20 +148,40 @@ namespace CollabClothing.Application.Catalog.Categories
             cate.ParentId = request.ParentId;
             cate.Slug = request.Slug;
             cate.Level = request.Level;
-            if (request.Icon != null)
+
+            if (cate.Icon == null)
             {
-                var fullPath = "wwwroot" + cate.Icon;
-                if (File.Exists(fullPath))
+                if (request.Icon != null)
                 {
-                    await Task.Run(() =>
-                    {
-                        File.Delete(fullPath);
-                    });
+                    cate.Icon = await this.SaveFile(request.Icon);
                 }
-                cate.Icon = await this.SaveFile(request.Icon);
+                _context.Categories.Add(cate);
                 await _context.SaveChangesAsync();
+                return new ResultApiSuccessed<bool>();
             }
-            return new ResultApiSuccessed<bool>();
+            else
+            {
+                if (request.Icon != null)
+                {
+                    var fullPath = "wwwroot" + cate.Icon;
+                    if (File.Exists(fullPath))
+                    {
+                        await Task.Run(() =>
+                        {
+                            File.Delete(fullPath);
+                        });
+                    }
+                    cate.Icon = await this.SaveFile(request.Icon);
+                    _context.Categories.Update(cate);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _context.Categories.Update(cate);
+                    await _context.SaveChangesAsync();
+                }
+                return new ResultApiSuccessed<bool>();
+            }
         }
 
         public async Task<ResultApi<bool>> Delete(string CateId)
@@ -155,6 +191,7 @@ namespace CollabClothing.Application.Catalog.Categories
             {
                 return new ResultApiError<bool>("Không tìm thấy danh mục sản phẩm");
             }
+
             var fullPath = "wwwroot" + cate.Icon;
             if (File.Exists(fullPath))
             {
@@ -171,12 +208,45 @@ namespace CollabClothing.Application.Catalog.Categories
 
         public async Task<List<CategoryViewModel>> GetAll()
         {
-            var query = from c in _context.Categories select new { c };
+            var query = from c in _context.Categories orderby c.Level, c.Order select new { c };
             return await query.Select(x => new CategoryViewModel()
             {
                 CategoryId = x.c.Id,
-                CategoryName = x.c.NameCategory
+                CategoryName = x.c.NameCategory,
+                ParentId = x.c.ParentId,
+                Icon = x.c.Icon,
+                Slug = x.c.Slug
             }).ToListAsync();
+        }
+
+        public async Task<List<CategoryViewModel>> GetParentCate()
+        {
+            var query = from c in _context.Categories where c.ParentId.Equals("null") select new { c };
+            return await query.Select(x => new CategoryViewModel()
+            {
+                CategoryId = x.c.Id,
+                CategoryName = x.c.NameCategory,
+            })
+                .ToListAsync();
+        }
+
+        public async Task<List<CategoryViewModel>> GetCateChild(string parentId)
+        {
+            var query = from c in _context.Categories where c.ParentId.Equals(parentId) select new { c };
+            return await query.Select(x => new CategoryViewModel()
+            {
+                CategoryId = x.c.Id,
+                CategoryName = x.c.NameCategory,
+                ParentId = x.c.ParentId,
+                Icon = x.c.Icon,
+                Slug = x.c.Slug
+            }).ToListAsync();
+        }
+
+        public async Task<string> GetParentNameById(string id)
+        {
+            var query = (from c in _context.Categories where c.Id == id select c.NameCategory).FirstOrDefault();
+            return query;
         }
     }
 }

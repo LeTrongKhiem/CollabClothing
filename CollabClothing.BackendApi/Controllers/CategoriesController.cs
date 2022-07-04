@@ -18,10 +18,28 @@ namespace CollabClothing.BackendApi.Controllers
         {
             _categoryService = categoryService;
         }
+        [HttpGet("parentname/{id}")]
+        public async Task<IActionResult> GetParentName(string id)
+        {
+            var name = await _categoryService.GetParentNameById(id);
+            return Ok(name);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var cate = await _categoryService.GetAll();
+            return Ok(cate);
+        }
+        [HttpGet("parent")]
+        public async Task<IActionResult> GetParentCate()
+        {
+            var cate = await _categoryService.GetParentCate();
+            return Ok(cate);
+        }
+        [HttpGet("category/{parentId}")]
+        public async Task<IActionResult> GetCateChild(string parentId)
+        {
+            var cate = await _categoryService.GetCateChild(parentId);
             return Ok(cate);
         }
         [HttpGet("paging")]
@@ -46,6 +64,7 @@ namespace CollabClothing.BackendApi.Controllers
             return Ok(cate);
         }
         [HttpPost]
+
         [AllowAnonymous]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] CategoryCreateRequest request)
@@ -61,7 +80,6 @@ namespace CollabClothing.BackendApi.Controllers
             }
             var cate = await _categoryService.GetCateById(await cateId);
             return CreatedAtAction(nameof(cateId), new { id = cateId }, cate);
-
         }
         [HttpDelete("{cateId}")]
         [AllowAnonymous]
@@ -80,7 +98,7 @@ namespace CollabClothing.BackendApi.Controllers
         }
         [HttpPut("cateId")]
         [AllowAnonymous]
-        [Consumes("mutilpart/form-data")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Edit(string cateId, [FromForm] CategoryEditRequest request)
         {
             if (!ModelState.IsValid)
@@ -92,8 +110,7 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(result);
             }
-            return Ok(result);
+            return Ok();
         }
-
     }
 }

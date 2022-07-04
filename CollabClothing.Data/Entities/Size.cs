@@ -16,5 +16,6 @@ namespace CollabClothing.Data.Entities
         public string NameSize { get; set; }
 
         public virtual ICollection<ProductMapSize> ProductMapSizes { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

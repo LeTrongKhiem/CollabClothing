@@ -1,0 +1,196 @@
+﻿@using CollabClothing.ViewModels.Common
+@model PageResult<CollabClothing.ViewModels.Catalog.Cart.CheckoutRequest>
+
+@{
+	ViewData["Title"] = "Danh sách Order";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="page-header">
+ <div class="header-sub-title">
+  <nav class="breadcrumb breadcrumb-dash">
+   <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+   <a class="breadcrumb-item" asp-controller="Order" asp-action="Index">Danh sách Order</a>
+  </nav>
+ </div>
+</div>
+
+<button class="btn btn-default" id="btn-confirm">Duyệt đơn hàng</button>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+ <div class="modal-dialog modal-sm">
+  <div class="modal-content" style="width:410px; height:200px; top:300px;">
+   <div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+	<h4 class="modal-title" id="myModalLabel" style="height:103px; margin-top: -4px; padding-top:50px;">Bạn xác nhận duyệt đơn hàng này?</h4>
+   </div>
+   <div class="modal-footer">
+	<button type="button" class="btn btn-default" id="modal-btn-si">Đồng ý</button>
+	<button type="button" class="btn btn-primary" id="modal-btn-no">Hủy</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="card">
+ <div class="card-body">
+  <div class="row m-b-30">
+   <div class="col-lg-8">
+	<div class="d-md-flex">
+	 <div class="m-b-10 m-r-15">
+	 </div>
+	 <div class="m-b-10">
+	  <form asp-action="Index" method="get">
+	   <div class="input-affix m-b-10">
+		<i class="prefix-icon anticon anticon-search"></i>
+		<input type="text" class="form-control" placeholder="Tìm kiếm" name="keyword" value="@ViewBag.Keyword">
+
+		<div class="col-md-7">
+		 <button type="submit" class="btn btn-primary">Tìm</button>
+		 <button type="button" onclick="window.location.href='/Cart/Index'" class="btn btn-dark">Tất cả</button>
+		</div>
+	   </div>
+	   <select class="custom-select" style="min-width: 180px; margin-top: 15px;" name="status"
+									onchange="this.form.submit()">
+		<option selected value="all">---Chọn---</option>
+		<option value="true">---Đã duyệt---</option>
+		<option value="false">---Chưa duyệt---</option>
+	   </select>
+	  </form>
+	 </div>
+	</div>
+   </div>
+   <div class="col-lg-4 text-right">
+	<button class="btn btn-primary">
+	 <a asp-controller="Cart" asp-action="Create">
+	  <i class="anticon anticon-plus-circle m-r-5" style="color:azure;"></i>
+	  <span style="color:azure;">Thêm</span>
+	 </a>
+	</button>
+   </div>
+  </div>
+  <div class="row">
+   <div class="col-md-6"></div>
+   <div class="col-md-6">
+				@if (ViewBag.SuccessMsg != null)
+				{
+		<div class="alert alert-success" role="alert" id="msgAlert">
+						@ViewBag.SuccessMsg
+		</div>
+				}
+   </div>
+  </div>
+
+  <div class="table-responsive">
+   <table class="table table-hover e-commerce-table" id="data-table">
+	<thead>
+	 <tr>
+	  <th>
+	   Tên
+	  </th>
+	  <th>
+	   Địa chỉ
+	  </th>
+	  <th>
+	   Email
+	  </th>
+	  <th>
+	   Số điện thoại
+	  </th>
+	  <th>
+	   Trạng thái
+	  </th>
+	  <th>
+	   User
+	  </th>
+	  <th></th>
+	 </tr>
+	</thead>
+	<tbody>
+					@{
+						var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+					}
+					@foreach (var item in Model.Items)
+					{
+		 <tr>
+		  <td>
+								@Html.DisplayFor(modelItem => item.Name)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.Address)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.Email)
+		  </td>
+		  <td>
+								@Html.DisplayFor(modelItem => item.PhoneNumber)
+		  </td>
+							@if (item.Status == true)
+							{
+			  <td>Đã duyệt</td>
+							}
+							else
+							{
+			  <td>Chưa duyệt</td>
+							}
+		  <td>
+								@Html.DisplayFor(modelItem => item.UserId)
+		  </td>
+
+		  <td>
+		   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+			<a asp-controller="Cart" asp-action="GetDetailOrder" asp-route-id="@item.OrderId">
+			 <i class="anticon anticon-eye"></i>
+			</a>
+		   </button>
+		   <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+			<a asp-controller="Cart" asp-action="Edit" asp-route-id="@item.OrderId">
+			 <i class="anticon anticon-edit"></i>
+			</a>
+		   </button>
+		   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+			<a asp-controller="Cart" asp-action="Delete" asp-route-id="@item.OrderId">
+			 <i class="anticon anticon-delete"></i>
+			</a>
+		   </button>
+		   <button class="btn btn-icon btn-hover btn-sm btn-rounded"  style="width : 100px;" >
+			<a asp-asp-controller="Cart" asp-action="AcceptOrder" asp-id="@item.OrderId" id="btn-confirm-accept" data-id="@item.OrderId">
+			 Accept
+			</a>
+		   </button>
+		  </td>
+		 </tr>
+					}
+	</tbody>
+   </table>
+  </div>
+		@await Component.InvokeAsync("Pager", Model)
+ </div>
+</div>
+
+@section Scripts{
+<!-- page js -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="~/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script src="~/AdminAssets/vendors/datatables/jquery.dataTables.min.js"></script>
+<script src="~/AdminAssets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+
+
+<script>
+	   $('#data-table').DataTable();
+	setTimeout(function() {
+	   $('#msgAlert').fadeOut('slow');
+	}, 2000);
+</script>
+<script>
+	var site = new SiteController();
+	site.initialize();
+</script>
+<script src="~/AdminAssets/js/popper.min.js"></script>
+<script src="~/AdminAssets/js/bootstrap.bundle.min.js"></script>
+
+}

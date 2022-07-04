@@ -48,18 +48,22 @@ namespace CollabClothing.Data.EF
         public virtual DbSet<SizeMapColor> SizeMapColors { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<TransactionOnline> TransactionOnlines { get; set; }
+        public virtual DbSet<WareHouse> WareHouses { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=DBClothing1; integrated security=true");
+                //optionsBuilder.UseSqlServer("Data Source=collabclothing.database.windows.net;Initial Catalog=DatabaseClothing; User ID=khiemle2001;Password=nana01218909214$");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            //modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Vietnamese_100_CI_AS");
+
             modelBuilder.Entity<AppRole>(entity =>
             {
                 entity.ToTable("AppRoles");
@@ -84,6 +88,49 @@ namespace CollabClothing.Data.EF
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<WareHouse>(entity =>
+            {
+                entity.ToTable("WareHouse");
+                entity.Property(e => e.Id)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProductId)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SizeId)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ColorId)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                //entity.Property(e => e.Quantity)
+                //    .IsRequired()
+                //    .HasMaxLength(5);
+
+                entity.HasOne(d => d.Color)
+                    .WithMany()
+                    .HasForeignKey(d => d.ColorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_warehouse_color");
+                entity.HasOne(d => d.Size)
+                   .WithMany()
+                   .HasForeignKey(d => d.SizeId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("fk_warehouse_size");
+                entity.HasOne(d => d.Product)
+                   .WithMany()
+                   .HasForeignKey(d => d.ProductId)
+                   .OnDelete(DeleteBehavior.ClientSetNull)
+                   .HasConstraintName("fk_warehouse_product");
+            });
+
 
             modelBuilder.Entity<Banner>(entity =>
             {
@@ -106,12 +153,10 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBanner)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsRequired().HasColumnType("text").UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.TypeBannerId)
                     .IsRequired()
@@ -136,7 +181,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBannerType)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<Brand>(entity =>
@@ -160,7 +205,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameBrand)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.Slug)
                     .IsRequired()
@@ -207,7 +252,8 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameCategory)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true)
+                    .UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ParentId)
                     .IsRequired()
@@ -218,6 +264,8 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.Order)
+                .HasMaxLength(2);
             });
 
             modelBuilder.Entity<Color>(entity =>
@@ -289,7 +337,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ShipAddress)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ShipEmail)
                     .IsRequired()
@@ -299,7 +347,7 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ShipName)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.ShipPhoneNumber)
                     .IsRequired()
@@ -318,6 +366,10 @@ namespace CollabClothing.Data.EF
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.SizeId)
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
 
@@ -346,7 +398,7 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Description).HasColumnType("text");
+                entity.Property(e => e.Description).HasColumnType("text").UseCollation("Vietnamese_100_CI_AS");
 
                 entity.Property(e => e.PriceCurrent).HasColumnType("decimal(18, 0)");
 
@@ -355,8 +407,12 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
-
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.Details)
+                     //.HasColumnType("text").IsUnicode(true)
+                     //.UseCollation("Vietnamese_100_CI_AS");
+                     .HasColumnType("nvarchar(MAX)")
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
                 entity.Property(e => e.Slug)
                     .IsRequired()
                     .HasColumnType("text");
@@ -388,6 +444,15 @@ namespace CollabClothing.Data.EF
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_product_productDetails");
+                entity.Property(e => e.Type)
+                     .HasMaxLength(255)
+                    .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.Form)
+                    .HasMaxLength(255)
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+                entity.Property(e => e.MadeIn)
+                    .HasMaxLength(255)
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
@@ -477,26 +542,31 @@ namespace CollabClothing.Data.EF
             modelBuilder.Entity<Promotion>(entity =>
             {
                 entity.ToTable("Promotion");
+                entity.HasKey(e => new { e.ProductId, e.Id })
+                   .HasName("PK__ProductM__159C556D63F46B0A");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.NamePromotion)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.ProductId)
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Promotions)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_product_promotion");
+
+                entity.HasOne(d => d.PromotionDetail)
+                    .WithMany(p => p.Promotions)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_promotion_promotiondetails");
             });
 
             modelBuilder.Entity<PromotionDetail>(entity =>
@@ -507,20 +577,14 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+                entity.Property(e => e.NamePromotion)
+                   .IsRequired()
+                   .HasMaxLength(255)
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
+
                 entity.Property(e => e.Info)
                     .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PromotionId)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Promotion)
-                    .WithMany(p => p.PromotionDetails)
-                    .HasForeignKey(d => d.PromotionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_promo_promodetail");
+                   .IsUnicode(true).UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<Size>(entity =>

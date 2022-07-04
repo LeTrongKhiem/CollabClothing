@@ -1,0 +1,43 @@
+﻿@model CollabClothing.ViewModels.Catalog.ProductImages.ProductImageCreateRequest
+
+@{
+    ViewData["Title"] = "CreateImages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CreateImages</h1>
+
+<h4>ProductImageCreateRequest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateImages" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Alt" class="control-label"></label>
+                <input asp-for="Alt" class="form-control" />
+                <span asp-validation-for="Alt" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsThumbnail" /> @Html.DisplayNameFor(model => model.IsThumbnail)
+                </label>
+            </div>
+             <div class="form-group">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" type="file" multiple/>
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+
+    <a asp-action="GetListImages" asp-route-id="@Model.ProductId">Back to List</a>
+
+</div>
+

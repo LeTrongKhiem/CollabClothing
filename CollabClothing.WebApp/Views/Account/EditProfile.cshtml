@@ -1,0 +1,143 @@
+﻿@model UserEditViewModel
+
+@{
+	ViewData["Title"] = "Chỉnh sửa thông tin cá nhân";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Csss {
+<link rel="stylesheet" href="~/css/profile.css">
+<style>
+	.submit-edit {
+		width : 100px;
+		height : 35px;
+		background-color : rgb(50, 155, 139);
+		font-size : 12px;
+		border-radius : 5px;
+	}
+</style>
+}
+
+<div class="app">
+ <div class="layout">
+  <div class="sidebar">
+   <div class="sidebar-wrapper">
+	<div class="navbar-main">
+	 <ul class="navbar-menu">
+	  <li class="navbar-item tab-item active">
+	   <div class="">
+		<span>Profile</span>
+	   </div>
+	  </li>
+
+	  <li class="navbar-item tab-item">
+	   <div class="">
+		<span>Password</span>
+	   </div>
+	  </li>
+	 </ul>
+	</div>
+   </div>
+  </div>
+
+  <div class="mainpage">
+   <div class="main-content">
+	<main class="section">
+	 <div class="container">
+	  <!-- Cá nhân -->
+	  <div class="tab-pane active">
+	   <nav class="navbar-user">
+		<h2>Cập nhật thông tin tài khoản</h2>
+		<form class="profile-form" asp-action="EditProfile" method="post">
+		 <input type="hidden" asp-for="@Model.EditRequest.Email" value="@Model.EditRequest.Email" />
+		 <div class="user-box">
+		  <input type="text" required="" value="@Model.EditRequest.FirstName" asp-for="@Model.EditRequest.FirstName">
+		  <label>Họ</label>
+		 </div>
+		 <div class="user-box">
+		  <input type="text" required="" value="@Model.EditRequest.LastName" asp-for="@Model.EditRequest.LastName">
+		  <label>Tên</label>
+		 </div>
+		 <div class="user-box">
+		  <input type="text" required="" value="@Model.EditRequest.PhoneNumber" asp-for="@Model.EditRequest.PhoneNumber">
+		  <label>Số điện thoại</label>
+		 </div>
+		 <div class="user-box">
+		  <input type="text" required="" value="@Model.EditRequest.Dob" asp-for="@Model.EditRequest.Dob">
+		  <label>Ngày sinh</label>
+		 </div>
+		 <div class="col-md-6">
+										@if (ViewBag.SuccessMsg != null)
+										{
+			  <div class="alert alert-success" role="alert" id="msgAlert" style="color:#fff; font-size : 15px; text-align:center; align-content:center;">
+												@ViewBag.SuccessMsg
+			  </div>
+										}
+		 </div>
+		 <input type="submit" value="Xác nhận" class="submit-edit">
+		</form>
+	   </nav>
+	  </div>
+	  <div class="tab-pane">
+	   <h2>Cập nhật thông tin Password</h2>
+	   <form class="profile-form" asp-action="EditProfilePassword" method="post">
+		<div class="user-box">
+		 <input type="text" required="" asp-for="@Model.EditPassword.NewPassword">
+		 <label>Mật khẩu</label>
+		</div>
+		<div class="user-box">
+		 <input type="password" required="" asp-for="@Model.EditPassword.NewPasswordConfirm">
+		 <label>Xác nhận mật khẩu mới</label>
+		</div>
+		 <div class="col-md-6">
+										@if (ViewBag.SuccessMsg != null)
+										{
+			  <div class="alert alert-success" role="alert" id="msgAlert" style="color:#fff; font-size : 15px; text-align:center; align-content:center;">
+												@ViewBag.SuccessMsg
+			  </div>
+										}
+		 </div>
+		 <div asp-validation-summary="All" class="text-danger" style="color:red; font-size:15px;"></div>
+		<input type="submit" value="Xác nhận" class="submit-edit">
+	   </form>
+	  </div>
+	  <div class="tab-pane"></div>
+	  <div class="tab-pane"></div>
+	  <div class="tab-pane"></div>
+	  <div class="tab-pane"></div>
+	 </div>
+
+	</main>
+   </div>
+  </div>
+
+ </div>
+
+</div>
+
+<div>
+ <a asp-action="Index">Trở lại</a>
+</div>
+
+@section ScriptsSecond{
+<script type="text/javascript">
+	var tabs = document.querySelectorAll('.tab-item');
+	var panes = document.querySelectorAll('.tab-pane');
+
+	tabs.forEach(function (item, index) {
+		item.addEventListener('click', function () {
+
+			document.querySelector('.tab-item.active').classList.remove('active');
+			this.classList.add('active');
+
+			document.querySelector('.tab-pane.active').classList.remove('active');
+			panes[index].classList.add('active');
+		})
+	})
+</script>
+<script>
+	setTimeout(function() {
+	   $('#msgAlert').fadeOut('slow');
+	}, 2000);
+</script>
+@*}*@
+}

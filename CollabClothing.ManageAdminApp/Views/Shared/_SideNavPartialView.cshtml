@@ -29,52 +29,9 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="app-chat.html">Chat</a>
+                                    <a asp-controller="Cart" asp-action="Index">Quản lý thanh toán</a>
                                 </li>
-                                <li>
-                                    <a href="app-file-manager.html">File Manager</a>
-                                </li>
-                                <li>
-                                    <a href="app-mail.html">Mail</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="javascript:void(0);">
-                                        <span>Projects</span>
-                                        <span class="arrow">
-                                            <i class="arrow-icon"></i>
-                                        </span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="app-project-list.html">Project List</a>
-                                        </li>
-                                        <li>
-                                            <a href="app-project-details.html">Project Details</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="javascript:void(0);">
-                                        <span>E-commerce</span>
-                                        <span class="arrow">
-                                            <i class="arrow-icon"></i>
-                                        </span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="app-e-commerce-order-list.html">Orders List</a>
-                                        </li>
-                                        <li>
-                                            <a href="app-e-commerce-products.html">Products</a>
-                                        </li>
-                                        <li>
-                                            <a href="app-e-commerce-products-list.html">Products List</a>
-                                        </li>
-                                        <li>
-                                            <a href="app-e-commerce-products-edit.html">Products Edit</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                
                             </ul>
                         </li>
                         
@@ -94,6 +51,9 @@
                                 </li>
                                 <li>
                                      <a asp-controller="ProductImage" asp-action="Index">Quản lý hình ảnh sản phẩm</a>
+                                </li>
+                                <li>
+                                     <a asp-controller="Brand" asp-action="Index">Quản lý tên thương hiệu</a>
                                 </li>
                                 
                             </ul>
@@ -125,17 +85,14 @@
                                 <span class="icon-holder">
                                     <i class="anticon anticon-table"></i>
                                 </span>
-                                <span class="title">Quản lý nhân viên</span>
+                                <span class="title">Quản lý khuyến mãi</span>
                                 <span class="arrow">
                                     <i class="arrow-icon"></i>
                                 </span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="basic-table.html">Basic Table</a>
-                                </li>
-                                <li>
-                                    <a href="data-table.html">Data Table</a>
+                                    <a asp-controller="Promotion" asp-action="Index">Khuyến mãi chung</a>
                                 </li>
                             </ul>
                         </li>
@@ -163,11 +120,7 @@
                                     <a asp-controller="Role" asp-action="Index">Quản lý quyền truy cập</a>
                                 </li>
                                 <li>
-                                    <a href="chartjs.html">Quản lý tỉnh thành</a>
-                                </li>
-                               
-                                <li>
-                                    <a asp-area="Admin" asp-controller="BannersAdmin" asp-action="Index">Quản lý Banner</a>
+                                    <a asp-controller="Banner" asp-action="Index">Quản lý Banner</a>
                                 </li>
                             </ul>
                         </li>

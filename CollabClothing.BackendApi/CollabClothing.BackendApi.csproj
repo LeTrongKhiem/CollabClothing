@@ -9,6 +9,7 @@
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.15" />
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="5.0.2" />
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+	<PackageReference Include="NETCore.MailKit" Version="2.1.0" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
 	  
 	<ProjectReference Include="..\CollabClothing.Application\CollabClothing.Application.csproj" />
@@ -30,6 +31,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\user-content\icon-category\" />
+    <Folder Include="wwwroot\user-content\img-brand\" />
+    <Folder Include="wwwroot\user-content\img-banner\" />
   </ItemGroup>
 
 

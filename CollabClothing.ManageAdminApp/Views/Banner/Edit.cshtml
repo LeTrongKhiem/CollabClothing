@@ -1,0 +1,81 @@
+﻿@using Microsoft.Extensions.Configuration
+@model CollabClothing.ViewModels.Catalog.Banners.BannerEditRequest
+
+@{
+    ViewData["Title"] = "Sửa Banner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject IConfiguration Configuration;
+@section Scripts{
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+        .create( document.querySelector( '#txt_details' ), {
+        } )
+        .then( editor => {
+            window.editor = editor;
+        } )
+        .catch( err => {
+            console.error( err.stack );
+        } );
+    </script>
+}
+<style>
+.ck-editor__editable_inline {
+    min-height: 400px;
+}
+</style>
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i
+                    class="anticon anticon-home m-r-5"></i>Home</a>
+            <a class="breadcrumb-item" asp-controller="Banner" asp-action="Edit">Sửa Banner</a>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NameBanner" class="control-label"></label>
+                <input asp-for="NameBanner" class="form-control" />
+                <span asp-validation-for="NameBanner" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Alt" class="control-label"></label>
+                <input asp-for="Alt" class="form-control" />
+                <span asp-validation-for="Alt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeBannerId" class="control-label"></label>
+                <input asp-for="TypeBannerId" class="form-control" />
+                <span asp-validation-for="TypeBannerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Text" class="control-label"></label>
+                 <textarea id="txt_details" asp-for="Text" rows="10" class="form-control"></textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Path" class="control-label"></label>
+                <img src="@Configuration["BaseAddress"]@Model.Path" width="400px" height="100px" style="margin-left: 50px;"/>
+                <span asp-validation-for="Path" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Images" class="control-label"></label>
+                <input asp-for="Images" class="form-control" type="file"/>
+                <span asp-validation-for="Images" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở lại</a>
+</div>
+

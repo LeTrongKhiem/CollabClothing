@@ -22,5 +22,29 @@ namespace CollabClothing.Data.Extensions
             category.Slug = categoryDTO.Slug;
         }
         #endregion
+        #region BrandMappingDTO
+        public static void BrandMapping(this Brand brand, BrandDTO brandDTO)
+        {
+            brand.Id = brandDTO.Id;
+            brand.Images = brandDTO.Images;
+            brand.Info = brandDTO.Info;
+            brand.NameBrand = brandDTO.NameBrand;
+            brand.Slug = brandDTO.Slug;
+        }
+        #endregion
+        #region BannerMappingDTO
+        public static void BannerMapping(this Banner banner, BannerDTO bannerDTO)
+        {
+            banner.Id = bannerDTO.Id;
+            banner.NameBanner = bannerDTO.NameBanner;
+            banner.Images = bannerDTO.Images;
+            banner.Alt = bannerDTO.Alt;
+            banner.Text = bannerDTO.Text;
+            banner.TypeBannerId = bannerDTO.TypeBannerId;
+        }
+        #endregion
+        #region PromotionMappingDTO
+
+        #endregion
     }
 }

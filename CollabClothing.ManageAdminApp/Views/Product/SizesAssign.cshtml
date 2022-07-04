@@ -1,0 +1,43 @@
+﻿@using CollabClothing.ViewModels.Catalog.Products
+@model SizeAssignRequest
+
+@{
+    ViewData["Title"] = "Gán Size sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-header">
+ <div class="header-sub-title">
+  <nav class="breadcrumb breadcrumb-dash">
+   <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+   <a class="breadcrumb-item" asp-controller="Product" asp-action="Index">Danh sách sản phẩm</a>
+   <a class="breadcrumb-item" asp-controller="Product" asp-action="SizesAssign">Gán danh mục sản phẩm</a>
+  </nav>
+ </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SizesAssign">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" class="form-control"/>
+            @for (var i = 0; i < Model.Sizes.Count; i++)
+            {
+                <div class="form-group d-flex align-items-center row" style="font-size: 16px;">
+                       <div class="m-r-10 col-md-3">@Model.Sizes[i].Name</div>
+                        <div class="col-md-3">
+                            <input type="checkbox" asp-for="Sizes[i].Selected" style="font-size: 25px;"/>
+                            <input type="hidden" asp-for="Sizes[i].Id"/>
+                            <input type="hidden" asp-for="Sizes[i].Name"/>
+                        </div>
+                        
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở lại</a>
+</div>

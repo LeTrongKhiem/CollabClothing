@@ -1,12 +1,14 @@
-﻿@using CollabClothing.ViewModels.Common
+﻿@using CollabClothing.ApiShared
+@using CollabClothing.ViewModels.Common
+@using Microsoft.Extensions.Configuration
 @model PageResult<CollabClothing.ViewModels.Catalog.Categories.CategoryViewModel>
-
+@inject IConfiguration Configuration
+@inject ICategoryApiClient _categoryApiClient
 @{
     ViewData["Title"] = "Danh sách danh mục";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
 <div class="page-header">
  <div class="header-sub-title">
   <nav class="breadcrumb breadcrumb-dash">
@@ -62,9 +64,6 @@
                 Mã danh cha 
             </th>
             <th>
-                Level
-            </th>
-            <th>
                 ShowWeb
             </th>
             <th>
@@ -82,12 +81,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParentId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Level)
-            </td>
+            
+                                @if (@item.ParentId.Equals("null"))
+                                {
+                                    <td>Danh mục cha</td>
+                        } else
+                                {
+                                var parentName = await _categoryApiClient.GetParentName(@item.ParentId);
+                                   <td>@parentName.ToString()</td>
+                }
+            
             <td>
                 @Html.DisplayFor(modelItem => item.IsShowWeb)
             </td>
@@ -95,7 +98,7 @@
                 @Html.DisplayFor(modelItem => item.Slug)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Icon)
+               <img src="@Configuration["BaseAddress"]@Html.DisplayFor(modelItem => item.Icon)" width="100px" height="100px"/>
             </td>
             <td>
                  <button class="btn btn-icon btn-hover btn-sm btn-rounded">
@@ -120,7 +123,7 @@
     </tbody>
    </table>
   </div>
-  @*@await Component.InvokeAsync("Pager", Model)*@
+  @await Component.InvokeAsync("Pager", Model)
  </div>
 </div>
 
