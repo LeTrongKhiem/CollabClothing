@@ -1,4 +1,5 @@
-﻿using CollabClothing.ViewModels.Catalog.ProductImages;
+﻿using CollabClothing.ViewModels.Catalog.Color;
+using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Sizes;
 using CollabClothing.ViewModels.Common;
@@ -46,6 +47,7 @@ namespace CollabClothing.Application.Catalog.Products
         //assign size
         Task<bool> SizeAssign(string id, SizeAssignRequest request);
         Task<bool> PromotionAssign(string id, PromotionAssignRequest request);
+        Task<bool> ColorAssign(string id, ColorAssignRequest request);
 
         Task<int> GetQuantityRemain(string productId);
         Task<int> GetQuantityRemain(string productId, string sizeId, string colorId);
@@ -62,6 +64,7 @@ namespace CollabClothing.Application.Catalog.Products
 
         #region Get Name
         List<SizeViewModel> GetNameSize(string productId);
+        List<ColorViewModel> GetColorSize(string productId);
         Task<string> GetNameProductById(string id);
         #endregion
 

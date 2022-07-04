@@ -17,11 +17,13 @@ namespace CollabClothing.WebApp.Controllers
         private readonly IProductApiClient _productApiClient;
         private readonly IOrderApiClient _orderApiClient;
         private readonly ISizeApiClient _sizeApiClient;
-        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient, ISizeApiClient sizeApiClient)
+        private readonly IColorApiClient _colorApiClient;
+        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient, ISizeApiClient sizeApiClient, IColorApiClient colorApiClient)
         {
             _productApiClient = productApiClient;
             _orderApiClient = orderApiClient;
             _sizeApiClient = sizeApiClient;
+            _colorApiClient = colorApiClient;
         }
         public IActionResult Index()
         {
@@ -43,7 +45,7 @@ namespace CollabClothing.WebApp.Controllers
             }
             return Ok(currentCart);
         }
-        public async Task<IActionResult> AddToCart(string id, string sizeId)
+        public async Task<IActionResult> AddToCart(string id, string sizeId, string colorId)
         {
             if (!ModelState.IsValid)
             {
@@ -58,7 +60,7 @@ namespace CollabClothing.WebApp.Controllers
             }
 
             int quantity = 1;
-            if (currentCart.Any(x => x.productId == id) && currentCart.Any(x => x.Size == sizeId))
+            if (currentCart.Any(x => x.productId == id) && currentCart.Any(x => x.Size == sizeId) && currentCart.Any(x => x.Color == colorId))
             {
                 foreach (var item in currentCart)
                 {
@@ -80,7 +82,9 @@ namespace CollabClothing.WebApp.Controllers
                     BrandName = await _productApiClient.GetBrandNameByProductId(product.Id),
                     Type = product.Type,
                     Size = sizeId,
-                    SizeName = _sizeApiClient.GetNameSize(sizeId).Result.ToString()
+                    SizeName = _sizeApiClient.GetNameSize(sizeId).Result.ToString(),
+                    Color = colorId,
+                    ColorName = _colorApiClient.GetNameColor(colorId).Result.ToString()
                 };
                 currentCart.Add(cartVm);
             }

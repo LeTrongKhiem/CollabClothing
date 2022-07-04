@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Hosting;
 using CollabClothing.Data.EF;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CollabClothing.ViewModels.Catalog.Sizes;
+using CollabClothing.ViewModels.Catalog.Color;
 
 namespace CollabClothing.Application.Catalog.Products
 {
@@ -197,6 +198,34 @@ namespace CollabClothing.Application.Catalog.Products
             await _context.SaveChangesAsync();
             return true;
         }
+        #region Color Assign
+        public async Task<bool> ColorAssign(string id, ColorAssignRequest request)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return false;
+            }
+            foreach (var color in request.Colors)
+            {
+                var colorMap = await _context.ProductMapColors.FirstOrDefaultAsync(x => x.ColorId == color.Id && x.ProductId == product.Id);
+                if (colorMap != null && color.Selected == false)
+                {
+                    _context.ProductMapColors.Remove(colorMap);
+                }
+                else if (colorMap == null && color.Selected == true)
+                {
+                    await _context.ProductMapColors.AddAsync(new ProductMapColor()
+                    {
+                        ProductId = id,
+                        ColorId = color.Id
+                    });
+                }
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        #endregion
         #region Size Assign
         public async Task<bool> SizeAssign(string id, SizeAssignRequest request)
         {
@@ -347,6 +376,10 @@ namespace CollabClothing.Application.Catalog.Products
                                     join pmp in _context.Promotions on p.Id equals pmp.Id
                                     where pmp.ProductId == productId
                                     select p.NamePromotion).ToListAsync();
+            var colors = await (from color in _context.Colors
+                                join pmc in _context.ProductMapColors on color.Id equals pmc.ColorId
+                                where pmc.ProductId == productId
+                                select color.NameColor).ToListAsync();
             var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
             var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product == null)
@@ -374,7 +407,8 @@ namespace CollabClothing.Application.Catalog.Products
                 Form = productDetails.Form,
                 MadeIn = productDetails.MadeIn,
                 Sizes = sizes,
-                Promotions = promotions
+                Promotions = promotions,
+                Colors = colors
             };
             return viewModel;
         }
@@ -775,6 +809,22 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 Id = x.s.Id,
                 Name = x.s.NameSize
+            }).ToList();
+            return result;
+        }
+
+        public List<ColorViewModel> GetColorSize(string productId)
+        {
+            var query = from c in _context.Colors
+                        join pmc in _context.ProductMapColors on c.Id equals pmc.ColorId
+                        into pmcc
+                        from pmc in pmcc.DefaultIfEmpty()
+                        where pmc.ProductId == productId
+                        select new { c, pmc };
+            var result = query.Select(x => new ColorViewModel()
+            {
+                Id = x.c.Id,
+                Name = x.c.NameColor
             }).ToList();
             return result;
         }

@@ -108,33 +108,48 @@
 	 <span class="price-current">@String.Format(format, "{0:c0}", @Model.Products.PriceCurrent)</span>
 	 <span class="price-old">@String.Format(format, "{0:c0}", @Model.Products.PriceOld)</span>
 	</div>
-	<div class="select-color">
-	 <p class="select-color-ttl">
-	  Chọn màu:
-	  <span>Hồng</span>
-	 </p>
-	 <ul>
-	  <li class="act">
-	   <div class="imgPro">
-		<img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
-									 alt="@Model.Products.ProductName" class=" ls-is-cached lazyloaded">
-	   </div>
-	  </li>
-	 </ul>
+	<div class="select-size">
+	 <div class="size-top">
+	  <div class="select-color">
+							@{
+								var colors = await _productApiClient.GetColorNameByProductId(@Model.Products.Id);
+							}
+	   <p class="select-color-ttl">
+		Chọn màu:
+		<span id="selected-colorid"></span>
+	   </p>
+	   <select class="size-list" id="select-color" asp-for="Color.Id">
+								@foreach (var color in colors)
+								{
+			<option class="size-list-item size-color @(colors.First() == color ? "active" : "")" value="@color.Id" data-sizecolor="@color.Name">
+										@color.Name.ToString()
+			</option>
+								}
+	   </select>
+	   <ul>
+		<li class="act">
+		 <div class="imgPro">
+		  <img src="@Configuration["BaseAddress"]@Model.Products.ThumbnailImage"
+											 alt="@Model.Products.ProductName" class=" ls-is-cached lazyloaded">
+		 </div>
+		</li>
+	   </ul>
+	  </div>
+	 </div>
 	</div>
 	<div class="select-size">
 	 <div class="size-top">
 	  <p class="size-top-left">Chọn size: <span id="selected-sizeid"></span></p>
 	 </div>
 	 <form asp-controller="Cart" asp-action="AddToCart" method="post">
-	  <input type="hidden" value="@Model.Products.Id" asp-route-id="@Model.Products.Id"/>
+	  <input type="hidden" value="@Model.Products.Id" asp-route-id="@Model.Products.Id" />
 	  <select class="size-list" id="select-size" asp-for="Size.Id">
 							@{
 								var sizes = await _productApiClient.GetSizeNameByProductId(@Model.Products.Id);
 							}
 							@foreach (var size in sizes)
 							{
-		   <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Id" >
+		   <option class="size-list-item size-name @(sizes.First() == size ? "active" : "")" value="@size.Id" data-sizename="@size.Name">
 									@size.Name.ToString()
 		   </option>
 							}
@@ -173,9 +188,9 @@
 	 </ul>
 	</div>
 	<div class="detail-btn">
-					<a href="#" id="add_product_cart_size" class="btn btn-addcart container-product__item-btn" data-id="@Model.Products.Id" >
-						<p class="txt">Thêm vào giỏ</p>
-						</a>
+	 <a href="#" id="add_product_cart_size" class="btn btn-addcart container-product__item-btn" data-id="@Model.Products.Id">
+	  <p class="txt">Thêm vào giỏ</p>
+	 </a>
 
 	 <span class="btn btn-spmarket">Xem cửa hàng còn hàng</span>
 	</div>

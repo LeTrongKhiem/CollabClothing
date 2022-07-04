@@ -1,5 +1,6 @@
 ﻿using CollabClothing.ViewModels.Catalog.Brands;
 using CollabClothing.ViewModels.Catalog.Categories;
+using CollabClothing.ViewModels.Catalog.Color;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Sizes;
@@ -18,5 +19,6 @@ namespace CollabClothing.WebApp.Models
         public List<ProductImageViewModel> ProductsImages { get; set; }
         public BrandViewModel Brands { get; set; }
         public SizeViewModel Size { get; set; }
+        public ColorViewModel Color { get; set; }
     }
 }

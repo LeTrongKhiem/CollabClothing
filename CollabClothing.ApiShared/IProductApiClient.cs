@@ -1,4 +1,5 @@
-﻿using CollabClothing.ViewModels.Catalog.ProductImages;
+﻿using CollabClothing.ViewModels.Catalog.Color;
+using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 
 using CollabClothing.ViewModels.Catalog.Sizes;
@@ -22,6 +23,7 @@ namespace CollabClothing.ApiShared
         Task<bool> CategoryAssign(string id, CategoryAssignRequest request);
         Task<bool> SizeAssign(string id, SizeAssignRequest request);
         Task<bool> PromotionAssign(string id, PromotionAssignRequest request);
+        Task<bool> ColorAssign(string id, ColorAssignRequest request);
 
 
         Task<List<ProductViewModel>> GetFeaturedProducts(int take);
@@ -33,6 +35,7 @@ namespace CollabClothing.ApiShared
 
         Task<string> GetBrandNameByProductId(string productId);
         Task<List<SizeViewModel>> GetSizeNameByProductId(string productId);
+        Task<List<ColorViewModel>> GetColorNameByProductId(string productId);
         Task<string> GetNameProductById(string id);
 
 

@@ -33,5 +33,6 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public string MadeIn { get; set; }
         public List<string> Sizes { get; set; } = new List<string>();
         public List<string> Promotions { get; set; } = new List<string>();
+        public List<string> Colors { get; set; } = new List<string>();
     }
 }

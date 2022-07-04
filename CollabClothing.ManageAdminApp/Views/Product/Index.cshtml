@@ -194,6 +194,11 @@
 				</a>
 			   </button>
 			   <button class="btn btn-icon btn-hover btn-sm btn-rounded" style="width : 100px;">
+				<a asp-controller="Product" asp-action="ColorAssign" asp-route-id="@item.Id">
+				Color
+				</a>
+			   </button>
+			   <button class="btn btn-icon btn-hover btn-sm btn-rounded" style="width : 100px;">
 				<a asp-controller="Product" asp-action="UpdateQuantityRemain" asp-route-id="@item.Id">
 				Quantity
 				</a>
@@ -208,11 +213,7 @@
 				 <i class="anticon anticon-dollar"></i>
 				</a>
 			   </button>
-			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-				<a asp-controller="Product" asp-action="UpdateOldPrice" asp-route-id="@item.Id">
-				 <i class="anticon anticon-paper-clip"></i>
-				</a>
-			   </button>
+			   
 			   <button class="btn btn-icon btn-hover btn-sm btn-rounded">
 				<a asp-controller="Product" asp-action="GetListImages" asp-route-id="@item.Id">
 				 <i class="anticon anticon-folder"></i>

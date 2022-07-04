@@ -7,6 +7,7 @@
 }
 @inject ISizeApiClient sizeApiClient
 @inject IProductApiClient productApiClient
+@inject IColorApiClient colorApiClient
 <h1>Chi tiết đơn hàng</h1>
 <div class="page-header">
  <div class="header-sub-title">
@@ -64,7 +65,11 @@
 						@size.ToString()
 		</td>
 		<td>
-						@Html.DisplayFor(modelItem => item.ColorId)
+						@{
+							var color = await colorApiClient.GetNameColor(item.ColorId);
+						}
+
+						@color.ToString()
 		</td>
 		<td>
 						@String.Format(format, "{0:c0}", @item.Price )

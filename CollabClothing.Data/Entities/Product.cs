@@ -14,6 +14,7 @@ namespace CollabClothing.Data.Entities
             ProductImages = new HashSet<ProductImage>();
             ProductMapCategories = new HashSet<ProductMapCategory>();
             ProductMapSizes = new HashSet<ProductMapSize>();
+            ProductMapColors = new HashSet<ProductMapColor>();
             Promotions = new HashSet<Promotion>();
         }
 
@@ -35,6 +36,7 @@ namespace CollabClothing.Data.Entities
         public virtual ICollection<ProductImage> ProductImages { get; set; }
         public virtual ICollection<ProductMapCategory> ProductMapCategories { get; set; }
         public virtual ICollection<ProductMapSize> ProductMapSizes { get; set; }
+        public virtual ICollection<ProductMapColor> ProductMapColors { get; set; }
         public virtual ICollection<Promotion> Promotions { get; set; }
     }
 }

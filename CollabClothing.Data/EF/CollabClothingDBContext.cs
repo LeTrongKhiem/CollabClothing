@@ -49,6 +49,7 @@ namespace CollabClothing.Data.EF
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<TransactionOnline> TransactionOnlines { get; set; }
         public virtual DbSet<WareHouse> WareHouses { get; set; }
+        public virtual DbSet<ProductMapColor> ProductMapColors { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -279,7 +280,8 @@ namespace CollabClothing.Data.EF
                 entity.Property(e => e.NameColor)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .IsUnicode(true)
+                    .UseCollation("Vietnamese_100_CI_AS");
             });
 
             modelBuilder.Entity<Contact>(entity =>
@@ -537,6 +539,34 @@ namespace CollabClothing.Data.EF
                     .HasForeignKey(d => d.SizeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_size_product");
+            });
+
+            modelBuilder.Entity<ProductMapColor>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductId, e.ColorId })
+                    .HasName("PK__ProductMC__0C37165AA0FEF2ED");
+
+                entity.ToTable("ProductMapColor");
+
+                entity.Property(e => e.ProductId)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ColorId)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductMapColors)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_product_color");
+
+                entity.HasOne(d => d.Color)
+                    .WithMany(p => p.ProductMapColors)
+                    .HasForeignKey(d => d.ColorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_color_product");
             });
 
             modelBuilder.Entity<Promotion>(entity =>

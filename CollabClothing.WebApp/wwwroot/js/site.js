@@ -8,6 +8,7 @@ var SiteController = function () {
 		CartAddSite();
 		removeProductCart();
 		selectSize();
+		selectColor();
 		//ButtonLoadMore();
 	}
 	function removeProductCart() {
@@ -193,6 +194,7 @@ var SiteController = function () {
 			const id = $(this).data('id');
 			const sizeid = $(this).data('sizeId');
 			const selectSize = $('#select-size').val();
+			const selectColor = $('#select-color').val();
 			$.ajax({
 				type: "POST",
 				url: '/Cart/AddToCart/',
@@ -202,13 +204,14 @@ var SiteController = function () {
 					}, 0);
 					$('#count-cart-quantity').text(count);
 					$('#add_product_cart_size').attr("data-sizeId", selectSize);
+					$('#add_product_cart_size').attr("data-colorId", selectColor);
 					console.log(count);
 					loadCartData();
-					console.log(sizeid);
 				},
 				data: {
 					id: id,
-					sizeId: selectSize
+					sizeId: selectSize,
+					colorId: selectColor
 				},
 			});
 		})
@@ -219,8 +222,20 @@ var SiteController = function () {
 			$("#select-size").change(function () {
 				var select = $('#select-size option:selected').val();
 				var selectSizeId = $(this).find(':selected').data('id');
-				console.log(selectSizeId);
-			$('#selected-sizeid').html(select);
+				const sizeName = $(this).find(':selected').data('sizename')
+				console.log(sizeName);
+				$('#selected-sizeid').html(sizeName);
+			})
+		});
+	}
+	function selectColor() {
+		$(document).ready(function () {
+			$("#select-color").change(function () {
+				var select = $('#select-color option:selected').val();
+				var selectSizeId = $(this).find(':selected').data('id');
+				const sizeColor = $(this).find(':selected').data('sizecolor')
+				console.log(sizeColor);
+				$('#selected-colorid').html(sizeColor);
 			})
 		});
 	}

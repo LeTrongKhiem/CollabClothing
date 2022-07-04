@@ -1,4 +1,5 @@
 ﻿using CollabClothing.Utilities.Constants;
+using CollabClothing.ViewModels.Catalog.Color;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Sizes;
@@ -299,6 +300,23 @@ namespace CollabClothing.ApiShared
             }
             return JsonConvert.DeserializeObject<bool>(result);
         }
+
+        public async Task<bool> ColorAssign(string id, ColorAssignRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemConstans.AppSettings.RequestHeader, session);
+            var response = await client.PutAsync($"/api/products/{id}/colors", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<bool>(result);
+            }
+            return JsonConvert.DeserializeObject<bool>(result);
+        }
         public async Task<List<SizeViewModel>> GetSizeNameByProductId(string productId)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
@@ -310,6 +328,22 @@ namespace CollabClothing.ApiShared
             if (response.IsSuccessStatusCode)
             {
                 List<SizeViewModel> data = (List<SizeViewModel>)JsonConvert.DeserializeObject(result, typeof(List<SizeViewModel>));
+                return data;
+            }
+            throw new Exception(result);
+        }
+
+        public async Task<List<ColorViewModel>> GetColorNameByProductId(string productId)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/products/colorname/{productId}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<ColorViewModel> data = (List<ColorViewModel>)JsonConvert.DeserializeObject(result, typeof(List<ColorViewModel>));
                 return data;
             }
             throw new Exception(result);

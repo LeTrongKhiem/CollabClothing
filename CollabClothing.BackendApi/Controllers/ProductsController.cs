@@ -201,6 +201,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+
+        [HttpGet("colorname/{productId}")]
+        public IActionResult GetColorName(string productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = _manageProductService.GetColorSize(productId);
+            if (product == null)
+            {
+                return BadRequest("Cannot find product");
+            }
+            return Ok(product);
+        }
         [HttpGet("featured/{take}")]
         public async Task<IActionResult> GetFeaturedProducts(int take)
         {
@@ -304,6 +319,20 @@ namespace CollabClothing.BackendApi.Controllers
             return Ok(result);
         }
         //update product
+        [HttpPut("{id}/colors")]
+        public async Task<IActionResult> ColorAssign(string id, ColorAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _manageProductService.ColorAssign(id, request);
+            if (!result)
+            {
+                return BadRequest(request);
+            }
+            return Ok(result);
+        }
         [HttpPut("{id}")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update(string id, [FromForm] ProductEditRequest request)
