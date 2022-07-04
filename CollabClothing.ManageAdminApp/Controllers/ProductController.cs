@@ -22,7 +22,8 @@ namespace CollabClothing.ManageAdminApp.Controllers
         private readonly IBrandApiClient _brandApiClient;
         private readonly ISizeApiClient _sizeApiClient;
         private readonly IPromotionApiClient _promotionApiClient;
-        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient, ISizeApiClient sizeApiClient, IPromotionApiClient promotionApiClient)
+        private readonly IColorApiClient _colorApiClient;
+        public ProductController(IProductApiClient productApiClient, IConfiguration configuration, ICategoryApiClient categoryApiClient, IBrandApiClient brandApiClient, ISizeApiClient sizeApiClient, IPromotionApiClient promotionApiClient, IColorApiClient colorApiClient)
         {
             _productApiClient = productApiClient;
             _configuration = configuration;
@@ -30,6 +31,7 @@ namespace CollabClothing.ManageAdminApp.Controllers
             _brandApiClient = brandApiClient;
             _sizeApiClient = sizeApiClient;
             _promotionApiClient = promotionApiClient;
+            _colorApiClient = colorApiClient;
         }
         #endregion
         #region Index
@@ -515,22 +517,30 @@ namespace CollabClothing.ManageAdminApp.Controllers
 
         #region Update Quantity Remain
         [HttpGet]
-        public async Task<IActionResult> UpdateQuantityRemain(string id, string sizeId)
+        public async Task<IActionResult> UpdateQuantityRemain(string id, string sizeId, string colorId)
         {
             var sizes = await _sizeApiClient.GetAll();
+            var colors = await _colorApiClient.GetAll();
             ViewBag.Size = sizes.Select(x => new SelectListItem()
             {
                 Text = x.Name,
                 Value = x.Id,
                 Selected = x.Id != null
             });
-            var remain = await _productApiClient.GetWareHouse(id, sizeId);
+            ViewBag.Color = colors.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id,
+                Selected = x.Id != null
+            });
+            var remain = await _productApiClient.GetWareHouse(id, sizeId, colorId);
             if (remain == null)
             {
                 var wareHouse = new WareHouseRequest()
                 {
                     ProductId = id,
-                    SizeId = sizeId
+                    SizeId = sizeId,
+                    ColorId = colorId
                 };
                 return View(wareHouse);
             }

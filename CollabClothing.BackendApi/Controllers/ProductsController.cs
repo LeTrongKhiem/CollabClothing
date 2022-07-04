@@ -93,6 +93,22 @@ namespace CollabClothing.BackendApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet("getquantitysizecolor")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetQuantityRemain([FromQuery] string id, [FromQuery] string sizeId, [FromQuery] string colorId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetQuantityRemain(id, sizeId, colorId);
+            if (product == 0)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+
         [HttpGet("getwarehouse/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetWareHouse(string id)
@@ -118,6 +134,22 @@ namespace CollabClothing.BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var product = await _manageProductService.GetWareHouse(id, sizeId);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
+
+        [HttpGet("getwarehouse/filter")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetWareHouse([FromQuery] string id, [FromQuery] string sizeId, [FromQuery] string colorId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetWareHouse(id, sizeId, colorId);
             if (product == null)
             {
                 return BadRequest("Not found");

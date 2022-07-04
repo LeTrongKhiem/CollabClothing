@@ -61,6 +61,7 @@ namespace CollabClothing.ManageAdminApp
             services.AddTransient<IBannerApiClient, BannerApiClient>();
             services.AddTransient<IBrandApiClient, BrandApiClient>();
             services.AddTransient<ISizeApiClient, SizeApiClient>();
+            services.AddTransient<IColorApiClient, ColorApiClient>();
             services.AddTransient<IOrderApiClient, OrderApiClient>();
             services.AddTransient<IPromotionApiClient, PromotionApiClient>();
         }

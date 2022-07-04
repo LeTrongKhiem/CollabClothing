@@ -43,8 +43,10 @@ namespace CollabClothing.ApiShared
         Task<bool> DeleteProductImages(string id);
         Task<ProductImageViewModel> GetProductImagesById(string id);
         Task<int> GetQuantityRemain(string productId);
+        Task<int> GetQuantityRemain(string productId, string sizeId, string colorId);
         Task<bool> UpdateQuantityRemain(string productId, WareHouseRequest request);
         Task<WareHouseRequest> GetWareHouse(string productId);
         Task<WareHouseRequest> GetWareHouse(string productId, string sizeId);
+        Task<WareHouseRequest> GetWareHouse(string productId, string sizeId, string colorId);
     }
 }
