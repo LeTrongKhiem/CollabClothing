@@ -43,7 +43,7 @@
   <tbody>
 			@{
 				var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-
+				decimal sum = 0;
 			}
 			@foreach (var item in Model.OrderDetails)
 			{
@@ -51,6 +51,7 @@
 		<td>
 						@{
 							var product = await productApiClient.GetNameProductById(item.ProductId);
+							sum += item.Price;
 						}
 						@product.ToString()
 		</td>
@@ -79,6 +80,15 @@
 		</td>
 	   </tr>
 			}
+   <tr>
+	   <td></td>
+	   <td></td>
+	   <td></td>
+	   <td>Tổng tiền</td>
+	<td style="font-weight:700;">
+					@String.Format(format, "{0:c0}", @sum )
+	</td>
+   </tr>
   </tbody>
  </table>
 </div>
