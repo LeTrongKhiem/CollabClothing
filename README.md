@@ -1,7 +1,17 @@
-# Project Ap dung cong nghe ASP Net Core 5.0 
+﻿# Project Ap dung cong nghe ASP Net Core 5.0 
+## Thực hiện: Lê Trọng Khiêm
 ## Technologies
-- ASP Net Core 5.0 MVC
-- Entity Framework Core
+### Frontend: 
 - HTML5
 - CSS
-- Javascript 
+- Javascript ( JQuery, Ajax )
+
+### Backend:
+- ASP Net Core 5.0 MVC
+- Entity Framework
+- Web API ( RESTful API )
+### Áp dụng Design Patern:
+- Dependence Injection
+
+## Cách run Project:
+- 

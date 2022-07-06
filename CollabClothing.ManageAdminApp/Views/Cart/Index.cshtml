@@ -1,4 +1,5 @@
-﻿@using CollabClothing.ViewModels.Common
+﻿@using CollabClothing.ApiShared
+@using CollabClothing.ViewModels.Common
 @model PageResult<CollabClothing.ViewModels.Catalog.Cart.CheckoutRequest>
 
 @{
@@ -6,12 +7,12 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@inject IUserApiClient userApiClient;
 <div class="page-header">
  <div class="header-sub-title">
   <nav class="breadcrumb breadcrumb-dash">
    <a asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-   <a class="breadcrumb-item" asp-controller="Order" asp-action="Index">Danh sách Order</a>
+   <a class="breadcrumb-item" asp-controller="Cart" asp-action="Index">Danh sách Order</a>
   </nav>
  </div>
 </div>
@@ -53,8 +54,8 @@
 	   <select class="custom-select" style="min-width: 180px; margin-top: 15px;" name="status"
 									onchange="this.form.submit()">
 		<option selected value="all">---Chọn---</option>
-		<option value="true">---Đã duyệt---</option>
-		<option value="false">---Chưa duyệt---</option>
+		<option value="true">Đã duyệt</option>
+		<option value="false">Chưa duyệt</option>
 	   </select>
 	  </form>
 	 </div>
@@ -134,8 +135,11 @@
 							{
 			  <td>Chưa duyệt</td>
 							}
+							@{
+								var user = userApiClient.GetById(new Guid(item.UserId));
+							}
 		  <td>
-								@Html.DisplayFor(modelItem => item.UserId)
+								@user.Result.ResultObject.LastName
 		  </td>
 
 		  <td>

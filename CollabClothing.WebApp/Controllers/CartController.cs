@@ -8,25 +8,39 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CollabClothing.WebApp.Controllers
 {
     public class CartController : Controller
     {
+        #region Constructor
         private readonly IProductApiClient _productApiClient;
         private readonly IOrderApiClient _orderApiClient;
         private readonly ISizeApiClient _sizeApiClient;
-        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient, ISizeApiClient sizeApiClient)
+        private readonly IColorApiClient _colorApiClient;
+        private readonly IUserApiClient _userApiClient;
+        public CartController(IProductApiClient productApiClient, IOrderApiClient orderApiClient, ISizeApiClient sizeApiClient, IColorApiClient colorApiClient, IUserApiClient userApiClient)
         {
             _productApiClient = productApiClient;
             _orderApiClient = orderApiClient;
             _sizeApiClient = sizeApiClient;
+            _colorApiClient = colorApiClient;
+            _userApiClient = userApiClient;
         }
+        #endregion
+        #region Index
         public IActionResult Index()
         {
+            if (TempData["result"] != null)
+            {
+                ViewBag.Notify = TempData["result"];
+            }
             return View();
         }
+        #endregion
+        #region Get Cart
         [HttpGet]
         public IActionResult GetCart()
         {
@@ -43,13 +57,18 @@ namespace CollabClothing.WebApp.Controllers
             }
             return Ok(currentCart);
         }
-        public async Task<IActionResult> AddToCart(string id, string sizeId)
+        #endregion
+        #region Add to cart
+        public async Task<IActionResult> AddToCart(string id, string sizeId, string colorId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             var product = await _productApiClient.GetById(id);
+
+            var quantityRemain = await _productApiClient.GetQuantityRemain(id);
+
             var session = HttpContext.Session.GetString(SystemConstans.SessionCart);
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
             if (session != null)
@@ -58,13 +77,13 @@ namespace CollabClothing.WebApp.Controllers
             }
 
             int quantity = 1;
-            if (currentCart.Any(x => x.productId == id) && currentCart.Any(x => x.Size == sizeId))
+            if (currentCart.Any(x => (x.productId == id && x.Size == sizeId && x.Color == colorId)))
             {
                 foreach (var item in currentCart)
                 {
-                    if (item.productId == id)
+                    if (item.productId == id && item.Color == colorId && item.Size == sizeId)
                     {
-                        item.Quantity = (currentCart.First(x => x.productId == id).Quantity + 1);
+                        item.Quantity = (currentCart.First(x => x.productId == id && x.Size == sizeId && x.Color == colorId).Quantity + 1);
                     }
                 }
             }
@@ -80,7 +99,9 @@ namespace CollabClothing.WebApp.Controllers
                     BrandName = await _productApiClient.GetBrandNameByProductId(product.Id),
                     Type = product.Type,
                     Size = sizeId,
-                    SizeName = _sizeApiClient.GetNameSize(sizeId).Result.ToString()
+                    SizeName = _sizeApiClient.GetNameSize(sizeId).Result.ToString(),
+                    Color = colorId,
+                    ColorName = _colorApiClient.GetNameColor(colorId).Result.ToString()
                 };
                 currentCart.Add(cartVm);
             }
@@ -88,14 +109,24 @@ namespace CollabClothing.WebApp.Controllers
             HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }
-        public IActionResult UpdateCart(string id, int quantity)
+        #endregion
+        #region Update cart ( update quantity, remove product in cart ) 
+        public IActionResult UpdateCart(string id, int quantity, string sizeId, string colorId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             var session = HttpContext.Session.GetString(SystemConstans.SessionCart);
-            var quantityRemainTask = _productApiClient.GetQuantityRemain(id);
+            Task<int> quantityRemainTask;
+            if (sizeId == null && colorId == null)
+            {
+                quantityRemainTask = _productApiClient.GetQuantityRemain(id);
+            }
+            else
+            {
+                quantityRemainTask = _productApiClient.GetQuantityRemain(id, sizeId, colorId);
+            }
             int quantityRemain = quantityRemainTask.Result;
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
             if (session != null)
@@ -104,7 +135,7 @@ namespace CollabClothing.WebApp.Controllers
             }
             foreach (var item in currentCart)
             {
-                if (item.productId == id)
+                if (item.productId == id && item.Color == colorId && item.Size == sizeId)
                 {
                     if (quantity == 0)
                     {
@@ -113,21 +144,23 @@ namespace CollabClothing.WebApp.Controllers
                     }
                     if (quantity > quantityRemain)
                     {
-                        break;
+                        TempData["result"] = "Sản phẩm trong kho đã hết. Quý khách vui lòng chọn sản phẩm khác";
                     }
-                    item.Quantity = quantity;
+                    else if (quantity <= quantityRemain)
+                    {
+                        item.Quantity = quantity;
+                    }
                 }
             }
             HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));
             return Ok(currentCart);
         }
+        #endregion
         #region Checkout
         public IActionResult Checkout()
         {
-            var quantityRemain = _productApiClient.GetQuantityRemain("352e1af2-4a0e-4d58-a0ef-cb07f2a7e74d");
+            var quantityRemain = _productApiClient.GetQuantityRemain("352e1af2-4a0e-4d58-a0ef-cb07f2a7e74d", "32BD8E51-8D32-4AC5-9E11-6CE8EFE4A88C", "CA95EEB7-94FD-4CAD-9384-A4A2BA78CF96");
             int quantity = quantityRemain.Result;
-            var session = HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
-            var userId = HttpContext.User.Identity.Name;
             return View(GetCheckout());
         }
 
@@ -141,6 +174,18 @@ namespace CollabClothing.WebApp.Controllers
             }
             var getCheckout = GetCheckout();
             var userLogined = HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var userName = HttpContext.User.Identity.Name;
+            string userId;
+            if (userName != null)
+            {
+                var user = await _userApiClient.GetByUsername(userName);
+                userId = user.ResultObject.Id.ToString();
+            }
+            else
+            {
+                //userId = SystemConstans.UsersSetting.UserGuestId;
+                userId = null;
+            }
             var orderDetails = new List<OrderDetailsViewModel>();
             foreach (var item in getCheckout.CartItems)
             {
@@ -160,7 +205,7 @@ namespace CollabClothing.WebApp.Controllers
                 Name = request.CheckoutRequest.Name,
                 PhoneNumber = request.CheckoutRequest.PhoneNumber,
                 Status = request.CheckoutRequest.Status,
-                UserId = request.CheckoutRequest.UserId,
+                UserId = userId,
                 OrderDetails = orderDetails
             };
 

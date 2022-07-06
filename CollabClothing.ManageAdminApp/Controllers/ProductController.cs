@@ -308,6 +308,47 @@ namespace CollabClothing.ManageAdminApp.Controllers
             return View(sizesAssignRequest);
         }
         #endregion
+        #region Color Assign
+        [HttpGet]
+        public async Task<IActionResult> ColorAssign(string id)
+        {
+            var colorAssign = await GetColorAssignRequest(id);
+            return View(colorAssign);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ColorAssign(ColorAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var result = await _productApiClient.ColorAssign(request.Id, request);
+            if (result)
+            {
+                TempData["result"] = "Cập nhật màu sắc sản phẩm thành công";
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("Error", "");
+            var colorAssignRequest = GetColorAssignRequest(request.Id);
+            return View(colorAssignRequest);
+        }
+        private async Task<ColorAssignRequest> GetColorAssignRequest(string id)
+        {
+            var product = await _productApiClient.GetById(id);
+            var colors = await _colorApiClient.GetAll();
+            var colorAssign = new ColorAssignRequest();
+            foreach (var color in colors)
+            {
+                colorAssign.Colors.Add(new SelectItem()
+                {
+                    Id = color.Id,
+                    Name = color.Name,
+                    Selected = product.Colors.Contains(color.Name)
+                });
+            }
+            return colorAssign;
+        }
+        #endregion
         #region UpdateCurrentPrice
         [HttpGet]
         public async Task<IActionResult> UpdateCurrentPrice(string id)
