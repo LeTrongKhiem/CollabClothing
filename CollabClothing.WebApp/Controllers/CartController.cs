@@ -66,6 +66,9 @@ namespace CollabClothing.WebApp.Controllers
                 return BadRequest();
             }
             var product = await _productApiClient.GetById(id);
+
+            var quantityRemain = await _productApiClient.GetQuantityRemain(id);
+
             var session = HttpContext.Session.GetString(SystemConstans.SessionCart);
             List<CartItemViewModel> currentCart = new List<CartItemViewModel>();
             if (session != null)
