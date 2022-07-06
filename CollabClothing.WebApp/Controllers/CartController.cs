@@ -33,6 +33,10 @@ namespace CollabClothing.WebApp.Controllers
         #region Index
         public IActionResult Index()
         {
+            if (TempData["result"] != null)
+            {
+                ViewBag.Notify = TempData["result"];
+            }
             return View();
         }
         #endregion
@@ -70,13 +74,13 @@ namespace CollabClothing.WebApp.Controllers
             }
 
             int quantity = 1;
-            if (currentCart.Any(x => x.productId == id) && currentCart.Any(x => x.Size == sizeId) && currentCart.Any(x => x.Color == colorId))
+            if (currentCart.Any(x => (x.productId == id && x.Size == sizeId && x.Color == colorId)))
             {
                 foreach (var item in currentCart)
                 {
-                    if (item.productId == id)
+                    if (item.productId == id && item.Color == colorId && item.Size == sizeId)
                     {
-                        item.Quantity = (currentCart.First(x => x.productId == id).Quantity + 1);
+                        item.Quantity = (currentCart.First(x => x.productId == id && x.Size == sizeId && x.Color == colorId).Quantity + 1);
                     }
                 }
             }
@@ -128,7 +132,7 @@ namespace CollabClothing.WebApp.Controllers
             }
             foreach (var item in currentCart)
             {
-                if (item.productId == id)
+                if (item.productId == id && item.Color == colorId && item.Size == sizeId)
                 {
                     if (quantity == 0)
                     {
@@ -137,9 +141,12 @@ namespace CollabClothing.WebApp.Controllers
                     }
                     if (quantity > quantityRemain)
                     {
-                        break;
+                        TempData["result"] = "Sản phẩm trong kho đã hết. Quý khách vui lòng chọn sản phẩm khác";
                     }
-                    item.Quantity = quantity;
+                    else if (quantity <= quantityRemain)
+                    {
+                        item.Quantity = quantity;
+                    }
                 }
             }
             HttpContext.Session.SetString(SystemConstans.SessionCart, JsonConvert.SerializeObject(currentCart));
