@@ -41,7 +41,146 @@
  </div>
  <div class="container-nav">
 		@await Component.InvokeAsync("BrandNavBar")
+	
  </div>
+ 	  <ul class="container-filter__list">
+                <li class="container-filter__item">
+                    Mức giá
+                    <i class="container-filter__icon-down fas fa-chevron-down"></i>
+                    <ul class="container-filter__price">
+                        <li class="container-filter-item">
+                            Dưới 1 triệu
+                        </li>
+                        <li class="container-filter-item">
+                            Dưới 2 triệu
+                        </li>
+                        <li class="container-filter-item">
+                            Dưới 3 triệu
+                        </li>
+                        <li class="container-filter-item">
+                            Dưới 4 triệu
+                        </li>
+                        <li class="container-filter-item">
+                            Dưới 5 triệu
+                        </li>
+                        <li class="container-filter-item">
+                            Dưới 7 triệu
+                        </li>
+                        <li class="container-filter-item">
+                            Dưới 10 triệu
+                        </li>
+                        <li class="container-filter-item">
+                            Trên 10 triệu
+                        </li>
+                    </ul>
+                </li>
+                <li class="container-filter__item">
+                    Hãng sản xuất
+                    <i class="container-filter__icon-down fas fa-chevron-down"></i>
+                    <ul class="container-filter__manufacturer">
+                        <li class="container-filter-item-manufacturer">
+                            Apple
+                        </li>
+                        <li class="container-filter-item-manufacturer">
+                            Xiaomi
+                        </li>
+                        <li class="container-filter-item-manufacturer">
+                            Samsung
+                        </li>
+                        <li class="container-filter-item-manufacturer">
+                            Oppo
+                        </li>
+                        <li class="container-filter-item-manufacturer">
+                            OnePlus
+                        </li>
+                        <li class="container-filter-item-manufacturer">
+                            Vivo
+                        </li>
+                        <li class="container-filter-item-manufacturer">
+                            LG
+                        </li>
+                        <li class="container-filter-item-manufacturer">
+                            Google
+                        </li>
+                    </ul>
+                </li>
+                <li class="container-filter__item">
+                    Hệ điều hành
+                    <i class="container-filter__icon-down fas fa-chevron-down"></i>
+                    <ul class="container-filter__price">
+                        <li class="container-filter-item">
+                            Android
+                        </li>
+                        <li class="container-filter-item">
+                            IOS
+                        </li>
+                        <li class="container-filter-item">
+                            Window Phone
+                        </li>
+                        <li class="container-filter-item">
+                            HDH Khác
+                        </li>
+                    </ul>
+                </li>
+                <li class="container-filter__item">
+                    Màn hình
+                    <i class="container-filter__icon-down fas fa-chevron-down"></i>
+                    <ul class="container-filter__price">
+                        <li class="container-filter-item">
+                            Dưới 3"
+                        </li>
+                        <li class="container-filter-item">
+                            Khoảng 3"
+                        </li>
+                        <li class="container-filter-item">
+                            Khoảng 4"
+                        </li>
+                        <li class="container-filter-item">
+                            Khoảng 5"
+                        </li>
+                        <li class="container-filter-item">
+                            Khoảng 6"
+                        </li>
+                    </ul>
+
+                </li>
+                <li class="container-filter__item">
+                    Tính năng
+                    <i class="container-filter__icon-down fas fa-chevron-down"></i>
+                    <ul class="container-filter__price">
+                        <li class="container-filter-item">
+                            Băng tầng 4G 5G
+                        </li>
+                        <li class="container-filter-item">
+                            2 Sim 2 Sóng
+                        </li>
+                        <li class="container-filter-item">
+                            Smart Phone
+                        </li>
+                        <li class="container-filter-item">
+                            Wifi
+                        </li>
+                        <li class="container-filter-item">
+                            Cảm ứng
+                        </li>
+                    </ul>
+                </li>
+                <li class="container-filter__item">
+                    Sắp xếp theo giá
+                    <i class="container-filter__icon-down fas fa-chevron-down"></i>
+                    <ul class="container-filter__price">
+
+                        <li class="container-filter-item">
+                            <a href="FilterController?locgia=caodenthap&madanhmuc=${madanhmucRequest}">Giá
+                                cao đến thấp</a>
+                        </li>
+                        <li class="container-filter-item">
+                            <a href="FilterController?locgia=thapdencao&madanhmuc=${madanhmucRequest}">Giá thấp đến cao</a>
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>
  <div class="col l-12 m-12 c-12">
   <div class="container-product">
    <div class="row no-gutters laptop-products" id="content">

@@ -89,8 +89,10 @@ namespace CollabClothing.WebApp.Controllers
             }
             else
             {
+                Guid gProductDictinct = Guid.NewGuid();
                 var cartVm = new CartItemViewModel()
                 {
+                    IdProductInCartDistinct = gProductDictinct.ToString(),
                     productId = id,
                     Quantity = quantity,
                     Name = product.ProductName,
@@ -145,6 +147,7 @@ namespace CollabClothing.WebApp.Controllers
                     if (quantity > quantityRemain)
                     {
                         TempData["result"] = "Sản phẩm trong kho đã hết. Quý khách vui lòng chọn sản phẩm khác";
+                        item.Notify = "Sản phẩm trong kho đã hết. Quý khách vui lòng chọn sản phẩm khác";
                     }
                     else if (quantity <= quantityRemain)
                     {

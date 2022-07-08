@@ -15,13 +15,17 @@ var SiteController = function () {
 		$('body').on('click', '.header__cart-remove', function (e) {
 			e.preventDefault();
 			const id = $(this).data('id');
+			const sizeid = $(this).data('sizeid');
+			const colorid = $(this).data('colorid');
 			const quantity = 0;
 			$.ajax({
 				type: "POST",
 				url: '/Cart/UpdateCart',
 				data: {
 					id: id,
-					quantity: quantity
+					quantity: quantity,
+					sizeid,
+					colorid
 				},
 				success: function (response) {
 					const count = response.reduce((item, object) => {
@@ -67,7 +71,7 @@ var SiteController = function () {
 						+ "</div>"
 						+ "<div class=\"header__cart-item-body\">"
 						+ "<span class=\"header__cart-item-desciption\">Phân loại " + item.type + "</span>"
-						+ "<a class=\"header__cart-remove\" data-id=\"" + item.productId + "\">Xóa</a>"
+						+ "<a class=\"header__cart-remove\" data-id=\"" + item.productId + "\" data-sizeid=\"" + item.size + "\" data-colorid=\"" + item.color + "\">Xóa</a>"
 						+ "</div>"
 						+ "</div>"
 						+ "</li>"

@@ -7,6 +7,7 @@ namespace CollabClothing.WebApp.Models
 {
     public class CartItemViewModel
     {
+        public string IdProductInCartDistinct { get; set; }
         public string productId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
@@ -18,5 +19,6 @@ namespace CollabClothing.WebApp.Models
         public string Type { get; set; }
         public string SizeName { get; set; }
         public string ColorName { get; set; }
+        public string Notify { get; set; }
     }
 }

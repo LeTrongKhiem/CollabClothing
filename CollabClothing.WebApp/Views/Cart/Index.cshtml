@@ -15,7 +15,7 @@
 
 <script>
 				setTimeout(function() {
-	   $('#msgAlert').fadeOut('slow');
+	   $('.msgAlert').fadeOut('slow');
 	}, 2000);
 </script>
 }
@@ -40,12 +40,6 @@
    <div id="cart-body">
 
 	<div class="col-md-6">
-					@if (ViewBag.Notify != null)
-					{
-		 <div class="alert alert-success" role="alert" id="msgAlert">
-							@ViewBag.Notify
-		 </div>
-					}
 	</div>
    </div>
    <div class="back-to-shop"><a class="a-link" href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
