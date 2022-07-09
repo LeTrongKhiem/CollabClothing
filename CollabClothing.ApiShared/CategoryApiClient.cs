@@ -127,6 +127,21 @@ namespace CollabClothing.ApiShared
             return JsonConvert.DeserializeObject<CategoryViewModel>(result);
         }
 
+        public async Task<CategoryViewModel> GetBySlug(string slug)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString(SystemConstans.AppSettings.Token);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[SystemConstans.AppSettings.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/categories/cate/{slug}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<CategoryViewModel>(result);
+            }
+            return JsonConvert.DeserializeObject<CategoryViewModel>(result);
+        }
+
         public async Task<List<CategoryViewModel>> GetAll()
         {
             return await GetListAsync<CategoryViewModel>("/api/categories/");

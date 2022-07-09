@@ -63,6 +63,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(cate);
         }
+        [HttpGet("cate/{slug}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetBySlug(string slug)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var cate = await _categoryService.GetCateBySlug(slug);
+            if (cate == null)
+            {
+                return BadRequest();
+            }
+            return Ok(cate);
+        }
         [HttpPost]
 
         [AllowAnonymous]

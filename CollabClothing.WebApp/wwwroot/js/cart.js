@@ -89,6 +89,7 @@
                 var html = '';
                 var total = 0;
                 var count = 0;
+                value = '@TempData["result"]';
                 $.each(response, function (e, item) {
                     html += "<div class=\"row border - top border - bottom\">"
                         + "<div class=\"row main-cart align-items-center\" >"
@@ -106,23 +107,16 @@
                         + " <div class=\"col\" style=\"margin : auto\"> " + item.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) + " <a  class=\"close btn_remove\" data-id=\"" + item.productId + "\" data-sizeid=\"" + item.size + "\" data-colorid=\"" + item.color + "\">&#10005;</a></div>"
                         + "</div>"
                         + "</div>"
-                        //+ "@if (ViewBag.Notify != null) {"
-                        //+ "<div class=\"alert alert-success\" role=\"alert\" id=\"msgAlert\">"
-                        //+ "@ViewBag.Notify"
-                        //+ "</div>"
-                        //+ "}"
-                    if (item.notify != null) {
-                        html += "<div class=\"alert alert-success msgAlert\" role=\"alert\">"
-                            + item.notify
-                            + "</div>"
-                    }
                     total += item.price * item.quantity
                     count += item.quantity
                     console.log(count);
-                    $(".msgAlert")
-                        .fadeIn("slow")
-                        .delay(2000)
-                        .fadeOut('slow')
+                    //if (item.notify != null) {
+                    //    $("#msgAlert")
+                    //        .css('display', 'block')
+                    //        .fadeIn("slow")
+                    //        .delay(2000)
+                    //        .fadeOut('slow')
+                    //}
                 });
                 
                 $('#cart-body').html(html);

@@ -136,6 +136,38 @@ namespace CollabClothing.Application.Catalog.Categories
             return cate1;
         }
 
+        public async Task<CategoryViewModel> GetCateBySlug(string slug)
+        {
+            var cate = await _context.Categories.FirstOrDefaultAsync(x => x.Slug.Equals(slug));
+            if (cate == null)
+            {
+                throw new CollabException($"Not find Category with Slug: {slug}");
+            }
+            List<string> childCate = new List<string>();
+            foreach (var item in _context.Categories)
+            {
+                if (item.ParentId == cate.Id)
+                {
+                    childCate.Add(item.NameCategory);
+                }
+            }
+            var cate1 = new CategoryViewModel()
+            {
+                CategoryId = cate.Id,
+                CategoryName = cate.NameCategory,
+                ParentId = cate.ParentId,
+                IsShowWeb = cate.IsShowWeb,
+                Icon = cate.Icon,
+                Level = cate.Level,
+                Slug = cate.Slug,
+                ListChildCates = childCate
+            };
+
+            Category category = new Category();
+            category.CateMapping(new CategoryDTO());
+            return cate1;
+        }
+
         public async Task<ResultApi<bool>> Edit(string cateId, CategoryEditRequest request)
         {
             var cate = await _context.Categories.FindAsync(cateId);

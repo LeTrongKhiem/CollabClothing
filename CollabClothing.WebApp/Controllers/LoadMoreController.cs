@@ -16,7 +16,7 @@ namespace CollabClothing.WebApp.Controllers
             _productApiClient = productApiClient;
         }
         //[HttpGet]
-        public async Task<IActionResult> Index(string cateId)
+        public async Task<IActionResult> Index(string slug)
         {
             String amount = HttpContext.Request.Query["exits"];
             int amountI = int.Parse(amount);
@@ -27,7 +27,8 @@ namespace CollabClothing.WebApp.Controllers
             {
                 PageIndex = pageI,
                 PageSize = 5,
-                CategoryId = cateId,
+                //CategoryId = cateId,
+                Slug = slug
             });
             if (amountI >= product.TotalRecord)
             {
