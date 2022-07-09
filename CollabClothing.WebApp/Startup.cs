@@ -105,9 +105,18 @@ namespace CollabClothing.WebApp
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapControllerRoute(
+                //  name: "Product Category",
+                //  pattern: "/danh-muc/{id}", new
+                //  {
+                //      controller = "Product",
+                //      action = "Category"
+
+                //  });
+
                 endpoints.MapControllerRoute(
                   name: "Product Category",
-                  pattern: "/danh-muc/{id}", new
+                  pattern: "/danh-muc/{id}/asc", new
                   {
                       controller = "Product",
                       action = "Category"
@@ -121,18 +130,18 @@ namespace CollabClothing.WebApp
                       action = "Category"
 
                   });
-                //endpoints.MapControllerRoute(
-                //  name: "Product Category",
-                //  pattern: "/danh-muc/{slug}", new
-                //  {
-                //      controller = "Product",
-                //      action = "Category"
+                endpoints.MapControllerRoute(
+                  name: "Product Category",
+                  pattern: "/danh-muc/{slug}", new
+                  {
+                      controller = "Product",
+                      action = "Category"
 
-                //  });
+                  });
 
                 endpoints.MapControllerRoute(
                   name: "Product LoadMore",
-                  pattern: "/danh-muc/load/{cateId}", new
+                  pattern: "/danh-muc/load/{slug}", new
                   {
                       controller = "LoadMore",
                       action = "Index"

@@ -23,7 +23,7 @@
 				@if (@Model.Category != null)
 				{
 		<i class="itemListElement-icon fa fa-angle-right"></i> <a itemprop="item"
-																		  href="/danh-muc/@Model.Category.CategoryId"
+																		  href="/danh-muc/@Model.Category.Slug"
 																		  title=""
 																		  class="actived"><span itemprop="name" content="Laptop">@Model.Category.CategoryName</span></a>
 				}
@@ -42,6 +42,45 @@
  <div class="container-nav">
 		@await Component.InvokeAsync("BrandNavBar")
  </div>
+<form asp-controller="Product" asp-action="Category" method="get">
+	<div class="col l-12 m-12 c-12">
+		<div class="container-filter">
+			<div class="container-filter__item">
+				Giá từ
+				<i class="container-filter__icon-down fas fa-chevron-down"></i>
+
+				<ul class="container-filter__list">
+					<li class="container-filter__list-item">
+						Giá từ cao đến thấp
+						<input type="submit" value="asc" name="price" title="fdsafsdf"/>
+					</li>
+					<li class="container-filter__list-item">
+						Giá từ thấp đến cao
+					</li>
+				</ul>
+			</div>
+
+			<div class="container-filter__item">
+				Bán chạy
+				<i class="container-filter__icon-down fas fa-chevron-down"></i>
+				<ul class="container-filter__list">
+					<li class="container-filter__list-item">
+						Bán chạy
+					</li>
+					<li class="container-filter__list-item">
+						Phổ biến
+					</li>
+					<li class="container-filter__list-item">
+						Khuyến mãi
+					</li>
+					<li class="container-filter__list-item">
+						Hàng mới về
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</form>
  <div class="col l-12 m-12 c-12">
   <div class="container-product">
    <div class="row no-gutters laptop-products" id="content">
@@ -141,12 +180,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.CategoryId)) {
+		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug)) {
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
 		jQuery.ajax({
-			url: 'load/@Model.Category.CategoryId',
+			url: 'load/@Model.Category.Slug',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {

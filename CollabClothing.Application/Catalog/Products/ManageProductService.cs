@@ -421,6 +421,7 @@ namespace CollabClothing.Application.Catalog.Products
         //GetRequestPagingProduct truyen vao keyword la chuoi tim kiem va 1 list cac categoryid
         public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPaging request)
         {
+            var cateBySlug = await _context.Categories.FirstOrDefaultAsync(x => x.Slug == request.Slug);
             //1. Select join
             var query = (from p in _context.Products
                          join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
@@ -439,6 +440,10 @@ namespace CollabClothing.Application.Catalog.Products
             {
                 query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.b.NameBrand.Contains(request.Keyword));
             }
+            if (!string.IsNullOrEmpty(request.Slug) && !request.Slug.Equals("all"))
+            {
+                query = query.Where(x => x.c.Slug == request.Slug || x.c.ParentId == cateBySlug.Id);
+            }
             if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
             {
                 query = query.Where(x => x.pmc.CategoryId == request.CategoryId || x.c.ParentId == request.CategoryId);
@@ -446,6 +451,17 @@ namespace CollabClothing.Application.Catalog.Products
             if (!string.IsNullOrEmpty(request.BrandId))
             {
                 query = query.Where(x => x.p.BrandId == request.BrandId);
+            }
+            if (request.Price != null)
+            {
+                if (request.Price.Equals("asc"))
+                {
+                    query = query.OrderBy(x => x.p.PriceCurrent);
+                }
+                else if (request.Price.Equals("desc"))
+                {
+                    query = query.OrderByDescending(x => x.p.PriceCurrent);
+                }
             }
             //3. paging
             //ham skip lay data tiep theo vd trang 1 (1-1 * 5) = 0 lay 5 sp tiep theo la den sp thu 1 den 5

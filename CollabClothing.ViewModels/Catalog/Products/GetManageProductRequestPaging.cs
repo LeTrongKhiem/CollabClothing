@@ -13,5 +13,6 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public string? CategoryId { get; set; }
         public string? Slug { get; set; }
         public string? BrandId { get; set; }
+        public string? Price { get; set; }
     }
 }

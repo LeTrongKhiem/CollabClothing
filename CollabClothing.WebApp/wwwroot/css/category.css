@@ -1,4 +1,5 @@
-﻿.container {
+﻿
+.container {
     background-color: var(--white-color);
 }
 
@@ -129,15 +130,15 @@
     display: block;
     text-decoration: none;
     font-size: 1.4rem;
-    color: var(--primary-color);
+    color: #000;
     padding: 12px 16px;
 }
 
 .container-filter__item {
     display: inline-flex;
     align-items: center;
-    font-size: 1.4rem;
-    padding: 8px;
+    font-size: 1.7rem;
+    padding: 10px;
     position: relative;
     user-select: none;
     margin-right: 8px;
@@ -184,14 +185,15 @@
 
 .container-filter__list {
     position: absolute;
-    top: 100%;
+    top: 90%;
     right: 0;
     left: 0;
+    width: max-content;
     padding-left: 0;
     margin: 0;
     list-style: none;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
-    background-color: var(--white-color);
+    background-color: #fff;
     display: none;
     cursor: pointer;
     z-index: 1;

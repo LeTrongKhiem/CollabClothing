@@ -21,6 +21,10 @@
 	}
 </style>
 }
+<div id="toasts">
+	
+ </div>
+
 <div class="container grid wide">
  <ul class="breadcrumb">
   <li>
@@ -191,7 +195,6 @@
 	 <a href="#" id="add_product_cart_size" class="btn btn-addcart container-product__item-btn" data-id="@Model.Products.Id">
 	  <p class="txt">Thêm vào giỏ</p>
 	 </a>
-
 	 <span class="btn btn-spmarket">Xem cửa hàng còn hàng</span>
 	</div>
 
@@ -317,8 +320,39 @@
 
  </div>
 
+
 </section>
+
 
 @section Scripts {
 <script src="~/js/detail.js"></script>
+
+}
+
+@section ScriptsSecond {
+<script>
+	const buttonShows = document.querySelectorAll('.btn-addcart')
+	buttonShows.forEach((btn) => {
+		btn.addEventListener('click', (e) => {
+			createToast(e.target.getAttribute('class'))
+		})
+	})
+	function createToast() {
+		let toast = document.createElement('div')
+		toast.className = `toast add-cart`
+		toast.innerHTML = `
+	<i class="fas fa-check-circle"></i>
+	<span class="msg"> Thêm vào giỏ hàng thành công!</span>
+	<span class="countdown"></span>
+	`
+		document.querySelector('#toasts').appendChild(toast)
+
+		setTimeout(() => {
+			toast.style.animation = 'hide_slide 1s ease forwards'
+		}, 4000)
+		setTimeout(() => {
+			toast.remove()
+		}, 6000)
+	}
+</script>
 }

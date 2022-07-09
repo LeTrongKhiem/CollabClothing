@@ -20,7 +20,7 @@ namespace CollabClothing.WebApp.Controllers
             _categoryApiClient = categoryApiClient;
             _brandApiClient = brandApiClient;
         }
-        public async Task<IActionResult> Category(string id, string slug, string keyword, string brandId, int pageIndex = 1)
+        public async Task<IActionResult> Category(string id, string slug, string keyword, string brandId, string price, int pageIndex = 1)
         {
             if (id == null)
             {
@@ -33,12 +33,14 @@ namespace CollabClothing.WebApp.Controllers
                 PageSize = 5,
                 Slug = slug,
                 Keyword = keyword,
-                BrandId = brandId
+                BrandId = brandId,
+                Price = price
             });
             ViewBag.Keyword = keyword;
             var viewModel = new ProductCategoryViewModel()
             {
-                Category = !id.Equals("all") ? await _categoryApiClient.GetById(id) : null,
+                //Category = !id.Equals("all") ? await _categoryApiClient.GetById(id) : null,
+                Category = !slug.Equals("all") ? await _categoryApiClient.GetBySlug(slug) : null,
                 Products = products,
                 Brand = brandId != null ? await _brandApiClient.GetById(brandId) : null
             };

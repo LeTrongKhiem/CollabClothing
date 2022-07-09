@@ -41,6 +41,7 @@
                 }, 0);
                 loadCart();//load lai cart update price
                 $('#count-cart-quantity').text(count);
+
             },
             error: function (err) {
                 console.log(err)
@@ -51,11 +52,12 @@
         $('body').on('click', '.btn_asc', function (e) {
             e.preventDefault();
             const id = $(this).data('id');
+            const idProductDistinct = $(this).data('productdistinctid');
             const sizeid = $(this).data('sizeid');
             const colorid = $(this).data('colorid');
             const selectSize = $('#select-size').val();
             const selectColor = $('#select-color').val();
-            const quantity = parseInt($('#txt_quantity_' + id).val()) + 1;
+            const quantity = parseInt($('#txt_quantity_' + id + idProductDistinct).val()) + 1;
             EventListenerBase(id, quantity, sizeid, colorid);
         });
         $('body').on('click', '.btn_desc', function (e) {
@@ -63,7 +65,8 @@
             const id = $(this).data('id');
             const sizeid = $(this).data('sizeid');
             const colorid = $(this).data('colorid');
-            const quantity = parseInt($('#txt_quantity_' + id).val()) - 1;
+            const idProductDistinct = $(this).data('productdistinctid');
+            const quantity = parseInt($('#txt_quantity_' + id + idProductDistinct).val()) - 1;
             EventListenerBase(id, quantity, sizeid, colorid);
         });
         $('body').on('click', '.btn_remove', function (e) {
@@ -86,8 +89,8 @@
                 var html = '';
                 var total = 0;
                 var count = 0;
+                value = '@TempData["result"]';
                 $.each(response, function (e, item) {
-                    
                     html += "<div class=\"row border - top border - bottom\">"
                         + "<div class=\"row main-cart align-items-center\" >"
                         + "<div class=\"col-2\"><img class=\"img-fluid\" src=\"" + $('#hiBaseAddress').val() + item.image + "\"></div>"
@@ -99,7 +102,7 @@
                         + " <div class=\"row-in\">Thương hiệu: " + item.brandName + "</div>"
                         + "</div>"
                         + "<div class=\"col\" style=\"margin : auto\">"
-                        + "<a href=\"#\" class=\"a-link btn_desc\" data-id=\"" + item.productId + "\" data-sizeid=\"" + item.size + "\" data-colorid=\"" + item.color + "\">-</a><input disabled id=\"txt_quantity_" + item.productId + "\" value=\"" + item.quantity + "\" class=\"border-quantity-cart\"/><a href=\"#\" class=\"a-link btn_asc\" data-id=\"" + item.productId + "\" data-sizeid=\"" + item.size + "\" data-colorid=\"" + item.color + "\">+</a>"
+                        + "<a href=\"#\" class=\"a-link btn_desc\" data-id=\"" + item.productId + "\" data-sizeid=\"" + item.size + "\" data-colorid=\"" + item.color + "\" data-productdistinctid=\"" + item.idProductInCartDistinct + "\">-</a><input disabled id=\"txt_quantity_" + item.productId + "" + item.idProductInCartDistinct + "\" value=\"" + item.quantity + "\" class=\"border-quantity-cart\"/><a href=\"#\" class=\"a-link btn_asc\" data-id=\"" + item.productId + "\" data-sizeid=\"" + item.size + "\" data-colorid=\"" + item.color + "\" data-productdistinctid=\"" + item.idProductInCartDistinct + "\">+</a>"
                         + "</div>"
                         + " <div class=\"col\" style=\"margin : auto\"> " + item.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) + " <a  class=\"close btn_remove\" data-id=\"" + item.productId + "\" data-sizeid=\"" + item.size + "\" data-colorid=\"" + item.color + "\">&#10005;</a></div>"
                         + "</div>"
@@ -107,7 +110,15 @@
                     total += item.price * item.quantity
                     count += item.quantity
                     console.log(count);
+                    //if (item.notify != null) {
+                    //    $("#msgAlert")
+                    //        .css('display', 'block')
+                    //        .fadeIn("slow")
+                    //        .delay(2000)
+                    //        .fadeOut('slow')
+                    //}
                 });
+                
                 $('#cart-body').html(html);
                 $('.total-cart').text(total.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
                 $('.count-cart').text(count);
