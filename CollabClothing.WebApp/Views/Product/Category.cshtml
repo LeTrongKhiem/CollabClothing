@@ -6,6 +6,12 @@
 @inject IConfiguration Configuration;
 @section Csss {
 <link rel="stylesheet" href="~/css/category.css">
+<style>
+	.link-price-filter {
+		text-decoration : none;
+		color:#000;
+}
+</style>
 }
 <div class="grid wide">
  <div class="container-breadcrumb">
@@ -42,7 +48,7 @@
  <div class="container-nav">
 		@await Component.InvokeAsync("BrandNavBar")
  </div>
-<form asp-controller="Product" asp-action="Category" method="get">
+ <form asp-controller="Product" asp-action="Category" method="get">
 	<div class="col l-12 m-12 c-12">
 		<div class="container-filter">
 			<div class="container-filter__item">
@@ -51,17 +57,18 @@
 
 				<ul class="container-filter__list">
 					<li class="container-filter__list-item">
-						Giá từ cao đến thấp
-						<input type="submit" value="asc" name="price" title="fdsafsdf"/>
+						<a class="link-price-filter" href="/danh-muc/@ViewBag.Slug/cao-den-thap">Giá từ cao đến thấp</a>
+						@*<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="cao-den-thap">Giá từ cao đến thấp</a>*@
 					</li>
 					<li class="container-filter__list-item">
-						Giá từ thấp đến cao
+						<a class="link-price-filter" href="/danh-muc/@ViewBag.Slug/thap-den-cao">Giá từ thấp đến cao</a>
+						@*<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="thap-den-cao">Giá từ thấp đến cao</a>*@
 					</li>
 				</ul>
 			</div>
 
 			<div class="container-filter__item">
-				Bán chạy
+				Mức giá
 				<i class="container-filter__icon-down fas fa-chevron-down"></i>
 				<ul class="container-filter__list">
 					<li class="container-filter__list-item">
@@ -80,7 +87,8 @@
 			</div>
 		</div>
 	</div>
-</form>
+	</form>
+@*@await Component.InvokeAsync("Filter");*@
  <div class="col l-12 m-12 c-12">
   <div class="container-product">
    <div class="row no-gutters laptop-products" id="content">
@@ -180,12 +188,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug)) {
+		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug) && @ViewBag.priceOrder != null) {
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
 		jQuery.ajax({
-			url: 'load/@Model.Category.Slug',
+			url: 'loadmore/@ViewBag.priceOrder',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {
@@ -195,6 +203,29 @@
 				var row = document.getElementById('content');
 				row.innerHTML += data;
 
+			},
+			error: function (xhr) {
+					$('.container-btn-extend').css('display', 'none');
+			}
+		});
+	}
+</script>
+		}
+
+		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug) && @ViewBag.priceOrder == null) {
+<script>
+		function loadMore() {
+		var amount = document.getElementsByClassName('productCount').length;
+		jQuery.ajax({
+			url: 'loadmore/@Model.Category.Slug',
+			contentType: "application/json; charset=utf-8",
+			type: "get", //send it through get method
+			data: {
+				exits: amount
+			},
+			success: function (data) {
+				var row = document.getElementById('content');
+				row.innerHTML += data;
 			},
 			error: function (xhr) {
 					$('.container-btn-extend').css('display', 'none');

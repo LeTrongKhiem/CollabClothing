@@ -1,4 +1,5 @@
-﻿<form asp-controller="Product" asp-action="Category" method="get">
+﻿@using Microsoft.AspNetCore.Http.Extensions
+<form asp-controller="Product" asp-action="Category" method="get">
 	<div class="col l-12 m-12 c-12">
 		<div class="container-filter">
 			<div class="container-filter__item">
@@ -7,11 +8,10 @@
 
 				<ul class="container-filter__list">
 					<li class="container-filter__list-item">
-						Giá từ cao đến thấp
-						<input type="submit" value="asc"/>
+						@*<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="cao-den-thap">Giá từ cao đến thấp</a>*@
 					</li>
 					<li class="container-filter__list-item">
-						Giá từ thấp đến cao
+						<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="thap-den-cao">Giá từ thấp đến cao</a>
 					</li>
 				</ul>
 			</div>
@@ -36,4 +36,4 @@
 			</div>
 		</div>
 	</div>
-</form>
+	</form>

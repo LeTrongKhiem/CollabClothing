@@ -62,6 +62,21 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(product);
         }
+        [HttpGet("paging/{priceOrder}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductRequestPaging request, string priceOrder)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = await _manageProductService.GetAllPaging(request, priceOrder);
+            if (product == null)
+            {
+                return BadRequest("Not found");
+            }
+            return Ok(product);
+        }
         [HttpGet("getnameproduct/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetNameProductById(string id)

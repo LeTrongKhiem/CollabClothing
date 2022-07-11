@@ -128,8 +128,15 @@ namespace CollabClothing.WebApp
                   {
                       controller = "Product",
                       action = "Category"
-
                   });
+                endpoints.MapControllerRoute(
+                   name: "Product LoadMore",
+                   pattern: "/danh-muc/thuong-hieu/load/{brandId}", new
+                   {
+                       controller = "LoadMore",
+                       action = "Brand"
+
+                   });
                 endpoints.MapControllerRoute(
                   name: "Product Category",
                   pattern: "/danh-muc/{slug}", new
@@ -138,23 +145,38 @@ namespace CollabClothing.WebApp
                       action = "Category"
 
                   });
+                endpoints.MapControllerRoute(
+                 name: "Product LoadMore",
+                 pattern: "/danh-muc/loadmore/{slug}", new
+                 {
+                     controller = "LoadMore",
+                     action = "Index",
+                 });
+                endpoints.MapControllerRoute(
+                  name: "Product Category",
+                  pattern: "/danh-muc/{slug}/{priceOrder}", new
+                  {
+                      controller = "Product",
+                      action = "Category"
+
+                  });
 
                 endpoints.MapControllerRoute(
                   name: "Product LoadMore",
-                  pattern: "/danh-muc/load/{slug}", new
+                  pattern: "/danh-muc/{slug}/loadmore/{price}", new
                   {
                       controller = "LoadMore",
-                      action = "Index"
-
+                      action = "Index",
                   });
-                endpoints.MapControllerRoute(
-                 name: "Product LoadMore",
-                 pattern: "/danh-muc/thuong-hieu/load/{brandId}", new
-                 {
-                     controller = "LoadMore",
-                     action = "Brand"
+                //endpoints.MapControllerRoute(
+                //  name: "Product LoadMore",
+                //  pattern: "/danh-muc/load/{slug}", new
+                //  {
+                //      controller = "LoadMore",
+                //      action = "Index"
 
-                 });
+                //  });
+
 
                 endpoints.MapControllerRoute(
                     name: "Product Details",

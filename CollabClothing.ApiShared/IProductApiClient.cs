@@ -16,6 +16,7 @@ namespace CollabClothing.ApiShared
     public interface IProductApiClient
     {
         Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request);
+        Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request, string priceOrder);
         Task<bool> Create(ProductCreateRequest request);
         Task<bool> Delete(string id);
         Task<bool> Edit(string id, ProductEditRequest request);

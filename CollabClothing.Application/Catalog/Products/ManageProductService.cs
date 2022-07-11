@@ -433,7 +433,8 @@ namespace CollabClothing.Application.Catalog.Products
                          join b in _context.Brands on p.BrandId equals b.Id into pb
                          from b in pb.DefaultIfEmpty()
                          where (pimg.IsThumbnail == true)
-                         orderby p.Id ascending
+                         //orderby p.Id descending
+                         //orderby p.PriceCurrent ascending
                          select new { p, pmc, c, pimg, b });
             //2. filter
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -454,13 +455,13 @@ namespace CollabClothing.Application.Catalog.Products
             }
             if (request.Price != null)
             {
-                if (request.Price.Equals("asc"))
-                {
-                    query = query.OrderBy(x => x.p.PriceCurrent);
-                }
-                else if (request.Price.Equals("desc"))
+                if (request.Price.Equals("cao-den-thap"))
                 {
                     query = query.OrderByDescending(x => x.p.PriceCurrent);
+                }
+                else
+                {
+                    query = query.OrderBy(x => x.p.PriceCurrent);
                 }
             }
             //3. paging
@@ -501,6 +502,90 @@ namespace CollabClothing.Application.Catalog.Products
 
         }
 
+        public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductRequestPaging request, string priceOrder)
+        {
+            var cateBySlug = await _context.Categories.FirstOrDefaultAsync(x => x.Slug == request.Slug);
+            //1. Select join
+            var query = (from p in _context.Products
+                         join pd in _context.ProductDetails on p.Id equals pd.ProductId into ppd
+                         from pd in ppd.DefaultIfEmpty()
+                         join pmc in _context.ProductMapCategories on p.Id equals pmc.ProductId into ppmc
+                         from pmc in ppmc.DefaultIfEmpty()
+                         join c in _context.Categories on pmc.CategoryId equals c.Id into pmcc
+                         from c in pmcc.DefaultIfEmpty()
+                         join pimg in _context.ProductImages on p.Id equals pimg.ProductId into ppimg
+                         from pimg in ppimg.DefaultIfEmpty()
+                         join b in _context.Brands on p.BrandId equals b.Id into pb
+                         from b in pb.DefaultIfEmpty()
+                         where (pimg.IsThumbnail == true)
+                         //orderby p.Id descending
+                         //orderby p.PriceCurrent ascending
+                         select new { p, pmc, c, pimg, b, pd });
+            //2. filter
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.p.ProductName.Contains(request.Keyword) || x.b.NameBrand.Contains(request.Keyword));
+            }
+            if (!string.IsNullOrEmpty(request.Slug) && !request.Slug.Equals("all"))
+            {
+                query = query.Where(x => x.c.Slug == request.Slug || x.c.ParentId == cateBySlug.Id);
+            }
+            if (!string.IsNullOrEmpty(request.CategoryId) && !request.CategoryId.Equals("all"))
+            {
+                query = query.Where(x => x.pmc.CategoryId == request.CategoryId || x.c.ParentId == request.CategoryId);
+            }
+            if (!string.IsNullOrEmpty(request.BrandId))
+            {
+                query = query.Where(x => x.p.BrandId == request.BrandId);
+            }
+            if (priceOrder != null)
+            {
+                if (priceOrder.Equals("cao-den-thap"))
+                {
+                    query = query.OrderByDescending(x => x.p.PriceCurrent);
+                }
+                else
+                {
+                    query = query.OrderBy(x => x.p.PriceCurrent);
+                }
+            }
+            //3. paging
+            //ham skip lay data tiep theo vd trang 1 (1-1 * 5) = 0 lay 5 sp tiep theo la den sp thu 1 den 5
+            //                              trang 2 (2-1 *5) = 5 lay 5 sp tiep theo tu sp 6 toi 10
+            if (query == null)
+            {
+                return null;
+            }
+            int totalRow = await query.CountAsync();
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).Select(x => new ProductViewModel()
+                {
+                    Id = x.p.Id,
+                    ProductName = x.p.ProductName,
+                    BrandId = x.b.NameBrand,
+                    Description = x.p.Description,
+                    Installment = x.p.Installment,
+                    PriceCurrent = x.p.PriceCurrent,
+                    PriceOld = x.p.PriceOld,
+                    SaleOff = x.p.SaleOff,
+                    Slug = x.p.Slug,
+                    SoldOut = x.p.SoldOut,
+                    CategoryName = x.c.NameCategory,
+                    ThumbnailImage = x.pimg.Path,
+                    BrandName = x.b.NameBrand
+                })
+                .ToListAsync();
+            //4. select and projection
+            var pagedResult = new PageResult<ProductViewModel>()
+            {
+                Items = data,
+                TotalRecord = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+            };
+            return pagedResult;
+
+        }
 
         public async Task<bool> UpdatePriceCurrent(string productId, decimal newPrice)
         {
