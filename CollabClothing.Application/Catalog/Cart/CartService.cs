@@ -1,6 +1,8 @@
-﻿using CollabClothing.Data.EF;
+﻿using CollabClothing.Application.Catalog.Products;
+using CollabClothing.Data.EF;
 using CollabClothing.Data.Entities;
 using CollabClothing.ViewModels.Catalog.Cart;
+using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,15 +16,58 @@ namespace CollabClothing.Application.Catalog.Cart
     public class CartService : ICartService
     {
         private readonly CollabClothingDBContext _context;
-        public CartService(CollabClothingDBContext context)
+        private readonly IManageProductService _manageProductService;
+        public CartService(CollabClothingDBContext context, IManageProductService manageProductService)
         {
             _context = context;
+            _manageProductService = manageProductService;
+        }
+
+        private async Task<int> getQuantityWareHouse(string productId, string sizeId, string colorId)
+        {
+            var query = from w in _context.WareHouses
+                        where w.ProductId == productId && w.SizeId == sizeId && w.ColorId == colorId
+                        select w;
+            var wareHouse = await query.Select(x => x.Quantity).FirstOrDefaultAsync();
+            return wareHouse;
         }
 
         public async Task<bool> AcceptOrder(string id, bool status)
         {
             var order = await _context.Orders.FindAsync(id);
             order.Status = status;
+            //var orderDetails = await _context.OrderDetails.Select(x => new OrderDetail()
+            //{
+            //    Id = x.Id,
+            //    Quantity = x.Quantity,
+            //    ProductId = x.ProductId,
+            //    SizeId = x.SizeId,
+            //    ColorId = x.ColorId
+            //}).Where(x => x.OrderId == id).ToListAsync();
+            var query = (from od in _context.OrderDetails where od.OrderId == id select od);
+            var orderDetails = await query.Select(x => new OrderDetail()
+            {
+                Id = x.Id,
+                Quantity = x.Quantity,
+                ProductId = x.ProductId,
+                SizeId = x.SizeId,
+                ColorId = x.ColorId
+            }).ToListAsync();
+            foreach (var orderDetail in orderDetails)
+            {
+                var quantityRemain = await getQuantityWareHouse(orderDetail.ProductId, orderDetail.SizeId, orderDetail.ColorId);
+                var quantityBuy = quantityRemain - orderDetail.Quantity;
+                var wareHouseRequest = new WareHouseRequest()
+                {
+                    SizeId = orderDetail.SizeId,
+                    ColorId = orderDetail.ColorId,
+                    Quantity = quantityBuy
+                };
+                var wareHouse = await _context.WareHouses.FirstOrDefaultAsync(x => x.ProductId == orderDetail.ProductId && x.SizeId == orderDetail.SizeId && x.ColorId == orderDetail.ColorId);
+                //var updateQuantityRemain = await _manageProductService.UpdateQuantityRemainProduct(orderDetail.ProductId, wareHouseRequest);
+                wareHouse.Quantity = quantityBuy;
+                await _context.SaveChangesAsync();
+            }
             return await _context.SaveChangesAsync() > 0;
         }
         #region Create Checkout
@@ -142,7 +187,8 @@ namespace CollabClothing.Application.Catalog.Cart
                                 Name = x.o.ShipName,
                                 PhoneNumber = x.o.ShipPhoneNumber,
                                 Status = x.o.Status,
-                                UserId = x.o.UserId.ToString()
+                                UserId = x.o.UserId.ToString(),
+                                OrderDate = x.o.OrderDate
                             }).ToListAsync();
             var pageResult = new PageResult<CheckoutRequest>()
             {

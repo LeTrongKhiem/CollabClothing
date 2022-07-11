@@ -102,7 +102,10 @@
 	   Trạng thái
 	  </th>
 	  <th>
-	   User
+	   Người đặt hàng
+	  </th>
+	  <th>
+	   Thời gian đặt hàng
 	  </th>
 	  <th></th>
 	 </tr>
@@ -140,6 +143,10 @@
 							}
 		  <td>
 								@user.Result.ResultObject.LastName
+		  </td>
+
+		   <td>
+								@Html.DisplayFor(modelItem => item.OrderDate)
 		  </td>
 
 		  <td>
