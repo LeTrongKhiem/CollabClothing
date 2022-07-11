@@ -115,7 +115,12 @@ namespace CollabClothing.ApiShared
 
         public async Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request)
         {
-            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}&brandId={request.BrandId}&slug={request.Slug}");
+            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}&brandId={request.BrandId}&slug={request.Slug}&price={request.Price}");
+        }
+
+        public async Task<PageResult<ProductViewModel>> GetAll(GetManageProductRequestPaging request, string priceOrder)
+        {
+            return await GetAsync<PageResult<ProductViewModel>>($"/api/products/paging/{priceOrder}?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}&brandId={request.BrandId}&slug={request.Slug}");
         }
 
         public async Task<ProductViewModel> GetById(string id)
