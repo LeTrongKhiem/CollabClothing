@@ -518,7 +518,7 @@ namespace CollabClothing.Application.Catalog.Products
                          join b in _context.Brands on p.BrandId equals b.Id into pb
                          from b in pb.DefaultIfEmpty()
                          where (pimg.IsThumbnail == true)
-                         //orderby p.Id descending
+                         orderby p.PriceOld descending
                          //orderby p.PriceCurrent ascending
                          select new { p, pmc, c, pimg, b, pd });
             //2. filter

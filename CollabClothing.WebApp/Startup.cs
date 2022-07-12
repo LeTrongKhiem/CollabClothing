@@ -114,14 +114,14 @@ namespace CollabClothing.WebApp
 
                 //  });
 
-                endpoints.MapControllerRoute(
-                  name: "Product Category",
-                  pattern: "/danh-muc/{id}/asc", new
-                  {
-                      controller = "Product",
-                      action = "Category"
+                //endpoints.MapControllerRoute(
+                //  name: "Product Category",
+                //  pattern: "/danh-muc/{id}", new
+                //  {
+                //      controller = "Product",
+                //      action = "Category"
 
-                  });
+                //  });
                 endpoints.MapControllerRoute(
                   name: "Product Brand",
                   pattern: "/danh-muc/thuong-hieu/{brandId}", new
@@ -151,6 +151,8 @@ namespace CollabClothing.WebApp
                  {
                      controller = "LoadMore",
                      action = "Index",
+                     //controller = "Product",
+                     //action = "Category",
                  });
                 endpoints.MapControllerRoute(
                   name: "Product Category",
