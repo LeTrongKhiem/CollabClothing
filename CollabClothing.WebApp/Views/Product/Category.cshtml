@@ -13,6 +13,8 @@
 }
 </style>
 }
+<input type="hidden" value="@ViewBag.Keyword" id="hiKeyword"/>
+<input type="hidden" value="@ViewBag.priceOrder" id="hiOrder"/>
 <div class="grid wide">
  <div class="container-breadcrumb">
   <ol class="breadcrumb">
@@ -57,12 +59,12 @@
 
 				<ul class="container-filter__list">
 					<li class="container-filter__list-item">
-						<a class="link-price-filter" href="/danh-muc/@ViewBag.Slug/cao-den-thap">Giá từ cao đến thấp</a>
-						@*<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="cao-den-thap">Giá từ cao đến thấp</a>*@
+						@*<a class="link-price-filter" href="/danh-muc/@ViewBag.Slug/cao-den-thap">Giá từ cao đến thấp</a>*@
+						<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="cao-den-thap">Giá từ cao đến thấp</a>
 					</li>
 					<li class="container-filter__list-item">
-						<a class="link-price-filter" href="/danh-muc/@ViewBag.Slug/thap-den-cao">Giá từ thấp đến cao</a>
-						@*<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="thap-den-cao">Giá từ thấp đến cao</a>*@
+						@*<a class="link-price-filter" href="/danh-muc/@ViewBag.Slug/thap-den-cao">Giá từ thấp đến cao</a>*@
+						<a class="link-price-filter" asp-controller="Product" asp-action="Category" asp-route-priceOrder="thap-den-cao">Giá từ thấp đến cao</a>
 					</li>
 				</ul>
 			</div>
@@ -192,12 +194,16 @@
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
+		var keyword = $('#hiKeyword').val();
+		var priceOrder = $('#hiOrder').val();
 		jQuery.ajax({
 			url: 'loadmore/@ViewBag.priceOrder',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {
-				exits: amount
+				exits: amount,
+				keyword : keyword,
+				price : priceOrder
 			},
 			success: function (data) {
 				var row = document.getElementById('content');
@@ -216,12 +222,16 @@
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
+		var keyword = $('#hiKeyword').val();
+		var priceOrder = $('#hiOrder').val();
 		jQuery.ajax({
 			url: 'loadmore/@Model.Category.Slug',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {
-				exits: amount
+				exits: amount,
+				keyword : keyword,
+				price : priceOrder
 			},
 			success: function (data) {
 				var row = document.getElementById('content');
@@ -239,12 +249,17 @@
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
+		var keyword = $('#hiKeyword').val();
+		var priceOrder = $('#hiOrder').val();
 		jQuery.ajax({
 			url: 'load/@Model.Brand.Id',
 			contentType: "application/json; charset=utf-8",
 			type: "get", //send it through get method
 			data: {
-				exits: amount
+				exits: amount,
+				keyword : keyword,
+				price : priceOrder
+
 			},
 			success: function (data) {
 				var row = document.getElementById('content');

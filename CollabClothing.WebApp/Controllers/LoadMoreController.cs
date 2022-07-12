@@ -17,9 +17,10 @@ namespace CollabClothing.WebApp.Controllers
             _productApiClient = productApiClient;
         }
         //[HttpGet]
-        public async Task<IActionResult> Index(string slug, string price)
+        public async Task<IActionResult> Index(string slug, string price, string keyword)
         {
             String amount = HttpContext.Request.Query["exits"];
+            //String keyword = HttpContext.Request.Query["keyword"];
             int amountI = int.Parse(amount);
             double page = amountI / 5;
             int pageI = (int)Math.Floor(page) + 1;
@@ -33,6 +34,7 @@ namespace CollabClothing.WebApp.Controllers
                     PageSize = 5,
                     //CategoryId = cateId,
                     Slug = slug,
+                    Keyword = keyword
                 });
             }
             else
@@ -43,8 +45,9 @@ namespace CollabClothing.WebApp.Controllers
                     PageSize = 5,
                     //CategoryId = cateId,
                     Slug = slug,
-                    //Price = "thap-den-cao"
-                }, price);
+                    Keyword = keyword,
+                    Price = price
+                });
             }
 
             if (amountI >= product.TotalRecord)
@@ -53,7 +56,7 @@ namespace CollabClothing.WebApp.Controllers
             }
             return View(product);
         }
-        public async Task<IActionResult> Brand(string brandId)
+        public async Task<IActionResult> Brand(string brandId, string price, string keyword)
         {
             String amount = HttpContext.Request.Query["exits"];
             int amountI = int.Parse(amount);
@@ -64,6 +67,8 @@ namespace CollabClothing.WebApp.Controllers
                 PageIndex = pageI,
                 PageSize = 5,
                 BrandId = brandId,
+                Price = price,
+                Keyword = keyword
             });
             if (amountI >= product.TotalRecord)
             {

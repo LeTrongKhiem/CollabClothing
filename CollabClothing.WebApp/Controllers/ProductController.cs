@@ -34,8 +34,9 @@ namespace CollabClothing.WebApp.Controllers
                 Slug = slug,
                 Keyword = keyword,
                 BrandId = brandId,
-                //Price = priceOrder
-            }, priceOrder);
+                Price = priceOrder
+            });
+
             ViewBag.Keyword = keyword;
             ViewBag.Slug = slug;
             ViewBag.priceOrder = priceOrder;
