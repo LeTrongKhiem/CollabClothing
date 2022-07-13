@@ -1,0 +1,88 @@
+﻿@model IEnumerable<CollabClothing.ViewModels.Catalog.Statistic.BenefitViewModel>
+
+@{
+	ViewData["Title"] = "Thống kê doanh thu";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Thống kê doanh thu</h1>
+
+<div class="row">
+ <div class="col-md-12">
+  <select id="select-day-from" class="form-control" style="width : 200px;">
+   <option value="2022/07/11">2022/07/11</option>
+   <option></option>
+   <option></option>
+   <option></option>
+  </select>
+  <select id="select-day-to" class="form-control" style="width : 200px;">
+   <option value="2022/07/12">2022/07/12</option>
+   <option value="2022/07/13">2022/07/13</option>
+   <option></option>
+   <option></option>
+  </select>
+  <a href="#" class="btn-submit-day" />Submit</a>
+  <div>
+   <canvas id="chartStatistic"></canvas>
+  </div>
+ </div>
+</div>
+
+@section Scripts {
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="~/js/chartsjs.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+<script>
+	function registerChart(lsData) {
+		var lsLabel = [];
+		var lsDatasource = [];
+
+		$.each(lsData, function(index, item) {
+			lsLabel.push(item.date);
+			lsDatasource.push(item.benefit)
+		})
+
+
+
+
+		var ctx = document.getElementById("chartStatistic");//.getContext("2d");
+
+
+		var barChartData = {
+			labels: lsLabel,
+			datasets: [{
+				label: 'Doanh thu theo ngày',
+				backgroundColor : '#0b9663',
+				borderWidth: 1,
+				data: lsDatasource
+			}]
+
+		};
+		var myBarChart = new Chart(ctx, {
+			type : "bar",
+			data : barChartData
+		});
+	}
+	$('body').on('click', '.btn-submit-day', function (e) {
+		e.preventDefault();
+		const selectdayfrom = $('#select-day-from').val();
+		const selectdayto = $('#select-day-to').val();
+		$.ajax({
+			type: "GET",
+			url: '/Statistic/GetByDay/',
+			success: function (response) {
+				registerChart(response)
+				console.log(response)
+			},
+			data: {
+				fromDate : selectdayfrom,
+				toDate : selectdayto
+			},
+		});
+	})
+</script>
+
+}

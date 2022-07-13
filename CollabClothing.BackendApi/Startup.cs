@@ -36,6 +36,7 @@ using CollabClothing.Application.Catalog.Sizes;
 using CollabClothing.Application.Catalog.Cart;
 using CollabClothing.Application.Catalog.Promotions;
 using CollabClothing.Application.Catalog.Color;
+using CollabClothing.Application.Catalog.Statistic;
 
 namespace CollabClothing.BackendApi
 {
@@ -80,6 +81,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<IColorService, ColorService>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IPromotionService, PromotionService>();
+            services.AddTransient<IBenefitService, BenefitService>();
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();

@@ -24,7 +24,7 @@ namespace CollabClothing.Data.EF
         {
         }
 
-
+        public virtual DbSet<OutputStatistic> OutputStatistics { get; set; }
         public virtual DbSet<Entities.Action> Actions { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
         public virtual DbSet<AppUser> AppUsers { get; set; }

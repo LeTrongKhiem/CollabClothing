@@ -20,6 +20,7 @@ namespace CollabClothing.WebApp.Models
 
         public List<ProductViewModel> GetProductOutStanding { get; set; }
         public string categoryId { get; set; }
+        public string slug { get; set; }
 
         public string ParseToVND(decimal price)
         {
