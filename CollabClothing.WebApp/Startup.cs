@@ -154,22 +154,22 @@ namespace CollabClothing.WebApp
                      //controller = "Product",
                      //action = "Category",
                  });
-                endpoints.MapControllerRoute(
-                  name: "Product Category",
-                  pattern: "/danh-muc/{slug}/{priceOrder}", new
-                  {
-                      controller = "Product",
-                      action = "Category"
+                //endpoints.MapControllerRoute(
+                //  name: "Product Category",
+                //  pattern: "/danh-muc/{slug}/{priceOrder}", new
+                //  {
+                //      controller = "Product",
+                //      action = "Category"
 
-                  });
+                //  });
 
-                endpoints.MapControllerRoute(
-                  name: "Product LoadMore",
-                  pattern: "/danh-muc/{slug}/loadmore/{price}", new
-                  {
-                      controller = "LoadMore",
-                      action = "Index",
-                  });
+                //endpoints.MapControllerRoute(
+                //  name: "Product LoadMore",
+                //  pattern: "/danh-muc/{slug}/loadmore/{price}", new
+                //  {
+                //      controller = "LoadMore",
+                //      action = "Index",
+                //  });
                 //endpoints.MapControllerRoute(
                 //  name: "Product LoadMore",
                 //  pattern: "/danh-muc/load/{slug}", new

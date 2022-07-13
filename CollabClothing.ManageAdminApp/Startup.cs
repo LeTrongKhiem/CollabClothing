@@ -64,6 +64,7 @@ namespace CollabClothing.ManageAdminApp
             services.AddTransient<IColorApiClient, ColorApiClient>();
             services.AddTransient<IOrderApiClient, OrderApiClient>();
             services.AddTransient<IPromotionApiClient, PromotionApiClient>();
+            services.AddTransient<IStatisticApiClient, StatisticApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

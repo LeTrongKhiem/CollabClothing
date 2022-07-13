@@ -190,7 +190,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug) && @ViewBag.priceOrder != null) {
+@*		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug) && @ViewBag.priceOrder != null) {
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
@@ -216,9 +216,9 @@
 		});
 	}
 </script>
-		}
+		}*@
 
-		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug) && @ViewBag.priceOrder == null) {
+		@if (@Model.Category != null && !string.IsNullOrEmpty(@Model.Category.Slug)) {
 <script>
 		function loadMore() {
 		var amount = document.getElementsByClassName('productCount').length;
