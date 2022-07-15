@@ -714,11 +714,15 @@
 .container-product__item-img {
     display: inline-block;
     height: 180px;
-    width: 150px;
+    width: 100%;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
+    .container-product__item-img img{
+        width:100%;
+        height:auto;
+    }
 
     .container-product__item-img.container-product__item-img--s-size {
         height: 80px;

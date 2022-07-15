@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Policy;
 using Microsoft.AspNetCore.Http;
+using CollabClothing.Utilities.Constants;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -74,7 +75,8 @@ namespace CollabClothing.Application.System.Users
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var url = $"https://localhost:5003/Account/ConfirmEmail?userId={user.Id}&code={code}";
+                string urlWebApp = SystemConstans.AppSettings.urlWebApp;
+                var url = urlWebApp + $"/Account/ConfirmEmail?userId={user.Id}&code={code}";
                 await _emailSender.SendEmailAsync(request.Email, "Xác nhận địa chỉ email",
                         $"Hãy xác nhận địa chỉ email bằng cách <a href='{url}'>Bấm vào đây</a>.");
                 if (_userManager.Options.SignIn.RequireConfirmedEmail)
@@ -109,7 +111,8 @@ namespace CollabClothing.Application.System.Users
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             //code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var url = $"https://localhost:5003/Account/ResetPassword?code={code}";
+            string urlWebApp = SystemConstans.AppSettings.urlWebApp;
+            var url = urlWebApp + $"/Account/ResetPassword?code={code}";
             await _emailSender.SendEmailAsync(request.Email, "Xác nhận thay đổi mật khẩu",
                 $"Bạn đã yêu cầu thay đổi mật khẩu. Vui lòng <a href='{url}'>bấm vào đây</a>. Nếu không bạn có thể bỏ qua email này.");
             return new ResultApiSuccessed<bool>();
