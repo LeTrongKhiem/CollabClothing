@@ -2,11 +2,14 @@
 
   <PropertyGroup>
 	<TargetFramework>net5.0</TargetFramework>
+	<UserSecretsId>e14f4f9d-83fb-45ff-a8b5-10700d3ce8cb</UserSecretsId>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
 	<PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.15" />
+	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="5.0.2" />
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
 	<PackageReference Include="NETCore.MailKit" Version="2.1.0" />
