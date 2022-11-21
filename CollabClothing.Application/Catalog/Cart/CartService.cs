@@ -87,6 +87,18 @@ namespace CollabClothing.Application.Catalog.Cart
                 {
                     var product = await _context.Products.FindAsync(item.ProductId);
                     Guid gOrderDetails = Guid.NewGuid();
+                    //use linq
+                    var detailOrders = request.OrderDetails.Select(x => new OrderDetail()
+                    {
+                        Id = gOrderDetails.ToString(),
+                        OrderId = gOrder.ToString(),
+                        ProductId = item.ProductId,
+                        Price = product.PriceCurrent * item.Quantity,
+                        Quantity = item.Quantity,
+                        SizeId = item.SizeId ?? null,
+                        ColorId = item.ColorId ?? null
+                    }).FirstOrDefault();
+
                     orderDetails.Add(new OrderDetail()
                     {
                         Id = gOrderDetails.ToString(),

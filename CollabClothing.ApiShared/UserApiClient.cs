@@ -24,7 +24,7 @@ namespace CollabClothing.ApiShared
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
-        }
+        }   
         public async Task<ResultApi<string>> Authenticate(LoginRequest request)
         {
             var json = JsonConvert.SerializeObject(request);
