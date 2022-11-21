@@ -9,7 +9,8 @@ namespace CollabClothing.Utilities.Constants
             public const string BaseAddress = "BaseAddress";
             public const string Token = "Token";
             public const string RequestHeader = "Bearer";
-            public const string urlWebApp = "http://localhost:8002";
+            //public const string urlWebApp = "http://letrongkhiem.software";
+            public const string urlWebApp = "https://localhost:5003";
         }
         public class UsersSetting
         {

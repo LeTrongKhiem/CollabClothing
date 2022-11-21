@@ -380,8 +380,9 @@ namespace CollabClothing.Application.Catalog.Products
                                 join pmc in _context.ProductMapColors on color.Id equals pmc.ColorId
                                 where pmc.ProductId == productId
                                 select color.NameColor).ToListAsync();
+
             var image = await _context.ProductImages.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
-            var productDetails = await _context.ProductDetails.FirstOrDefaultAsync(x => x.ProductId == productId);
+            var productDetails = await _context.ProductDetails?.FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product == null)
             {
                 throw new CollabException($"Cannot find product with id: {productId}");
@@ -393,19 +394,19 @@ namespace CollabClothing.Application.Catalog.Products
                 PriceCurrent = product.PriceCurrent,
                 PriceOld = product.PriceOld,
                 SaleOff = product.SaleOff,
-                Description = product.Description,
+                Description = product?.Description,
                 BrandId = product.BrandId,
                 Installment = product.Installment,
                 Slug = product.Slug,
                 SoldOut = product.SoldOut,
                 Categories = categories,
                 ThumbnailImage = image != null ? image.Path : "no-image.jpg",
-                Details = product.Details,
+                Details = product?.Details,
                 Consumer = productDetails.Consumer,
-                Type = productDetails.Type,
-                Cotton = productDetails.Cotton,
-                Form = productDetails.Form,
-                MadeIn = productDetails.MadeIn,
+                Type = productDetails?.Type,
+                Cotton = (bool)(productDetails?.Cotton),
+                Form = productDetails?.Form,
+                MadeIn = productDetails?.MadeIn,
                 Sizes = sizes,
                 Promotions = promotions,
                 Colors = colors

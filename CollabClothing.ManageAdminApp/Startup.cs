@@ -43,7 +43,7 @@ namespace CollabClothing.ManageAdminApp
                 option.AccessDeniedPath = "/User/Forbidden";
             }
                 );
-            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>()); 
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             IMvcBuilder builder = services.AddRazorPages();

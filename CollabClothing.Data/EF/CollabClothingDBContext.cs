@@ -55,8 +55,8 @@ namespace CollabClothing.Data.EF
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=DBClothing1; integrated security=true");
-                //optionsBuilder.UseSqlServer("Data Source=collabclothing.database.windows.net;Initial Catalog=DatabaseClothing; User ID=khiemle2001;Password=nana01218909214$");
+                //optionsBuilder.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=DBClothing1; integrated security=true");
+                optionsBuilder.UseSqlServer("Data Source=tcp:collabclothingdb.database.windows.net,1433;Initial Catalog=DBClothing1_Prod;User Id=khiemle2001@collabclothingdb;Password=nana01218909214$");
             }
         }
 
