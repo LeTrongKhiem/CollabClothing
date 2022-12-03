@@ -5,7 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (web)",
+            "name": "CollabClothing.WebApp",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/CollabClothing.WebApp/bin/Debug/net5.0/CollabClothing.WebApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CollabClothing.WebApp",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+
+        {
+            "name": "CollabClothing.ManageAdmin",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -25,7 +46,7 @@
             }
         },
         {
-            "name": ".NET Core Launch (web)",
+            "name": "CollabClothing.BackendApi",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -48,6 +69,16 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Both Console & Web API",
+            "configurations": [
+                "CollabClothing.BackendApi",
+                "CollabClothing.WebApp",
+                "CollabClothing.ManageAdmin"
+            ]
         }
     ]
 }
