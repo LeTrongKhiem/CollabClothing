@@ -6,6 +6,10 @@ using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.Application.Catalog.Products;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using CollabClothing.BackendApi.Extensions;
+using CollabClothing.Application.System.Users;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -16,10 +20,14 @@ namespace CollabClothing.BackendApi.Controllers
     {
         private readonly IPublicProductService _publicProductService;
         private readonly IManageProductService _manageProductService;
-        public ProductsController(IPublicProductService publicProductService, IManageProductService manageProductService)
+        private readonly IUserService _userService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ProductsController(IPublicProductService publicProductService, IManageProductService manageProductService, IUserService userService = null, IHttpContextAccessor httpContextAccessor = null)
         {
             _publicProductService = publicProductService;
             _manageProductService = manageProductService;
+            _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
         }
         //api get all product 
         //url mac dinh cua get http://localhost:port/controller
@@ -495,6 +503,29 @@ namespace CollabClothing.BackendApi.Controllers
             }
             var result = await _manageProductService.UpdateQuantityRemainProduct(productId, request);
             if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
+        #endregion
+
+        #region TMDT
+        [HttpGet("historyorder")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetHistoryOrder([FromQuery] GetManageProductRequestPaging request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            // var userId = User.GetUserId();
+            var userName = HttpContext.User.Identity.Name;
+            var user = await _userService.GetByUsername(userName);
+            var userId = user.ResultObject.Id;
+            // var user = Guid.TryParse(userIdStr, out Guid userId) ? userId : Guid.Empty;
+            var result = await _manageProductService.GetOrderHistory(userId, request);
+            if (result == null)
             {
                 return BadRequest();
             }

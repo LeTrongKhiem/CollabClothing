@@ -448,5 +448,9 @@ namespace CollabClothing.ApiShared
             }
             return null;
         }
+        public async Task<PageResult<ProductOrderViewModel>> GetHistoryOrder(GetManageProductRequestPaging request)
+        {
+            return await GetAsync<PageResult<ProductOrderViewModel>>($"/api/products/historyorder?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}&brandId={request.BrandId}&slug={request.Slug}&price={request.Price}");
+        }
     }
 }

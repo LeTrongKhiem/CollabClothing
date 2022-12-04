@@ -69,6 +69,8 @@ namespace CollabClothing.Application.Catalog.Products
         Task<string> GetNameProductById(string id);
         #endregion
 
-
+        #region TMDT
+        Task<PageResult<ProductOrderViewModel>> GetOrderHistory(Guid userId, GetManageProductRequestPaging request);
+        #endregion
     }
 }

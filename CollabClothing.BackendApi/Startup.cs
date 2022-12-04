@@ -37,6 +37,7 @@ using CollabClothing.Application.Catalog.Cart;
 using CollabClothing.Application.Catalog.Promotions;
 using CollabClothing.Application.Catalog.Color;
 using CollabClothing.Application.Catalog.Statistic;
+using Microsoft.AspNetCore.Http;
 
 namespace CollabClothing.BackendApi
 {
@@ -86,7 +87,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
-
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();

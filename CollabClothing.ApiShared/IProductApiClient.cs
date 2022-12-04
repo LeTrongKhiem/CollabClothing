@@ -52,5 +52,6 @@ namespace CollabClothing.ApiShared
         Task<WareHouseRequest> GetWareHouse(string productId);
         Task<WareHouseRequest> GetWareHouse(string productId, string sizeId);
         Task<WareHouseRequest> GetWareHouse(string productId, string sizeId, string colorId);
+        Task<PageResult<ProductOrderViewModel>> GetHistoryOrder(GetManageProductRequestPaging request);
     }
 }

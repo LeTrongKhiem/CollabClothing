@@ -1052,5 +1052,50 @@ namespace CollabClothing.Application.Catalog.Products
             }).FirstOrDefaultAsync();
             return wareHouse;
         }
+
+        public async Task<PageResult<ProductOrderViewModel>> GetOrderHistory(Guid userId, GetManageProductRequestPaging request)
+        {
+            var query = from od in _context.OrderDetails
+                        join o in _context.Orders on od.OrderId equals o.Id
+                        join p in _context.Products on od.ProductId equals p.Id
+                        join b in _context.Brands on p.BrandId equals b.Id
+                        join c in _context.Colors on od.ColorId equals c.Id
+                        join s in _context.Sizes on od.SizeId equals s.Id
+                        where o.UserId == userId
+                        select new { od, o, p, b, c, s };
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(x => x.p.ProductName.Contains(request.Keyword));
+            }
+            if (!string.IsNullOrEmpty(request.BrandId))
+            {
+                query = query.Where(x => x.p.BrandId == request.BrandId);
+            }
+            int totalRow = await query.CountAsync();
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new ProductOrderViewModel()
+                {
+                    OrderDetailId = x.od.Id,
+                    OrderId = x.od.OrderId,
+                    ProductId = x.od.ProductId,
+                    ProductName = x.p.ProductName,
+                    BrandName = x.b.NameBrand,
+                    Color = x.c.NameColor,
+                    Size = x.s.NameSize,
+                    PriceTotal = x.od.Price,
+                    Quantity = x.od.Quantity,
+                    OrderDate = x.o.OrderDate,
+                    Status = x.o.Status
+                }).ToListAsync();
+            var pageResult = new PageResult<ProductOrderViewModel>()
+            {
+                TotalRecord = totalRow,
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
+            };
+            return pageResult;
+        }
     }
 }

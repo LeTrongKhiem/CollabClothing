@@ -31,10 +31,10 @@ namespace CollabClothing.Application.System.Users
         private readonly CollabClothingDBContext _context;
         private readonly ILogger<UserService> _logger;
         private readonly IEmailSender _emailSender;
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
         #region Constructor
         public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context,
-            ILogger<UserService> logger, IEmailSender emailSender)
+            ILogger<UserService> logger, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -43,6 +43,7 @@ namespace CollabClothing.Application.System.Users
             _context = context;
             _logger = logger;
             _emailSender = emailSender;
+            _httpContextAccessor = httpContextAccessor;
         }
         #endregion
         #region Register
@@ -161,7 +162,8 @@ namespace CollabClothing.Application.System.Users
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, user.FirstName),
                 new Claim(ClaimTypes.Role, string.Join(";", roles)),
-                new Claim(ClaimTypes.Name, request.UserName)
+                new Claim(ClaimTypes.Name, request.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -358,6 +360,12 @@ namespace CollabClothing.Application.System.Users
                 Roles = roles
             };
             return new ResultApiSuccessed<UserViewModel>(userViewModel);
+        }
+
+        public async Task<Guid?> GetUserId()
+        {
+            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+            return user?.Id;
         }
     }
 }
