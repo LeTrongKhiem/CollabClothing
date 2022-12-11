@@ -3,8 +3,7 @@ using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CollabClothing.WebApp.Controllers
@@ -59,6 +58,28 @@ namespace CollabClothing.WebApp.Controllers
                 ProductRelated = await _productApiClient.GetFeaturedProducts(8),
             };
             return View(productDetails);
+        }
+
+        public async Task<IActionResult> GetHistoryOrder(int pageIndex = 1, int pageSize = 10, string keyword = null)
+        {
+            var request = new GetManageProductRequestPaging()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Keyword = keyword
+            };
+            var userIdGuid = Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out Guid userId)
+                ? userId
+                : throw new Exception("Not authenticated");
+            var result = await _productApiClient.GetHistoryOrder(request, userId);
+            return View(result);
+        }
+
+        public async Task<IActionResult> CancelOrder(string orderId)
+        {
+            var result = await _productApiClient.CancelOrder(orderId);
+
+            return RedirectToAction("GetHistoryOrder");
         }
     }
 }

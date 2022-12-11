@@ -1,37 +1,54 @@
 ﻿@using CollabClothing.ViewModels.System.Users
 @model LoginRequest
 @section Csss {
-	<link rel="stylesheet" href="~/assets/css/dangnhap.css">
+    <link rel="stylesheet" href="~/assets/css/dangnhap.css">
 }
 @{
-	ViewData["Title"] = "Đăng nhập";
+    ViewData["Title"] = "Đăng nhập";
 }
+<style>
+    .loginwithgoogle {
+        height: 30px;
+        align-items: center;
+        width: 300px;
+        text-align: center;
+        margin: 0px auto;
+        font-size: 12px;
+        background-color: red;
+    }
+</style>
 <div class="v2-login-area">
-	<form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
-		
-		<div class="form-signin-heading text-center">
-			<h1 class="sign-title">Đăng nhập</h1>
-		</div>
-		<div class="v2-login-wrap">
-			<input type="text" class="form-control" value="" placeholder="Tên đăng nhập/Email/Số điện thoại"
-				   autofocus="" asp-for="UserName" required="">
-			<input type="password" class="form-control" placeholder="Mật khẩu" id="password" asp-for="Password"
-				   required="">
-			<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
-			 <div class="text-danger warning" asp-validation-summary="All"></div>
-			<button class="btn btn-lg btn-login" type="submit">Đăng nhập</button>
-		</div>
-		<div class="v2-login-bottom">
-			<span class="v2-left">
-				<span class="v2-hide">Chưa có tài khoản</span><a href="/Account/Register"
-																 class="v2-register-now"> ( Đăng ký ngay )</a>
-			</span>
-			<span class="v2-right">
-				<a class="v2-remember-password" asp-action="ForgotPassword"> Quên mật khẩu ?</a>
-			</span>
-		</div>
-	</form>
+    <form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
+
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">Đăng nhập</h1>
+        </div>
+        <div class="v2-login-wrap">
+            <input type="text" class="form-control" value="" placeholder="Tên đăng nhập/Email/Số điện thoại"
+                   autofocus="" asp-for="UserName" required="">
+            <input type="password" class="form-control" placeholder="Mật khẩu" id="password" asp-for="Password"
+                   required="">
+            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+            <div class="text-danger warning" asp-validation-summary="All"></div>
+            <button class="btn btn-lg btn-login" type="submit">Đăng nhập</button>
+
+        </div>
+        <div class="v2-login-bottom">
+            <span class="v2-left">
+                <span class="v2-hide">Chưa có tài khoản</span><a href="/Account/Register"
+                                                                 class="v2-register-now"> ( Đăng ký ngay )</a>
+            </span>
+            <span class="v2-right">
+                <a class="v2-remember-password" asp-action="ForgotPassword"> Quên mật khẩu ?</a>
+            </span>
+        </div>
+    </form>
+    <div class="loginwithgoogle">
+        <a asp-action="GoogleLogin" style="text-decoration : none;">
+            Đăng nhập bằng Google
+        </a>
+    </div>
 </div>
 @section Scripts {
-	<script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 }

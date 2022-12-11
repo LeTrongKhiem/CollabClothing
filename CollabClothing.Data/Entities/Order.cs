@@ -19,6 +19,7 @@ namespace CollabClothing.Data.Entities
         public string ShipEmail { get; set; }
         public string ShipPhoneNumber { get; set; }
         public bool Status { get; set; }
+        public int StatusOrder { get; set; }
         public AppUser AppUser { get; set; }
         public Guid? UserId { get; set; }
 

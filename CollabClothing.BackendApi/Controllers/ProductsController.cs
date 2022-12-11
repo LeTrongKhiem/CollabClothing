@@ -1,15 +1,14 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CollabClothing.ViewModels.Catalog.Products;
-using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.Application.Catalog.Products;
-using System;
-using Microsoft.AspNetCore.Authorization;
-using CollabClothing.BackendApi.Extensions;
 using CollabClothing.Application.System.Users;
-using System.Security.Claims;
+using CollabClothing.Data.Entities;
+using CollabClothing.ViewModels.Catalog.ProductImages;
+using CollabClothing.ViewModels.Catalog.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -22,12 +21,14 @@ namespace CollabClothing.BackendApi.Controllers
         private readonly IManageProductService _manageProductService;
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ProductsController(IPublicProductService publicProductService, IManageProductService manageProductService, IUserService userService = null, IHttpContextAccessor httpContextAccessor = null)
+        private readonly UserManager<AppUser> _userManager;
+        public ProductsController(IPublicProductService publicProductService, IManageProductService manageProductService, IUserService userService, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
         {
             _publicProductService = publicProductService;
             _manageProductService = manageProductService;
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
         //api get all product 
         //url mac dinh cua get http://localhost:port/controller
@@ -513,19 +514,33 @@ namespace CollabClothing.BackendApi.Controllers
         #region TMDT
         [HttpGet("historyorder")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetHistoryOrder([FromQuery] GetManageProductRequestPaging request)
+        public async Task<IActionResult> GetHistoryOrder([FromQuery] GetManageProductRequestPaging request, [FromQuery] Guid userId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            // var userId = User.GetUserId();
-            var userName = HttpContext.User.Identity.Name;
-            var user = await _userService.GetByUsername(userName);
-            var userId = user.ResultObject.Id;
-            // var user = Guid.TryParse(userIdStr, out Guid userId) ? userId : Guid.Empty;
+            //var userId1 = User.GetCurrentUserId();
+            //var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            //var user = await _userManager.FindByEmailAsync(email);
             var result = await _manageProductService.GetOrderHistory(userId, request);
             if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
+
+        [HttpDelete("orderupdate/{orderId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CancelOrder(string orderId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _manageProductService.CancelOrder(orderId);
+            if (!result)
             {
                 return BadRequest();
             }

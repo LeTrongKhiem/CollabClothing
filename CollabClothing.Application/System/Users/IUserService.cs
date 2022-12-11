@@ -1,7 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authentication;
+using System;
+using System.Threading.Tasks;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -21,5 +22,9 @@ namespace CollabClothing.Application.System.Users
         public Task<ResultApi<bool>> UpdatePassword(Guid id, EditPasswordRequest request);
         Task<ResultApi<bool>> UpdateEmail(Guid id, string newEmail);
         Task<Guid?> GetUserId();
+
+        Task<AuthenticationProperties> GoogleLogin(string url);
+
+        Task<string[]> GoogleResponse();
     }
 }

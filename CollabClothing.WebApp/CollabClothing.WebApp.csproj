@@ -17,8 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\css\order-page.css" />
+  </ItemGroup>
+
+  <ItemGroup>
 	<PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
 	<PackageReference Include="MailKit" Version="3.2.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.15" />
 	<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.14" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.15" />
 	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.14" />

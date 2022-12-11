@@ -1,0 +1,101 @@
+﻿@using CollabClothing.ViewModels.Catalog.Products;
+@using CollabClothing.ViewModels.Common;
+@using System.Globalization;
+@using Microsoft.Extensions.Configuration
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Lịch sử đặt hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model PageResult<ProductOrderViewModel>;
+@inject IConfiguration Configuration;
+<link rel="stylesheet" href="~/css/style.css">
+<link rel="stylesheet" href="~/css/detail.css">
+@*<link rel="stylesheet" href="~/css/grid.css">*@
+<link rel="stylesheet" href="~/css/order-page.css">
+<div class="app">
+    <div class="container">
+        <div class="grid wide">
+            <div class="container-order">
+                <div class="heading">Đơn hàng của tôi</div>
+                <form asp-action="GetHistoryOrder" method="get">
+                    <div class="order__search">
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" color="#808089" class="icon-left" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(128, 128, 137);"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+                        <input name="keyword" placeholder="Tìm đơn hàng theo Mã đơn hàng, Nhà bán hoặc Tên sản phẩm" type="search" class="input with-icon-left">
+                        <button type="submit" class="btn btn-primary">Tìm</button>
+                    </div>
+                </form>
+                <div>
+                    <div class="order__list">
+                        @foreach (var item in Model.Items)
+                        {
+                            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
+                            <div class="order__list-item">
+                                <div class="order__list-item-id">
+                                    <div class="order__list-item-id-title">#Mã đơn hàng:  </div>
+                                    <div class="order__list-item-id-value">@item.OrderId</div>
+                                </div>
+                                <div class="order__list-item-content">
+                                    <div class="">
+                                        <div class="product">
+                                            <div class="product-detail">
+                                                <div class="product-img" style="background-image: url('@Configuration["BaseAddress"]@item.PathImage');"><span class="quantity">x @item.Quantity</span></div>
+                                                <div class="product-info"><p class="product-name">@item.ProductName</p><div class="store"><span>Yolo</span><br /><span>Size: @item.Size</span><br /><span>Color: @item.Color</span></div></div>
+                                            </div>
+                                            <div class="price"><span>@String.Format("{0:0,0 vnđ}", item.SinglePrice)</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @{
+                                    var status = "";
+                                    if (item.StatusOrder == 1)
+                                    {
+                                        status = "Chờ vận chuyển";
+                                    }
+                                    else if (item.StatusOrder == 2)
+                                    {
+                                        status = "Đang giao hàng";
+                                    }
+                                    else if (item.StatusOrder == 3)
+                                    {
+                                        status = "Đã nhận hàng";
+                                    }
+                                    else
+                                        status = "Hủy đơn hàng";
+                                }
+                                <div class="order__list-item-footer">
+                                    <div class="order__list-item-status">
+                                        <div class="order__list-item-status-title">Trạng thái:  </div>
+                                        <div class="order__list-item-status-value">@(status)</div>
+                                    </div>
+                                    <div class="order__list-item-price">
+                                        <div class="order__list-item-price-total">
+                                            <div class="order__list-item-price-title">Tổng tiền: </div>
+                                            <div class="order__list-item-price-value">@String.Format("{0:0,0 vnđ}", item.PriceTotal)</div>
+                                        </div>
+                                        <div class="button-detail">
+                                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId"><button>Xem chi tiết</button></a>
+                                            @if (item.StatusOrder != 3)
+                                            {
+                                                <form asp-controller="Product" asp-action="CancelOrder">
+                                                    <input type="hidden" name="orderId" value="@item.OrderId" />
+                                                    <button type="submit">Hủy đơn hàng</button>
+                                                </form>
+                                                //<a asp-controller="Product" asp-action="CancelOrder" asp-route-id="@item.OrderId"><button>Hủy đơn hàng</button></a>
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+                        @await Component.InvokeAsync("Pager", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,9 @@
 ﻿using CollabClothing.ApiShared;
-using CollabClothing.Utilities.Constants;
 using CollabClothing.ViewModels.System.Users;
 using CollabClothing.WebApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -11,9 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +22,7 @@ namespace CollabClothing.WebApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
+
         public AccountController(IUserApiClient userApiClient, IConfiguration configuration)
         {
             _userApiClient = userApiClient;
@@ -279,6 +278,25 @@ namespace CollabClothing.WebApp.Controllers
             }
             TempData["result"] = "Cập nhật thất bại";
             return RedirectToAction("EditProfile", "Account");
+        }
+        #endregion
+
+        #region Login With Google
+        [AllowAnonymous]
+        public IActionResult GoogleLogin()
+        {
+            string url = Url.Action("GoogleResponse", "Account");
+            var properties = _userApiClient.GoogleLogin(url);
+            return new ChallengeResult("Google", properties.Result);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await _userApiClient.GoogleResponse();
+            if (result != null)
+                return View(result);
+            return RedirectToAction("Index", "Home");
         }
         #endregion
     }

@@ -1,24 +1,24 @@
-using System;
-using System.Text;
-using System.Security.Cryptography;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using CollabClothing.ViewModels.System.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using CollabClothing.Data.Entities;
 using CollabClothing.Data.EF;
+using CollabClothing.Data.Entities;
+using CollabClothing.Utilities.Constants;
 using CollabClothing.ViewModels.Common;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using CollabClothing.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authentication;
+//using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Http;
-using CollabClothing.Utilities.Constants;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CollabClothing.Application.System.Users
 {
@@ -366,6 +366,52 @@ namespace CollabClothing.Application.System.Users
         {
             var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
             return user?.Id;
+        }
+
+        public async Task<AuthenticationProperties> GoogleLogin(string url)
+        {
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", url);
+            return properties;
+        }
+
+        public async Task<string[]> GoogleResponse()
+        {
+            ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return null;
+            }
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            string[] userInfor = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+
+            if (result.Succeeded)
+            {
+                return userInfor;
+            }
+            else
+            {
+                var user = new AppUser()
+                {
+                    UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                    Dob = DateTime.Now,
+                    FirstName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    LastName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    PhoneNumber = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    EmailConfirmed = true
+                };
+                var createResult = await _userManager.CreateAsync(user);
+                if (createResult.Succeeded)
+                {
+                    createResult = await _userManager.AddLoginAsync(user, info);
+                    if (createResult.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return userInfor;
+                    }
+                }
+                return null;
+            }
         }
     }
 }

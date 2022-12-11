@@ -1,12 +1,11 @@
 ﻿using CollabClothing.Utilities.Constants;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -24,7 +23,7 @@ namespace CollabClothing.ApiShared
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
-        }   
+        }
         public async Task<ResultApi<string>> Authenticate(LoginRequest request)
         {
             var json = JsonConvert.SerializeObject(request);
@@ -212,6 +211,40 @@ namespace CollabClothing.ApiShared
                 return JsonConvert.DeserializeObject<ResultApiSuccessed<UserViewModel>>(body);
             }
             return JsonConvert.DeserializeObject<ResultApiError<UserViewModel>>(body);
+        }
+
+        public async Task<AuthenticationProperties> GoogleLogin(string url)
+        {
+            var json = JsonConvert.SerializeObject(url);
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PostAsync($"/api/users/google-login", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return await Task.FromResult(JsonConvert.DeserializeObject<AuthenticationProperties>(result));
+            }
+            return null;
+        }
+
+        public async Task<string[]> GoogleResponse()
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.GetAsync($"/api/users/google-response");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Content.ReadAsStringAsync().Result.Split(',');
+            }
+            return null;
         }
     }
 }

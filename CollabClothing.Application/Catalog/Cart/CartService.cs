@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CollabClothing.Application.Catalog.Cart
@@ -36,6 +35,7 @@ namespace CollabClothing.Application.Catalog.Cart
         {
             var order = await _context.Orders.FindAsync(id);
             order.Status = status;
+            order.StatusOrder = 2;
             //var orderDetails = await _context.OrderDetails.Select(x => new OrderDetail()
             //{
             //    Id = x.Id,
@@ -61,11 +61,12 @@ namespace CollabClothing.Application.Catalog.Cart
                 {
                     SizeId = orderDetail.SizeId,
                     ColorId = orderDetail.ColorId,
-                    Quantity = quantityBuy
+                    Quantity = quantityBuy,
                 };
                 var wareHouse = await _context.WareHouses.FirstOrDefaultAsync(x => x.ProductId == orderDetail.ProductId && x.SizeId == orderDetail.SizeId && x.ColorId == orderDetail.ColorId);
                 //var updateQuantityRemain = await _manageProductService.UpdateQuantityRemainProduct(orderDetail.ProductId, wareHouseRequest);
-                wareHouse.Quantity = quantityBuy;
+                if (wareHouse is not null)
+                    wareHouse.Quantity = quantityBuy;
                 await _context.SaveChangesAsync();
             }
             return await _context.SaveChangesAsync() > 0;
@@ -126,7 +127,8 @@ namespace CollabClothing.Application.Catalog.Cart
                     AppUser = user,
                     OrderDetails = orderDetails,
                     OrderDate = DateTime.Now,
-                    UserId = userId
+                    UserId = userId,
+                    StatusOrder = 1
                 };
                 _context.Orders.Add(orderUserId);
             }

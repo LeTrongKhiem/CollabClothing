@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Catalog.Cart
 {
@@ -16,6 +13,7 @@ namespace CollabClothing.ViewModels.Catalog.Cart
         public bool Status { get; set; }
         public string? UserId { get; set; }
         public DateTime OrderDate { get; set; }
+        public int StatusOrder { get; set; }
         public List<OrderDetailsViewModel> OrderDetails { get; set; } = new List<OrderDetailsViewModel>();
     }
 }

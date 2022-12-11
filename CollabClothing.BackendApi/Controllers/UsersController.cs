@@ -1,11 +1,10 @@
-using System;
-using System.Threading.Tasks;
 using CollabClothing.Application.System.Users;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace CollabClothing.BackendApi.Controllers
 {
@@ -195,6 +194,36 @@ namespace CollabClothing.BackendApi.Controllers
             }
             var result = await _userService.Delete(id);
             if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [AllowAnonymous]
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin([FromBody] string url)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.GoogleLogin(url);
+            if (result == null)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [AllowAnonymous]
+        [HttpGet("google-response")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.GoogleResponse();
+            if (result == null)
             {
                 return BadRequest(result);
             }

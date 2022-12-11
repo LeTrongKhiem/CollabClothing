@@ -1,26 +1,20 @@
-﻿using System.Net.Mime;
-using System.Net.NetworkInformation;
-using System.Net;
-using System.IO;
-using System.Net.Http.Headers;
-using CollabClothing.Utilities.Exceptions;
-using CollabClothing.ViewModels.Catalog.Products;
-using CollabClothing.ViewModels.Common;
+﻿using CollabClothing.Application.Common;
+using CollabClothing.Data.EF;
 using CollabClothing.Data.Entities;
+using CollabClothing.Utilities.Exceptions;
+using CollabClothing.ViewModels.Catalog.Color;
+using CollabClothing.ViewModels.Catalog.ProductImages;
+using CollabClothing.ViewModels.Catalog.Products;
+using CollabClothing.ViewModels.Catalog.Sizes;
+using CollabClothing.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using CollabClothing.Application.Common;
-using CollabClothing.ViewModels.Catalog.ProductImages;
-using Microsoft.AspNetCore.Hosting;
-using CollabClothing.Data.EF;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using CollabClothing.ViewModels.Catalog.Sizes;
-using CollabClothing.ViewModels.Catalog.Color;
 
 namespace CollabClothing.Application.Catalog.Products
 {
@@ -1086,7 +1080,14 @@ namespace CollabClothing.Application.Catalog.Products
                     PriceTotal = x.od.Price,
                     Quantity = x.od.Quantity,
                     OrderDate = x.o.OrderDate,
-                    Status = x.o.Status
+                    Status = x.o.Status,
+                    PathImage = x.p.ProductImages.Where(x => x.IsThumbnail).Select(x => x.Path).FirstOrDefault() ?? "no-image.jpg",
+                    ShipAddress = x.o.ShipAddress,
+                    ShipEmail = x.o.ShipEmail,
+                    ShipName = x.o.ShipName,
+                    ShipPhoneNumber = x.o.ShipPhoneNumber,
+                    SinglePrice = x.p.PriceCurrent,
+                    StatusOrder = x.o.StatusOrder
                 }).ToListAsync();
             var pageResult = new PageResult<ProductOrderViewModel>()
             {
@@ -1096,6 +1097,24 @@ namespace CollabClothing.Application.Catalog.Products
                 PageSize = request.PageSize
             };
             return pageResult;
+        }
+
+        public async Task<bool> CancelOrder(string orderId)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+
+            order.StatusOrder = 4;
+
+            _context.Orders.UpdateRange(order);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

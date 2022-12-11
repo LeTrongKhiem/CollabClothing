@@ -5,10 +5,8 @@ using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Sizes;
 
 using CollabClothing.ViewModels.Common;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CollabClothing.ApiShared
@@ -52,6 +50,8 @@ namespace CollabClothing.ApiShared
         Task<WareHouseRequest> GetWareHouse(string productId);
         Task<WareHouseRequest> GetWareHouse(string productId, string sizeId);
         Task<WareHouseRequest> GetWareHouse(string productId, string sizeId, string colorId);
-        Task<PageResult<ProductOrderViewModel>> GetHistoryOrder(GetManageProductRequestPaging request);
+        Task<PageResult<ProductOrderViewModel>> GetHistoryOrder(GetManageProductRequestPaging request, Guid userId);
+
+        Task<bool> CancelOrder(string orderId);
     }
 }

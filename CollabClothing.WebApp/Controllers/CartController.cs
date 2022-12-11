@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CollabClothing.WebApp.Controllers
@@ -209,7 +208,8 @@ namespace CollabClothing.WebApp.Controllers
                 PhoneNumber = request.CheckoutRequest.PhoneNumber,
                 Status = request.CheckoutRequest.Status,
                 UserId = userId,
-                OrderDetails = orderDetails
+                OrderDetails = orderDetails,
+                StatusOrder = 1
             };
 
             //api

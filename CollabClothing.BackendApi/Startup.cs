@@ -1,43 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CollabClothing.Application.Catalog.Banners;
+using CollabClothing.Application.Catalog.Brands;
+using CollabClothing.Application.Catalog.Cart;
+using CollabClothing.Application.Catalog.Categories;
+using CollabClothing.Application.Catalog.Color;
 using CollabClothing.Application.Catalog.Products;
+using CollabClothing.Application.Catalog.Promotions;
+using CollabClothing.Application.Catalog.Sizes;
+using CollabClothing.Application.Catalog.Statistic;
 using CollabClothing.Application.Common;
+using CollabClothing.Application.System.Mail;
+using CollabClothing.Application.System.Roles;
 using CollabClothing.Application.System.Users;
 using CollabClothing.Data.EF;
 using CollabClothing.Data.Entities;
 using CollabClothing.Utilities.Constants;
+using CollabClothing.ViewModels.System.Mail;
+using CollabClothing.ViewModels.System.Users;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using FluentValidation.AspNetCore;
-using FluentValidation;
-using CollabClothing.ViewModels.System.Users;
-using CollabClothing.Application.Catalog.Categories;
-using CollabClothing.Application.System.Roles;
-using CollabClothing.Application.Catalog.Brands;
-using CollabClothing.Application.Catalog.Banners;
-using CollabClothing.ViewModels.System.Mail;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using CollabClothing.Application.System.Mail;
-using CollabClothing.Application.Catalog.Sizes;
-using CollabClothing.Application.Catalog.Cart;
-using CollabClothing.Application.Catalog.Promotions;
-using CollabClothing.Application.Catalog.Color;
-using CollabClothing.Application.Catalog.Statistic;
-using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 
 namespace CollabClothing.BackendApi
 {
@@ -101,8 +95,11 @@ namespace CollabClothing.BackendApi
             services.AddAuthentication(auth =>
             {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => options.LoginPath = "/User/Login")
+                .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
@@ -118,7 +115,20 @@ namespace CollabClothing.BackendApi
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
                 };
             });
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                // Đọc thông tin Authentication:Google từ appsettings.json
+                IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
 
+                // Thiết lập ClientID và ClientSecret để truy cập API google
+                googleOptions.ClientId = googleAuthNSection["ClientId"];
+                googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+                // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
+                googleOptions.CallbackPath = "/loginwithgoogle";
+                googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+
+            });
+            services.AddHttpContextAccessor();
             // services.AddControllersWithViews();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
@@ -176,9 +186,7 @@ namespace CollabClothing.BackendApi
 
             app.UseAuthentication();
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>

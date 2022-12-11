@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -448,9 +447,14 @@ namespace CollabClothing.ApiShared
             }
             return null;
         }
-        public async Task<PageResult<ProductOrderViewModel>> GetHistoryOrder(GetManageProductRequestPaging request)
+        public async Task<PageResult<ProductOrderViewModel>> GetHistoryOrder(GetManageProductRequestPaging request, Guid userId)
         {
-            return await GetAsync<PageResult<ProductOrderViewModel>>($"/api/products/historyorder?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}&brandId={request.BrandId}&slug={request.Slug}&price={request.Price}");
+            return await GetAsync<PageResult<ProductOrderViewModel>>($"/api/products/historyorder?pageIndex={request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}&categoryId={request.CategoryId}&brandId={request.BrandId}&slug={request.Slug}&price={request.Price}&userId={userId}");
+        }
+
+        public async Task<bool> CancelOrder(string orderd)
+        {
+            return await DeleteAsync($"/api/products/orderupdate/{orderd}");
         }
     }
 }

@@ -3,11 +3,8 @@ using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
 using CollabClothing.ViewModels.Catalog.Sizes;
 using CollabClothing.ViewModels.Common;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CollabClothing.Application.Catalog.Products
@@ -71,6 +68,8 @@ namespace CollabClothing.Application.Catalog.Products
 
         #region TMDT
         Task<PageResult<ProductOrderViewModel>> GetOrderHistory(Guid userId, GetManageProductRequestPaging request);
+
+        Task<bool> CancelOrder(string orderId);
         #endregion
     }
 }

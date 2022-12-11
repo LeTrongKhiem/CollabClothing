@@ -1,8 +1,7 @@
 ﻿using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authentication;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CollabClothing.ApiShared
@@ -22,5 +21,7 @@ namespace CollabClothing.ApiShared
         Task<ResultApi<bool>> ForgotPassword(ForgotPasswordRequest request);
         Task<ResultApi<bool>> ResetPassword(ResetPasswordRequest request);
         Task<ResultApi<bool>> EditPassword(Guid id, EditPasswordRequest request);
+        Task<AuthenticationProperties> GoogleLogin(string url);
+        Task<string[]> GoogleResponse();
     }
 }
