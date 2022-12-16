@@ -11,6 +11,7 @@ using CollabClothing.Application.Common;
 using CollabClothing.Application.System.Mail;
 using CollabClothing.Application.System.Roles;
 using CollabClothing.Application.System.Users;
+using CollabClothing.BackendApi.Controllers;
 using CollabClothing.Data.EF;
 using CollabClothing.Data.Entities;
 using CollabClothing.Utilities.Constants;
@@ -77,6 +78,8 @@ namespace CollabClothing.BackendApi
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IPromotionService, PromotionService>();
             services.AddTransient<IBenefitService, BenefitService>();
+            services.AddTransient<IDemo111, demo111>();
+
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
@@ -98,7 +101,20 @@ namespace CollabClothing.BackendApi
                 auth.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => options.LoginPath = "/User/Login")
+                .AddCookie()
+                .AddGoogle(googleOptions =>
+                {
+                    // Đọc thông tin Authentication:Google từ appsettings.json
+                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+                    googleOptions.CallbackPath = "/loginwithgoogle";
+
+                    // Thiết lập ClientID và ClientSecret để truy cập API google
+                    googleOptions.ClientId = googleAuthNSection["ClientId"];
+                    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+                    // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
+                    googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+
+                })
                 .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -115,19 +131,20 @@ namespace CollabClothing.BackendApi
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
                 };
             });
-            services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                // Đọc thông tin Authentication:Google từ appsettings.json
-                IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie()
+            //    .AddGoogle(googleOptions =>
+            //    {
+            //        // Đọc thông tin Authentication:Google từ appsettings.json
+            //        IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+            //        googleOptions.CallbackPath = "/loginwithgoogle";
 
-                // Thiết lập ClientID và ClientSecret để truy cập API google
-                googleOptions.ClientId = googleAuthNSection["ClientId"];
-                googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
-                // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
-                googleOptions.CallbackPath = "/loginwithgoogle";
-                googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+            //        // Thiết lập ClientID và ClientSecret để truy cập API google
+            //        googleOptions.ClientId = googleAuthNSection["ClientId"];
+            //        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+            //        // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
+            //        //googleOptions.SignInScheme = IdentityConstants.ApplicationScheme;
 
-            });
+            //    });
             services.AddHttpContextAccessor();
             // services.AddControllersWithViews();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());

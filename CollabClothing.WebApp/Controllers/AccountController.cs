@@ -39,11 +39,17 @@ namespace CollabClothing.WebApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //await HttpContext.SignOutAsync("1");
+            //await HttpContext.SignOutAsync("2");
+
             return View();
         }
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //await HttpContext.SignOutAsync("1");
+            //await HttpContext.SignOutAsync("2");
+
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Home");
         }

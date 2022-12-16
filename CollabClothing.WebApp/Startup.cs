@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,26 +37,42 @@ namespace CollabClothing.WebApp
 
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
-            {
-                option.LoginPath = "/Account/Login";
-                option.AccessDeniedPath = "/User/Forbidden";
-            }
-               );
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            // .AddCookie("1", option =>
+            //     {
+            //         option.LoginPath = "/Account/Login";
+            //         option.AccessDeniedPath = "/User/Forbidden";
+            //     }
+            //)
+            .AddCookie()
+                .AddGoogle(googleOptions =>
+               {
+                   // Đọc thông tin Authentication:Google từ appsettings.json
+                   IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+                   googleOptions.CallbackPath = "/loginwithgoogle";
 
-            services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                // Đọc thông tin Authentication:Google từ appsettings.json
-                IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+                   // Thiết lập ClientID và ClientSecret để truy cập API google
+                   googleOptions.ClientId = googleAuthNSection["ClientId"];
+                   googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+                   // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
+                   //googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
 
-                // Thiết lập ClientID và ClientSecret để truy cập API google
-                googleOptions.ClientId = googleAuthNSection["ClientId"];
-                googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
-                // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
-                googleOptions.CallbackPath = "/loginwithgoogle";
-                googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+               });
+            //.AddCookie();
 
-            });
+            //services.AddAuthentication().AddGoogle(googleOptions =>
+            //{
+            //    // Đọc thông tin Authentication:Google từ appsettings.json
+            //    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+
+            //    // Thiết lập ClientID và ClientSecret để truy cập API google
+            //    googleOptions.ClientId = googleAuthNSection["ClientId"];
+            //    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+            //    // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
+            //    googleOptions.CallbackPath = "/loginwithgoogle";
+            //    googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+
+            //});
 
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

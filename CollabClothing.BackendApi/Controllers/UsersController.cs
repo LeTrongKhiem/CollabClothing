@@ -14,9 +14,11 @@ namespace CollabClothing.BackendApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IDemo111 _demo;
+        public UsersController(IUserService userService, IDemo111 demo)
         {
             _userService = userService;
+            _demo = demo;
         }
         [HttpPost("register")]
         [AllowAnonymous]
@@ -222,7 +224,7 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userService.GoogleResponse();
+            var result = await _demo.GoogleResponse();
             if (result == null)
             {
                 return BadRequest(result);

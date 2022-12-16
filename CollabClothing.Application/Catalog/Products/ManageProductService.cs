@@ -1098,10 +1098,20 @@ namespace CollabClothing.Application.Catalog.Products
             };
             return pageResult;
         }
-
+        /// <summary>
+        /// 1 cho xac nhan
+        /// 2 dang giao hang
+        /// 3 da giao hang
+        /// 4 huy
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<bool> CancelOrder(string orderId)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+
+            if (order.StatusOrder == 2 || order.StatusOrder == 3)
+                return false;
 
             order.StatusOrder = 4;
 
