@@ -6,11 +6,8 @@
 @{
     ViewData["Title"] = "Đăng nhập";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-    .auth-form_or {
-        text-align: center;
-        font-size: 14px;
-    }
 
     .login-with-google {
         text-align: center;
@@ -56,6 +53,32 @@
     .v2-left a {
         text-decoration: none;
     }
+    .login-with-social{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .btn {
+
+padding: 10px 61px 12px 49px;
+  border: none;
+  border-radius: 4px;
+  margin: 5px;
+  opacity: 0.85;
+  display: inline-block;
+    font-size: 14px;
+  line-height: 20px;
+  text-decoration: none; /* remove underline from anchors */
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+    .fb {
+  background-color: #3B5998;
+  color: white;
+}
+.fb i {
+    font-size: 16px;
+}
 </style>
 <div class="v2-login-area">
     <form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
@@ -83,14 +106,24 @@
     <div class="auth-form_or">
         <span>-- Hoặc --</span>
     </div>
+    <div class="login-with-social">
     <div class="login-with-google">
-        @*<a href="http://localhost:5001/api/Users/google-login" style="text-decoration : none;" class="goolge-btn">
-            Đăng nhập bằng Google
-        </a>*@
+
         <a asp-action="GoogleLogin" style="text-decoration : none;" class="goolge-btn">
-            Đăng nhập bằng Google
+           Google
         </a>
     </div>
+
+        <a href="#" class="fb btn">
+          <i class="fa fa-facebook fa-fw"></i>  Facebook
+         </a>
+    </div>
+     <div class="auth__register__link">
+            <span class="">
+                <span class="v2-hide">Chưa có tài khoản ?</span>
+                <a href="/Account/Register" class="v2-register-now" style="text-decoration: none;"> ( Đăng ký ngay )</a>
+            </span>
+
     <div class="login-with-google">
        <a asp-action="FacebookLogin" style="text-decoration : none;" class="goolge-btn">
             Đăng nhập bằng Facebook
@@ -101,8 +134,13 @@
             <span class="v2-hide">Chưa có tài khoản ?</span>
             <a href="/Account/Register" class="v2-register-now" style="text-decoration: none;"> ( Đăng ký ngay )</a>
         </span>
+
     </div>
+    
 </div>
 @section Scripts {
-<script src='https://www.google.com/recaptcha/api.js'></script>
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    
 }
+
