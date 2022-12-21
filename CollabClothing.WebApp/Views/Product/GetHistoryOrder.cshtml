@@ -15,6 +15,21 @@
 <link rel="stylesheet" href="~/css/detail.css">
 @*<link rel="stylesheet" href="~/css/grid.css">*@
 <link rel="stylesheet" href="~/css/order-page.css">
+<style>
+.search-right {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgb(11, 116, 229);
+  padding: 0px 6px 0px 16px;
+  border-left: 2px solid rgb(221, 221, 227);
+  cursor: pointer;
+  border: none;
+ background: none;
+    
+}
+</style>
 <div class="app">
     <div class="container">
         <div class="grid wide">
@@ -24,7 +39,7 @@
                     <div class="order__search">
                         <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" color="#808089" class="icon-left" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(128, 128, 137);"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
                         <input name="keyword" placeholder="Tìm đơn hàng theo Mã đơn hàng, Nhà bán hoặc Tên sản phẩm" type="search" class="input with-icon-left">
-                        <button type="submit" class="btn btn-primary">Tìm</button>
+                        <button type="submit" class="search-right">Tìm Đơn Hàng</button>
                     </div>
                 </form>
                 <div>
@@ -76,7 +91,7 @@
                                             <div class="order__list-item-price-value">@String.Format("{0:0,0 vnđ}", item.PriceTotal)</div>
                                         </div>
                                         <div class="button-detail">
-                                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId"><button>Xem chi tiết</button></a>
+                                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" style="text-decoration:none;"><button>Xem chi tiết</button></a>
                                             @if (item.StatusOrder != 3)
                                             {
                                                 <form asp-controller="Product" asp-action="CancelOrder">
