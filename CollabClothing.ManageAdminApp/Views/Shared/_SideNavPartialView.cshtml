@@ -1,261 +1,242 @@
-﻿
-@*
+﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <div id="wrapper" class="toggled">
-<div class="side-nav">
-                <div class="side-nav-inner">
-                    <ul class="side-nav-menu scrollable">
-                        <li class="nav-item">
-                            <a class="dropdown-toggle" asp-area="Admin" asp-controller="Home" asp-action="Index">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-dashboard"></i>
-                                </span>
-                                <span class="title">Dashboard</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
+    <div class="side-nav">
+        <div class="side-nav-inner">
+            <ul class="side-nav-menu scrollable">
+                <li class="nav-item">
+                    <a class="dropdown-toggle" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-dashboard"></i>
+                        </span>
+                        <span class="title">Dashboard</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-appstore"></i>
+                        </span>
+                        <span class="title">Quản lý đơn hàng</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Cart" asp-action="Index">Quản lý thanh toán</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-hdd"></i>
+                        </span>
+                        <span class="title">Quản lý sản phẩm</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Product" asp-action="Index">Quản lý sản phẩm</a>
+                        </li>
+                        <li>
+                            <a asp-controller="ProductImage" asp-action="Index">Quản lý hình ảnh sản phẩm</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Brand" asp-action="Index">Quản lý tên thương hiệu</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-form"></i>
+                        </span>
+                        <span class="title">Doanh số</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="form-elements.html">Form Elements</a>
+                        </li>
+                        <li>
+                            <a href="form-layouts.html">Form Layouts</a>
+                        </li>
+                        <li>
+                            <a href="form-validation.html">Form Validation</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-table"></i>
+                        </span>
+                        <span class="title">Quản lý khuyến mãi</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Promotion" asp-action="Index">Khuyến mãi chung</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-pie-chart"></i>
+                        </span>
+                        <span class="title">Quản lý hệ thống</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="User" asp-action="Index">Quản lý tài khoản</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Category" asp-action="Index">Quản lý danh mục sản phẩm</a>
+                        </li>
+                        <li>
+                            <a asp-controller="ProductListAdmin" asp-action="Index">Quản lý sản phẩm</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Role" asp-action="Index">Quản lý quyền truy cập</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Banner" asp-action="Index">Quản lý Banner</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-file"></i>
+                        </span>
+                        <span class="title">Quản lý tin tức</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="profile.html">Profile</a>
+                        </li>
+                        <li>
+                            <a href="invoice.html">Invoice</a>
+                        </li>
+                        <li>
+                            <a href="members.html">Members</a>
+                        </li>
+                        <li>
+                            <a href="pricing.html">Pricing</a>
+                        </li>
+                        <li>
+                            <a href="setting.html">Setting</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-appstore"></i>
-                                </span>
-                                <span class="title">Quản lý đơn hàng</span>
+                            <a href="javascript:void(0);">
+                                <span>Blog</span>
                                 <span class="arrow">
                                     <i class="arrow-icon"></i>
                                 </span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a asp-controller="Cart" asp-action="Index">Quản lý thanh toán</a>
-                                </li>
-                                
-                            </ul>
-                        </li>
-                        
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-hdd"></i>
-                                </span>
-                                <span class="title">Quản lý sản phẩm</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                     <a asp-controller="Product" asp-action="Index">Quản lý sản phẩm</a>
+                                    <a href="blog-grid.html">Blog Grid</a>
                                 </li>
                                 <li>
-                                     <a asp-controller="ProductImage" asp-action="Index">Quản lý hình ảnh sản phẩm</a>
+                                    <a href="blog-list.html">Blog List</a>
                                 </li>
                                 <li>
-                                     <a asp-controller="Brand" asp-action="Index">Quản lý tên thương hiệu</a>
-                                </li>
-                                
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-form"></i>
-                                </span>
-                                <span class="title">Doanh số</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="form-elements.html">Form Elements</a>
-                                </li>
-                                <li>
-                                    <a href="form-layouts.html">Form Layouts</a>
-                                </li>
-                                <li>
-                                    <a href="form-validation.html">Form Validation</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-table"></i>
-                                </span>
-                                <span class="title">Quản lý khuyến mãi</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a asp-controller="Promotion" asp-action="Index">Khuyến mãi chung</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-pie-chart"></i>
-                                </span>
-                                <span class="title">Quản lý hệ thống</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                 <li>
-                                    <a asp-controller="User" asp-action="Index">Quản lý tài khoản</a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Category" asp-action="Index">Quản lý danh mục sản phẩm</a>
-                                </li>
-                                <li>
-                                    <a asp-controller="ProductListAdmin" asp-action="Index">Quản lý sản phẩm</a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Role" asp-action="Index">Quản lý quyền truy cập</a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Banner" asp-action="Index">Quản lý Banner</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-file"></i>
-                                </span>
-                                <span class="title">Quản lý tin tức</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="profile.html">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="invoice.html">Invoice</a>
-                                </li>
-                                <li>
-                                    <a href="members.html">Members</a>
-                                </li>
-                                <li>
-                                    <a href="pricing.html">Pricing</a>
-                                </li>
-                                <li>
-                                    <a href="setting.html">Setting</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="javascript:void(0);">
-                                        <span>Blog</span>
-                                        <span class="arrow">
-                                            <i class="arrow-icon"></i>
-                                        </span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="blog-grid.html">Blog Grid</a>
-                                        </li>
-                                        <li>
-                                            <a href="blog-list.html">Blog List</a>
-                                        </li>
-                                        <li>
-                                            <a href="blog-post.html">Blog Post</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                         <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-file"></i>
-                                </span>
-                                <span class="title">Quản lý Pages</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="profile.html">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="invoice.html">Invoice</a>
-                                </li>
-                                <li>
-                                    <a href="members.html">Members</a>
-                                </li>
-                                <li>
-                                    <a href="pricing.html">Pricing</a>
-                                </li>
-                                <li>
-                                    <a href="setting.html">Setting</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="javascript:void(0);">
-                                        <span>Blog</span>
-                                        <span class="arrow">
-                                            <i class="arrow-icon"></i>
-                                        </span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="blog-grid.html">Blog Grid</a>
-                                        </li>
-                                        <li>
-                                            <a href="blog-list.html">Blog List</a>
-                                        </li>
-                                        <li>
-                                            <a href="blog-post.html">Blog Post</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
-                                <span class="icon-holder">
-                                    <i class="anticon anticon-lock"></i>
-                                </span>
-                                <span class="title">Thống kê đơn hàng</span>
-                                <span class="arrow">
-                                    <i class="arrow-icon"></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a asp-controller="Statistic" asp-action="GetByDay">Thống kê doanh thu</a>
-                                </li>
-                                <li>
-                                    <a href="login-2.html">Login 2</a>
-                                </li>
-                                <li>
-                                    <a href="login-3.html">Login 3</a>
-                                </li>
-                                <li>
-                                    <a href="sign-up-1.html">Sign Up 1</a>
-                                </li>
-                                <li>
-                                    <a href="sign-up-2.html">Sign Up 2</a>
-                                </li>
-                                <li>
-                                    <a href="sign-up-3.html">Sign Up 3</a>
-                                </li>
-                                <li>
-                                    <a href="error-1.html">Error 1</a>
-                                </li>
-                                <li>
-                                    <a href="error-2.html">Error 2</a>
+                                    <a href="blog-post.html">Blog Post</a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
-                </div>
-            </div>
-            </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-file"></i>
+                        </span>
+                        <span class="title">Quản lý Pages</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="profile.html">Profile</a>
+                        </li>
+                        <li>
+                            <a href="invoice.html">Invoice</a>
+                        </li>
+                        <li>
+                            <a href="members.html">Members</a>
+                        </li>
+                        <li>
+                            <a href="pricing.html">Pricing</a>
+                        </li>
+                        <li>
+                            <a href="setting.html">Setting</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="javascript:void(0);">
+                                <span>Blog</span>
+                                <span class="arrow">
+                                    <i class="arrow-icon"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="blog-grid.html">Blog Grid</a>
+                                </li>
+                                <li>
+                                    <a href="blog-list.html">Blog List</a>
+                                </li>
+                                <li>
+                                    <a href="blog-post.html">Blog Post</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-lock"></i>
+                        </span>
+                        <span class="title">Thống kê đơn hàng</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Statistic" asp-action="GetByDay">Thống kê doanh thu</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Statistic" asp-action="GetAll">Thống kê doanh thu theo loại hàng</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

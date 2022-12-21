@@ -1,9 +1,6 @@
 ﻿using CollabClothing.Application.Catalog.Statistic;
 using CollabClothing.ViewModels.Catalog.Statistic;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CollabClothing.BackendApi.Controllers
@@ -31,6 +28,19 @@ namespace CollabClothing.BackendApi.Controllers
             }
             return Ok(result);
         }
-
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll([FromQuery] BenefitRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _benefitService.GetAll(request);
+            if (result == null)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }
