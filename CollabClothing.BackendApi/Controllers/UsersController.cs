@@ -1,9 +1,17 @@
 using CollabClothing.Application.System.Users;
+using CollabClothing.Data.EF;
+using CollabClothing.Data.Entities;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CollabClothing.BackendApi.Controllers
@@ -14,11 +22,13 @@ namespace CollabClothing.BackendApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUserServiceResponse _userServiceResponse;
         private readonly IDemo111 _demo;
-        public UsersController(IUserService userService, IDemo111 demo)
+        public UsersController(IUserService userService, IDemo111 demo, IUserServiceResponse userServiceResponse)
         {
             _userService = userService;
             _demo = demo;
+            _userServiceResponse = userServiceResponse;
         }
         [HttpPost("register")]
         [AllowAnonymous]
@@ -217,6 +227,21 @@ namespace CollabClothing.BackendApi.Controllers
             return Ok(result);
         }
         [AllowAnonymous]
+        [HttpPost("facebook-login")]
+        public async Task<IActionResult> FacebookLogin([FromBody] string url)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.FacebookLogin(url);
+            if (result == null)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [AllowAnonymous]
         [HttpGet("google-response")]
         public async Task<IActionResult> GoogleResponse()
         {
@@ -224,12 +249,95 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _demo.GoogleResponse();
+            var result = await _userService.GoogleResponse();
             if (result == null)
             {
                 return BadRequest(result);
             }
             return Ok(result);
+        }
+    }
+
+    public interface IUserServiceResponse
+    {
+        Task<ChallengeResult> GoogleLogin(string url);
+
+        Task<string[]> GoogleResponse();
+    }
+
+
+    public class UserServiceResponse : IUserServiceResponse
+    {
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly IConfiguration _config;
+        private readonly CollabClothingDBContext _context;
+        private readonly ILogger<UserService> _logger;
+        private readonly IEmailSender _emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        #region Constructor
+        public UserServiceResponse(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context,
+            ILogger<UserService> logger, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
+            _config = configuration;
+            _context = context;
+            _logger = logger;
+            _emailSender = emailSender;
+            _httpContextAccessor = httpContextAccessor;
+        }
+        #endregion
+
+        public async Task<ChallengeResult> GoogleLogin(string url)
+        {
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", "api/users/google-response");
+            return new ChallengeResult("Google", properties);
+        }
+
+        public async Task<string[]> GoogleResponse()
+        {
+            //var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", "users/google-response");
+
+            ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return null;
+            }
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            string[] userInfor = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+
+            if (result.Succeeded)
+            {
+                return userInfor;
+            }
+            else
+            {
+                var user = new AppUser()
+                {
+                    UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                    Dob = DateTime.Now,
+                    FirstName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    LastName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    PhoneNumber = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                    EmailConfirmed = true,
+                    Id = Guid.NewGuid(),
+                };
+                var createResult = await _userManager.CreateAsync(user);
+                if (createResult.Succeeded)
+                {
+                    createResult = await _userManager.AddLoginAsync(user, info);
+                    if (createResult.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return userInfor;
+                    }
+                }
+                return null;
+            }
         }
     }
 }

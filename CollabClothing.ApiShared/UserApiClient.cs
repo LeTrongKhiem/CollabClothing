@@ -231,10 +231,31 @@ namespace CollabClothing.ApiShared
             return null;
         }
 
-        public async Task<string[]> GoogleResponse()
+        public async Task<AuthenticationProperties> FacebookLogin(string url)
+        {
+            var json = JsonConvert.SerializeObject(url);
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var response = await client.PostAsync($"/api/users/facebook-login", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return await Task.FromResult(JsonConvert.DeserializeObject<AuthenticationProperties>(result));
+            }
+            return null;
+        }
+
+        public async Task<UserViewModel> GoogleResponse()
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
 
+            //var json = JsonConvert.SerializeObject(url);
+            //var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            //var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
@@ -242,7 +263,7 @@ namespace CollabClothing.ApiShared
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return response.Content.ReadAsStringAsync().Result.Split(',');
+                return JsonConvert.DeserializeObject<UserViewModel>(result);
             }
             return null;
         }

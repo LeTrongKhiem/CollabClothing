@@ -56,6 +56,8 @@ namespace CollabClothing.BackendApi
 
             services.AddScoped<IEmailSender, MailService>();
             services.AddIdentity<AppUser, AppRole>()
+            //services.AddDefaultIdentity<AppUser>()
+            //    .AddRoles<AppRole>()
             //.AddDefaultUI()
             .AddEntityFrameworkStores<CollabClothingDBContext>()
             .AddDefaultTokenProviders();
@@ -79,6 +81,7 @@ namespace CollabClothing.BackendApi
             services.AddTransient<IPromotionService, PromotionService>();
             services.AddTransient<IBenefitService, BenefitService>();
             services.AddTransient<IDemo111, demo111>();
+            services.AddTransient<IUserServiceResponse, UserServiceResponse>();
 
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
@@ -95,24 +98,36 @@ namespace CollabClothing.BackendApi
             string issuer = Configuration.GetValue<string>("Token:Issuer");
             string signingKey = Configuration.GetValue<string>("Token:Key");
             byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
-            services.AddAuthentication(auth =>
+            services.AddAuthentication(
+                auth =>
             {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 auth.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            }
+            )
                 .AddCookie()
                 .AddGoogle(googleOptions =>
                 {
                     // Đọc thông tin Authentication:Google từ appsettings.json
                     IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-                    googleOptions.CallbackPath = "/loginwithgoogle";
 
                     // Thiết lập ClientID và ClientSecret để truy cập API google
                     googleOptions.ClientId = googleAuthNSection["ClientId"];
                     googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+                    googleOptions.CallbackPath = "/loginwithgoogle";
                     // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
                     googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+
+                }).AddFacebook(facebookOptions =>
+                {
+                    // Đọc cấu hình
+                    IConfigurationSection facebookAuthNSection = Configuration.GetSection("Authentication:Facebook");
+                    facebookOptions.AppId = facebookAuthNSection["AppId"];
+                    facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
+                    // Thiết lập đường dẫn Facebook chuyển hướng đến
+                    facebookOptions.CallbackPath = "/dang-nhap-facebook";
+                    facebookOptions.SignInScheme = IdentityConstants.ExternalScheme;
 
                 })
                 .AddJwtBearer(options =>

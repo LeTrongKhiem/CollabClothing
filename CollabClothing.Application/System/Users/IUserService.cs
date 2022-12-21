@@ -1,3 +1,4 @@
+using CollabClothing.Data.Entities;
 using CollabClothing.ViewModels.Common;
 using CollabClothing.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -24,7 +25,8 @@ namespace CollabClothing.Application.System.Users
         Task<Guid?> GetUserId();
 
         Task<AuthenticationProperties> GoogleLogin(string url);
+        Task<AuthenticationProperties> FacebookLogin(string url);
 
-        Task<string[]> GoogleResponse();
+        Task<AppUser> GoogleResponse();
     }
 }

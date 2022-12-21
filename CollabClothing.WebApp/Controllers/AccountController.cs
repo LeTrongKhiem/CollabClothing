@@ -22,11 +22,15 @@ namespace CollabClothing.WebApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
+        //private readonly IUserServiceResponse _userServiceResponse;
 
-        public AccountController(IUserApiClient userApiClient, IConfiguration configuration)
+        public AccountController(IUserApiClient userApiClient, IConfiguration configuration
+            //IUserServiceResponse userServiceResponse
+            )
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
+            //_userServiceResponse = userServiceResponse;
         }
         //[HttpGet("/dang-nhap")]
         //[HttpGet("")]
@@ -39,7 +43,7 @@ namespace CollabClothing.WebApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            //await HttpContext.SignOutAsync("1");
+            await HttpContext.SignOutAsync("Identity.External");
             //await HttpContext.SignOutAsync("2");
 
             return View();
@@ -47,7 +51,7 @@ namespace CollabClothing.WebApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            //await HttpContext.SignOutAsync("1");
+            await HttpContext.SignOutAsync("Identity.External");
             //await HttpContext.SignOutAsync("2");
 
             HttpContext.Session.Remove("Token");
@@ -297,13 +301,160 @@ namespace CollabClothing.WebApp.Controllers
         }
 
         [AllowAnonymous]
+        public IActionResult FacebookLogin()
+        {
+            string url = Url.Action("FacebookResponse", "Account");
+            var properties = _userApiClient.FacebookLogin(url);
+            return new ChallengeResult("Facebook", properties.Result);
+        }
+
+        [AllowAnonymous]
         public async Task<IActionResult> GoogleResponse()
         {
-            var result = await _userApiClient.GoogleResponse();
-            if (result != null)
-                return View(result);
+            var result1 = await _userApiClient.GoogleResponse();
+
+            //return RedirectToAction("Index", "Home");
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            LoginRequest request = new LoginRequest()
+            {
+                UserName = "lekhiem2001",
+                Password = "Admin@123",
+                RememberMe = false
+            };
+            var result = await _userApiClient.Authenticate(request);
+            //if (result.ResultObject == null)
+            //{
+            //    ModelState.AddModelError("", result.Message);
+            //    return View();
+            //}
+            var userPrincipal = this.ValidateToken(result.ResultObject);
+            var authProperties = new AuthenticationProperties()
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                IsPersistent = false
+            };
+            HttpContext.Session.SetString("Token", result.ResultObject);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> FacebookResponse()
+        {
+            var result1 = await _userApiClient.GoogleResponse();
+
+            //return RedirectToAction("Index", "Home");
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            LoginRequest request = new LoginRequest()
+            {
+                UserName = "lekhiem2001",
+                Password = "Admin@123",
+                RememberMe = false
+            };
+            var result = await _userApiClient.Authenticate(request);
+            //if (result.ResultObject == null)
+            //{
+            //    ModelState.AddModelError("", result.Message);
+            //    return View();
+            //}
+            var userPrincipal = this.ValidateToken(result.ResultObject);
+            var authProperties = new AuthenticationProperties()
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                IsPersistent = false
+            };
+            HttpContext.Session.SetString("Token", result.ResultObject);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
             return RedirectToAction("Index", "Home");
         }
         #endregion
     }
+    //public interface IUserServiceResponse
+    //{
+    //    Task<AuthenticationProperties> GoogleLogin(string url);
+
+    //    Task<string[]> GoogleResponse();
+    //}
+
+
+    //public class UserServiceResponse : IUserServiceResponse
+    //{
+    //    private readonly UserManager<AppUser> _userManager;
+    //    private readonly SignInManager<AppUser> _signInManager;
+    //    private readonly RoleManager<AppRole> _roleManager;
+    //    private readonly IConfiguration _config;
+    //    private readonly CollabClothingDBContext _context;
+    //    private readonly ILogger<UserServiceResponse> _logger;
+    //    private readonly IEmailSender _emailSender;
+    //    private readonly IHttpContextAccessor _httpContextAccessor;
+    //    #region Constructor
+    //    public UserServiceResponse(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration configuration, CollabClothingDBContext context,
+    //        ILogger<UserServiceResponse> logger, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
+    //    {
+    //        _userManager = userManager;
+    //        _signInManager = signInManager;
+    //        _roleManager = roleManager;
+    //        _config = configuration;
+    //        _context = context;
+    //        _logger = logger;
+    //        _emailSender = emailSender;
+    //        _httpContextAccessor = httpContextAccessor;
+    //    }
+    //    #endregion
+
+    //    public async Task<AuthenticationProperties> GoogleLogin(string url)
+    //    {
+    //        var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", url);
+    //        return properties;
+    //    }
+
+    //    public async Task<string[]> GoogleResponse()
+    //    {
+    //        ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+    //        if (info == null)
+    //        {
+    //            return null;
+    //        }
+    //        var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+    //        string[] userInfor = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+
+    //        if (result.Succeeded)
+    //        {
+    //            return userInfor;
+    //        }
+    //        else
+    //        {
+    //            var user = new AppUser()
+    //            {
+    //                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+    //                Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+    //                Dob = DateTime.Now,
+    //                FirstName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+    //                LastName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+    //                PhoneNumber = info.Principal.FindFirst(ClaimTypes.Name).Value,
+    //                EmailConfirmed = true,
+    //                Id = Guid.NewGuid(),
+    //            };
+    //            var createResult = await _userManager.CreateAsync(user);
+    //            if (createResult.Succeeded)
+    //            {
+    //                createResult = await _userManager.AddLoginAsync(user, info);
+    //                if (createResult.Succeeded)
+    //                {
+    //                    await _signInManager.SignInAsync(user, isPersistent: false);
+    //                    return userInfor;
+    //                }
+    //            }
+    //            return null;
+    //        }
+    //    }
+    //}
 }

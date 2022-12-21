@@ -374,44 +374,62 @@ namespace CollabClothing.Application.System.Users
             return properties;
         }
 
-        public async Task<string[]> GoogleResponse()
+        public async Task<AuthenticationProperties> FacebookLogin(string url)
         {
-            ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
-            {
-                return null;
-            }
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
-            string[] userInfor = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Facebook", url);
+            return properties;
+        }
 
-            if (result.Succeeded)
+        public async Task<AppUser> GoogleResponse()
+        {
+            //var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", url);
+
+            //ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+            var user = new AppUser()
             {
-                return userInfor;
-            }
-            else
+                FirstName = "Khiem",
+                LastName = "Le",
+                Email = "lekhiem20011@gmail.com",
+                Id = Guid.NewGuid(),
+                UserName = "lekhiem20011",
+                Dob = new DateTime(2001, 12, 12),
+            };
+            //if (info == null)
+            //{
+            //    return null;
+            //}
+            //var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            //string[] userInfor = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+
+            //if (result.Succeeded)
+            //{
+            //    return userInfor;
+            //}
+            //else
+            //{
+            //var user = new AppUser()
+            //{
+            //    UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+            //    Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+            //    Dob = DateTime.Now,
+            //    FirstName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+            //    LastName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+            //    PhoneNumber = info.Principal.FindFirst(ClaimTypes.Name).Value,
+            //    EmailConfirmed = true,
+            //    Id = Guid.NewGuid(),
+            //};
+            var createResult = await _userManager.CreateAsync(user);
+            if (createResult.Succeeded)
             {
-                var user = new AppUser()
-                {
-                    UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
-                    Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                    Dob = DateTime.Now,
-                    FirstName = info.Principal.FindFirst(ClaimTypes.Name).Value,
-                    LastName = info.Principal.FindFirst(ClaimTypes.Name).Value,
-                    PhoneNumber = info.Principal.FindFirst(ClaimTypes.Name).Value,
-                    EmailConfirmed = true
-                };
-                var createResult = await _userManager.CreateAsync(user);
+                //createResult = await _userManager.AddLoginAsync(user, info);
                 if (createResult.Succeeded)
                 {
-                    createResult = await _userManager.AddLoginAsync(user, info);
-                    if (createResult.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return userInfor;
-                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return user;
                 }
-                return null;
             }
+            return user;
         }
     }
 }
+//}
