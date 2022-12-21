@@ -26,7 +26,8 @@
   border-left: 2px solid rgb(221, 221, 227);
   cursor: pointer;
   border: none;
-    background: none;
+ background: none;
+    
 }
 </style>
 <div class="app">
@@ -90,7 +91,7 @@
                                             <div class="order__list-item-price-value">@String.Format("{0:0,0 vnđ}", item.PriceTotal)</div>
                                         </div>
                                         <div class="button-detail">
-                                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId"><button>Xem chi tiết</button></a>
+                                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" style="text-decoration:none;"><button>Xem chi tiết</button></a>
                                             @if (item.StatusOrder != 3)
                                             {
                                                 <form asp-controller="Product" asp-action="CancelOrder">
