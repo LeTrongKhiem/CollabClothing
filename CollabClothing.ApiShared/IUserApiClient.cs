@@ -22,6 +22,7 @@ namespace CollabClothing.ApiShared
         Task<ResultApi<bool>> ResetPassword(ResetPasswordRequest request);
         Task<ResultApi<bool>> EditPassword(Guid id, EditPasswordRequest request);
         Task<AuthenticationProperties> GoogleLogin(string url);
-        Task<string[]> GoogleResponse();
+        Task<AuthenticationProperties> FacebookLogin(string url);
+        Task<UserViewModel> GoogleResponse();
     }
 }

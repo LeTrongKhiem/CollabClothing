@@ -1,0 +1,200 @@
+﻿@model IEnumerable<CollabClothing.ViewModels.Catalog.Statistic.BenefitViewModel>
+
+@{
+    ViewData["Title"] = "Thống kê doanh thu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Thống kê doanh thu</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <select id="select-day-from" class="form-control" style="width : 200px;">
+            <option value="2022/07/01">2022/07</option>
+            <option value="2022/08/01">2022/08</option>
+            <option value="2022/09/01">2022/09</option>
+            <option value="2022/10/01">2022/10</option>
+            <option value="2022/11/01">2022/11</option>
+            <option value="2022/12/01">2022/12</option>
+            <option value="2023/01/01">2023/01</option>
+            <option value="2023/02/01">2023/02</option>
+            <option value="2023/03/01">2023/03</option>
+            <option value="2023/04/01">2023/04</option>
+        </select>
+        @*  <select id="select-day-to" class="form-control" style="width : 200px;">
+        <option value="2022/07/12">2022/07/12</option>
+        <option value="2022/07/13">2022/07/13</option>
+        <option></option>
+        <option></option>
+        </select>*@
+        <a href="#" class="btn-submit-day" />Submit</a>
+        <div>
+            @*<canvas id="chartStatistic"></canvas>*@
+            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="~/js/chartsjs.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+    <script>
+        function registerChart(lsData) {
+            let categoryname = lsData.map((item) => item.nameCategory);
+            let total = lsData.map((item) => item.tongcong);
+            var xValues = [categoryname];
+            console.log(xValues)
+            var yValues = [total];
+            var barColors = [
+                "#b91d47",
+                "#00aba9",
+                "#2b5797",
+                "#e8c3b9",
+                "#1e7145"
+            ];
+
+            new Chart("myChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "World Wide Wine Production 2018"
+                    }
+                }
+            });
+        }
+        $('body').on('click', '.btn-submit-day', function (e) {
+            e.preventDefault();
+            const selectdayfrom = $('#select-day-from').val();
+            //const selectdayto = $('#select-day-to').val();
+            $.ajax({
+                type: "GET",
+                url: '/Statistic/GetAll/',
+                success: function (response) {
+                    registerChart(response)
+                    console.log(response)
+                },
+                data: {
+                    fromDate: selectdayfrom,
+                    //toDate : selectdayto
+                },
+            });
+        })
+    </script>
+    @*<script>
+        //function registerChart(lsData) {
+        //	var lsLabel = [];
+        //	var lsDatasource = [];
+
+        //	$.each(lsData, function(index, item) {
+        //		lsLabel.push(item.date);
+        //		lsDatasource.push(item.benefit)
+        //	})
+
+        //	var ctx = document.getElementById("chartStatistic");//.getContext("2d");
+
+        //	var barChartData = {
+        //		labels: lsLabel,
+        //		datasets: [{
+        //			label: 'Doanh thu theo ngày',
+        //			backgroundColor : '#0b9663',
+        //			borderWidth: 1,
+        //			data: lsDatasource
+        //		}]
+
+        //	};
+        //	var myBarChart = new Chart(ctx, {
+        //		type : "bar",
+        //		data : barChartData
+        //	});
+        //}
+        function registerChart(lsData) {
+            let categoryname = lsData.map((item) => item.nameCategory);
+            let total = lsData.map((item) => item.tongcong);
+            console.log(categoryname)
+            console.log(total)
+            const data = {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1,
+                    backgroundColor: ['#CB4335', '#1F618D', '#F1C40F', '#27AE60', '#884EA0', '#D35400'],
+                }]
+            };
+            var ctx = document.getElementById("chartStatistic");
+            // </block:data>
+
+            // <block:handleHover:1>
+            // Append '4d' to the colors (alpha channel), except for the hovered index
+            function handleHover(evt, item, legend) {
+                legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                    colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
+                });
+                legend.chart.update();
+            }
+            // </block:handleHover>
+
+            // <block:handleLeave:2>
+            // Removes the alpha channel from background colors
+            function handleLeave(evt, item, legend) {
+                legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                    colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+                });
+                legend.chart.update();
+            }
+            // </block:handleLeave>
+
+            // <block:config:0>
+            const config = new Chart(ctx, {
+                type: 'pie',
+                data: lsData,
+                options: {
+                    plugins: {
+                        legend: {
+                            onHover: handleHover,
+                            onLeave: handleLeave
+                        }
+                    }
+                }
+            });
+
+
+            // </block:config>
+
+            module.exports = {
+                config
+            };
+        }
+        $('body').on('click', '.btn-submit-day', function (e) {
+            e.preventDefault();
+            const selectdayfrom = $('#select-day-from').val();
+            //const selectdayto = $('#select-day-to').val();
+            $.ajax({
+                type: "GET",
+                url: '/Statistic/GetAll/',
+                success: function (response) {
+                    registerChart(response)
+                    console.log(response)
+                },
+                data: {
+                    fromDate: selectdayfrom,
+                    //toDate : selectdayto
+                },
+            });
+        })
+    </script>*@
+
+}

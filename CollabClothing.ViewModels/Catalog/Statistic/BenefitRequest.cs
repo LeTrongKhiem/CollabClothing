@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Catalog.Statistic
 {
@@ -10,5 +6,11 @@ namespace CollabClothing.ViewModels.Catalog.Statistic
     {
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+    }
+
+    public class OutputStatisticTMDT
+    {
+        public string NameCategory { get; set; }
+        public decimal TONGCONG { get; set; }
     }
 }

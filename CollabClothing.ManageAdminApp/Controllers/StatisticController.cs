@@ -2,8 +2,6 @@
 using CollabClothing.ViewModels.Catalog.Statistic;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CollabClothing.ManageAdminApp.Controllers
@@ -36,6 +34,22 @@ namespace CollabClothing.ManageAdminApp.Controllers
             if (result.Count != 0)
             {
                 return Ok(result);
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll(DateTime fromDate)
+        {
+            var request = new BenefitRequest()
+            {
+                FromDate = fromDate,
+                ToDate = fromDate.AddDays(30)
+            };
+            var result = await _statisticApiClient.GetAll(request);
+            if (result.Count != 0)
+            {
+                return Json(result);
             }
             return View();
         }

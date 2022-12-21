@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,26 +38,36 @@ namespace CollabClothing.WebApp
 
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            services.AddAuthentication(defaultScheme: CookieAuthenticationDefaults.AuthenticationScheme)
             // .AddCookie("1", option =>
             //     {
             //         option.LoginPath = "/Account/Login";
             //         option.AccessDeniedPath = "/User/Forbidden";
             //     }
             //)
-            .AddCookie()
+            .AddCookie("Identity.External")
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddGoogle(googleOptions =>
                {
                    // Đọc thông tin Authentication:Google từ appsettings.json
                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-                   googleOptions.CallbackPath = "/loginwithgoogle";
 
                    // Thiết lập ClientID và ClientSecret để truy cập API google
                    googleOptions.ClientId = googleAuthNSection["ClientId"];
                    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+                   googleOptions.CallbackPath = "/loginwithgoogle";
                    // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
-                   //googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
+                   googleOptions.SignInScheme = IdentityConstants.ExternalScheme;
 
+               }).AddFacebook(facebookOptions =>
+               {
+                   // Đọc cấu hình
+                   IConfigurationSection facebookAuthNSection = Configuration.GetSection("Authentication:Facebook");
+                   facebookOptions.AppId = facebookAuthNSection["AppId"];
+                   facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
+                   // Thiết lập đường dẫn Facebook chuyển hướng đến
+                   facebookOptions.SignInScheme = IdentityConstants.ExternalScheme;
+                   facebookOptions.CallbackPath = "/dang-nhap-facebook";
                });
             //.AddCookie();
 
@@ -105,7 +116,7 @@ namespace CollabClothing.WebApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseMigrationsEndPoint();
+                //app.UseMigrationsEndPoint();
             }
             else
             {
