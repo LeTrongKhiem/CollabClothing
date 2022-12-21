@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CollabClothing.ViewModels.Catalog.Products
 {
@@ -25,6 +22,7 @@ namespace CollabClothing.ViewModels.Catalog.Products
         public List<string> Categories { get; set; } = new List<string>();
         public string CategoryName { get; set; }
         public string BrandName { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public bool Consumer { get; set; }
         public string Type { get; set; }

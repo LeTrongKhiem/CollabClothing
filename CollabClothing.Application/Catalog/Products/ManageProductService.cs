@@ -88,8 +88,8 @@ namespace CollabClothing.Application.Catalog.Products
                 Description = request.Description,
                 Slug = _utilitiesHelp.SEOUrl(request.ProductName),
                 Details = request.Details,
-                ProductMapCategories = cates
-
+                ProductMapCategories = cates,
+                CreatedDate = DateTime.Now
             };
             //var ProductMapCategory = new ProductMapCategory()
             //{
@@ -727,8 +727,9 @@ namespace CollabClothing.Application.Catalog.Products
                          into pb
                          from b in pb.DefaultIfEmpty()
                          where pimg.IsThumbnail == true
+                         orderby p.CreatedDate descending
                          select new { p, pimg, b });
-            List<ProductViewModel> data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
+            List<ProductViewModel> data = await query.Take(take).OrderByDescending(x => x.p.PriceCurrent)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
@@ -768,7 +769,7 @@ namespace CollabClothing.Application.Catalog.Products
                          where (pimg.IsThumbnail == true) && (cate.ParentId.Equals(idCate) || cate.Id.Equals(idCate))
 
                          select new { p, pimg, b });
-            List<ProductViewModel> data = await query.Take(take).OrderBy(x => x.p.PriceCurrent)
+            List<ProductViewModel> data = await query.Take(take).OrderByDescending(x => x.p.CreatedDate)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.p.Id,
