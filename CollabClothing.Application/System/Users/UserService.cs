@@ -393,6 +393,7 @@ namespace CollabClothing.Application.System.Users
                 Id = Guid.NewGuid(),
                 UserName = "lekhiem20011",
                 Dob = new DateTime(2001, 12, 12),
+                EmailConfirmed = true
             };
             //if (info == null)
             //{

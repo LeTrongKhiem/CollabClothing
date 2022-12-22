@@ -1,7 +1,7 @@
 ﻿@using CollabClothing.ViewModels.System.Users
 @model LoginRequest
 @section Csss {
-<link rel="stylesheet" href="~/assets/css/dangnhap.css">
+    <link rel="stylesheet" href="~/assets/css/dangnhap.css">
 }
 @{
     ViewData["Title"] = "Đăng nhập";
@@ -11,9 +11,13 @@
 
     .login-with-google {
         text-align: center;
-        margin-top: 20px;
+     
     }
-
+    
+    .auth-form_or{
+        text-align:center;
+        font-size:14px;
+    }
     .goolge-btn {
         padding: 12px 70px 12px 80px;
         width: 100%;
@@ -30,10 +34,10 @@
         box-shadow: #f5f5f5;
     }
 
-    .goolge-btn:hover {
-        background-color: #f5f5f5;
-        cursor: pointer;
-    }
+        .goolge-btn:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
 
     .auth__register__link {
         text-align: center;
@@ -45,40 +49,42 @@
         margin-bottom: 100px;
         border: 1px solid transparent;
         border-radius: 5px;
-
         overflow: hidden;
-
     }
 
     .v2-left a {
         text-decoration: none;
     }
-    .login-with-social{
+
+    .login-with-social {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 20px;
     }
-    .btn {
 
-padding: 10px 61px 12px 49px;
-  border: none;
-  border-radius: 4px;
-  margin: 5px;
-  opacity: 0.85;
-  display: inline-block;
-    font-size: 14px;
-  line-height: 20px;
-  text-decoration: none; /* remove underline from anchors */
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
-}
+    .btn {
+        padding: 10px 61px 12px 49px;
+        border: none;
+        border-radius: 4px;
+        margin: 5px;
+        opacity: 0.85;
+        display: inline-block;
+        font-size: 14px;
+        line-height: 20px;
+        text-decoration: none; /* remove underline from anchors */
+        box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+    }
+
     .fb {
-  background-color: #3B5998;
-  color: white;
-}
-.fb i {
-    font-size: 16px;
-}
+        background-color: #3B5998;
+        color: white;
+    }
+
+        .fb i {
+            font-size: 16px;
+        }
+
 </style>
 <div class="v2-login-area">
     <form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
@@ -88,9 +94,9 @@ padding: 10px 61px 12px 49px;
         </div>
         <div class="v2-login-wrap">
             <input type="text" class="form-control" value="" placeholder="Tên đăng nhập/Email/Số điện thoại"
-                autofocus="" asp-for="UserName" required="">
+                   autofocus="" asp-for="UserName" required="">
             <input type="password" class="form-control" placeholder="Mật khẩu" id="password" asp-for="Password"
-                required="">
+                   required="">
             <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
             <div class="text-danger warning" asp-validation-summary="All"></div>
             <button class="btn  btn-login" type="submit" style="font-size: 20px; height:40px">Đăng nhập</button>
@@ -107,26 +113,15 @@ padding: 10px 61px 12px 49px;
         <span>-- Hoặc --</span>
     </div>
     <div class="login-with-social">
-    <div class="login-with-google">
+        <div class="login-with-google">
 
-        <a asp-action="GoogleLogin" style="text-decoration : none;" class="goolge-btn">
-           Google
-        </a>
-    </div>
+            <a asp-action="GoogleLogin" style="text-decoration : none;" class="goolge-btn">
+                Google
+            </a>
+        </div>
 
-        <a href="#" class="fb btn">
-          <i class="fa fa-facebook fa-fw"></i>  Facebook
-         </a>
-    </div>
-     <div class="auth__register__link">
-            <span class="">
-                <span class="v2-hide">Chưa có tài khoản ?</span>
-                <a href="/Account/Register" class="v2-register-now" style="text-decoration: none;"> ( Đăng ký ngay )</a>
-            </span>
-
-    <div class="login-with-google">
-       <a asp-action="FacebookLogin" style="text-decoration : none;" class="goolge-btn">
-            Đăng nhập bằng Facebook
+        <a asp-action="FacebookLogin" class="fb btn">
+            <i class="fa fa-facebook fa-fw"></i>  Facebook
         </a>
     </div>
     <div class="auth__register__link">
@@ -135,12 +130,23 @@ padding: 10px 61px 12px 49px;
             <a href="/Account/Register" class="v2-register-now" style="text-decoration: none;"> ( Đăng ký ngay )</a>
         </span>
 
-    </div>
-    
-</div>
-@section Scripts {
+        @*<div class="login-with-google">
+        <a asp-action="FacebookLogin" style="text-decoration : none;" class="goolge-btn">
+        Đăng nhập bằng Facebook
+        </a>
+        </div>*@
+        @*<div class="auth__register__link">
+        <span class="">
+        <span class="v2-hide">Chưa có tài khoản ?</span>
+        <a href="/Account/Register" class="v2-register-now" style="text-decoration: none;"> ( Đăng ký ngay )</a>
+        </span>
 
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-    
-}
+        </div>*@
+
+    </div>
+    @section Scripts {
+
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+
+    }
 
