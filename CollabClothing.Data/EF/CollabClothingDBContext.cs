@@ -670,13 +670,13 @@ namespace CollabClothing.Data.EF
                     .HasMaxLength(255)
                     .IsUnicode(false);
             });
-            modelBuilder.Entity<TransactionOnline>(entity =>
-            {
-                entity.ToTable("TransactionOnlines");
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.Id).UseIdentityColumn();
-                entity.HasOne(x => x.AppUser).WithMany(x => x.Transactions).HasForeignKey(x => x.UserId);
-            });
+            //modelBuilder.Entity<TransactionOnline>(entity =>
+            //{
+            //    entity.ToTable("TransactionOnlines");
+            //    entity.HasKey(x => x.Id);
+            //    entity.Property(x => x.Id).UseIdentityColumn();
+            //    entity.HasOne(x => x.AppUser).WithMany(x => x.Transactions).HasForeignKey(x => x.UserId);
+            //});
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogin").HasKey(x => x.UserId);
