@@ -4,8 +4,13 @@
 	<TargetFramework>net5.0</TargetFramework>
 	<UserSecretsId>e14f4f9d-83fb-45ff-a8b5-10700d3ce8cb</UserSecretsId>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
-
+	<ItemGroup>
+		<_ContentIncludedByDefault Remove="appsettings.DevelopmentServer.json" />
+		<_ContentIncludedByDefault Remove="appsettings.Production.json" />
+		<_ContentIncludedByDefault Remove="appsettings.QA.json" />
+	</ItemGroup>
   <ItemGroup>
 	<PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.15" />
@@ -40,6 +45,16 @@
     <Folder Include="wwwroot\user-content\img-brand\" />
     <Folder Include="wwwroot\user-content\img-banner\" />
   </ItemGroup>
-
-
+	<ItemGroup>
+		<Content Update="appsettings.Development.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 </Project>
