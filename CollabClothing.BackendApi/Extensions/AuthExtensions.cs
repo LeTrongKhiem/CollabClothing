@@ -7,10 +7,10 @@ namespace CollabClothing.BackendApi.Extensions
     {
         public static Guid GetUserId(this ClaimsPrincipal user)
         {
-            var userIdClaim = user.FindFirst(x => x.Type == "sub" || x.Type.ToLower() == "id");
+            var userIdClaim = user.FindFirstValue(ClaimTypes.Sid);
             if (userIdClaim == default)
                 throw new Exception("No userId claim");
-            if (Guid.TryParse(userIdClaim.Value, out Guid userId))
+            if (Guid.TryParse(userIdClaim, out Guid userId))
             {
                 return userId;
             }
