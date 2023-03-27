@@ -1,5 +1,6 @@
 using CollabClothing.Application.Catalog.Products;
 using CollabClothing.Application.System.Users;
+using CollabClothing.BackendApi.Extensions;
 using CollabClothing.Data.Entities;
 using CollabClothing.ViewModels.Catalog.ProductImages;
 using CollabClothing.ViewModels.Catalog.Products;
@@ -64,6 +65,7 @@ namespace CollabClothing.BackendApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var userId = User.GetUserId();
             var product = await _manageProductService.GetAllPaging(request);
             if (product == null)
             {
