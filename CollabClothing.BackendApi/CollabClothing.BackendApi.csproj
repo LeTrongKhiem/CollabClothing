@@ -21,6 +21,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
 		<PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+		<PackageReference Include="PusherServer" Version="4.6.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
 
 		<ProjectReference Include="..\CollabClothing.Application\CollabClothing.Application.csproj" />
@@ -41,6 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Setup\" />
 		<Folder Include="wwwroot\user-content\icon-category\" />
 		<Folder Include="wwwroot\user-content\img-brand\" />
 		<Folder Include="wwwroot\user-content\img-banner\" />

@@ -34,7 +34,7 @@ namespace CollabClothing.BackendApi.Controllers
         //api get all product 
         //url mac dinh cua get http://localhost:port/controller
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get()
         {
             var product = await _publicProductService.GetAll();
