@@ -2,6 +2,7 @@
 using CollabClothing.Application.Catalog.Brands;
 using CollabClothing.Application.Catalog.Cart;
 using CollabClothing.Application.Catalog.Categories;
+using CollabClothing.Application.Catalog.Chat;
 using CollabClothing.Application.Catalog.Color;
 using CollabClothing.Application.Catalog.Products;
 using CollabClothing.Application.Catalog.Promotions;
@@ -15,6 +16,7 @@ using CollabClothing.BackendApi.Controllers;
 using CollabClothing.Data.EF;
 using CollabClothing.Data.Entities;
 using CollabClothing.Utilities.Constants;
+using CollabClothing.ViewModels.System;
 using CollabClothing.ViewModels.System.Mail;
 using CollabClothing.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
@@ -80,8 +82,8 @@ namespace CollabClothing.BackendApi
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IPromotionService, PromotionService>();
             services.AddTransient<IBenefitService, BenefitService>();
-            services.AddTransient<IDemo111, demo111>();
             services.AddTransient<IUserServiceResponse, UserServiceResponse>();
+            services.AddTransient<IChatService, ChatService>();
 
 
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
@@ -164,6 +166,12 @@ namespace CollabClothing.BackendApi
             // services.AddControllersWithViews();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
+            services.AddCors();
+
+            services.AddSignalR();
+
+            services.Configure<AppSettings>(Configuration);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CollabClothing.BackendApi", Version = "v1" });
@@ -218,6 +226,16 @@ namespace CollabClothing.BackendApi
 
             app.UseAuthentication();
             app.UseRouting();
+            app.UseCors(options => options
+                .WithOrigins(
+                    new string[]
+                    {
+                        "http://localhost:5000", "http://localhost:5001", "http://localhost:5002",
+                        "http://localhost:5003"
+                    })
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+            );
             app.UseAuthorization();
             app.UseSwagger();
 
@@ -232,6 +250,8 @@ namespace CollabClothing.BackendApi
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }

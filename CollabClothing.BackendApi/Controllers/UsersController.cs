@@ -23,11 +23,9 @@ namespace CollabClothing.BackendApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly IUserServiceResponse _userServiceResponse;
-        private readonly IDemo111 _demo;
-        public UsersController(IUserService userService, IDemo111 demo, IUserServiceResponse userServiceResponse)
+        public UsersController(IUserService userService, IUserServiceResponse userServiceResponse)
         {
             _userService = userService;
-            _demo = demo;
             _userServiceResponse = userServiceResponse;
         }
         [HttpPost("register")]

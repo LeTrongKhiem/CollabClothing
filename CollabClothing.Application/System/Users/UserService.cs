@@ -164,7 +164,7 @@ namespace CollabClothing.Application.System.Users
                 new Claim(ClaimTypes.Role, string.Join(";", roles)),
                 new Claim(ClaimTypes.Name, request.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Sid, user.Id.ToString())
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
