@@ -22,18 +22,13 @@ namespace CollabClothing.WebApp.Controllers
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
-        //private readonly IUserServiceResponse _userServiceResponse;
 
         public AccountController(IUserApiClient userApiClient, IConfiguration configuration
-            //IUserServiceResponse userServiceResponse
             )
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
-            //_userServiceResponse = userServiceResponse;
         }
-        //[HttpGet("/dang-nhap")]
-        //[HttpGet("")]
         [HttpGet]
         public async Task<IActionResult> Login()
         {
@@ -44,7 +39,6 @@ namespace CollabClothing.WebApp.Controllers
             }
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync("Identity.External");
-            //await HttpContext.SignOutAsync("2");
 
             return View();
         }
@@ -52,7 +46,6 @@ namespace CollabClothing.WebApp.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync("Identity.External");
-            //await HttpContext.SignOutAsync("2");
 
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Home");
